@@ -15,7 +15,7 @@ class AdminPagesController extends Controller
     public function customers()
     {
         $customers = User::query()
-            ->where('role', '!=', 'admin')
+            ->where('is_admin', false)
             ->latest('id')
             ->paginate(25);
 

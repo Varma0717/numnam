@@ -21,7 +21,7 @@ class AdminDashboardController extends Controller
             'products' => Product::query()->count(),
             'orders' => Order::query()->count(),
             'revenue' => (float) Order::query()->where('payment_status', 'paid')->sum('total'),
-            'customers' => User::query()->where('role', '!=', 'admin')->count(),
+            'customers' => User::query()->where('is_admin', false)->count(),
             'subscriptions' => Subscription::query()->count(),
             'contacts' => Contact::query()->count(),
             'blogs' => Blog::query()->count(),

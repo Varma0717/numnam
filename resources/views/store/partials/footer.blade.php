@@ -1,21 +1,21 @@
-<footer class="site-footer">
-    {{-- Newsletter section --}}
-    <div class="footer-newsletter">
-        <div class="footer-newsletter-inner">
-            <div>
-                <h3>Join the NumNam Family</h3>
-                <p>Get parenting tips, new product alerts, and exclusive offers delivered to your inbox.</p>
-            </div>
-            <form class="newsletter-form" method="POST" action="{{ route('store.contact.submit') }}">
-                @csrf
-                <input type="hidden" name="query_type" value="newsletter">
-                <input type="hidden" name="first_name" value="Subscriber">
-                <input type="email" name="email" placeholder="Your email address" required class="newsletter-input">
-                <button type="submit" class="cta-btn">Subscribe</button>
-            </form>
+{{-- Newsletter section (above footer) --}}
+<div class="footer-newsletter">
+    <div class="footer-newsletter-inner">
+        <div>
+            <h3>Join the NumNam Family</h3>
+            <p>Get parenting tips, new product alerts, and exclusive offers delivered to your inbox.</p>
         </div>
+        <form class="newsletter-form" method="POST" action="{{ route('store.contact.submit') }}">
+            @csrf
+            <input type="hidden" name="query_type" value="newsletter">
+            <input type="hidden" name="first_name" value="Subscriber">
+            <input type="email" name="email" placeholder="Your email address" required class="newsletter-input">
+            <button type="submit" class="cta-btn">Subscribe</button>
+        </form>
     </div>
+</div>
 
+<footer class="site-footer">
     <div class="site-footer-inner">
         <div class="footer-col footer-brand-col">
             <div class="footer-logo">

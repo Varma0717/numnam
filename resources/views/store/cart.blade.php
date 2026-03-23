@@ -3,6 +3,15 @@
 @section('title', 'NumNam - Cart')
 
 @section('content')
+@php
+    $productPlaceholders = [
+        asset('assets/images/product_1.png'),
+        asset('assets/images/product_2.png'),
+        asset('assets/images/product_3.png'),
+        asset('assets/images/product_4.png'),
+    ];
+@endphp
+
 <section class="hero section in-view">
     <div>
         <span class="kicker">Cart</span>
@@ -18,8 +27,12 @@
     @else
         <div class="store-grid">
             @foreach($items as $item)
+                @php
+                    $placeholderImage = $productPlaceholders[$item['product']->id % count($productPlaceholders)];
+                    $lineImage = $item['product']->image ?: $placeholderImage;
+                @endphp
                 <article class="line-item">
-                    <div class="line-media" style="background-image:url('{{ $item['product']->image ?: '' }}')"></div>
+                    <div class="line-media" style="background-image:url('{{ $lineImage }}')"></div>
                     <div>
                         <h4>{{ $item['product']->name }}</h4>
                         <p class="meta">Rs {{ number_format($item['unit_price'], 0) }} each</p>

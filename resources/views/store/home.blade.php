@@ -4,42 +4,34 @@
 
 @section('content')
 @php
-    $resolveTrustImage = function (string $name, string $fallback): string {
-        $candidates = [$name, $name . '.png', $name . '.jpg', $name . '.jpeg', $name . '.webp'];
-        foreach ($candidates as $candidate) {
-            if (file_exists(public_path('images/' . $candidate))) {
-                return asset('images/' . $candidate);
-            }
-        }
-
-        return asset($fallback);
-    };
-
     $trustCards = [
         [
-            'file' => 'weavy-Gemini-3-(Nano-Banana-Pro)-2026-02',
-            'fallback' => 'assets/images/product_1.png',
+            'icon' => 'shield',
             'title' => 'Doctor-Founded',
             'subtitle' => 'Backed by European Nutrition',
         ],
         [
-            'file' => '13_edited.png',
-            'fallback' => 'assets/images/product_2.png',
+            'icon' => 'leaf',
             'title' => 'Vegetable Forward',
             'subtitle' => 'Rich in Veggies',
         ],
         [
-            'file' => 'no-sugar-free-vector-icon-cubes-circle-added-product-package-design-217234312_edited.png',
-            'fallback' => 'assets/images/product_3.png',
+            'icon' => 'drop',
             'title' => 'No added sugar',
             'subtitle' => 'Naturally sweet',
         ],
         [
-            'file' => 'no-added-preservatives-icon-chemical-art',
-            'fallback' => 'assets/images/product_4.png',
+            'icon' => 'spark',
             'title' => 'No preservatives',
             'subtitle' => 'Totally clean',
         ],
+    ];
+
+    $productPlaceholders = [
+        asset('assets/images/product_1.png'),
+        asset('assets/images/product_2.png'),
+        asset('assets/images/product_3.png'),
+        asset('assets/images/product_4.png'),
     ];
 @endphp
 
@@ -99,7 +91,21 @@
     <div class="trust-grid">
         @foreach($trustCards as $item)
             <article class="trust-card">
-                <img src="{{ $resolveTrustImage($item['file'], $item['fallback']) }}" alt="{{ $item['title'] }} icon">
+                <span class="trust-icon" aria-hidden="true">
+                    @switch($item['icon'])
+                        @case('shield')
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+                            @break
+                        @case('leaf')
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 21c6 0 12-6 12-12V3h-6C6 3 3 6 3 12s3 9 3 9z"/><path d="M7 17c3-3 6-6 11-8"/></svg>
+                            @break
+                        @case('drop')
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2s6 7 6 11a6 6 0 11-12 0c0-4 6-11 6-11z"/></svg>
+                            @break
+                        @default
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l1.9 4.9L19 9l-5.1 2.1L12 16l-1.9-4.9L5 9l5.1-2.1L12 2z"/><path d="M5 19l1-2 2-1-2-1-1-2-1 2-2 1 2 1 1 2z"/><path d="M19 19l.7-1.3L21 17l-1.3-.7L19 15l-.7 1.3L17 17l1.3.7L19 19z"/></svg>
+                    @endswitch
+                </span>
                 <div>
                     <h4>{{ $item['title'] }}</h4>
                     <p class="meta">{{ $item['subtitle'] }}</p>
@@ -110,35 +116,52 @@
 </section>
 
 <section class="section fade-in-up">
-    <div class="section-head"><div><h3>Our Best Sellers</h3></div></div>
-    <div class="store-grid three">
-        @forelse($featuredProducts as $product)
-            <article class="card hover-up">
-                <div class="media" style="background-image:url('{{ $product->image ?: '' }}'); background-size:cover;">
-                    @if($product->sale_price)
-                        <span class="badge-sale">-{{ round((1 - $product->sale_price / $product->price) * 100) }}%</span>
-                    @endif
-                </div>
-                <div class="card-body">
-                    <span class="kicker">{{ $product->age_group }}</span>
-                    <h4><a href="{{ route('store.product.show', $product) }}">{{ $product->name }}</a></h4>
-                    <p class="meta">{{ \Illuminate\Support\Str::limit($product->short_description ?: $product->description, 90) }}</p>
-                    <div class="price">
-                        <strong>Rs {{ number_format($product->sale_price ?: $product->price, 0) }}</strong>
-                        @if($product->sale_price)
-                            <del>Rs {{ number_format($product->price, 0) }}</del>
-                        @endif
-                    </div>
-                    <form method="POST" action="{{ route('store.cart.add', $product) }}" class="store-actions">
-                        @csrf
-                        <button class="btn-primary" type="submit">Add to Cart</button>
-                    </form>
-                </div>
-            </article>
-        @empty
-            <p class="meta">No featured products yet.</p>
-        @endforelse
+    <div class="section-head">
+        <div><h3>Our Best Sellers</h3></div>
+        @if($featuredProducts->count() > 3)
+            <div class="product-carousel-controls" aria-label="Best sellers controls">
+                <button type="button" class="product-carousel-btn" data-carousel-prev aria-label="Previous products">&#10094;</button>
+                <button type="button" class="product-carousel-btn" data-carousel-next aria-label="Next products">&#10095;</button>
+            </div>
+        @endif
     </div>
+    @if($featuredProducts->isEmpty())
+        <p class="meta">No featured products yet.</p>
+    @else
+        <div class="product-carousel" data-product-carousel>
+            <div class="product-carousel-viewport">
+                <div class="product-carousel-track" data-carousel-track>
+                    @foreach($featuredProducts as $product)
+                        @php($placeholderImage = $productPlaceholders[$loop->index % count($productPlaceholders)])
+                        <div class="product-carousel-item">
+                            <article class="card hover-up">
+                                <div class="media" style="background-image:url('{{ $placeholderImage }}'); background-size:cover;">
+                                    @if($product->sale_price)
+                                        <span class="badge-sale">-{{ round((1 - $product->sale_price / $product->price) * 100) }}%</span>
+                                    @endif
+                                </div>
+                                <div class="card-body">
+                                    <span class="kicker">{{ $product->age_group }}</span>
+                                    <h4><a href="{{ route('store.product.show', $product) }}">{{ $product->name }}</a></h4>
+                                    <p class="meta">{{ \Illuminate\Support\Str::limit($product->short_description ?: $product->description, 90) }}</p>
+                                    <div class="price">
+                                        <strong>Rs {{ number_format($product->sale_price ?: $product->price, 0) }}</strong>
+                                        @if($product->sale_price)
+                                            <del>Rs {{ number_format($product->price, 0) }}</del>
+                                        @endif
+                                    </div>
+                                    <form method="POST" action="{{ route('store.cart.add', $product) }}" class="store-actions">
+                                        @csrf
+                                        <button class="btn-primary" type="submit">Add to Cart</button>
+                                    </form>
+                                </div>
+                            </article>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
 </section>
 
 <section class="section fade-in-up">

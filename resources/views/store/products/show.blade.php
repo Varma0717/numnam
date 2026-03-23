@@ -1,8 +1,18 @@
 @extends('store.layouts.app')
 
+@php
+    $productPlaceholders = [
+        asset('assets/images/product_1.png'),
+        asset('assets/images/product_2.png'),
+        asset('assets/images/product_3.png'),
+        asset('assets/images/product_4.png'),
+    ];
+    $mainPlaceholder = $productPlaceholders[$product->id % count($productPlaceholders)];
+@endphp
+
 @section('title', 'NumNam - ' . $product->name)
 @section('meta_description', Str::limit($product->short_description ?: $product->description, 160))
-@section('og_image', $product->image ?: asset('assets/images/hero.jpg'))
+@section('og_image', $mainPlaceholder)
 
 @section('structured_data')
 <script type="application/ld+json">
@@ -11,7 +21,7 @@
     "@type": "Product",
     "name": "{{ $product->name }}",
     "description": "{{ Str::limit($product->description, 300) }}",
-    "image": "{{ $product->image ?: asset('assets/images/product_1.png') }}",
+    "image": "{{ $mainPlaceholder }}",
     "brand": {"@type": "Brand", "name": "NumNam"},
     "offers": {
         "@type": "Offer",
@@ -29,12 +39,12 @@
         {{-- Product Gallery --}}
         <div class="product-gallery">
             <div class="product-gallery-main">
-                <img src="{{ $product->image ?: asset('assets/images/product_1.png') }}" alt="{{ $product->name }}" loading="lazy">
+                <img src="{{ $mainPlaceholder }}" alt="{{ $product->name }}" loading="lazy">
             </div>
             @if($gallery->isNotEmpty())
             <div class="product-gallery-thumbs">
                 <div class="product-thumb active">
-                    <img src="{{ $product->image ?: asset('assets/images/product_1.png') }}" alt="{{ $product->name }} main">
+                    <img src="{{ $mainPlaceholder }}" alt="{{ $product->name }} main">
                 </div>
                 @foreach($gallery as $photo)
                     <div class="product-thumb">
@@ -182,10 +192,9 @@
     <div class="section-head"><div><h3>You May Also Like</h3></div></div>
     <div class="store-grid three">
         @foreach($related as $item)
+            @php($relatedPlaceholder = $productPlaceholders[$loop->index % count($productPlaceholders)])
             <article class="card hover-up">
-                @if($item->image)
-                    <div class="media" style="background-image:url('{{ $item->image }}'); background-size:cover;"></div>
-                @endif
+                <div class="media" style="background-image:url('{{ $relatedPlaceholder }}'); background-size:cover;"></div>
                 <div class="card-body">
                     <h4><a href="{{ route('store.product.show', $item) }}">{{ $item->name }}</a></h4>
                     <div class="price">

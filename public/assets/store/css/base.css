@@ -26,6 +26,7 @@ html, body {
   line-height: 1.5;
   color: var(--text);
   background: #ffffff;
+  overflow-x: clip;
 }
 
 a { color: var(--text); text-decoration: none; transition: color 0.2s; }
@@ -55,9 +56,9 @@ img { max-width: 100%; display: block; transition: all 0.3s ease-in-out; }
 
 .store-inner .hero {
   min-height: 250px;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  width: calc(100% + 10vw);
+  margin-left: -5vw;
+  margin-right: -5vw;
   padding: 48px min(60px, 4vw);
   grid-template-columns: 1fr 320px;
   background: linear-gradient(135deg, rgba(159, 134, 217, 0.14) 0%, rgba(255, 255, 255, 0.96) 100%);
@@ -172,7 +173,7 @@ textarea { min-height: 130px; height: auto; resize: vertical; }
 
 .section-sub { margin: 4px 0 0; color: var(--muted); font-size: 16px; line-height: 24px; }
 
-.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; justify-content: flex-start; }
 
 .pager { display: flex; justify-content: center; margin-top: 20px; }
 
@@ -183,8 +184,21 @@ textarea { min-height: 130px; height: auto; resize: vertical; }
   border-radius: 50px;
 }
 
-.hover-up { transition: all 0.25s cubic-bezier(0.02, 0.01, 0.47, 1); }
-.hover-up:hover { transform: translateY(-2px); }
+.hover-up {
+  transition: transform 0.28s cubic-bezier(0.02, 0.01, 0.47, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+}
+.hover-up .media {
+  transition: background-size 0.45s ease, filter 0.28s ease;
+}
+.hover-up:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 26px rgba(31, 35, 41, 0.14);
+  border-color: rgba(159, 134, 217, 0.35);
+}
+.hover-up:hover .media {
+  background-size: 112% !important;
+  filter: saturate(1.05);
+}
 
 @media (min-width: 780px) {
   .page { padding: 0; }
@@ -275,6 +289,9 @@ textarea { min-height: 130px; height: auto; resize: vertical; }
 .breadcrumbs {
   padding: 16px 0 0;
   font-size: 13px;
+}
+.breadcrumbs.breadcrumbs-below-banner {
+  padding: 14px 0 18px;
 }
 .breadcrumbs ol {
   list-style: none;
@@ -458,8 +475,8 @@ textarea { min-height: 130px; height: auto; resize: vertical; }
   font-size: 14px;
   color: var(--text);
   box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-  min-width: 280px;
-  max-width: 380px;
+  min-width: 220px;
+  max-width: 320px;
   display: flex;
   align-items: center;
   gap: 10px;

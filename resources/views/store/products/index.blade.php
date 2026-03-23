@@ -3,6 +3,15 @@
 @section('title', 'NumNam - Products')
 
 @section('content')
+@php
+    $productPlaceholders = [
+        asset('assets/images/product_1.png'),
+        asset('assets/images/product_2.png'),
+        asset('assets/images/product_3.png'),
+        asset('assets/images/product_4.png'),
+    ];
+@endphp
+
 <section class="hero section in-view">
     <div>
         <span class="kicker">Shop</span>
@@ -34,8 +43,9 @@
 <section class="section">
     <div class="store-grid three">
         @forelse($products as $product)
+            @php($placeholderImage = $productPlaceholders[$loop->index % count($productPlaceholders)])
             <article class="card hover-up fade-in-up">
-                <div class="media" style="background-image:url('{{ $product->image ?: '' }}'); background-size:cover;">
+                <div class="media" style="background-image:url('{{ $placeholderImage }}'); background-size:cover;">
                     @if($product->sale_price)
                         <span class="badge-sale">-{{ round((1 - $product->sale_price / $product->price) * 100) }}%</span>
                     @endif

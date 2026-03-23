@@ -12,15 +12,15 @@
         <nav class="site-nav" role="navigation" aria-label="Main navigation">
             <a href="{{ route('store.home') }}" class="{{ request()->routeIs('store.home') ? 'active' : '' }}">Home</a>
             <div class="nav-item has-submenu">
-                <a href="{{ route('store.products') }}" class="{{ request()->routeIs('store.products*') || request()->routeIs('store.pricing*') ? 'active' : '' }}">Shop</a>
+                <a href="{{ route('store.products') }}" class="{{ request()->routeIs('store.products*') ? 'active' : '' }}">Shop</a>
                 <ul class="submenu" role="menu" aria-label="Shop submenu">
-                    <li><a href="{{ route('store.products') }}">All Products</a></li>
-                    <li><a href="{{ route('store.pricing') }}">Subscriptions</a></li>
+                    <li><a href="{{ route('store.products') }}">Browse Products</a></li>
                     @foreach(($megaCategories ?? collect())->take(3) as $category)
                         <li><a href="{{ route('store.products', ['category' => $category->slug]) }}">{{ $category->name }}</a></li>
                     @endforeach
                 </ul>
             </div>
+            <a href="{{ route('store.pricing') }}" class="{{ request()->routeIs('store.pricing*') ? 'active' : '' }}">Subscriptions</a>
             <div class="nav-item has-submenu">
                 <a href="{{ route('store.blog.index') }}" class="{{ request()->routeIs('store.blog*') || request()->routeIs('store.recipes') || request()->routeIs('store.faq') || request()->routeIs('store.refer-friends') ? 'active' : '' }}">Learn</a>
                 <ul class="submenu" role="menu" aria-label="Learn submenu">

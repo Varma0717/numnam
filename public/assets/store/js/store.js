@@ -1,5 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  /* ====== Breadcrumb Position (Below Banner) ====== */
+  const mainContent = document.getElementById('main-content');
+  if (mainContent) {
+    const children = Array.from(mainContent.children || []);
+    const breadcrumbNode = children.find((el) => el.classList && el.classList.contains('breadcrumbs'));
+    const firstSection = children.find((el) => el.tagName === 'SECTION' && !el.classList.contains('breadcrumbs'));
+
+    if (breadcrumbNode && firstSection) {
+      const isBeforeFirstSection = Boolean(
+        breadcrumbNode.compareDocumentPosition(firstSection) & Node.DOCUMENT_POSITION_FOLLOWING
+      );
+      if (isBeforeFirstSection) {
+        firstSection.insertAdjacentElement('afterend', breadcrumbNode);
+      }
+      breadcrumbNode.classList.add('breadcrumbs-below-banner');
+    }
+  }
+
   /* ====== Auto-dismiss alerts ====== */
   const autoDismiss = document.querySelectorAll('[data-auto-dismiss]');
   autoDismiss.forEach((node) => {
@@ -67,8 +85,18 @@ document.addEventListener('DOMContentLoaded', () => {
     window.setTimeout(() => {
       toast.classList.add('toast-out');
       window.setTimeout(() => toast.remove(), 300);
-    }, 4000);
+    }, 3200);
   };
+
+  // Flush server-side flash queue once toast API is ready.
+  const flashQueue = Array.isArray(window.__numnamFlashQueue) ? window.__numnamFlashQueue : [];
+  if (flashQueue.length) {
+    flashQueue.forEach((entry) => {
+      if (!entry || !entry.message) return;
+      window.numnamToast(entry.message, entry.type || 'info');
+    });
+    window.__numnamFlashQueue = [];
+  }
 
   /* ====== FAQ Accordion ====== */
   document.querySelectorAll('.accordion-trigger').forEach((trigger) => {
@@ -132,6 +160,75 @@ document.addEventListener('DOMContentLoaded', () => {
       const panel = document.getElementById(target);
       if (panel) panel.classList.add('active');
     });
+  });
+
+  /* ====== Product Carousel ====== */
+  const productCarousels = document.querySelectorAll('[data-product-carousel]');
+  productCarousels.forEach((carousel) => {
+    const track = carousel.querySelector('[data-carousel-track]');
+    const prevBtn = carousel.closest('.section')?.querySelector('[data-carousel-prev]');
+    const nextBtn = carousel.closest('.section')?.querySelector('[data-carousel-next]');
+    const items = Array.from(carousel.querySelectorAll('.product-carousel-item'));
+    if (!track || items.length <= 1) return;
+
+    let index = 0;
+    let maxIndex = 0;
+    let perView = 3;
+    let timer = null;
+
+    const setPerView = () => {
+      perView = window.matchMedia('(max-width: 979px)').matches ? 1 : 3;
+      maxIndex = Math.max(0, items.length - perView);
+      if (index > maxIndex) index = maxIndex;
+    };
+
+    const render = () => {
+      setPerView();
+      track.style.transform = `translateX(-${index * (100 / perView)}%)`;
+      if (prevBtn) prevBtn.disabled = items.length <= perView;
+      if (nextBtn) nextBtn.disabled = items.length <= perView;
+    };
+
+    const next = () => {
+      if (maxIndex === 0) return;
+      index = index >= maxIndex ? 0 : index + 1;
+      render();
+    };
+
+    const prev = () => {
+      if (maxIndex === 0) return;
+      index = index <= 0 ? maxIndex : index - 1;
+      render();
+    };
+
+    const restart = () => {
+      if (timer) window.clearInterval(timer);
+      if (items.length > perView) timer = window.setInterval(next, 4200);
+    };
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        next();
+        restart();
+      });
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        prev();
+        restart();
+      });
+    }
+
+    carousel.addEventListener('mouseenter', () => {
+      if (timer) window.clearInterval(timer);
+    });
+
+    carousel.addEventListener('mouseleave', restart);
+    window.addEventListener('resize', render, { passive: true });
+
+    render();
+    restart();
   });
 
   /* ====== Hero Slider ====== */
