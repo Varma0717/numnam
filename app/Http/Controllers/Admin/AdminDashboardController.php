@@ -11,6 +11,8 @@ use App\Models\Product;
 use App\Models\RewardLedger;
 use App\Models\Subscription;
 
+use App\Models\User;
+
 class AdminDashboardController extends Controller
 {
     public function index()
@@ -18,6 +20,8 @@ class AdminDashboardController extends Controller
         $metrics = [
             'products' => Product::query()->count(),
             'orders' => Order::query()->count(),
+            'revenue' => (float) Order::query()->where('payment_status', 'paid')->sum('total'),
+            'customers' => User::query()->where('role', '!=', 'admin')->count(),
             'subscriptions' => Subscription::query()->count(),
             'contacts' => Contact::query()->count(),
             'blogs' => Blog::query()->count(),
@@ -27,7 +31,7 @@ class AdminDashboardController extends Controller
                 : 0,
         ];
 
-        $recentOrders = Order::query()->latest('id')->take(8)->get();
+        $recentOrders = Order::query()->with('user')->latest('id')->take(8)->get();
 
         return view('admin.dashboard', compact('metrics', 'recentOrders'));
     }

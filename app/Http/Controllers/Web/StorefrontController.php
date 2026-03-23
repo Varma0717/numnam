@@ -476,10 +476,17 @@ class StorefrontController extends Controller
                 return redirect()->route('store.account')->withErrors(['payment' => $gatewayInitError]);
             }
 
-            return redirect()->route('store.account')->with('status', 'Order created. Payment session initialized for ' . strtoupper($order->payment_gateway) . '.');
+            return redirect()->route('store.order.success', $order)->with('status', 'Order created. Payment session initialized for ' . strtoupper($order->payment_gateway) . '.');
         }
 
-        return redirect()->route('store.account')->with('status', 'Order placed successfully.');
+        return redirect()->route('store.order.success', $order)->with('status', 'Order placed successfully.');
+    }
+
+    public function orderSuccess(Request $request, Order $order)
+    {
+        abort_unless($order->user_id === $request->user()->id, 403);
+        $order->load('items');
+        return view('store.order-success', compact('order'));
     }
 
     public function account(Request $request)

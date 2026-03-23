@@ -1,81 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Library Admin</title>
-    <style>
-        body { margin: 0; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; background: #f8fafc; color: #111827; }
-        .container { max-width: 1200px; margin: 24px auto; padding: 0 16px; }
-        .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
-        .grid { display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .media-grid { display: grid; gap: 12px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-        @media (max-width: 1000px) { .grid, .media-grid { grid-template-columns: 1fr 1fr; } }
-        @media (max-width: 640px) { .grid, .media-grid { grid-template-columns: 1fr; } }
-        input, select, button { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #d1d5db; }
-        button { border: none; background: #0f766e; color: #fff; font-weight: 600; cursor: pointer; }
-        .item { border: 1px solid #d1fae5; border-radius: 10px; padding: 10px; background: #f0fdfa; }
-        .meta { font-size: 12px; color: #4b5563; }
-        .row { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
-        .output { white-space: pre-wrap; background: #0b1220; color: #d1f5ef; border-radius: 10px; padding: 12px; font-size: 12px; min-height: 120px; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <div class="card">
-        <h1>Media Library</h1>
-        <p>Upload, organize, and assign images to pages/products.</p>
-    </div>
+@extends('admin.layouts.app')
 
-    <div class="card">
-        <h2>Upload Images</h2>
-        <form id="uploadForm" class="grid" enctype="multipart/form-data">
-            <input type="file" name="file" accept="image/*" required>
-            <input type="text" name="folder" placeholder="Folder (e.g. homepage)">
-            <input type="text" name="collection" placeholder="Collection (e.g. hero)">
-            <input type="text" name="title" placeholder="Title">
-            <input type="text" name="alt_text" placeholder="Alt text">
-            <button type="submit">Upload</button>
-        </form>
-    </div>
+@section('title', 'Media Library - NumNam Admin')
 
-    <div class="card">
-        <h2>Organize & Select</h2>
-        <div class="row" style="margin-bottom: 10px;">
-            <div class="grid">
-                <input id="folderFilter" placeholder="Filter folder">
-                <input id="collectionFilter" placeholder="Filter collection">
+@section('content')
+<section class="admin-page-head">
+    <h2>Media Library</h2>
+    <p class="admin-page-sub">Upload, organize, and assign images to pages/products.</p>
+</section>
+
+<section class="admin-panel">
+    <h3>Upload Images</h3>
+    <form id="uploadForm" class="admin-media-grid admin-media-grid-3" enctype="multipart/form-data">
+        <div class="admin-form-row">
+            <label for="mediaFile">Image File</label>
+            <input id="mediaFile" type="file" name="file" accept="image/*" required>
+        </div>
+        <div class="admin-form-row">
+            <label for="mediaFolder">Folder</label>
+            <input id="mediaFolder" type="text" name="folder" placeholder="homepage">
+        </div>
+        <div class="admin-form-row">
+            <label for="mediaCollection">Collection</label>
+            <input id="mediaCollection" type="text" name="collection" placeholder="hero">
+        </div>
+        <div class="admin-form-row">
+            <label for="mediaTitle">Title</label>
+            <input id="mediaTitle" type="text" name="title" placeholder="Hero banner image">
+        </div>
+        <div class="admin-form-row">
+            <label for="mediaAlt">Alt Text</label>
+            <input id="mediaAlt" type="text" name="alt_text" placeholder="Baby food products arranged on a table">
+        </div>
+        <div class="admin-form-row admin-form-row-action">
+            <button class="admin-btn" type="submit">Upload</button>
+        </div>
+    </form>
+</section>
+
+<section class="admin-panel">
+    <h3>Organize And Select</h3>
+    <div class="admin-media-filter-row">
+        <div class="admin-media-grid admin-media-grid-4">
+            <div class="admin-form-row">
+                <label for="folderFilter">Filter Folder</label>
+                <input id="folderFilter" placeholder="homepage">
+            </div>
+            <div class="admin-form-row">
+                <label for="collectionFilter">Filter Collection</label>
+                <input id="collectionFilter" placeholder="hero">
+            </div>
+            <div class="admin-form-row">
+                <label for="entityType">Entity Type</label>
                 <select id="entityType">
-                    <option value="">Entity type (optional)</option>
+                    <option value="">Optional</option>
                     <option value="page">page</option>
                     <option value="product">product</option>
                 </select>
-                <input id="entityId" type="number" min="1" placeholder="Entity ID (optional)">
             </div>
-            <button id="loadBtn" type="button">Load Images</button>
+            <div class="admin-form-row">
+                <label for="entityId">Entity ID</label>
+                <input id="entityId" type="number" min="1" placeholder="Optional">
+            </div>
         </div>
-        <div id="mediaGrid" class="media-grid"></div>
+        <button id="loadBtn" class="admin-btn-secondary" type="button">Load Images</button>
     </div>
 
-    <div class="card">
-        <h2>Link Image to Page/Product</h2>
-        <form id="linkForm" class="grid">
-            <input type="number" min="1" name="media_id" placeholder="Media ID" required>
-            <select name="entity_type" required>
+    <div id="mediaGrid" class="admin-media-library-grid"></div>
+</section>
+
+<section class="admin-panel">
+    <h3>Link Image To Page Or Product</h3>
+    <form id="linkForm" class="admin-media-grid admin-media-grid-4">
+        <div class="admin-form-row">
+            <label for="mediaId">Media ID</label>
+            <input id="mediaId" type="number" min="1" name="media_id" placeholder="Media ID" required>
+        </div>
+        <div class="admin-form-row">
+            <label for="entityTypeAttach">Entity Type</label>
+            <select id="entityTypeAttach" name="entity_type" required>
                 <option value="page">page</option>
                 <option value="product">product</option>
             </select>
-            <input type="number" min="1" name="entity_id" placeholder="Entity ID" required>
-            <input type="text" name="role" placeholder="Role (banner, thumbnail, gallery)">
-            <button type="submit">Attach</button>
-        </form>
-    </div>
+        </div>
+        <div class="admin-form-row">
+            <label for="entityIdAttach">Entity ID</label>
+            <input id="entityIdAttach" type="number" min="1" name="entity_id" placeholder="Entity ID" required>
+        </div>
+        <div class="admin-form-row">
+            <label for="mediaRole">Role</label>
+            <input id="mediaRole" type="text" name="role" placeholder="banner, thumbnail, gallery">
+        </div>
+        <div class="admin-form-row admin-form-row-action admin-form-row-span-full">
+            <button class="admin-btn" type="submit">Attach</button>
+        </div>
+    </form>
+</section>
 
-    <div class="card">
-        <h2>API Response</h2>
-        <div id="output" class="output">Ready.</div>
-    </div>
-</div>
+<section class="admin-panel">
+    <h3>API Response</h3>
+    <pre id="output" class="admin-api-output">Ready.</pre>
+</section>
 
 <script>
 const base = `${window.location.origin}${window.location.pathname.replace('/admin/media', '')}/api/v1/admin`;
@@ -117,13 +141,13 @@ async function loadMedia() {
     const rows = data.data?.data || [];
 
     mediaGrid.innerHTML = rows.map(item => `
-        <article class="item">
-            <div><strong>#${item.id}</strong> ${item.title || item.file_name}</div>
-            <div class="meta">folder: ${item.folder} / ${item.collection}</div>
-            <div class="meta">path: ${item.file_path}</div>
-            <div class="meta">linked: ${(item.links || []).map(x => `${x.entity_type}:${x.entity_id}`).join(', ') || 'none'}</div>
+        <article class="admin-media-item">
+            <div class="admin-media-title">#${item.id} ${item.title || item.file_name}</div>
+            <p class="admin-media-meta">folder: ${item.folder} / ${item.collection}</p>
+            <p class="admin-media-meta">path: ${item.file_path}</p>
+            <p class="admin-media-meta">linked: ${(item.links || []).map(x => `${x.entity_type}:${x.entity_id}`).join(', ') || 'none'}</p>
         </article>
-    `).join('') || '<div class="item">No media found</div>';
+    `).join('') || '<article class="admin-media-item"><p class="admin-media-meta">No media found.</p></article>';
 
     print(data);
 }
@@ -175,5 +199,4 @@ loadBtn.addEventListener('click', async () => {
 
 loadMedia().catch(print);
 </script>
-</body>
-</html>
+@endsection

@@ -1,7 +1,7 @@
 .site-footer {
   margin-top: 0;
   border-top: 0;
-  background: #ffffff;
+  background: #e9ecef;
   padding: 50px 0 0;
 }
 
@@ -106,5 +106,10 @@
 }
 
 @media (min-width: 780px) {
-  .site-footer-inner { grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr; }
+  .site-footer-inner { grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr; }
+}
+
+@media (max-width: 779px) {
+  .site-footer-inner { grid-template-columns: 1fr 1fr; }
+  .footer-brand-col { grid-column: 1 / -1; max-width: none; }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminPagesController;
 use App\Http\Controllers\Admin\Catalog\ProductManagementController;
 use App\Http\Controllers\Admin\Commerce\CouponManagementController;
 use App\Http\Controllers\Admin\Commerce\OrderManagementController;
@@ -60,6 +61,7 @@ Route::delete('/cart/remove/{product}', [StorefrontController::class, 'removeFro
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', [StorefrontController::class, 'checkout'])->name('store.checkout');
     Route::post('/checkout', [StorefrontController::class, 'placeOrder'])->name('store.checkout.place-order');
+    Route::get('/order-success/{order}', [StorefrontController::class, 'orderSuccess'])->name('store.order.success');
     Route::get('/account', [StorefrontController::class, 'account'])->name('store.account');
 
     Route::post('/checkout/pay/{order}', [CheckoutPaymentController::class, 'createSession'])
@@ -107,5 +109,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/media', function () {
             return view('admin.media.index');
         })->name('media');
+
+        Route::get('/customers', [AdminPagesController::class, 'customers'])->name('customers.index');
+        Route::get('/categories', [AdminPagesController::class, 'categories'])->name('categories.index');
+        Route::get('/blogs', [AdminPagesController::class, 'blogs'])->name('blogs.index');
+        Route::get('/contacts', [AdminPagesController::class, 'contacts'])->name('contacts.index');
+        Route::get('/subscriptions', [AdminPagesController::class, 'subscriptions'])->name('subscriptions.index');
+        Route::get('/settings', [AdminPagesController::class, 'settings'])->name('settings.index');
     });
 });

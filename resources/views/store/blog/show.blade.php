@@ -9,7 +9,7 @@
         <h1>{{ $blog->title }}</h1>
         <p>{{ optional($blog->published_at)->format('d M Y') }} | {{ number_format($blog->view_count) }} views</p>
     </div>
-    <div class="hero-art" style="background-image:url('{{ $blog->featured_image ?: '' }}'); background-size:cover;"></div>
+    <div class="hero-art" style="background-image:url('{{ $blog->featured_image ?: asset('assets/images/background_img.jpg') }}'); background-size:cover;"></div>
 </section>
 
 <section class="section">

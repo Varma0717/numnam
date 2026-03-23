@@ -34,8 +34,15 @@
 <section class="section">
     <div class="store-grid three">
         @forelse($products as $product)
-            <article class="card">
-                <div class="media" style="background-image:url('{{ $product->image ?: '' }}'); background-size:cover;"></div>
+            <article class="card hover-up fade-in-up">
+                <div class="media" style="background-image:url('{{ $product->image ?: '' }}'); background-size:cover;">
+                    @if($product->sale_price)
+                        <span class="badge-sale">-{{ round((1 - $product->sale_price / $product->price) * 100) }}%</span>
+                    @endif
+                    @if($product->created_at->gt(now()->subDays(14)))
+                        <span class="badge-new">New</span>
+                    @endif
+                </div>
                 <div class="card-body">
                     <h4><a href="{{ route('store.product.show', $product) }}">{{ $product->name }}</a></h4>
                     <p class="meta">{{ \Illuminate\Support\Str::limit($product->short_description ?: $product->description, 100) }}</p>
@@ -47,12 +54,15 @@
                     </div>
                     <form method="POST" action="{{ route('store.cart.add', $product) }}">
                         @csrf
-                        <button class="btn-primary" type="submit">Add to cart</button>
+                        <button class="btn-primary" type="submit">Add to Cart</button>
                     </form>
                 </div>
             </article>
         @empty
-            <p class="meta">No products found.</p>
+            <div class="empty-state">
+                <p>No products found matching your filters.</p>
+                <a class="cta-btn" href="{{ route('store.products') }}">View All Products</a>
+            </div>
         @endforelse
     </div>
 

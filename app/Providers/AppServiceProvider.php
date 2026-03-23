@@ -38,7 +38,13 @@ class AppServiceProvider extends ServiceProvider
                 ->take(8)
                 ->get(['id', 'name', 'slug']);
 
+            $cartItemCount = collect(session('cart', []))
+                ->sum(function ($line) {
+                    return (int) ($line['qty'] ?? 0);
+                });
+
             $view->with('megaCategories', $megaCategories);
+            $view->with('cartItemCount', $cartItemCount);
         });
     }
 }
