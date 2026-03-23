@@ -1,0 +1,23 @@
+@extends('store.layouts.app')
+
+@section('title', 'NumNam - ' . $page['title'])
+
+@section('content')
+<section class="hero section in-view">
+    <div>
+        <span class="kicker">Policy</span>
+        <h1>{{ $page['title'] }}</h1>
+        <p>Please review this policy before placing orders or using platform features.</p>
+    </div>
+    <div class="hero-art"></div>
+</section>
+
+<section class="section">
+    @foreach($page['sections'] as $section)
+        <article style="padding:.45rem 0; border-bottom:1px solid var(--line);">
+            <h3 style="margin:0 0 .4rem;">{{ $section['heading'] }}</h3>
+            <p class="meta" style="margin:0;">{{ $section['text'] }}</p>
+        </article>
+    @endforeach
+</section>
+@endsection

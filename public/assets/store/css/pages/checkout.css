@@ -1,0 +1,42 @@
+.line-item {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.line-media {
+  border-radius: var(--radius);
+  min-height: 84px;
+  background-size: cover;
+  background-position: center;
+  background-color: #EFF2F3;
+}
+
+.checkout-layout {
+  display: grid;
+  gap: 30px;
+  grid-template-columns: 1fr;
+}
+
+.checkout-layout .section {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.checkout-layout h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+@media (min-width: 900px) {
+  .checkout-layout {
+    grid-template-columns: 1.2fr 0.9fr;
+    align-items: start;
+  }
+}
