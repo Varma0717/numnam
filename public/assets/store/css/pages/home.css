@@ -145,7 +145,12 @@
   font-family: "DM Sans", sans-serif;
   color: var(--brand-1);
 }
-.metric span { font-size: 14px; color: var(--muted); line-height: 21px; }
+
+.metric span {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 21px;
+}
 
 .trust-strip {
   background: transparent;
@@ -255,6 +260,7 @@
 .testimonial-card {
   text-align: center;
 }
+
 .testimonial-card p {
   margin-top: 0;
   font-style: italic;
@@ -262,6 +268,7 @@
   line-height: 28px;
   color: var(--text);
 }
+
 .testimonial-card .meta strong {
   color: var(--text);
   font-size: 14px;
@@ -288,8 +295,13 @@
 }
 
 @keyframes ticker {
-  from { transform: translateX(100%); }
-  to { transform: translateX(-100%); }
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 /* Category card styling */
@@ -298,7 +310,9 @@
 }
 
 /* Subscription plan cards */
-.plan-card .price { font-size: 24px; }
+.plan-card .price {
+  font-size: 24px;
+}
 
 /* Community section */
 .community-section {
@@ -309,13 +323,21 @@
 }
 
 @media (min-width: 780px) {
-  .hero-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-metrics {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .trust-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 979px) {
+
   .hero-slide,
-  .hero-slide-overlay { min-height: 430px; }
+  .hero-slide-overlay {
+    min-height: 430px;
+  }
 
   .hero-slide-overlay {
     padding: 58px 18px;

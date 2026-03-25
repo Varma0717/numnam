@@ -1,0 +1,122 @@
+/* ============================================================
+   Product Detail Page
+   ============================================================ */
+.product-detail-grid {
+    display: grid;
+    gap: 40px;
+    grid-template-columns: 1fr;
+    align-items: start;
+}
+
+.product-info .kicker {
+    margin-bottom: 8px;
+}
+
+.product-title {
+    font-family: "DM Sans", sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 12px 0 8px;
+    color: var(--text);
+}
+
+.product-info .chip-row {
+    margin-bottom: 12px;
+}
+
+.product-description {
+    font-size: 16px;
+    line-height: 26px;
+    color: var(--muted);
+}
+
+.product-price {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--brand-1);
+    margin: 16px 0;
+}
+
+.product-price del {
+    color: var(--muted);
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.stock-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.stock-status.in-stock {
+    color: #00a32a;
+}
+
+.stock-status.out-of-stock {
+    color: var(--danger);
+}
+
+.product-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.qty-input {
+    max-width: 100px;
+}
+
+.product-trust-signals {
+    display: flex;
+    gap: 20px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+.trust-signal {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.product-story {
+    font-size: 16px;
+    line-height: 28px;
+    color: var(--muted);
+    max-width: 80ch;
+}
+
+/* Rating stars */
+.rating {
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.star {
+    font-size: 16px;
+}
+
+.star.filled {
+    color: var(--brand-2);
+}
+
+.star.empty {
+    color: var(--line);
+}
+
+@media (min-width: 780px) {
+    .product-detail-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}

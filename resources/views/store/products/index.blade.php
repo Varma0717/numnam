@@ -4,12 +4,12 @@
 
 @section('content')
 @php
-    $productPlaceholders = [
-        asset('assets/images/product_1.png'),
-        asset('assets/images/product_2.png'),
-        asset('assets/images/product_3.png'),
-        asset('assets/images/product_4.png'),
-    ];
+$productPlaceholders = [
+asset('assets/images/product_1.png'),
+asset('assets/images/product_2.png'),
+asset('assets/images/product_3.png'),
+asset('assets/images/product_4.png'),
+];
 @endphp
 
 <section class="hero section in-view">
@@ -22,57 +22,57 @@
 </section>
 
 <section class="section catalog-filters">
-    <form method="GET" class="store-grid two">
-        <input class="input" type="text" name="q" value="{{ request('q') }}" placeholder="Search products">
+    <form method="GET" class="catalog-filter-bar">
+        <input class="input" type="text" name="q" value="{{ request('q') }}" placeholder="Search products...">
         <select class="input" name="category">
             <option value="">All categories</option>
             @foreach($categories as $category)
-                <option value="{{ $category->slug }}" @selected(request('category') === $category->slug)>{{ $category->name }}</option>
+            <option value="{{ $category->slug }}" @selected(request('category')===$category->slug)>{{ $category->name }}</option>
             @endforeach
         </select>
         <select class="input" name="type">
             <option value="">All types</option>
             @foreach(['puree', 'puffs', 'cookies'] as $type)
-                <option value="{{ $type }}" @selected(request('type') === $type)>{{ ucfirst($type) }}</option>
+            <option value="{{ $type }}" @selected(request('type')===$type)>{{ ucfirst($type) }}</option>
             @endforeach
         </select>
-        <button class="cta-btn" type="submit">Apply filters</button>
+        <button class="cta-btn" type="submit">Apply Filters</button>
     </form>
 </section>
 
 <section class="section">
     <div class="store-grid three">
         @forelse($products as $product)
-            @php($placeholderImage = $productPlaceholders[$loop->index % count($productPlaceholders)])
-            <article class="card hover-up fade-in-up">
-                <div class="media" style="background-image:url('{{ $placeholderImage }}'); background-size:cover;">
-                    @if($product->sale_price)
-                        <span class="badge-sale">-{{ round((1 - $product->sale_price / $product->price) * 100) }}%</span>
-                    @endif
-                    @if($product->created_at->gt(now()->subDays(14)))
-                        <span class="badge-new">New</span>
-                    @endif
-                </div>
-                <div class="card-body">
-                    <h4><a href="{{ route('store.product.show', $product) }}">{{ $product->name }}</a></h4>
-                    <p class="meta">{{ \Illuminate\Support\Str::limit($product->short_description ?: $product->description, 100) }}</p>
-                    <div class="price">
-                        <strong>Rs {{ number_format($product->sale_price ?: $product->price, 0) }}</strong>
-                        @if($product->sale_price)
-                            <del>Rs {{ number_format($product->price, 0) }}</del>
-                        @endif
-                    </div>
-                    <form method="POST" action="{{ route('store.cart.add', $product) }}">
-                        @csrf
-                        <button class="btn-primary" type="submit">Add to Cart</button>
-                    </form>
-                </div>
-            </article>
-        @empty
-            <div class="empty-state">
-                <p>No products found matching your filters.</p>
-                <a class="cta-btn" href="{{ route('store.products') }}">View All Products</a>
+        @php($placeholderImage = $productPlaceholders[$loop->index % count($productPlaceholders)])
+        <article class="card hover-up fade-in-up">
+            <div class="media" style="background-image:url('{{ $placeholderImage }}'); background-size:cover;">
+                @if($product->sale_price)
+                <span class="badge-sale">-{{ round((1 - $product->sale_price / $product->price) * 100) }}%</span>
+                @endif
+                @if($product->created_at->gt(now()->subDays(14)))
+                <span class="badge-new">New</span>
+                @endif
             </div>
+            <div class="card-body">
+                <h4><a href="{{ route('store.product.show', $product) }}">{{ $product->name }}</a></h4>
+                <p class="meta">{{ \Illuminate\Support\Str::limit($product->short_description ?: $product->description, 100) }}</p>
+                <div class="price">
+                    <strong>Rs {{ number_format($product->sale_price ?: $product->price, 0) }}</strong>
+                    @if($product->sale_price)
+                    <del>Rs {{ number_format($product->price, 0) }}</del>
+                    @endif
+                </div>
+                <form method="POST" action="{{ route('store.cart.add', $product) }}">
+                    @csrf
+                    <button class="btn-primary" type="submit">Add to Cart</button>
+                </form>
+            </div>
+        </article>
+        @empty
+        <div class="empty-state">
+            <p>No products found matching your filters.</p>
+            <a class="cta-btn" href="{{ route('store.products') }}">View All Products</a>
+        </div>
         @endforelse
     </div>
 

@@ -54,7 +54,7 @@ class StorefrontController extends Controller
 
         $topCategories = Category::query()
             ->where('is_active', true)
-            ->withCount(['products' => fn ($query) => $query->where('is_active', true)])
+            ->withCount(['products' => fn($query) => $query->where('is_active', true)])
             ->orderByDesc('products_count')
             ->take(6)
             ->get();
@@ -92,8 +92,8 @@ class StorefrontController extends Controller
                     $categoryQuery->where('slug', $request->string('category'));
                 });
             })
-            ->when($request->filled('type'), fn ($query) => $query->where('type', $request->string('type')))
-            ->when($request->filled('q'), fn ($query) => $query->where('name', 'like', '%' . $request->string('q') . '%'))
+            ->when($request->filled('type'), fn($query) => $query->where('type', $request->string('type')))
+            ->when($request->filled('q'), fn($query) => $query->where('name', 'like', '%' . $request->string('q') . '%'))
             ->latest('id')
             ->paginate(12)
             ->withQueryString();
@@ -163,7 +163,7 @@ class StorefrontController extends Controller
         $featuredArticles = Blog::query()
             ->where('status', 'published')
             ->latest('published_at')
-            ->take(4)
+            ->take(3)
             ->get();
 
         return view('store.recipes', compact('recipeTips', 'featuredArticles'));

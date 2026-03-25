@@ -14,25 +14,31 @@
 </section>
 
 <section class="section fade-in-up">
-    <div class="section-head"><div><h3>Frequently Asked Questions</h3></div></div>
+    <div class="section-head">
+        <div>
+            <h3>Frequently Asked Questions</h3>
+        </div>
+    </div>
     <div class="accordion">
         @foreach($faqs as $i => $faq)
-            <div class="accordion-item{{ $i === 0 ? ' open' : '' }}">
-                <button type="button" class="accordion-trigger" aria-expanded="{{ $i === 0 ? 'true' : 'false' }}">
-                    {{ $faq['q'] }}
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                </button>
-                <div class="accordion-panel" style="{{ $i === 0 ? 'max-height:200px' : '' }}">
-                    <div class="accordion-panel-inner">{{ $faq['a'] }}</div>
-                </div>
+        <div class="accordion-item{{ $i === 0 ? ' open' : '' }}">
+            <button type="button" class="accordion-trigger" aria-expanded="{{ $i === 0 ? 'true' : 'false' }}">
+                {{ $faq['q'] }}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9" />
+                </svg>
+            </button>
+            <div class="accordion-panel" style="{{ $i === 0 ? 'max-height:200px' : '' }}">
+                <div class="accordion-panel-inner">{{ $faq['a'] }}</div>
             </div>
+        </div>
         @endforeach
     </div>
 </section>
 
-<section class="section fade-in-up" style="text-align:center;">
+<section class="section fade-in-up faq-cta">
     <h3>Still have questions?</h3>
-    <p class="meta" style="margin-bottom:16px;">Our care team is here to help you with anything.</p>
+    <p class="meta faq-cta-text">Our care team is here to help you with anything.</p>
     <a class="cta-btn" href="{{ route('store.contact') }}">Contact Us</a>
 </section>
 @endsection

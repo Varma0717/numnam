@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ====== Toast Notification System ====== */
-  window.numnamToast = function(message, type) {
+  window.numnamToast = function (message, type) {
     type = type || 'info';
     const container = document.getElementById('toast-container');
     if (!container) return;
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tab.closest('.account-tabs')?.querySelectorAll('.account-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       document.querySelectorAll('.account-panel').forEach(p => p.classList.remove('active'));
-      const panel = document.getElementById(target);
+      const panel = document.querySelector('[data-panel="' + target + '"]');
       if (panel) panel.classList.add('active');
     });
   });

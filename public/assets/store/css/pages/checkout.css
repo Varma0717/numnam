@@ -40,3 +40,35 @@
     align-items: start;
   }
 }
+
+.checkout-section-title {
+  margin: 0;
+}
+
+.checkout-payment-title {
+  margin-top: 20px;
+}
+
+.pincode-input {
+  max-width: 200px;
+}
+
+.checkout-referral-note {
+  padding-top: 10px;
+}
+
+.checkout-submit-btn {
+  font-size: 14px;
+  padding: 14px 32px;
+}
+
+.checkout-summary {
+  position: sticky;
+  top: 90px;
+}
+
+.checkout-trust-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

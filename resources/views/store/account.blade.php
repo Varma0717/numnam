@@ -4,10 +4,10 @@
 
 @section('content')
 <section class="section fade-in-up">
-    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <div class="account-header">
         <div>
             <span class="kicker">Welcome back</span>
-            <h1 style="margin:0;">{{ auth()->user()->name }}</h1>
+            <h1 class="account-name">{{ auth()->user()->name }}</h1>
         </div>
         <form method="POST" action="{{ route('store.logout') }}">
             @csrf
@@ -48,14 +48,14 @@
     {{-- Orders Panel --}}
     <div class="account-panel active" data-panel="orders">
         @if($orders->isEmpty())
-            <div class="empty-state">
-                <p>You haven't placed any orders yet.</p>
-                <a class="cta-btn" href="{{ route('store.products') }}">Start Shopping</a>
-            </div>
+        <div class="empty-state">
+            <p>You haven't placed any orders yet.</p>
+            <a class="cta-btn" href="{{ route('store.products') }}">Start Shopping</a>
+        </div>
         @else
-            <div style="overflow-x:auto;">
-                <table class="store-table">
-                    <thead>
+        <div class="table-responsive">
+            <table class="store-table">
+                <thead>
                     <tr>
                         <th>Order #</th>
                         <th>Date</th>
@@ -63,118 +63,121 @@
                         <th>Total</th>
                         <th>Payment</th>
                     </tr>
-                    </thead>
-                    <tbody>
+                </thead>
+                <tbody>
                     @foreach($orders as $order)
-                        <tr>
-                            <td><strong>{{ $order->order_number }}</strong></td>
-                            <td>{{ $order->created_at->format('d M Y') }}</td>
-                            <td><span class="chip">{{ ucfirst($order->status) }}</span></td>
-                            <td>Rs {{ number_format($order->total, 0) }}</td>
-                            <td>{{ strtoupper($order->payment_status) }}</td>
-                        </tr>
+                    <tr>
+                        <td><strong>{{ $order->order_number }}</strong></td>
+                        <td>{{ $order->created_at->format('d M Y') }}</td>
+                        <td><span class="chip">{{ ucfirst($order->status) }}</span></td>
+                        <td>Rs {{ number_format($order->total, 0) }}</td>
+                        <td>{{ strtoupper($order->payment_status) }}</td>
+                    </tr>
                     @endforeach
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
+        </div>
         @endif
     </div>
 
     {{-- Subscriptions Panel --}}
     <div class="account-panel" data-panel="subscriptions">
         @if($subscriptions->isEmpty())
-            <div class="empty-state">
-                <p>No active subscriptions.</p>
-                <a class="cta-btn" href="{{ route('store.pricing') }}">View Plans</a>
-            </div>
+        <div class="empty-state">
+            <p>No active subscriptions.</p>
+            <a class="cta-btn" href="{{ route('store.pricing') }}">View Plans</a>
+        </div>
         @else
-            <div style="overflow-x:auto;">
-                <table class="store-table">
-                    <thead>
+        <div class="table-responsive">
+            <table class="store-table">
+                <thead>
                     <tr>
                         <th>Plan</th>
                         <th>Cycle</th>
                         <th>Price</th>
                         <th>Status</th>
                     </tr>
-                    </thead>
-                    <tbody>
+                </thead>
+                <tbody>
                     @foreach($subscriptions as $subscription)
-                        <tr>
-                            <td><strong>{{ $subscription->plan_name }}</strong></td>
-                            <td>{{ ucfirst($subscription->frequency) }}</td>
-                            <td>Rs {{ number_format($subscription->price_per_cycle, 0) }}</td>
-                            <td><span class="chip">{{ ucfirst($subscription->status) }}</span></td>
-                        </tr>
+                    <tr>
+                        <td><strong>{{ $subscription->plan_name }}</strong></td>
+                        <td>{{ ucfirst($subscription->frequency) }}</td>
+                        <td>Rs {{ number_format($subscription->price_per_cycle, 0) }}</td>
+                        <td><span class="chip">{{ ucfirst($subscription->status) }}</span></td>
+                    </tr>
                     @endforeach
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
+        </div>
         @endif
     </div>
 
     {{-- Referrals Panel --}}
     <div class="account-panel" data-panel="referrals">
-        <div class="summary-card" style="margin-bottom:24px;">
-            <h4 style="margin:0 0 8px;">Your Referral Code</h4>
-            <p style="font-size:1.3rem; font-weight:700; letter-spacing:2px; color:var(--brand-1); margin:0;">
+        <div class="summary-card account-referral-card">
+            <h4 class="account-referral-title">Your Referral Code</h4>
+            <p class="account-referral-code">
                 {{ auth()->user()->referral_code ?: 'Not generated yet' }}
             </p>
             @if(auth()->user()->referral_code)
-                <p class="meta" style="margin-top:8px;">Share this link: <strong>{{ route('store.register', ['ref' => auth()->user()->referral_code]) }}</strong></p>
+            <p class="meta account-referral-link">Share this link: <strong>{{ route('store.register', ['ref' => auth()->user()->referral_code]) }}</strong></p>
             @endif
         </div>
         @if($referrals->isEmpty())
-            <p class="meta">No referrals yet. Share your code with friends!</p>
+        <p class="meta">No referrals yet. Share your code with friends!</p>
         @else
-            <div style="overflow-x:auto;">
-                <table class="store-table">
-                    <thead>
-                    <tr><th>Customer</th><th>Joined</th></tr>
-                    </thead>
-                    <tbody>
+        <div class="table-responsive">
+            <table class="store-table">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Joined</th>
+                    </tr>
+                </thead>
+                <tbody>
                     @foreach($referrals as $referral)
-                        <tr>
-                            <td>{{ $referral->name }}</td>
-                            <td>{{ $referral->created_at->format('d M Y') }}</td>
-                        </tr>
+                    <tr>
+                        <td>{{ $referral->name }}</td>
+                        <td>{{ $referral->created_at->format('d M Y') }}</td>
+                    </tr>
                     @endforeach
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
+        </div>
         @endif
     </div>
 
     {{-- Rewards Panel --}}
     <div class="account-panel" data-panel="rewards">
         @if($rewards->isEmpty())
-            <div class="empty-state">
-                <p>No reward transactions yet. Refer friends to earn rewards!</p>
-                <a class="cta-btn" href="{{ route('store.refer-friends') }}">Learn About Referrals</a>
-            </div>
+        <div class="empty-state">
+            <p>No reward transactions yet. Refer friends to earn rewards!</p>
+            <a class="cta-btn" href="{{ route('store.refer-friends') }}">Learn About Referrals</a>
+        </div>
         @else
-            <div style="overflow-x:auto;">
-                <table class="store-table">
-                    <thead>
+        <div class="table-responsive">
+            <table class="store-table">
+                <thead>
                     <tr>
                         <th>Date</th>
                         <th>Type</th>
                         <th>Amount</th>
                         <th>Description</th>
                     </tr>
-                    </thead>
-                    <tbody>
+                </thead>
+                <tbody>
                     @foreach($rewards as $reward)
-                        <tr>
-                            <td>{{ $reward->created_at->format('d M Y') }}</td>
-                            <td><span class="chip">{{ strtoupper($reward->type) }}</span></td>
-                            <td>Rs {{ number_format($reward->amount, 0) }}</td>
-                            <td>{{ $reward->description }}</td>
-                        </tr>
+                    <tr>
+                        <td>{{ $reward->created_at->format('d M Y') }}</td>
+                        <td><span class="chip">{{ strtoupper($reward->type) }}</span></td>
+                        <td>Rs {{ number_format($reward->amount, 0) }}</td>
+                        <td>{{ $reward->description }}</td>
+                    </tr>
                     @endforeach
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
+        </div>
         @endif
     </div>
 </section>

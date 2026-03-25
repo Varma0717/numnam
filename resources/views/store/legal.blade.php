@@ -14,10 +14,10 @@
 
 <section class="section">
     @foreach($page['sections'] as $section)
-        <article style="padding:.45rem 0; border-bottom:1px solid var(--line);">
-            <h3 style="margin:0 0 .4rem;">{{ $section['heading'] }}</h3>
-            <p class="meta" style="margin:0;">{{ $section['text'] }}</p>
-        </article>
+    <article class="legal-section">
+        <h3>{{ $section['heading'] }}</h3>
+        <p class="meta">{{ $section['text'] }}</p>
+    </article>
     @endforeach
 </section>
 @endsection
