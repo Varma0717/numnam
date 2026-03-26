@@ -11,7 +11,7 @@
 }
 
 .line-item:hover {
-  border-color: rgba(159, 134, 217, 0.3);
+  border-color: rgba(45, 106, 79, 0.3);
 }
 
 .line-media {
@@ -117,7 +117,7 @@
 
 .btn-remove:hover {
   color: var(--danger);
-  background: rgba(227, 89, 70, 0.08);
+  background: rgba(231, 111, 81, 0.08);
 }
 
 /* Cart layout */
@@ -212,15 +212,15 @@
 }
 
 .payment-card:hover {
-  border-color: rgba(159, 134, 217, 0.4);
-  background: rgba(243, 238, 255, 0.3);
+  border-color: rgba(45, 106, 79, 0.35);
+  background: rgba(234, 245, 239, 0.3);
 }
 
 .payment-card.selected,
 .payment-card:has(input:checked) {
   border-color: var(--brand-1);
-  background: rgba(243, 238, 255, 0.5);
-  box-shadow: 0 0 0 3px rgba(159, 134, 217, 0.15);
+  background: rgba(234, 245, 239, 0.5);
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
 }
 
 .payment-card input[type="radio"] {

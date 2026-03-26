@@ -141,44 +141,33 @@ $mainPlaceholder = $productPlaceholders[$product->id % count($productPlaceholder
     <img src="" alt="Product zoom">
 </div>
 
-<section class="section fade-in-up">
-    <div class="section-head">
-        <div>
-            <h3>Ingredients & Nutrition</h3>
+{{-- Tabbed Content: Ingredients / Nutrition / Story --}}
+<section class="section fade-in-up product-tabs-section">
+    <nav class="product-tab-nav" role="tablist">
+        <button class="product-tab active" role="tab" aria-selected="true" aria-controls="tab-ingredients" data-tab="tab-ingredients">Ingredients</button>
+        <button class="product-tab" role="tab" aria-selected="false" aria-controls="tab-nutrition" data-tab="tab-nutrition">Nutrition Facts</button>
+        <button class="product-tab" role="tab" aria-selected="false" aria-controls="tab-story" data-tab="tab-story">Product Story</button>
+    </nav>
+    <div class="product-tab-panels">
+        <div class="product-tab-panel active" id="tab-ingredients" role="tabpanel">
+            <p>{{ $product->ingredients ?: 'Ingredient details will be updated soon.' }}</p>
+        </div>
+        <div class="product-tab-panel" id="tab-nutrition" role="tabpanel">
+            @php($nutrition = $product->nutrition_facts ?: $product->nutrition_info)
+            @if(is_array($nutrition) && !empty($nutrition))
+            <ul class="nutrition-list">
+                @foreach($nutrition as $key => $value)
+                <li><span class="nutrition-key">{{ is_string($key) ? ucfirst(str_replace('_', ' ', $key)) : 'Nutrient' }}</span> <span class="nutrition-val">{{ is_scalar($value) ? $value : json_encode($value) }}</span></li>
+                @endforeach
+            </ul>
+            @else
+            <p class="meta">Detailed nutrition values are coming soon.</p>
+            @endif
+        </div>
+        <div class="product-tab-panel" id="tab-story" role="tabpanel">
+            <p class="product-story">{{ $product->description }}</p>
         </div>
     </div>
-    <div class="store-grid two">
-        <article class="card">
-            <div class="card-body">
-                <h4>Ingredients</h4>
-                <p class="meta">{{ $product->ingredients ?: 'Ingredient details will be updated soon.' }}</p>
-            </div>
-        </article>
-        <article class="card">
-            <div class="card-body">
-                <h4>Nutrition Facts</h4>
-                @php($nutrition = $product->nutrition_facts ?: $product->nutrition_info)
-                @if(is_array($nutrition) && !empty($nutrition))
-                <ul>
-                    @foreach($nutrition as $key => $value)
-                    <li>{{ is_string($key) ? ucfirst(str_replace('_', ' ', $key)) : 'Nutrient' }}: {{ is_scalar($value) ? $value : json_encode($value) }}</li>
-                    @endforeach
-                </ul>
-                @else
-                <p class="meta">Detailed nutrition values are coming soon.</p>
-                @endif
-            </div>
-        </article>
-    </div>
-</section>
-
-<section class="section fade-in-up">
-    <div class="section-head">
-        <div>
-            <h3>Product Story</h3>
-        </div>
-    </div>
-    <p class="product-story">{{ $product->description }}</p>
 </section>
 
 {{-- Customer Reviews Section --}}

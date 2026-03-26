@@ -101,7 +101,7 @@
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--brand-1) 0%, var(--brand-3) 100%);
+    background: linear-gradient(135deg, var(--brand-1) 0%, var(--brand-1-light) 100%);
     color: #fff;
     font-size: 24px;
     font-weight: 700;
@@ -114,8 +114,8 @@
 /* About CTA */
 .about-cta-section {
     text-align: center;
-    background: linear-gradient(135deg, #f3eeff 0%, #FFF5F2 100%);
-    border-radius: 12px;
+    background: linear-gradient(135deg, #eaf5ef 0%, #FDF8F4 100%);
+    border-radius: var(--radius-lg);
     padding: 48px 24px;
 }
 
@@ -143,6 +143,78 @@
 @media (min-width: 780px) {
     .about-mission-grid {
         grid-template-columns: 1.2fr 1fr;
+    }
+}
+
+/* Journey Timeline */
+.journey-timeline {
+    position: relative;
+    padding-left: 32px;
+}
+
+.journey-timeline::before {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: var(--line);
+}
+
+.journey-step {
+    position: relative;
+    padding-bottom: 32px;
+}
+
+.journey-step:last-child {
+    padding-bottom: 0;
+}
+
+.journey-step::before {
+    content: "";
+    position: absolute;
+    left: -27px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--brand-1);
+    border: 3px solid var(--brand-1-soft);
+}
+
+.journey-year {
+    display: inline-block;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--brand-1);
+    margin-bottom: 6px;
+}
+
+.journey-content h4 {
+    margin: 0 0 4px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.journey-content .meta {
+    max-width: 50ch;
+}
+
+@media (min-width: 780px) {
+    .journey-timeline {
+        padding-left: 48px;
+    }
+
+    .journey-step::before {
+        left: -43px;
+    }
+
+    .journey-timeline::before {
+        left: 7px;
     }
 }
 
@@ -189,7 +261,7 @@
 }
 
 .recipe-header {
-    background: linear-gradient(135deg, #f3eeff 0%, #FFF5F2 100%);
+    background: linear-gradient(135deg, #eaf5ef 0%, #FDF8F4 100%);
     padding: 24px;
 }
 
@@ -297,7 +369,7 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--brand-1) 0%, var(--brand-3) 100%);
+    background: linear-gradient(135deg, var(--brand-1) 0%, var(--brand-1-light) 100%);
     color: #fff;
     font-size: 20px;
     font-weight: 700;

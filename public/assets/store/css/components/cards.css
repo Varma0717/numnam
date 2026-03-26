@@ -14,7 +14,7 @@
 }
 
 .card:hover {
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(159, 134, 217, 0.06);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(45, 106, 79, 0.06);
 }
 
 /* Gradient sweep overlay on hover */
@@ -22,7 +22,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(159, 134, 217, 0.08) 0%, transparent 50%);
+  background: linear-gradient(135deg, rgba(45, 106, 79, 0.06) 0%, transparent 50%);
   opacity: 0;
   transition: opacity 0.45s ease;
   pointer-events: none;
@@ -63,7 +63,7 @@
 
 .card h4 {
   margin: 0 0 8px;
-  font-family: "DM Sans", sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: 700;
   font-size: 18px;
   line-height: 30px;
@@ -103,7 +103,7 @@
 }
 
 .chip {
-  border: 1px solid #e0d4f5;
+  border: 1px solid rgba(45, 106, 79, 0.2);
   border-radius: 36px;
   background: var(--accent-soft);
   color: var(--brand-1);
@@ -159,7 +159,7 @@
 }
 
 .card .store-actions .btn-primary:hover {
-  background: var(--brand-3);
+  background: var(--brand-1-light);
 }
 
 /* Blog card */

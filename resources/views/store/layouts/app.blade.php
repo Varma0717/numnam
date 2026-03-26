@@ -57,7 +57,7 @@
     {{-- Preconnect for performance --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Lobster+Two:wght@400;700&family=Mulish:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,700&display=swap">
 
     <link rel="stylesheet" href="{{ url('assets/store/css/base.css') }}">
     <link rel="stylesheet" href="{{ url('assets/store/css/components/header.css') }}">

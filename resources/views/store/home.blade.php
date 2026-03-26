@@ -157,6 +157,68 @@ asset('assets/images/product_4.png'),
     </div>
 </section>
 
+{{-- Age Stage Navigator --}}
+<section class="section age-stage-section animate-fade-up">
+    <div class="section-head">
+        <div>
+            <h3>Shop by Stage</h3>
+            <p class="section-sub">Nutrition tailored to your baby's growth journey</p>
+        </div>
+    </div>
+    <div class="age-stage-grid stagger-children">
+        <a href="{{ route('store.products', ['age_group' => '4-6 Months']) }}" class="age-stage-card">
+            <div class="age-stage-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M6 21v-2a4 4 0 014-4h4" />
+                    <path d="M15 19l2 2 4-4" />
+                </svg>
+            </div>
+            <h4>Stage 1</h4>
+            <p class="meta">4–6 Months</p>
+            <span class="age-stage-label">First Tastes</span>
+        </a>
+        <a href="{{ route('store.products', ['age_group' => '6-8 Months']) }}" class="age-stage-card">
+            <div class="age-stage-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z" />
+                    <circle cx="12" cy="9" r="2.5" />
+                </svg>
+            </div>
+            <h4>Stage 2</h4>
+            <p class="meta">6–8 Months</p>
+            <span class="age-stage-label">Exploring Flavours</span>
+        </a>
+        <a href="{{ route('store.products', ['age_group' => '8-12 Months']) }}" class="age-stage-card">
+            <div class="age-stage-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 00-3-3.87" />
+                    <path d="M16 3.13a4 4 0 010 7.75" />
+                </svg>
+            </div>
+            <h4>Stage 3</h4>
+            <p class="meta">8–12 Months</p>
+            <span class="age-stage-label">Textured Meals</span>
+        </a>
+        <a href="{{ route('store.products', ['age_group' => '12+ Months']) }}" class="age-stage-card">
+            <div class="age-stage-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M18 8h1a4 4 0 010 8h-1" />
+                    <path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
+                    <line x1="6" y1="1" x2="6" y2="4" />
+                    <line x1="10" y1="1" x2="10" y2="4" />
+                    <line x1="14" y1="1" x2="14" y2="4" />
+                </svg>
+            </div>
+            <h4>Stage 4</h4>
+            <p class="meta">12+ Months</p>
+            <span class="age-stage-label">Family Foods</span>
+        </a>
+    </div>
+</section>
+
 <section class="section animate-fade-up">
     <div class="section-head">
         <div>
@@ -228,6 +290,75 @@ asset('assets/images/product_4.png'),
         <div class="step-card">
             <h4>Delivered to You</h4>
             <p>Fast, reliable delivery straight to your door. Subscribe for extra savings.</p>
+        </div>
+    </div>
+</section>
+
+{{-- Ingredient Transparency --}}
+<section class="section ingredient-section animate-fade-up">
+    <div class="ingredient-grid">
+        <div class="ingredient-copy">
+            <span class="kicker">Transparency First</span>
+            <h3>Know exactly what's inside</h3>
+            <p class="section-sub">Every NumNam product lists its full ingredient deck — no hidden fillers, no mystery powders. Just clean, whole foods your baby deserves.</p>
+            <ul class="ingredient-checklist">
+                <li>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-1)" stroke-width="2.5">
+                        <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                    100% natural, whole-food ingredients
+                </li>
+                <li>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-1)" stroke-width="2.5">
+                        <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                    Zero added sugar, salt or preservatives
+                </li>
+                <li>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-1)" stroke-width="2.5">
+                        <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                    European nutrition standards
+                </li>
+                <li>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-1)" stroke-width="2.5">
+                        <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                    Stage-appropriate textures & nutrients
+                </li>
+            </ul>
+            <a href="{{ route('store.about') }}" class="btn-soft">Learn Our Story</a>
+        </div>
+        <div class="ingredient-visual">
+            <div class="ingredient-badge-grid stagger-children">
+                <div class="ingredient-badge">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M6 21c6 0 12-6 12-12V3h-6C6 3 3 6 3 12s3 9 3 9z" />
+                    </svg>
+                    <span>Organic Veggies</span>
+                </div>
+                <div class="ingredient-badge">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                        <line x1="9" y1="9" x2="9.01" y2="9" />
+                        <line x1="15" y1="9" x2="15.01" y2="9" />
+                    </svg>
+                    <span>No Artificial Flavours</span>
+                </div>
+                <div class="ingredient-badge">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 2s6 7 6 11a6 6 0 11-12 0c0-4 6-11 6-11z" />
+                    </svg>
+                    <span>No Added Sugar</span>
+                </div>
+                <div class="ingredient-badge">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z" />
+                    </svg>
+                    <span>FSSAI Certified</span>
+                </div>
+            </div>
         </div>
     </div>
 </section>

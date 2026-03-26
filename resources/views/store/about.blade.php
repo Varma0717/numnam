@@ -64,6 +64,45 @@
     </div>
 </section>
 
+{{-- NumNam Journey Timeline --}}
+<section class="section animate-fade-up">
+    <div class="section-head">
+        <div>
+            <h3>Our Journey</h3>
+        </div>
+    </div>
+    <div class="journey-timeline stagger-children">
+        <div class="journey-step animate-fade-up">
+            <span class="journey-year">2022</span>
+            <div class="journey-content">
+                <h4>The Idea</h4>
+                <p class="meta">Frustrated by the gap between clinical nutrition and what's actually available on shelves, our founders set out to build something better.</p>
+            </div>
+        </div>
+        <div class="journey-step animate-fade-up">
+            <span class="journey-year">2023</span>
+            <div class="journey-content">
+                <h4>First Recipes</h4>
+                <p class="meta">Over 50 recipe iterations with pediatric dietitians to nail taste, texture, and age-appropriate nutrition in every pack.</p>
+            </div>
+        </div>
+        <div class="journey-step animate-fade-up">
+            <span class="journey-year">2024</span>
+            <div class="journey-content">
+                <h4>Launch Day</h4>
+                <p class="meta">NumNam goes live — stage-based baby food designed for real Indian families, shipped fresh across the country.</p>
+            </div>
+        </div>
+        <div class="journey-step animate-fade-up">
+            <span class="journey-year">Now</span>
+            <div class="journey-content">
+                <h4>Growing Together</h4>
+                <p class="meta">New formats, new flavors, and a growing community of parents who trust clean-label choices for their little ones.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="section animate-fade-up">
     <div class="section-head">
         <div>

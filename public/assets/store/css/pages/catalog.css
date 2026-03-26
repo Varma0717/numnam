@@ -2,6 +2,62 @@
   margin-bottom: 24px;
 }
 
+/* ---- Age-stage quick filter row ---- */
+.age-filter-row {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-bottom: -8px;
+}
+
+.age-filter-label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.age-filter-chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.age-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 1.5px solid var(--line);
+  background: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.age-chip:hover {
+  border-color: var(--brand-1);
+  background: var(--brand-1-soft);
+  color: var(--brand-1);
+}
+
+.age-chip.active {
+  border-color: var(--brand-1);
+  background: var(--brand-1);
+  color: #fff;
+}
+
+.age-chip-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* ---- Catalog hero ---- */
+
 .catalog-filter-bar {
   display: grid;
   gap: 12px;
@@ -18,9 +74,9 @@
 .catalog-filter-bar input {
   height: 48px;
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   padding: 10px 20px;
-  font-family: "DM Sans", sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 14px;
   color: var(--text);
   background: #fff;
@@ -32,7 +88,7 @@
 .catalog-filter-bar select:focus,
 .catalog-filter-bar input:focus {
   border-color: var(--brand-1);
-  box-shadow: 0 0 0 3px rgba(159, 134, 217, 0.18);
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.15);
   outline: none;
 }
 

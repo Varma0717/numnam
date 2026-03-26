@@ -13,7 +13,7 @@
 }
 
 .blog-read-more:hover {
-    color: var(--brand-3);
+    color: var(--brand-1-light);
 }
 
 /* Blog detail */
@@ -42,7 +42,7 @@
 }
 
 .blog-article h2 {
-    font-family: "DM Sans", sans-serif;
+    font-family: "Plus Jakarta Sans", sans-serif;
     font-size: 24px;
     margin: 32px 0 12px;
     line-height: 1.3;

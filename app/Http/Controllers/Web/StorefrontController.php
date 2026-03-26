@@ -96,7 +96,15 @@ class StorefrontController extends Controller
             })
             ->when($request->filled('type'), fn($query) => $query->where('type', $request->string('type')))
             ->when($request->filled('q'), fn($query) => $query->where('name', 'like', '%' . $request->string('q') . '%'))
-            ->latest('id')
+            ->when($request->filled('age'), fn($query) => $query->where('age_group', 'like', '%' . $request->string('age') . '%'))
+            ->when($request->filled('sort'), function ($query) use ($request) {
+                return match ($request->string('sort')->toString()) {
+                    'price_low'  => $query->orderBy('price'),
+                    'price_high' => $query->orderByDesc('price'),
+                    'name_az'    => $query->orderBy('name'),
+                    default      => $query->latest('id'),
+                };
+            }, fn($query) => $query->latest('id'))
             ->paginate(12)
             ->withQueryString();
 

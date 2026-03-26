@@ -14,15 +14,39 @@ asset('assets/images/product_4.png'),
 
 <section class="hero section in-view">
     <div>
-        <span class="kicker">Shop</span>
-        <h1>All Products</h1>
-        <p>Explore fruitie packs, upcoming puffs, and stage-based nutrition options with quick filters.</p>
+        <span class="kicker">Shop NumNam</span>
+        <h1>Wholesome Baby Food</h1>
+        <p>Stage-based nutrition made from real ingredients — purees, puffs &amp; more for every milestone.</p>
+    </div>
+</section>
+
+{{-- Age-stage quick filter chips --}}
+<section class="section age-filter-row">
+    <p class="age-filter-label">Filter by age</p>
+    <div class="age-filter-chips">
+        <a href="{{ route('store.products', array_merge(request()->except('age','page'), request('age') === '4-6' ? [] : ['age' => '4-6'])) }}"
+            class="age-chip {{ request('age') === '4-6' ? 'active' : '' }}">
+            <span class="age-chip-icon">🍌</span> 4–6 months
+        </a>
+        <a href="{{ route('store.products', array_merge(request()->except('age','page'), request('age') === '6-8' ? [] : ['age' => '6-8'])) }}"
+            class="age-chip {{ request('age') === '6-8' ? 'active' : '' }}">
+            <span class="age-chip-icon">🥕</span> 6–8 months
+        </a>
+        <a href="{{ route('store.products', array_merge(request()->except('age','page'), request('age') === '8-12' ? [] : ['age' => '8-12'])) }}"
+            class="age-chip {{ request('age') === '8-12' ? 'active' : '' }}">
+            <span class="age-chip-icon">🥦</span> 8–12 months
+        </a>
+        <a href="{{ route('store.products', array_merge(request()->except('age','page'), request('age') === '12+' ? [] : ['age' => '12+'])) }}"
+            class="age-chip {{ request('age') === '12+' ? 'active' : '' }}">
+            <span class="age-chip-icon">🍎</span> 12+ months
+        </a>
     </div>
 </section>
 
 <section class="section catalog-filters">
     <form method="GET" class="catalog-filter-bar">
         <input class="input" type="text" name="q" value="{{ request('q') }}" placeholder="Search products...">
+        @if(request('age'))<input type="hidden" name="age" value="{{ request('age') }}">@endif
         <select class="input" name="category">
             <option value="">All categories</option>
             @foreach($categories as $category)

@@ -3,7 +3,7 @@
   max-width: 100vw;
   margin-left: calc(-50vw + 50%);
   overflow: hidden;
-  background: #f6f3ff;
+  background: #eaf5ef;
   position: relative;
 }
 
@@ -68,7 +68,8 @@
   margin: 0;
   color: #ffffff;
   max-width: 750px;
-  font-family: "Lobster Two", cursive;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 800;
   font-size: clamp(2.2rem, 4.8vw, 4rem);
   line-height: 1.06;
   opacity: 0;
@@ -170,7 +171,7 @@
   display: block;
   font-size: 22px;
   line-height: 27px;
-  font-family: "DM Sans", sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   color: var(--brand-1);
 }
 
@@ -191,8 +192,8 @@
 }
 
 .trust-card {
-  background: linear-gradient(180deg, #ffffff 0%, #faf7ff 100%);
-  border: 1px solid rgba(159, 134, 217, 0.24);
+  background: linear-gradient(180deg, #ffffff 0%, #f4faf6 100%);
+  border: 1px solid rgba(45, 106, 79, 0.18);
   border-radius: 14px;
   padding: 18px;
   display: grid;
@@ -204,8 +205,8 @@
 
 .trust-card:hover {
   transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(31, 35, 41, 0.1), 0 0 0 1px rgba(159, 134, 217, 0.3);
-  border-color: rgba(159, 134, 217, 0.5);
+  box-shadow: 0 20px 40px rgba(31, 35, 41, 0.1), 0 0 0 1px rgba(45, 106, 79, 0.25);
+  border-color: rgba(45, 106, 79, 0.4);
 }
 
 .trust-icon {
@@ -216,8 +217,8 @@
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  background: linear-gradient(135deg, var(--brand-1) 0%, var(--brand-3) 100%);
-  box-shadow: 0 10px 20px rgba(159, 134, 217, 0.28);
+  background: linear-gradient(135deg, var(--brand-1) 0%, var(--brand-1-light) 100%);
+  box-shadow: 0 10px 20px rgba(45, 106, 79, 0.25);
 }
 
 .trust-icon svg {
@@ -265,7 +266,7 @@
   height: 40px;
   border: 0;
   border-radius: 999px;
-  background: #f1eaff;
+  background: var(--accent-soft);
   color: var(--brand-1);
   font-size: 22px;
   line-height: 1;
@@ -291,9 +292,10 @@
 
 .testimonial-card p {
   margin-top: 0;
+  font-family: "Playfair Display", serif;
   font-style: italic;
-  font-size: 16px;
-  line-height: 28px;
+  font-size: 17px;
+  line-height: 30px;
   color: var(--text);
 }
 
@@ -354,8 +356,8 @@
 
 /* Community section */
 .community-section {
-  background: linear-gradient(135deg, #f3eeff 0%, #FFF5F2 100%);
-  border-radius: 12px;
+  background: linear-gradient(135deg, #eaf5ef 0%, #FDF8F4 100%);
+  border-radius: var(--radius-lg);
   padding: 48px 40px;
   text-align: center;
   position: relative;
@@ -370,7 +372,7 @@
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background: rgba(159, 134, 217, 0.08);
+  background: rgba(45, 106, 79, 0.06);
   pointer-events: none;
 }
 
@@ -387,7 +389,7 @@
   padding: 24px 16px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(159, 134, 217, 0.15);
+  border: 1px solid rgba(45, 106, 79, 0.12);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -438,7 +440,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--brand-1), var(--brand-3));
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-1-light));
   color: #fff;
   font-weight: 700;
   font-size: 18px;
@@ -471,6 +473,154 @@
   .stats-row {
     grid-template-columns: repeat(4, 1fr);
   }
+
+  .age-stage-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .ingredient-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+}
+
+/* ============================================================
+   Age Stage Navigator
+   ============================================================ */
+.age-stage-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.age-stage-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 32px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: #fff;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.age-stage-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--brand-1-light);
+  color: var(--text);
+}
+
+.age-stage-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  background: var(--accent-soft);
+  color: var(--brand-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.age-stage-card:hover .age-stage-icon {
+  background: var(--brand-1);
+  color: #fff;
+}
+
+.age-stage-card h4 {
+  margin: 0 0 4px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.age-stage-card .meta {
+  margin: 0;
+}
+
+.age-stage-label {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 4px 14px;
+  border-radius: 50px;
+  background: var(--brand-1-soft);
+  color: var(--brand-1);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* ============================================================
+   Ingredient Transparency Section
+   ============================================================ */
+.ingredient-grid {
+  display: grid;
+  gap: 40px;
+}
+
+.ingredient-copy h3 {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  margin: 12px 0 8px;
+}
+
+.ingredient-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0;
+}
+
+.ingredient-checklist li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  border-bottom: 1px solid rgba(232, 224, 216, 0.5);
+}
+
+.ingredient-checklist li:last-child {
+  border-bottom: 0;
+}
+
+.ingredient-badge-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.ingredient-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 24px 16px;
+  background: var(--surface-warm);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--brand-1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ingredient-badge:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.ingredient-badge span {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
 }
 
 @media (max-width: 979px) {

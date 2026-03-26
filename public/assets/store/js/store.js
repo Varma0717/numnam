@@ -343,4 +343,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   render();
   restartAutoplay();
+
+  /* ====== Product Detail Tabs ====== */
+  const tabBtns = document.querySelectorAll('.product-tab[data-tab]');
+  if (tabBtns.length) {
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-tab');
+        document.querySelectorAll('.product-tab').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+        document.querySelectorAll('.product-tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        const panel = document.getElementById(targetId);
+        if (panel) panel.classList.add('active');
+      });
+    });
+  }
 });
