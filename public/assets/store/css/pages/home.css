@@ -316,6 +316,7 @@
 .ticker-track {
   display: flex;
   width: max-content;
+  will-change: transform;
   animation: marquee-scroll 25s linear infinite;
 }
 
@@ -332,16 +333,7 @@
   text-transform: uppercase;
   letter-spacing: 2px;
   padding: 0 40px;
-}
-
-@keyframes marquee-scroll {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(-50%);
-  }
+  flex-shrink: 0;
 }
 
 /* Category card styling */

@@ -5,15 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (mainContent) {
     const children = Array.from(mainContent.children || []);
     const breadcrumbNode = children.find((el) => el.classList && el.classList.contains('breadcrumbs'));
-    const firstSection = children.find((el) => el.tagName === 'SECTION' && !el.classList.contains('breadcrumbs'));
+    const heroSection = children.find((el) => el.tagName === 'SECTION' && el.classList.contains('hero'));
 
-    if (breadcrumbNode && firstSection) {
-      const isBeforeFirstSection = Boolean(
-        breadcrumbNode.compareDocumentPosition(firstSection) & Node.DOCUMENT_POSITION_FOLLOWING
-      );
-      if (isBeforeFirstSection) {
-        firstSection.insertAdjacentElement('afterend', breadcrumbNode);
-      }
+    if (breadcrumbNode && heroSection) {
+      heroSection.insertAdjacentElement('afterend', breadcrumbNode);
       breadcrumbNode.classList.add('breadcrumbs-below-banner');
     }
   }
