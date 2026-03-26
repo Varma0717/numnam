@@ -18,7 +18,6 @@ asset('assets/images/product_4.png'),
         <h1>All Products</h1>
         <p>Explore fruitie packs, upcoming puffs, and stage-based nutrition options with quick filters.</p>
     </div>
-    <div class="hero-art"></div>
 </section>
 
 <section class="section catalog-filters">
@@ -41,10 +40,20 @@ asset('assets/images/product_4.png'),
 </section>
 
 <section class="section">
-    <div class="store-grid three">
+    <div class="catalog-sort">
+        <span class="result-count">{{ $products->total() }} product{{ $products->total() !== 1 ? 's' : '' }} found</span>
+        <select class="input" name="sort" onchange="window.location.href=this.value">
+            <option value="{{ request()->fullUrlWithQuery(['sort' => 'newest']) }}" @selected(request('sort', 'newest' )==='newest' )>Newest First</option>
+            <option value="{{ request()->fullUrlWithQuery(['sort' => 'price_low']) }}" @selected(request('sort')==='price_low' )>Price: Low to High</option>
+            <option value="{{ request()->fullUrlWithQuery(['sort' => 'price_high']) }}" @selected(request('sort')==='price_high' )>Price: High to Low</option>
+            <option value="{{ request()->fullUrlWithQuery(['sort' => 'name_az']) }}" @selected(request('sort')==='name_az' )>Name: A-Z</option>
+        </select>
+    </div>
+
+    <div class="store-grid three stagger-children">
         @forelse($products as $product)
         @php($placeholderImage = $productPlaceholders[$loop->index % count($productPlaceholders)])
-        <article class="card hover-up fade-in-up">
+        <article class="card hover-up animate-fade-up" style="--stagger-delay: {{ $loop->index * 80 }}ms">
             <div class="media" style="background-image:url('{{ $placeholderImage }}'); background-size:cover;">
                 @if($product->sale_price)
                 <span class="badge-sale">-{{ round((1 - $product->sale_price / $product->price) * 100) }}%</span>
@@ -69,8 +78,13 @@ asset('assets/images/product_4.png'),
             </div>
         </article>
         @empty
-        <div class="empty-state">
-            <p>No products found matching your filters.</p>
+        <div class="empty-state" style="grid-column: 1 / -1;">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--line)" stroke-width="1.5" style="margin: 0 auto 16px;">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+            </svg>
+            <h3>No products found</h3>
+            <p class="meta">Try adjusting your filters or search terms.</p>
             <a class="cta-btn" href="{{ route('store.products') }}">View All Products</a>
         </div>
         @endforelse

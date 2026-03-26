@@ -9,7 +9,6 @@
         <h1>{{ $page['title'] }}</h1>
         <p>Please review this policy before placing orders or using platform features.</p>
     </div>
-    <div class="hero-art"></div>
 </section>
 
 <section class="section">

@@ -22,6 +22,21 @@
   position: relative;
 }
 
+/* Ken Burns slow zoom on active slide */
+.hero-slide.is-active {
+  animation: kenburns 8s ease-in-out forwards;
+}
+
+@keyframes kenburns {
+  0% {
+    background-size: 100%;
+  }
+
+  100% {
+    background-size: 110%;
+  }
+}
+
 .hero-slide::before {
   content: "";
   position: absolute;
@@ -56,6 +71,9 @@
   font-family: "Lobster Two", cursive;
   font-size: clamp(2.2rem, 4.8vw, 4rem);
   line-height: 1.06;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroTextIn 0.8s 0.3s cubic-bezier(.16, 1, .3, 1) forwards;
 }
 
 .hero-slide-overlay p {
@@ -63,6 +81,16 @@
   font-size: 17px;
   line-height: 29px;
   max-width: 700px;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: heroTextIn 0.8s 0.5s cubic-bezier(.16, 1, .3, 1) forwards;
+}
+
+@keyframes heroTextIn {
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .hero-slider-controls {
@@ -171,13 +199,13 @@
   grid-template-columns: 64px 1fr;
   gap: 14px;
   align-items: center;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  transition: transform 0.35s cubic-bezier(.16, 1, .3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
 .trust-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 28px rgba(31, 35, 41, 0.12);
-  border-color: rgba(159, 134, 217, 0.45);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(31, 35, 41, 0.1), 0 0 0 1px rgba(159, 134, 217, 0.3);
+  border-color: rgba(159, 134, 217, 0.5);
 }
 
 .trust-icon {
@@ -280,7 +308,17 @@
   width: 100vw;
   max-width: 100vw;
   margin-left: calc(-50vw + 50%);
-  padding: 12px 0 !important;
+  padding: 14px 0 !important;
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 25s linear infinite;
+}
+
+.ticker-track:hover {
+  animation-play-state: paused;
 }
 
 .ticker-strip p {
@@ -289,18 +327,18 @@
   font-size: 14px;
   color: #ffffff;
   white-space: nowrap;
-  animation: ticker 18s linear infinite;
   text-transform: uppercase;
   letter-spacing: 2px;
+  padding: 0 40px;
 }
 
-@keyframes ticker {
-  from {
-    transform: translateX(100%);
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
   }
 
-  to {
-    transform: translateX(-100%);
+  100% {
+    transform: translateX(-50%);
   }
 }
 
@@ -317,9 +355,108 @@
 /* Community section */
 .community-section {
   background: linear-gradient(135deg, #f3eeff 0%, #FFF5F2 100%);
-  border-radius: 8px;
-  padding: 40px;
+  border-radius: 12px;
+  padding: 48px 40px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.community-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(159, 134, 217, 0.08);
+  pointer-events: none;
+}
+
+/* Stats counter row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 40px 0;
+}
+
+.stat-block {
+  text-align: center;
+  padding: 24px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(159, 134, 217, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-block:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.stat-number {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--brand-1);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-number .suffix {
+  font-size: 0.7em;
+}
+
+.stat-desc {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* How it works section */
+.how-it-works {
+  counter-reset: step;
+}
+
+.step-card {
+  position: relative;
+  padding-left: 64px;
+  min-height: 60px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.step-card::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-3));
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-card h4 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.step-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 24px;
 }
 
 @media (min-width: 780px) {
@@ -329,6 +466,10 @@
 
   .trust-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 

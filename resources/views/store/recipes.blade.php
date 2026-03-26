@@ -10,7 +10,6 @@
         <h1>Infant nutrition recipes and practical feeding tips</h1>
         <p>Simple, stage-aware ideas that support weaning and healthy mealtime habits.</p>
     </div>
-    <div class="hero-art"></div>
 </section>
 
 <section class="section fade-in-up">

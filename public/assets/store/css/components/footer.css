@@ -3,6 +3,18 @@
   border-top: 0;
   background: #e9ecef;
   padding: 50px 0 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--brand-1), var(--brand-2), var(--brand-3));
 }
 
 .site-footer-inner {
@@ -46,8 +58,8 @@
 }
 
 .footer-col a:hover {
-  padding-left: 17px;
-  text-decoration: underline;
+  padding-left: 19px;
+  text-decoration: none;
   color: var(--brand-1);
 }
 
@@ -98,8 +110,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  transition: all 0.2s;
+  background: rgba(255, 255, 255, 0.6);
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
   padding-left: 0;
 }
 
@@ -108,10 +120,33 @@
 }
 
 .box-socials-footer a:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px) scale(1.1);
   background: var(--brand-1);
+  box-shadow: 0 6px 16px rgba(159, 134, 217, 0.3);
   padding-left: 0;
   text-decoration: none;
+}
+
+/* Brand-specific social hovers */
+.box-socials-footer a[href*="instagram"]:hover {
+  background: #E1306C;
+  box-shadow: 0 6px 16px rgba(225, 48, 108, 0.3);
+}
+
+.box-socials-footer a[href*="facebook"]:hover {
+  background: #1877F2;
+  box-shadow: 0 6px 16px rgba(24, 119, 242, 0.3);
+}
+
+.box-socials-footer a[href*="twitter"]:hover,
+.box-socials-footer a[href*="x.com"]:hover {
+  background: #1DA1F2;
+  box-shadow: 0 6px 16px rgba(29, 161, 242, 0.3);
+}
+
+.box-socials-footer a[href*="youtube"]:hover {
+  background: #FF0000;
+  box-shadow: 0 6px 16px rgba(255, 0, 0, 0.3);
 }
 
 @media (min-width: 780px) {

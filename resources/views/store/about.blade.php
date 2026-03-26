@@ -10,10 +10,9 @@
         <h1>From clinical care to everyday baby nutrition</h1>
         <p>NumNam was built by parents and doctors to make clean-label baby food easier, safer, and more practical for busy families.</p>
     </div>
-    <div class="hero-art"></div>
 </section>
 
-<section class="section fade-in-up">
+<section class="section animate-fade-up">
     <div class="about-mission-grid">
         <div>
             <div class="section-head">
@@ -24,7 +23,7 @@
             <p class="about-text">Our founders experienced how hard it is to find truly transparent baby food options with balanced taste and nutrition. NumNam combines pediatric thinking, practical ingredients, and age-aware formats so feeding becomes a joyful routine instead of a daily struggle.</p>
             <p class="about-text">Every product is developed with clinical nutrition input, sourced with clean-label standards, and designed for real mealtime scenarios — from first tastes to self-feeding toddlers.</p>
         </div>
-        <div class="about-values">
+        <div class="about-values stagger-children">
             <div class="about-value-card">
                 <span class="about-value-icon">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -65,13 +64,13 @@
     </div>
 </section>
 
-<section class="section fade-in-up">
+<section class="section animate-fade-up">
     <div class="section-head">
         <div>
             <h3>Meet The Founders</h3>
         </div>
     </div>
-    <div class="store-grid three">
+    <div class="store-grid three stagger-children">
         @foreach($founders as $founder)
         <article class="card founder-card hover-up">
             <div class="founder-avatar">{{ strtoupper(substr($founder['name'], 0, 1) . substr(strstr($founder['name'], ' '), 1, 1)) }}</div>
@@ -85,7 +84,7 @@
     </div>
 </section>
 
-<section class="section fade-in-up about-cta-section">
+<section class="section animate-fade-up about-cta-section">
     <h3>Ready to try NumNam?</h3>
     <p class="meta">Discover stage-wise nutrition made with ingredients you can trust.</p>
     <div class="hero-actions about-cta-actions">

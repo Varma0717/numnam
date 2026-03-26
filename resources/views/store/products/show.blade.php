@@ -38,6 +38,7 @@ $mainPlaceholder = $productPlaceholders[$product->id % count($productPlaceholder
 
 @section('content')
 <section class="section fade-in-up">
+    @include('store.partials.breadcrumbs')
     <div class="product-detail-grid">
         {{-- Product Gallery --}}
         <div class="product-gallery">
@@ -94,10 +95,23 @@ $mainPlaceholder = $productPlaceholders[$product->id % count($productPlaceholder
 
             <form method="POST" action="{{ route('store.cart.add', $product) }}" class="product-actions">
                 @csrf
-                <input class="input qty-input" type="number" min="1" name="qty" value="1">
+                <input class="input qty-input" type="number" min="1" name="qty" value="1" aria-label="Quantity">
                 <button class="cta-btn" type="submit" {{ $product->stock <= 0 ? 'disabled' : '' }}>Add to Cart</button>
                 <a class="btn-soft" href="{{ route('store.checkout') }}">Buy Now</a>
             </form>
+
+            @auth
+            <form method="POST" action="{{ route('store.wishlist.toggle', $product) }}" class="wishlist-action">
+                @csrf
+                @php($isWishlisted = auth()->user()->wishlists()->where('product_id', $product->id)->exists())
+                <button type="submit" class="btn-wishlist {{ $isWishlisted ? 'active' : '' }}" aria-label="{{ $isWishlisted ? 'Remove from wishlist' : 'Add to wishlist' }}">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="{{ $isWishlisted ? 'var(--brand-3)' : 'none' }}" stroke="{{ $isWishlisted ? 'var(--brand-3)' : 'currentColor' }}" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                    {{ $isWishlisted ? 'In Wishlist' : 'Add to Wishlist' }}
+                </button>
+            </form>
+            @endauth
 
             {{-- Trust signals --}}
             <div class="product-trust-signals">
@@ -172,39 +186,64 @@ $mainPlaceholder = $productPlaceholders[$product->id % count($productPlaceholder
     <div class="section-head">
         <div>
             <h3>Customer Reviews</h3>
-            <p class="section-sub">What parents are saying</p>
+            @php($reviewCount = $product->approvedReviews()->count())
+            @php($avgRating = $reviewCount > 0 ? round($product->approvedReviews()->avg('rating'), 1) : 0)
+            <p class="section-sub">{{ $reviewCount }} {{ Str::plural('review', $reviewCount) }}@if($avgRating > 0) &middot; {{ $avgRating }} average @endif</p>
         </div>
     </div>
+
+    @if($reviewCount > 0)
     <div class="store-grid three">
-        <article class="card testimonial-card">
+        @foreach($product->approvedReviews()->with('user')->latest()->take(6)->get() as $review)
+        <article class="card testimonial-card animate-fade-up" style="--stagger-delay: {{ $loop->index * 100 }}ms">
             <div class="card-body">
-                <div class="rating">
-                    @for($i=0;$i<5;$i++)<span class="star filled">&#9733;</span>@endfor
+                <div class="rating" aria-label="{{ $review->rating }} out of 5 stars">
+                    @for($i = 1; $i <= 5; $i++)
+                        <span class="star {{ $i <= $review->rating ? 'filled' : 'empty' }}">&#9733;</span>
+                        @endfor
                 </div>
-                <p>"My baby loves this! The texture is perfect for her age and I trust the clean ingredients."</p>
-                <p class="meta"><strong>Priya M.</strong> &middot; Verified Buyer</p>
+                @if($review->title)<h4 class="review-title">{{ $review->title }}</h4>@endif
+                <p>{{ $review->body }}</p>
+                <p class="meta"><strong>{{ $review->user->name }}</strong> &middot; {{ $review->created_at->diffForHumans() }}</p>
             </div>
         </article>
-        <article class="card testimonial-card">
-            <div class="card-body">
-                <div class="rating">
-                    @for($i=0;$i<5;$i++)<span class="star filled">&#9733;</span>@endfor
-                </div>
-                <p>"Finally a baby food brand that's transparent about what goes in. Highly recommend!"</p>
-                <p class="meta"><strong>Rahul K.</strong> &middot; Verified Buyer</p>
-            </div>
-        </article>
-        <article class="card testimonial-card">
-            <div class="card-body">
-                <div class="rating">
-                    @for($i=0;$i<4;$i++)<span class="star filled">&#9733;</span>@endfor
-                        <span class="star empty">&#9733;</span>
-                </div>
-                <p>"Great quality and fast delivery. My baby finished the whole pack in a week!"</p>
-                <p class="meta"><strong>Sneha R.</strong> &middot; Verified Buyer</p>
-            </div>
-        </article>
+        @endforeach
     </div>
+    @else
+    <p class="empty-state meta">No reviews yet. Be the first to share your experience!</p>
+    @endif
+
+    {{-- Review Form --}}
+    @auth
+    <div class="review-form-wrap animate-fade-up" style="margin-top:2rem">
+        <h4>Write a Review</h4>
+        <form method="POST" action="{{ route('store.review.store', $product) }}" class="review-form">
+            @csrf
+            <div class="form-group">
+                <label>Rating</label>
+                <div class="star-rating-input" role="radiogroup" aria-label="Rating">
+                    @for($i = 5; $i >= 1; $i--)
+                    <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" {{ old('rating') == $i ? 'checked' : '' }} required>
+                    <label for="star{{ $i }}" aria-label="{{ $i }} stars">&#9733;</label>
+                    @endfor
+                </div>
+                @error('rating') <span class="form-error">{{ $message }}</span> @enderror
+            </div>
+            <div class="form-group">
+                <label for="review-title">Title (optional)</label>
+                <input type="text" id="review-title" name="title" class="input" maxlength="150" value="{{ old('title') }}" placeholder="Sum it up in a few words">
+            </div>
+            <div class="form-group">
+                <label for="review-body">Your Review</label>
+                <textarea id="review-body" name="body" class="input" rows="4" required minlength="10" maxlength="2000" placeholder="Share your experience...">{{ old('body') }}</textarea>
+                @error('body') <span class="form-error">{{ $message }}</span> @enderror
+            </div>
+            <button type="submit" class="btn-primary">Submit Review</button>
+        </form>
+    </div>
+    @else
+    <p class="meta" style="margin-top:1rem"><a href="{{ route('store.login') }}">Log in</a> to write a review.</p>
+    @endauth
 </section>
 
 @if($related->isNotEmpty())

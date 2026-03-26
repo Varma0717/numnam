@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('store.*', function ($view) {
             $megaCategories = Category::query()
                 ->where('is_active', true)
+                ->where('slug', '!=', 'all-products')
                 ->with(['products' => function ($query) {
                     $query->where('is_active', true)
                         ->select('id', 'category_id', 'name', 'slug', 'sale_price', 'price')

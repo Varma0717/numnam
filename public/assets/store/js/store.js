@@ -41,8 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ====== Scroll Reveal (Intersection Observer) ====== */
-  const fadeEls = document.querySelectorAll('.fade-in-up');
-  if (fadeEls.length && 'IntersectionObserver' in window) {
+  const animSelectors = '.fade-in-up,.animate-fade-up,.animate-fade-down,.animate-fade-left,.animate-fade-right,.animate-scale-in,.animate-blur-in,.stagger-children';
+  const animEls = document.querySelectorAll(animSelectors);
+  if (animEls.length && 'IntersectionObserver' in window) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -50,8 +51,49 @@ document.addEventListener('DOMContentLoaded', () => {
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    fadeEls.forEach((el) => observer.observe(el));
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    animEls.forEach((el) => observer.observe(el));
+  }
+
+  /* ====== Header Scroll State ====== */
+  const siteHeader = document.querySelector('.site-header');
+  if (siteHeader) {
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      siteHeader.classList.toggle('scrolled', y > 60);
+      lastScroll = y;
+    }, { passive: true });
+  }
+
+  /* ====== Count-Up Animation ====== */
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const countEls = document.querySelectorAll('[data-count-to]');
+  if (countEls.length && 'IntersectionObserver' in window) {
+    const countObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const end = parseInt(el.dataset.countTo, 10) || 0;
+        if (prefersReducedMotion) {
+          el.textContent = end.toLocaleString();
+          countObserver.unobserve(el);
+          return;
+        }
+        const duration = 1600;
+        const start = performance.now();
+        const tick = (now) => {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.floor(eased * end).toLocaleString();
+          if (progress < 1) requestAnimationFrame(tick);
+          else el.textContent = end.toLocaleString();
+        };
+        requestAnimationFrame(tick);
+        countObserver.unobserve(el);
+      });
+    }, { threshold: 0.3 });
+    countEls.forEach((el) => countObserver.observe(el));
   }
 
   /* ====== Search Overlay ====== */
@@ -154,8 +196,15 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.account-tab').forEach((tab) => {
     tab.addEventListener('click', () => {
       const target = tab.dataset.tab;
-      tab.closest('.account-tabs')?.querySelectorAll('.account-tab').forEach(t => t.classList.remove('active'));
+      const tabList = tab.closest('.account-tabs');
+      if (tabList) {
+        tabList.querySelectorAll('.account-tab').forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+      }
       tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
       document.querySelectorAll('.account-panel').forEach(p => p.classList.remove('active'));
       const panel = document.querySelector('[data-panel="' + target + '"]');
       if (panel) panel.classList.add('active');

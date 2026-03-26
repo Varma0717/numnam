@@ -6,16 +6,29 @@
 @section('content')
 <section class="section">
     {{-- Checkout Progress Steps --}}
-    <div class="checkout-steps">
-        <div class="checkout-step completed">Cart</div>
-        <div class="checkout-step-line completed"></div>
-        <div class="checkout-step active">Checkout</div>
-        <div class="checkout-step-line"></div>
-        <div class="checkout-step">Confirmation</div>
+    <div class="progress-steps">
+        <div class="progress-step completed">
+            <span class="step-num">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+            </span>
+            <span>Cart</span>
+        </div>
+        <div class="progress-step-line filled"></div>
+        <div class="progress-step active">
+            <span class="step-num">2</span>
+            <span>Checkout</span>
+        </div>
+        <div class="progress-step-line"></div>
+        <div class="progress-step">
+            <span class="step-num">3</span>
+            <span>Confirmation</span>
+        </div>
     </div>
 </section>
 
-<section class="section checkout-layout fade-in-up">
+<section class="section checkout-layout animate-fade-up">
     <form method="POST" action="{{ route('store.checkout.place-order') }}" class="form-grid">
         @csrf
         <h3 class="checkout-section-title">Shipping Information</h3>
@@ -49,14 +62,40 @@
         </div>
 
         <h3 class="checkout-section-title checkout-payment-title">Payment Method</h3>
-        <select class="input" name="payment_method" required>
-            <option value="">Select payment method</option>
-            <option value="razorpay" {{ old('payment_method') === 'razorpay' ? 'selected' : '' }}>Razorpay (UPI / Cards)</option>
-            <option value="stripe" {{ old('payment_method') === 'stripe' ? 'selected' : '' }}>Stripe (Cards / Wallets)</option>
-            <option value="upi" {{ old('payment_method') === 'upi' ? 'selected' : '' }}>Manual UPI</option>
-            <option value="cod" {{ old('payment_method') === 'cod' ? 'selected' : '' }}>Cash on Delivery</option>
-            <option value="netbanking" {{ old('payment_method') === 'netbanking' ? 'selected' : '' }}>Net Banking</option>
-        </select>
+        <div class="payment-methods">
+            @php
+            $methods = [
+            ['value' => 'razorpay', 'label' => 'Razorpay', 'desc' => 'UPI, Cards, Wallets', 'icon' => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
+            </svg>'],
+            ['value' => 'stripe', 'label' => 'Stripe', 'desc' => 'International Cards', 'icon' => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
+            </svg>'],
+            ['value' => 'upi', 'label' => 'Manual UPI', 'desc' => 'Pay via UPI ID', 'icon' => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>'],
+            ['value' => 'cod', 'label' => 'Cash on Delivery', 'desc' => 'Pay when delivered', 'icon' => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="6" width="20" height="12" rx="2" />
+                <circle cx="12" cy="12" r="3" />
+            </svg>'],
+            ['value' => 'netbanking', 'label' => 'Net Banking', 'desc' => 'Bank transfer', 'icon' => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3" />
+            </svg>'],
+            ];
+            @endphp
+            @foreach($methods as $method)
+            <label class="payment-card {{ old('payment_method') === $method['value'] ? 'selected' : '' }}">
+                <input type="radio" name="payment_method" value="{{ $method['value'] }}" {{ old('payment_method') === $method['value'] ? 'checked' : '' }} required>
+                <span class="payment-card-icon">{!! $method['icon'] !!}</span>
+                <span class="payment-card-text">
+                    <strong>{{ $method['label'] }}</strong>
+                    <span class="meta">{{ $method['desc'] }}</span>
+                </span>
+            </label>
+            @endforeach
+        </div>
 
         <div class="store-grid two">
             <div class="form-group">

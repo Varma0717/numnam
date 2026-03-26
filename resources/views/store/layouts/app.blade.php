@@ -70,6 +70,7 @@
     <link rel="stylesheet" href="{{ url('assets/store/css/pages/product-detail.css') }}">
     <link rel="stylesheet" href="{{ url('assets/store/css/pages/blog.css') }}">
     <link rel="stylesheet" href="{{ url('assets/store/css/pages/pages.css') }}">
+    <link rel="stylesheet" href="{{ url('assets/store/css/animations.css') }}">
     @yield('head')
 </head>
 
@@ -84,8 +85,8 @@
         @include('store.partials.header')
 
         <main id="main-content" class="page" role="main">
-            {{-- Breadcrumbs --}}
-            @unless(request()->routeIs('store.home'))
+            {{-- Breadcrumbs (excluded on home + product detail — product show places them inline) --}}
+            @unless(request()->routeIs('store.home') || request()->routeIs('store.product.show'))
             @include('store.partials.breadcrumbs')
             @endunless
 

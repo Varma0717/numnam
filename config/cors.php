@@ -20,9 +20,12 @@ return [
 
     'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
-    // In production replace '*' with your exact frontend domain(s)
-    // e.g. ['https://numnam.com', 'https://app.numnam.com']
-    'allowed_origins' => ['*'],
+    // Configured via CORS_ALLOWED_ORIGINS env variable (comma-separated)
+    // e.g. CORS_ALLOWED_ORIGINS=https://numnam.com,https://app.numnam.com
+    'allowed_origins' => array_filter(array_map('trim', explode(
+        ',',
+        env('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://127.0.0.1:8000')
+    ))),
 
     'allowed_origins_patterns' => [],
 

@@ -10,9 +10,11 @@ use App\Models\Order;
 use App\Models\PaymentEvent;
 use App\Models\PricingPlan;
 use App\Models\Product;
+use App\Models\ProductReview;
 use App\Models\RewardLedger;
 use App\Models\SiteSetting;
 use App\Models\Subscription;
+use App\Models\Wishlist;
 use App\Services\Commerce\DiscountService;
 use App\Services\Commerce\PaymentGatewayService;
 use Illuminate\Http\RedirectResponse;
@@ -559,6 +561,53 @@ class StorefrontController extends Controller
                 'total' => $subtotal + $shippingFee,
             ],
         ];
+    }
+
+    public function wishlist(Request $request)
+    {
+        $products = $request->user()->wishlists()
+            ->with('product')
+            ->latest('id')
+            ->paginate(12)
+            ->through(fn($w) => $w->product)
+            ->filter();
+
+        return view('store.wishlist', compact('products'));
+    }
+
+    public function toggleWishlist(Request $request, Product $product): RedirectResponse
+    {
+        $existing = Wishlist::where('user_id', $request->user()->id)
+            ->where('product_id', $product->id)
+            ->first();
+
+        if ($existing) {
+            $existing->delete();
+            return back()->with('status', 'Removed from wishlist.');
+        }
+
+        Wishlist::create([
+            'user_id' => $request->user()->id,
+            'product_id' => $product->id,
+        ]);
+
+        return back()->with('status', 'Added to wishlist!');
+    }
+
+    public function storeReview(Request $request, Product $product): RedirectResponse
+    {
+        $validated = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'title' => 'nullable|string|max:150',
+            'body' => 'required|string|min:10|max:2000',
+        ]);
+
+        ProductReview::updateOrCreate(
+            ['user_id' => $request->user()->id, 'product_id' => $product->id],
+            array_merge($validated, ['is_approved' => false])
+        );
+
+        return back()->with('status', 'Review submitted! It will appear after moderation.');
     }
 
     private function legalPageMap(): Collection

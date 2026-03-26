@@ -168,8 +168,8 @@ Route::prefix('v1')->group(function () {
     Route::get('subscriptions/plans', [SubscriptionController::class, 'plans']);
 
     // ── Public: Contact Form ─────────────────────────────────────────────
-    Route::post('contact', [ContactController::class, 'store']);
-    Route::post('contact-form/submit', [ContactFormController::class, 'submit']);
+    Route::post('contact', [ContactController::class, 'store'])->middleware('throttle:5,1');
+    Route::post('contact-form/submit', [ContactFormController::class, 'submit'])->middleware('throttle:5,1');
 
     // ── Protected Routes (requires Sanctum token) ────────────────────────
     Route::middleware('auth:sanctum')->group(function () {
@@ -188,23 +188,24 @@ Route::prefix('v1')->group(function () {
         Route::delete('subscriptions/{subscription}',        [SubscriptionController::class, 'destroy']);
 
         // Admin-only: product / category / contact management
-        // In production, guard these with a role middleware (e.g. ->middleware('role:admin'))
-        Route::post('products',            [ProductController::class, 'store']);
-        Route::put('products/{product}',   [ProductController::class, 'update']);
-        Route::delete('products/{product}',[ProductController::class, 'destroy']);
+        Route::middleware('admin')->group(function () {
+            Route::post('products',            [ProductController::class, 'store']);
+            Route::put('products/{product}',   [ProductController::class, 'update']);
+            Route::delete('products/{product}', [ProductController::class, 'destroy']);
 
-        Route::post('categories',                [CategoryController::class, 'store']);
-        Route::put('categories/{category}',      [CategoryController::class, 'update']);
-        Route::delete('categories/{category}',   [CategoryController::class, 'destroy']);
+            Route::post('categories',                [CategoryController::class, 'store']);
+            Route::put('categories/{category}',      [CategoryController::class, 'update']);
+            Route::delete('categories/{category}',   [CategoryController::class, 'destroy']);
 
-        // Contact inbox (admin)
-        Route::get('contact',                    [ContactController::class, 'index']);
-        Route::patch('contact/{contact}/read',   [ContactController::class, 'markRead']);
+            // Contact inbox (admin)
+            Route::get('contact',                    [ContactController::class, 'index']);
+            Route::patch('contact/{contact}/read',   [ContactController::class, 'markRead']);
+        });
     });
 });
 
 // Health-check endpoint
-Route::get('health', fn () => response()->json([
+Route::get('health', fn() => response()->json([
     'status'  => 'ok',
     'service' => 'NumNam API',
     'version' => '1.0.0',

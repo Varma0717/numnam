@@ -6,20 +6,16 @@
         </a>
 
         <button type="button" class="nav-toggle" data-nav-toggle aria-label="Toggle navigation">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
         </button>
 
         <nav class="site-nav" role="navigation" aria-label="Main navigation">
             <a href="{{ route('store.home') }}" class="{{ request()->routeIs('store.home') ? 'active' : '' }}">Home</a>
-            <div class="nav-item has-submenu">
-                <a href="{{ route('store.products') }}" class="{{ request()->routeIs('store.products*') ? 'active' : '' }}">Shop</a>
-                <ul class="submenu" role="menu" aria-label="Shop submenu">
-                    <li><a href="{{ route('store.products') }}">Browse Products</a></li>
-                    @foreach(($megaCategories ?? collect())->take(3) as $category)
-                        <li><a href="{{ route('store.products', ['category' => $category->slug]) }}">{{ $category->name }}</a></li>
-                    @endforeach
-                </ul>
-            </div>
+            <a href="{{ route('store.products') }}" class="{{ request()->routeIs('store.products*') ? 'active' : '' }}">Shop</a>
             <a href="{{ route('store.pricing') }}" class="{{ request()->routeIs('store.pricing*') ? 'active' : '' }}">Subscriptions</a>
             <div class="nav-item has-submenu">
                 <a href="{{ route('store.blog.index') }}" class="{{ request()->routeIs('store.blog*') || request()->routeIs('store.recipes') || request()->routeIs('store.faq') || request()->routeIs('store.refer-friends') ? 'active' : '' }}">Learn</a>
@@ -37,7 +33,10 @@
         <div class="site-actions">
             {{-- Search toggle --}}
             <button type="button" class="header-icon-btn" data-search-toggle aria-label="Search">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
             </button>
 
             {{-- Cart icon --}}
@@ -48,22 +47,25 @@
                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                 </svg>
                 @if(($cartItemCount ?? 0) > 0)
-                    <span class="number-tag">{{ $cartItemCount }}</span>
+                <span class="number-tag">{{ $cartItemCount }}</span>
                 @endif
             </a>
 
             {{-- Account --}}
             @auth
-                <a class="header-icon-btn" href="{{ route('store.account') }}" aria-label="My Account">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                </a>
-                <form method="POST" action="{{ route('store.logout') }}" class="inline-form">
-                    @csrf
-                    <button type="submit" class="cta-btn cta-btn-sm">Logout</button>
-                </form>
+            <a class="header-icon-btn" href="{{ route('store.account') }}" aria-label="My Account">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+            </a>
+            <form method="POST" action="{{ route('store.logout') }}" class="inline-form">
+                @csrf
+                <button type="submit" class="cta-btn cta-btn-sm">Logout</button>
+            </form>
             @else
-                <a class="btn-ghost btn-ghost-sm" href="{{ route('store.login') }}">Login</a>
-                <a class="cta-btn cta-btn-sm" href="{{ route('store.register') }}">Register</a>
+            <a class="btn-ghost btn-ghost-sm" href="{{ route('store.login') }}">Login</a>
+            <a class="cta-btn cta-btn-sm" href="{{ route('store.register') }}">Register</a>
             @endauth
         </div>
     </div>
@@ -71,7 +73,10 @@
     {{-- Search overlay --}}
     <div class="search-overlay" id="searchOverlay" hidden>
         <form method="GET" action="{{ route('store.products') }}" class="search-overlay-form">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
             <input type="search" name="q" placeholder="Search products, recipes, articles..." autocomplete="off" class="search-overlay-input" value="{{ request('q') }}">
             <button type="button" class="search-overlay-close" data-search-close aria-label="Close search">&times;</button>
         </form>
@@ -85,9 +90,6 @@
         <a href="{{ route('store.home') }}">Home</a>
         <a href="{{ route('store.products') }}">Shop</a>
         <a href="{{ route('store.pricing') }}">Subscriptions</a>
-        @foreach(($megaCategories ?? collect())->take(5) as $category)
-            <a href="{{ route('store.products', ['category' => $category->slug]) }}" class="mobile-sub-link">{{ $category->name }}</a>
-        @endforeach
         <a href="{{ route('store.blog.index') }}">Blog</a>
         <a href="{{ route('store.recipes') }}">Recipes</a>
         <a href="{{ route('store.faq') }}">FAQ</a>
@@ -95,14 +97,18 @@
         <a href="{{ route('store.about') }}">About</a>
         <a href="{{ route('store.contact') }}">Contact</a>
         <a href="{{ route('store.cart') }}">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h7.72a2 2 0 002-1.61L23 6H6"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px">
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h7.72a2 2 0 002-1.61L23 6H6" />
+            </svg>
             Cart ({{ $cartItemCount ?? 0 }})
         </a>
         @auth
-            <a href="{{ route('store.account') }}">My Account</a>
+        <a href="{{ route('store.account') }}">My Account</a>
         @else
-            <a href="{{ route('store.login') }}">Login</a>
-            <a href="{{ route('store.register') }}">Register</a>
+        <a href="{{ route('store.login') }}">Login</a>
+        <a href="{{ route('store.register') }}">Register</a>
         @endauth
     </nav>
 </header>

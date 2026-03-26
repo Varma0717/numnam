@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Commerce\OrderManagementController;
 use App\Http\Controllers\Admin\Commerce\ReferralManagementController;
 use App\Http\Controllers\Web\CustomerAuthController;
 use App\Http\Controllers\Web\Payments\CheckoutPaymentController;
+use App\Http\Controllers\Web\PasswordResetController;
 use App\Http\Controllers\Web\StorefrontController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,7 +45,9 @@ Route::get('/blog', [StorefrontController::class, 'blogIndex'])->name('store.blo
 Route::get('/blog/{blog:slug}', [StorefrontController::class, 'blogShow'])->name('store.blog.show');
 
 Route::get('/contact', [StorefrontController::class, 'contact'])->name('store.contact');
-Route::post('/contact', [StorefrontController::class, 'contactSubmit'])->name('store.contact.submit');
+Route::post('/contact', [StorefrontController::class, 'contactSubmit'])
+    ->middleware('throttle:5,1')
+    ->name('store.contact.submit');
 
 Route::get('/terms-conditions', [StorefrontController::class, 'legal'])->defaults('slug', 'terms-conditions')->name('store.legal.terms');
 Route::get('/privacy-policy', [StorefrontController::class, 'legal'])->defaults('slug', 'privacy-policy')->name('store.legal.privacy');
@@ -64,6 +67,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/order-success/{order}', [StorefrontController::class, 'orderSuccess'])->name('store.order.success');
     Route::get('/account', [StorefrontController::class, 'account'])->name('store.account');
 
+    // Wishlist
+    Route::get('/wishlist', [StorefrontController::class, 'wishlist'])->name('store.wishlist');
+    Route::post('/wishlist/toggle/{product}', [StorefrontController::class, 'toggleWishlist'])->name('store.wishlist.toggle');
+
+    // Product reviews
+    Route::post('/products/{product:slug}/reviews', [StorefrontController::class, 'storeReview'])->name('store.review.store');
+
     Route::post('/checkout/pay/{order}', [CheckoutPaymentController::class, 'createSession'])
         ->name('store.checkout.payment.session');
 });
@@ -73,6 +83,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [CustomerAuthController::class, 'login'])->name('store.login.submit');
     Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('store.register');
     Route::post('/register', [CustomerAuthController::class, 'register'])->name('store.register.submit');
+
+    // Password reset
+    Route::get('/forgot-password', [PasswordResetController::class, 'showForgotForm'])->name('store.password.request');
+    Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])->name('store.password.email');
+    Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('store.password.update');
 });
 
 Route::post('/logout', [CustomerAuthController::class, 'logout'])

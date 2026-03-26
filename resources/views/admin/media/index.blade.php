@@ -102,101 +102,108 @@
 </section>
 
 <script>
-const base = `${window.location.origin}${window.location.pathname.replace('/admin/media', '')}/api/v1/admin`;
-const output = document.getElementById('output');
-const mediaGrid = document.getElementById('mediaGrid');
+    const base = `${window.location.origin}${window.location.pathname.replace('/admin/media', '')}/api/v1/admin`;
+    const output = document.getElementById('output');
+    const mediaGrid = document.getElementById('mediaGrid');
 
-function print(data) {
-    output.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
-}
-
-async function call(path, options = {}) {
-    const response = await fetch(`${base}/${path}`, {
-        headers: {
-            Accept: 'application/json',
-            ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
-        },
-        ...options,
-    });
-
-    const data = await response.json().catch(() => ({ message: 'Non-JSON response' }));
-
-    if (!response.ok) {
-        throw data;
+    function print(data) {
+        output.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
     }
 
-    return data;
-}
+    async function call(path, options = {}) {
+        const response = await fetch(`${base}/${path}`, {
+            headers: {
+                Accept: 'application/json',
+                ...(options.body instanceof FormData ? {} : {
+                    'Content-Type': 'application/json'
+                }),
+            },
+            ...options,
+        });
 
-async function loadMedia() {
-    const params = new URLSearchParams();
-    if (folderFilter.value.trim()) params.set('folder', folderFilter.value.trim());
-    if (collectionFilter.value.trim()) params.set('collection', collectionFilter.value.trim());
-    if (entityType.value && entityId.value) {
-        params.set('entity_type', entityType.value);
-        params.set('entity_id', entityId.value);
+        const data = await response.json().catch(() => ({
+            message: 'Non-JSON response'
+        }));
+
+        if (!response.ok) {
+            throw data;
+        }
+
+        return data;
     }
 
-    const data = await call(`media?${params.toString()}`);
-    const rows = data.data?.data || [];
+    async function loadMedia() {
+        const params = new URLSearchParams();
+        if (folderFilter.value.trim()) params.set('folder', folderFilter.value.trim());
+        if (collectionFilter.value.trim()) params.set('collection', collectionFilter.value.trim());
+        if (entityType.value && entityId.value) {
+            params.set('entity_type', entityType.value);
+            params.set('entity_id', entityId.value);
+        }
 
-    mediaGrid.innerHTML = rows.map(item => `
+        const data = await call(`media?${params.toString()}`);
+        const rows = data.data?.data || [];
+
+        mediaGrid.innerHTML = rows.map(item => `
         <article class="admin-media-item">
+            ${item.file_path ? `<img src="${item.file_path}" alt="${item.alt_text || item.title || ''}" style="width:100%;height:120px;object-fit:cover;border-radius:2px;margin-bottom:8px;background:#f0f0f1;">` : ''}
             <div class="admin-media-title">#${item.id} ${item.title || item.file_name}</div>
             <p class="admin-media-meta">folder: ${item.folder} / ${item.collection}</p>
-            <p class="admin-media-meta">path: ${item.file_path}</p>
-            <p class="admin-media-meta">linked: ${(item.links || []).map(x => `${x.entity_type}:${x.entity_id}`).join(', ') || 'none'}</p>
+            <p class="admin-media-meta">linked: ${(item.links || []).map(x => \`\${x.entity_type}:\${x.entity_id}\`).join(', ') || 'none'}</p>
         </article>
     `).join('') || '<article class="admin-media-item"><p class="admin-media-meta">No media found.</p></article>';
 
-    print(data);
-}
-
-uploadForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    try {
-        const data = await call('media', { method: 'POST', body: new FormData(uploadForm) });
         print(data);
-        uploadForm.reset();
-        await loadMedia();
-    } catch (err) {
-        print(err);
     }
-});
 
-linkForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const fd = new FormData(linkForm);
-    const mediaId = fd.get('media_id');
+    uploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+            const data = await call('media', {
+                method: 'POST',
+                body: new FormData(uploadForm)
+            });
+            print(data);
+            uploadForm.reset();
+            await loadMedia();
+        } catch (err) {
+            print(err);
+        }
+    });
 
-    try {
-        const payload = {
-            entity_type: fd.get('entity_type'),
-            entity_id: Number(fd.get('entity_id')),
-            role: fd.get('role') || 'gallery',
-        };
+    linkForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(linkForm);
+        const mediaId = fd.get('media_id');
 
-        const data = await call(`media/${mediaId}/attach`, {
-            method: 'POST',
-            body: JSON.stringify(payload),
-        });
+        try {
+            const payload = {
+                entity_type: fd.get('entity_type'),
+                entity_id: Number(fd.get('entity_id')),
+                role: fd.get('role') || 'gallery',
+            };
 
-        print(data);
-        linkForm.reset();
-        await loadMedia();
-    } catch (err) {
-        print(err);
-    }
-});
+            const data = await call(`media/${mediaId}/attach`, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+            });
 
-loadBtn.addEventListener('click', async () => {
-    try {
-        await loadMedia();
-    } catch (err) {
-        print(err);
-    }
-});
+            print(data);
+            linkForm.reset();
+            await loadMedia();
+        } catch (err) {
+            print(err);
+        }
+    });
 
-loadMedia().catch(print);
+    loadBtn.addEventListener('click', async () => {
+        try {
+            await loadMedia();
+        } catch (err) {
+            print(err);
+        }
+    });
+
+    loadMedia().catch(print);
 </script>
 @endsection

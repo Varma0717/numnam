@@ -46,28 +46,34 @@
 <div class="admin-grid" style="grid-template-columns: 1fr 1fr; gap:20px;">
     <section class="admin-panel">
         <h3>Recent Orders</h3>
-        <table class="admin-table">
-            <thead>
-            <tr>
-                <th>Order</th>
-                <th>Customer</th>
-                <th>Status</th>
-                <th>Total</th>
-            </tr>
-            </thead>
-            <tbody>
-            @forelse($recentOrders as $order)
-                <tr>
-                    <td><a href="{{ route('admin.orders.show', $order) }}">{{ $order->order_number }}</a></td>
-                    <td>{{ $order->user->name ?? '-' }}</td>
-                    <td>{{ ucfirst($order->status) }}</td>
-                    <td>Rs {{ number_format($order->total, 0) }}</td>
-                </tr>
-            @empty
-                <tr><td colspan="4">No orders yet.</td></tr>
-            @endforelse
-            </tbody>
-        </table>
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($recentOrders as $order)
+                    <tr>
+                        <td><a href="{{ route('admin.orders.show', $order) }}">{{ $order->order_number }}</a></td>
+                        <td>{{ $order->user->name ?? '-' }}</td>
+                        <td><span class="status-badge status-badge--{{ $order->status }}">{{ ucfirst($order->status) }}</span></td>
+                        <td>Rs {{ number_format($order->total, 0) }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="4" class="admin-empty">
+                            <p>No orders yet.</p>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </section>
 
     <section class="admin-panel">

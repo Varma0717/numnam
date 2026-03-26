@@ -10,9 +10,31 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'category_id', 'product_category_id', 'name', 'slug', 'sku', 'description', 'short_description', 'content', 'ingredients',
-        'age_group', 'type', 'price', 'sale_price', 'stock',
-        'image', 'gallery', 'is_active', 'is_featured', 'status', 'published_at', 'meta_title', 'meta_description', 'badges', 'nutrition_facts', 'nutrition_info',
+        'category_id',
+        'product_category_id',
+        'name',
+        'slug',
+        'sku',
+        'description',
+        'short_description',
+        'content',
+        'ingredients',
+        'age_group',
+        'type',
+        'price',
+        'sale_price',
+        'stock',
+        'image',
+        'gallery',
+        'is_active',
+        'is_featured',
+        'status',
+        'published_at',
+        'meta_title',
+        'meta_description',
+        'badges',
+        'nutrition_facts',
+        'nutrition_info',
     ];
 
     protected $casts = [
@@ -53,5 +75,20 @@ class Product extends Model
     public function getEffectivePriceAttribute(): float
     {
         return $this->sale_price ?? $this->price;
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(ProductReview::class);
+    }
+
+    public function approvedReviews()
+    {
+        return $this->hasMany(ProductReview::class)->where('is_approved', true);
+    }
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
     }
 }

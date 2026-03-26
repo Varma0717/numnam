@@ -10,7 +10,6 @@
         <h1>Quick answers for parents</h1>
         <p>Everything from age suitability to subscriptions, payment, and delivery.</p>
     </div>
-    <div class="hero-art"></div>
 </section>
 
 <section class="section fade-in-up">

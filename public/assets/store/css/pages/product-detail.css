@@ -14,7 +14,7 @@
 
 .product-title {
     font-family: "DM Sans", sans-serif;
-    font-size: 28px;
+    font-size: clamp(24px, 3.5vw, 32px);
     font-weight: 700;
     line-height: 1.25;
     margin: 12px 0 8px;
@@ -35,7 +35,7 @@
     display: flex;
     gap: 10px;
     align-items: center;
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 700;
     color: var(--brand-1);
     margin: 16px 0;
@@ -45,6 +45,18 @@
     color: var(--muted);
     font-weight: 400;
     font-size: 18px;
+}
+
+/* Savings badge */
+.savings-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 50px;
+    background: rgba(0, 163, 42, 0.1);
+    color: #00a32a;
+    font-size: 13px;
+    font-weight: 700;
 }
 
 .stock-status {
@@ -75,6 +87,44 @@
     max-width: 100px;
 }
 
+/* Gallery image hover zoom */
+.product-gallery-main {
+    cursor: zoom-in;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+}
+
+.product-gallery-main img {
+    transition: transform 0.5s cubic-bezier(0.02, 0.01, 0.47, 1);
+}
+
+.product-gallery-main:hover img {
+    transform: scale(1.08);
+}
+
+.product-thumbs {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.product-thumb {
+    width: 64px;
+    height: 64px;
+    border: 2px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.product-thumb.active,
+.product-thumb:hover {
+    border-color: var(--brand-1);
+    transform: scale(1.05);
+}
+
 .product-trust-signals {
     display: flex;
     gap: 20px;
@@ -86,6 +136,13 @@
     display: flex;
     align-items: center;
     gap: 6px;
+    font-size: 14px;
+    color: var(--muted);
+    transition: color 0.2s;
+}
+
+.trust-signal:hover {
+    color: var(--brand-1);
 }
 
 .product-story {
@@ -93,6 +150,13 @@
     line-height: 28px;
     color: var(--muted);
     max-width: 80ch;
+}
+
+/* Related products */
+.related-products {
+    border-top: 1px solid var(--line);
+    padding-top: 40px;
+    margin-top: 20px;
 }
 
 /* Rating stars */

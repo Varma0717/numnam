@@ -3,16 +3,16 @@
 @section('title', 'NumNam - Subscriptions')
 
 @section('content')
-<section class="section fade-in-up pricing-hero">
+<section class="section animate-fade-up pricing-hero">
     <span class="kicker">Subscription Plans</span>
     <h1>Choose the right plan for your family</h1>
     <p class="meta pricing-subtitle">Save more with regular deliveries. Every plan includes free shipping and the flexibility to pause or cancel anytime.</p>
 </section>
 
-<section class="section fade-in-up">
-    <div class="store-grid three">
+<section class="section animate-fade-up">
+    <div class="store-grid three stagger-children">
         @forelse($plans as $index => $plan)
-        <article class="card pricing-card{{ $index === 1 ? ' card-popular' : '' }}">
+        <article class="card pricing-card{{ $index === 1 ? ' card-popular glow-pulse' : '' }}">
             @if($index === 1)
             <span class="popular-badge">Most Popular</span>
             @endif
@@ -44,7 +44,7 @@
     </div>
 </section>
 
-<section class="section fade-in-up pricing-faq">
+<section class="section animate-fade-up pricing-faq">
     <h3>Frequently Asked Questions</h3>
     <div class="accordion pricing-accordion">
         <div class="accordion-item">

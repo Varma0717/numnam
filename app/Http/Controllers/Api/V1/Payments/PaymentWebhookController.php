@@ -25,6 +25,16 @@ class PaymentWebhookController extends Controller
         $valid = $this->paymentGatewayService->verifyRazorpayWebhook($payload, $signature);
         $data = $request->json()->all();
 
+        if (!$valid) {
+            PaymentEvent::create([
+                'gateway' => 'razorpay',
+                'event_type' => (string) ($data['event'] ?? 'unknown'),
+                'signature_valid' => false,
+                'payload' => $data,
+            ]);
+            return response()->json(['error' => 'Invalid signature.'], 403);
+        }
+
         $eventType = (string) ($data['event'] ?? 'unknown');
         $entity = $data['payload']['payment']['entity'] ?? [];
         $externalOrderId = $entity['order_id'] ?? null;
@@ -45,11 +55,11 @@ class PaymentWebhookController extends Controller
             'status' => $status,
             'amount' => $amount,
             'currency' => 'INR',
-            'signature_valid' => $valid,
+            'signature_valid' => true,
             'payload' => $data,
         ]);
 
-        if ($valid && $order && in_array($eventType, ['payment.captured', 'order.paid'], true)) {
+        if ($order && in_array($eventType, ['payment.captured', 'order.paid'], true)) {
             $order->update([
                 'payment_status' => 'paid',
                 'status' => 'processing',
@@ -58,7 +68,7 @@ class PaymentWebhookController extends Controller
             ]);
         }
 
-        if ($valid && $order && in_array($eventType, ['payment.failed'], true)) {
+        if ($order && in_array($eventType, ['payment.failed'], true)) {
             $order->update([
                 'payment_status' => 'failed',
                 'payment_gateway' => 'razorpay',
@@ -74,6 +84,16 @@ class PaymentWebhookController extends Controller
         $signature = (string) $request->header('Stripe-Signature');
         $valid = $this->paymentGatewayService->verifyStripeWebhook($payload, $signature);
         $data = $request->json()->all();
+
+        if (!$valid) {
+            PaymentEvent::create([
+                'gateway' => 'stripe',
+                'event_type' => (string) ($data['type'] ?? 'unknown'),
+                'signature_valid' => false,
+                'payload' => $data,
+            ]);
+            return response()->json(['error' => 'Invalid signature.'], 403);
+        }
 
         $eventType = (string) ($data['type'] ?? 'unknown');
         $object = $data['data']['object'] ?? [];
@@ -96,11 +116,11 @@ class PaymentWebhookController extends Controller
             'status' => $status,
             'amount' => $amount,
             'currency' => strtoupper((string) ($object['currency'] ?? 'INR')),
-            'signature_valid' => $valid,
+            'signature_valid' => true,
             'payload' => $data,
         ]);
 
-        if ($valid && $order && in_array($eventType, ['payment_intent.succeeded', 'charge.succeeded'], true)) {
+        if ($order && in_array($eventType, ['payment_intent.succeeded', 'charge.succeeded'], true)) {
             $order->update([
                 'payment_status' => 'paid',
                 'status' => 'processing',
@@ -109,7 +129,7 @@ class PaymentWebhookController extends Controller
             ]);
         }
 
-        if ($valid && $order && in_array($eventType, ['payment_intent.payment_failed', 'charge.failed'], true)) {
+        if ($order && in_array($eventType, ['payment_intent.payment_failed', 'charge.failed'], true)) {
             $order->update([
                 'payment_status' => 'failed',
                 'payment_gateway' => 'stripe',

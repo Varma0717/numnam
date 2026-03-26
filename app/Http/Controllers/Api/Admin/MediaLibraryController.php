@@ -21,8 +21,8 @@ class MediaLibraryController extends Controller
 
         $media = MediaLibrary::query()
             ->with('links')
-            ->when($request->filled('folder'), fn (Builder $q) => $q->where('folder', $request->string('folder')))
-            ->when($request->filled('collection'), fn (Builder $q) => $q->where('collection', $request->string('collection')))
+            ->when($request->filled('folder'), fn(Builder $q) => $q->where('folder', $request->string('folder')))
+            ->when($request->filled('collection'), fn(Builder $q) => $q->where('collection', $request->string('collection')))
             ->when($request->filled('entity_type') && $request->filled('entity_id'), function (Builder $q) use ($request) {
                 $q->whereHas('links', function (Builder $linkQuery) use ($request) {
                     $linkQuery->where('entity_type', $request->string('entity_type'))
@@ -42,7 +42,7 @@ class MediaLibraryController extends Controller
         }
 
         $validated = $request->validate([
-            'file' => 'required|file|max:10240',
+            'file' => 'required|file|max:10240|mimes:jpg,jpeg,png,gif,webp,svg,pdf,mp4,mp3',
             'folder' => 'nullable|string|max:100',
             'collection' => 'nullable|string|max:100',
             'title' => 'nullable|string|max:255',

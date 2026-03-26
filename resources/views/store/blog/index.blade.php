@@ -10,7 +10,6 @@
         <h1>Blog & Learning Center</h1>
         <p>Practical feeding guides, nutrition breakdowns, and parenting tips for every stage.</p>
     </div>
-    <div class="hero-art"></div>
 </section>
 
 <section class="section">

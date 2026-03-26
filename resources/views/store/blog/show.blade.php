@@ -5,7 +5,7 @@
 @section('og_image', $blog->featured_image ?: asset('assets/images/background_img.jpg'))
 
 @section('content')
-<section class="blog-hero section in-view">
+<section class="blog-hero hero section in-view" style="background-image: linear-gradient(135deg, rgba(24,24,24,0.62) 0%, rgba(24,24,24,0.34) 50%, rgba(24,24,24,0.18) 100%), url('{{ $blog->featured_image ?: asset('assets/images/background_img.jpg') }}');">
     <div>
         <span class="kicker">{{ $blog->category?->name ?? 'Article' }}</span>
         <h1>{{ $blog->title }}</h1>
@@ -19,7 +19,6 @@
             @endif
         </div>
     </div>
-    <div class="hero-art" style="background-image:url('{{ $blog->featured_image ?: asset('assets/images/background_img.jpg') }}'); background-size:cover;"></div>
 </section>
 
 <section class="section blog-content fade-in-up">
