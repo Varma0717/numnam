@@ -237,7 +237,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->unsignedDecimal('price', 10, 2);
-            $table->enum('billing_cycle', ['monthly', 'quarterly', 'yearly', 'one_time'])->default('monthly');
+            $table->enum('billing_cycle', ['weekly', 'monthly', 'quarterly', 'yearly', 'one_time'])->default('monthly');
             $table->json('features')->nullable();
             $table->unsignedInteger('sort_order')->default(0);
             $table->boolean('is_active')->default(true);

@@ -14,7 +14,7 @@ class PricingPlanController extends Controller
     public function index(Request $request): JsonResponse
     {
         $plans = PricingPlan::query()
-            ->when($request->filled('active'), fn ($q) => $q->where('is_active', $request->boolean('active')))
+            ->when($request->filled('active'), fn($q) => $q->where('is_active', $request->boolean('active')))
             ->with('products:id,name,slug')
             ->orderBy('sort_order')
             ->paginate((int) $request->input('per_page', 20));
@@ -30,7 +30,7 @@ class PricingPlanController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'duration' => 'required|string|max:100',
-            'billing_cycle' => 'required|in:monthly,quarterly,yearly,one_time',
+            'billing_cycle' => 'required|in:weekly,monthly,quarterly,yearly,one_time',
             'features' => 'nullable|array',
             'included_products' => 'nullable|array',
             'included_products.*.product_id' => 'required|exists:products,id',
@@ -49,7 +49,7 @@ class PricingPlanController extends Controller
 
             if ($includedProducts) {
                 $syncData = collect($includedProducts)
-                    ->mapWithKeys(fn ($item) => [
+                    ->mapWithKeys(fn($item) => [
                         (int) $item['product_id'] => ['quantity' => (int) ($item['quantity'] ?? 1)],
                     ])
                     ->all();
@@ -80,7 +80,7 @@ class PricingPlanController extends Controller
             'description' => 'nullable|string',
             'price' => 'sometimes|required|numeric|min:0',
             'duration' => 'sometimes|required|string|max:100',
-            'billing_cycle' => 'sometimes|required|in:monthly,quarterly,yearly,one_time',
+            'billing_cycle' => 'sometimes|required|in:weekly,monthly,quarterly,yearly,one_time',
             'features' => 'nullable|array',
             'included_products' => 'nullable|array',
             'included_products.*.product_id' => 'required|exists:products,id',
@@ -101,7 +101,7 @@ class PricingPlanController extends Controller
 
             if (is_array($includedProducts)) {
                 $syncData = collect($includedProducts)
-                    ->mapWithKeys(fn ($item) => [
+                    ->mapWithKeys(fn($item) => [
                         (int) $item['product_id'] => ['quantity' => (int) ($item['quantity'] ?? 1)],
                     ])
                     ->all();

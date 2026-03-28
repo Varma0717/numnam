@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS pricing_plans (
     slug VARCHAR(255) NOT NULL UNIQUE,
     description TEXT NULL,
     price DECIMAL(10,2) NOT NULL,
-    billing_cycle ENUM('monthly','quarterly','yearly','one_time') NOT NULL DEFAULT 'monthly',
+    billing_cycle ENUM('weekly','monthly','quarterly','yearly','one_time') NOT NULL DEFAULT 'monthly',
     features JSON NULL,
     sort_order INT UNSIGNED NOT NULL DEFAULT 0,
     is_active TINYINT(1) NOT NULL DEFAULT 1,

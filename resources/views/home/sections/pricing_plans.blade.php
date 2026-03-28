@@ -4,13 +4,14 @@
         <h2>{{ $data['heading'] ?? $section->title }}</h2>
         <div class="grid-3" style="margin-top: 14px;">
             @forelse(($section->render_items ?? collect()) as $plan)
-                <article class="card">
-                    <h3>{{ $plan->name }}</h3>
-                    <p class="muted">{{ ucfirst(str_replace('_', ' ', $plan->billing_cycle)) }}</p>
-                    <p><strong>${{ number_format((float) $plan->price, 2) }}</strong></p>
-                </article>
+            @php($cycleLabel = $plan->billing_cycle === 'one_time' ? 'One time' : 'Every ' . strtolower(str_replace('_', ' ', $plan->billing_cycle)))
+            <article class="card">
+                <h3>{{ $plan->name }}</h3>
+                <p class="muted">{{ $cycleLabel }}</p>
+                <p><strong>Rs {{ number_format((float) $plan->price, 0) }}</strong></p>
+            </article>
             @empty
-                <div class="card">No plans configured.</div>
+            <div class="card">No plans configured.</div>
             @endforelse
         </div>
     </div>

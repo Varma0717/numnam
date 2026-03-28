@@ -11,10 +11,12 @@
 
 <section class="section animate-fade-up">
     <div class="store-grid three stagger-children">
-        @forelse($plans as $index => $plan)
-        <article class="card pricing-card{{ $index === 1 ? ' card-popular glow-pulse' : '' }}">
-            @if($index === 1)
-            <span class="popular-badge">Most Popular</span>
+        @forelse($plans as $plan)
+        @php($isBestValue = collect($plan->features ?? [])->contains(fn($feature) => strtolower((string) $feature) === 'best value'))
+        @php($cycleLabel = $plan->billing_cycle === 'one_time' ? 'One time' : 'Every ' . strtolower(str_replace('_', ' ', $plan->billing_cycle)))
+        <article class="card pricing-card{{ $isBestValue ? ' card-popular glow-pulse' : '' }}">
+            @if($isBestValue)
+            <span class="popular-badge">Best Value</span>
             @endif
             <div class="card-body pricing-card-body">
                 <h4>{{ $plan->name }}</h4>
@@ -22,7 +24,8 @@
                 <div class="pricing-amount">
                     <strong>Rs {{ number_format($plan->price, 0) }}</strong>
                 </div>
-                <p class="meta pricing-cycle">{{ ucfirst(str_replace('_', ' ', $plan->billing_cycle)) }} &middot; {{ $plan->duration }}</p>
+                <p class="meta pricing-cycle">{{ $cycleLabel }}</p>
+                <p class="meta pricing-cycle">{{ $plan->duration }}</p>
                 <div class="chip-row pricing-features">
                     @foreach(($plan->features ?? []) as $feature)
                     <span class="chip">{{ $feature }}</span>
@@ -31,10 +34,10 @@
                 @auth
                 <form method="POST" action="{{ route('store.pricing.subscribe', $plan) }}">
                     @csrf
-                    <button class="{{ $index === 1 ? 'cta-btn' : 'btn-primary' }} pricing-subscribe-btn" type="submit">Subscribe Now</button>
+                    <button class="{{ $isBestValue ? 'cta-btn' : 'btn-primary' }} pricing-subscribe-btn" type="submit">Select</button>
                 </form>
                 @else
-                <a class="{{ $index === 1 ? 'cta-btn' : 'btn-primary' }} pricing-subscribe-btn" href="{{ route('store.login') }}">Login to Subscribe</a>
+                <a class="{{ $isBestValue ? 'cta-btn' : 'btn-primary' }} pricing-subscribe-btn" href="{{ route('store.login') }}">Select</a>
                 @endauth
             </div>
         </article>
