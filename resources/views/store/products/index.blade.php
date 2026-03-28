@@ -70,7 +70,7 @@ asset('assets/images/product_4.png'),
         </div>
 
         <div class="col-12 col-lg-2 d-grid">
-            <button class="cta-btn w-100" type="submit">Apply Filters</button>
+            <button class="btn btn-primary w-100" type="submit">Apply Filters</button>
         </div>
     </form>
 </section>

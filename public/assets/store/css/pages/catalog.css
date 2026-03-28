@@ -59,7 +59,8 @@
 /* ---- Catalog hero ---- */
 
 .catalog-filter-bar {
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
   padding: 20px;
   background: var(--surface-soft);
   border: 1px solid var(--line);
