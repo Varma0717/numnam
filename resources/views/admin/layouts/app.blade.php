@@ -166,6 +166,16 @@
                         Subscriptions
                     </a>
                 </li>
+                <li class="{{ request()->routeIs('admin.reviews*') ? 'current' : '' }}">
+                    <a href="{{ route('admin.reviews.index') }}">
+                        <span class="menu-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                            </svg>
+                        </span>
+                        Reviews
+                    </a>
+                </li>
                 <li class="menu-separator"></li>
                 <li class="{{ request()->routeIs('admin.media') ? 'current' : '' }}">
                     <a href="{{ route('admin.media') }}">

@@ -74,7 +74,7 @@ class Product extends Model
     /** Effective selling price (sale_price if set, otherwise price) */
     public function getEffectivePriceAttribute(): float
     {
-        return $this->sale_price ?? $this->price;
+        return (float) ($this->sale_price ?? $this->price ?? 0);
     }
 
     public function reviews()
@@ -84,7 +84,7 @@ class Product extends Model
 
     public function approvedReviews()
     {
-        return $this->hasMany(ProductReview::class)->where('is_approved', true);
+        return $this->hasMany(ProductReview::class)->where('moderation_status', 'approved');
     }
 
     public function wishlists()

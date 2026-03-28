@@ -39,11 +39,11 @@ asset('assets/images/product_4.png'),
     <div class="hero-slide-track" data-hero-track>
         <article class="hero-slide" style="background-image:url('{{ asset('assets/images/hero.jpg') }}');">
             <div class="hero-slide-overlay">
-                <div class="hero-slide-copy">
+                <div class="hero-slide-copy container-xxl px-0">
                     <span class="kicker">NumNam Nutrition</span>
                     <h1>{{ $homepageSections['hero_title'] ?? 'Smart baby nutrition, delivered with parent-friendly convenience.' }}</h1>
                     <p>{{ $homepageSections['hero_subtitle'] ?? 'Discover stage-wise foods, subscriptions, and transparent ingredients built for modern families.' }}</p>
-                    <div class="hero-actions">
+                    <div class="hero-actions d-flex flex-wrap gap-2">
                         <a class="cta-btn" href="{{ route('store.products') }}">Shop Products</a>
                         <a class="btn-soft" href="{{ route('store.pricing') }}">Build Subscription</a>
                     </div>
@@ -52,7 +52,7 @@ asset('assets/images/product_4.png'),
         </article>
         <article class="hero-slide" style="background-image:url('{{ asset('assets/images/hero_1.jpg') }}');">
             <div class="hero-slide-overlay">
-                <div class="hero-slide-copy">
+                <div class="hero-slide-copy container-xxl px-0">
                     <span class="kicker">Stage-Wise Growth</span>
                     <h2>Nutrition crafted for each milestone.</h2>
                     <p>From first tastes to self-feeding confidence, every bite is made to support healthy development.</p>
@@ -61,7 +61,7 @@ asset('assets/images/product_4.png'),
         </article>
         <article class="hero-slide" style="background-image:url('{{ asset('assets/images/background_img.jpg') }}');">
             <div class="hero-slide-overlay">
-                <div class="hero-slide-copy">
+                <div class="hero-slide-copy container-xxl px-0">
                     <span class="kicker">Parent Friendly</span>
                     <h2>Fast delivery, clean labels, no mealtime stress.</h2>
                     <p>Enjoy predictable subscriptions, transparent ingredients, and support built for modern families.</p>

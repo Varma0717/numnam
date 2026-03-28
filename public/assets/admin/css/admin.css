@@ -962,6 +962,21 @@ body.sidebar-collapsed .admin-content-wrap {
   color: #856404;
 }
 
+.status-badge--approved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge--rejected {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.admin-muted {
+  color: #757575;
+  font-size: 12px;
+}
+
 /* ======== Order Timeline ======== */
 .order-timeline {
   list-style: none;

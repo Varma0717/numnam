@@ -44,29 +44,41 @@ asset('assets/images/product_4.png'),
 </section>
 
 <section class="section catalog-filters">
-    <form method="GET" class="catalog-filter-bar">
-        <input class="input" type="text" name="q" value="{{ request('q') }}" placeholder="Search products...">
+    <form method="GET" class="catalog-filter-bar row g-3 align-items-end">
+        <div class="col-12 col-lg-4">
+            <input class="input form-control" type="text" name="q" value="{{ request('q') }}" placeholder="Search products...">
+        </div>
+
         @if(request('age'))<input type="hidden" name="age" value="{{ request('age') }}">@endif
-        <select class="input" name="category">
-            <option value="">All categories</option>
-            @foreach($categories as $category)
-            <option value="{{ $category->slug }}" @selected(request('category')===$category->slug)>{{ $category->name }}</option>
-            @endforeach
-        </select>
-        <select class="input" name="type">
-            <option value="">All types</option>
-            @foreach(['puree', 'puffs', 'cookies'] as $type)
-            <option value="{{ $type }}" @selected(request('type')===$type)>{{ ucfirst($type) }}</option>
-            @endforeach
-        </select>
-        <button class="cta-btn" type="submit">Apply Filters</button>
+
+        <div class="col-12 col-md-6 col-lg-3">
+            <select class="input form-select" name="category">
+                <option value="">All categories</option>
+                @foreach($categories as $category)
+                <option value="{{ $category->slug }}" @selected(request('category')===$category->slug)>{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3">
+            <select class="input form-select" name="type">
+                <option value="">All types</option>
+                @foreach(['puree', 'puffs', 'cookies'] as $type)
+                <option value="{{ $type }}" @selected(request('type')===$type)>{{ ucfirst($type) }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-12 col-lg-2 d-grid">
+            <button class="cta-btn w-100" type="submit">Apply Filters</button>
+        </div>
     </form>
 </section>
 
 <section class="section">
     <div class="catalog-sort">
         <span class="result-count">{{ $products->total() }} product{{ $products->total() !== 1 ? 's' : '' }} found</span>
-        <select class="input" name="sort" onchange="window.location.href=this.value">
+        <select class="input form-select" name="sort" onchange="window.location.href=this.value">
             <option value="{{ request()->fullUrlWithQuery(['sort' => 'newest']) }}" @selected(request('sort', 'newest' )==='newest' )>Newest First</option>
             <option value="{{ request()->fullUrlWithQuery(['sort' => 'price_low']) }}" @selected(request('sort')==='price_low' )>Price: Low to High</option>
             <option value="{{ request()->fullUrlWithQuery(['sort' => 'price_high']) }}" @selected(request('sort')==='price_high' )>Price: High to Low</option>

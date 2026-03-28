@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminPagesController;
 use App\Http\Controllers\Admin\Catalog\ProductManagementController;
 use App\Http\Controllers\Admin\Commerce\CouponManagementController;
 use App\Http\Controllers\Admin\Commerce\OrderManagementController;
+use App\Http\Controllers\Admin\Commerce\ReviewModerationController;
 use App\Http\Controllers\Admin\Commerce\ReferralManagementController;
 use App\Http\Controllers\Web\CustomerAuthController;
 use App\Http\Controllers\Web\Payments\CheckoutPaymentController;
@@ -131,6 +132,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/blogs', [AdminPagesController::class, 'blogs'])->name('blogs.index');
         Route::get('/contacts', [AdminPagesController::class, 'contacts'])->name('contacts.index');
         Route::get('/subscriptions', [AdminPagesController::class, 'subscriptions'])->name('subscriptions.index');
+        Route::get('/reviews', [ReviewModerationController::class, 'index'])->name('reviews.index');
+        Route::patch('/reviews/{review}/approve', [ReviewModerationController::class, 'approve'])->name('reviews.approve');
+        Route::patch('/reviews/{review}/reject', [ReviewModerationController::class, 'reject'])->name('reviews.reject');
+        Route::delete('/reviews/{review}', [ReviewModerationController::class, 'destroy'])->name('reviews.destroy');
         Route::get('/settings', [AdminPagesController::class, 'settings'])->name('settings.index');
     });
 });

@@ -57,6 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', () => {
       const y = window.scrollY;
       siteHeader.classList.toggle('scrolled', y > 60);
+
+      if (y > 140 && y > lastScroll) {
+        siteHeader.classList.add('header-hidden');
+      } else {
+        siteHeader.classList.remove('header-hidden');
+      }
+
       lastScroll = y;
     }, { passive: true });
   }

@@ -1,7 +1,7 @@
 {{-- Newsletter section (above footer) --}}
 <div class="footer-newsletter">
     <div class="footer-newsletter-inner">
-        <div>
+        <div class="newsletter-copy">
             <h3>Join the NumNam Family</h3>
             <p>Get parenting tips, new product alerts, and exclusive offers delivered to your inbox.</p>
         </div>
@@ -9,8 +9,8 @@
             @csrf
             <input type="hidden" name="query_type" value="newsletter">
             <input type="hidden" name="first_name" value="Subscriber">
-            <input type="email" name="email" placeholder="Your email address" required class="newsletter-input">
-            <button type="submit" class="cta-btn">Subscribe</button>
+            <input type="email" name="email" placeholder="Your email address" required class="newsletter-input form-control">
+            <button type="submit" class="cta-btn btn btn-primary">Subscribe</button>
         </form>
     </div>
 </div>

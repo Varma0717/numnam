@@ -73,7 +73,7 @@ class MobileEngagementController extends BaseMobileController
         $reviews = ProductReview::query()
             ->where('product_id', $product->id)
             ->where(function ($query) use ($request) {
-                $query->where('is_approved', true)
+                $query->where('moderation_status', 'approved')
                     ->orWhere('user_id', $request->user()->id);
             })
             ->with('user:id,name')
@@ -98,11 +98,11 @@ class MobileEngagementController extends BaseMobileController
         $summary = [
             'average_rating' => round((float) ProductReview::query()
                 ->where('product_id', $product->id)
-                ->where('is_approved', true)
+                ->where('moderation_status', 'approved')
                 ->avg('rating'), 2),
             'approved_reviews_count' => ProductReview::query()
                 ->where('product_id', $product->id)
-                ->where('is_approved', true)
+                ->where('moderation_status', 'approved')
                 ->count(),
         ];
 
@@ -134,6 +134,8 @@ class MobileEngagementController extends BaseMobileController
                 'title' => $validated['title'] ?? null,
                 'body' => $validated['body'],
                 'is_approved' => false,
+                'moderation_status' => 'pending',
+                'moderated_at' => null,
             ]
         );
 
@@ -157,6 +159,8 @@ class MobileEngagementController extends BaseMobileController
             'title' => $validated['title'] ?? null,
             'body' => $validated['body'],
             'is_approved' => false,
+            'moderation_status' => 'pending',
+            'moderated_at' => null,
         ]);
 
         return $this->success([], 'Review updated successfully. It will be visible after moderation.');

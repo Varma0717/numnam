@@ -108,7 +108,7 @@ class StorefrontController extends Controller
                 };
             }, fn($query) => $query->latest('id'))
             ->paginate(12)
-            ->withQueryString();
+            ->appends($request->query());
 
         return view('store.products.index', compact('products', 'categories'));
     }
@@ -707,7 +707,11 @@ class StorefrontController extends Controller
 
         ProductReview::updateOrCreate(
             ['user_id' => $request->user()->id, 'product_id' => $product->id],
-            array_merge($validated, ['is_approved' => false])
+            array_merge($validated, [
+                'is_approved' => false,
+                'moderation_status' => 'pending',
+                'moderated_at' => null,
+            ])
         );
 
         return back()->with('status', 'Review submitted! It will appear after moderation.');

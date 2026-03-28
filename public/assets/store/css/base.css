@@ -1,19 +1,22 @@
 :root {
-  --brand-1: #2D6A4F;
-  --brand-1-light: #52B788;
-  --brand-1-soft: #D8F3DC;
-  --brand-2: #F4A261;
-  --brand-3: #E76F51;
-  --accent: #2D6A4F;
-  --accent-dark: #1B4332;
-  --accent-soft: #eaf5ef;
-  --text: #1C1D1D;
-  --muted: #5A5D5E;
-  --surface: #FEFCF9;
-  --surface-soft: #FDF8F4;
-  --surface-warm: #FDF8F4;
-  --line: #E8E0D8;
-  --danger: #E76F51;
+  --brand-1: #195b48;
+  --brand-1-light: #2f8a6f;
+  --brand-1-soft: #d8eee4;
+  --brand-2: #f2a65c;
+  --brand-3: #d1603d;
+  --accent: #0f766e;
+  --accent-dark: #134e4a;
+  --accent-soft: #e3f4f1;
+  --text: #1b1f23;
+  --muted: #5e676f;
+  --surface: #fffdfa;
+  --surface-soft: #fff7ee;
+  --surface-warm: #fff4e7;
+  --line: #e7dccb;
+  --danger: #c84b31;
+  --hero-sun: #ffe8bf;
+  --hero-mint: #d8f1df;
+  --hero-coral: #ffd7cd;
   --radius: 12px;
   --radius-sm: 6px;
   --radius-lg: 16px;
@@ -40,11 +43,14 @@ html,
 body {
   margin: 0;
   padding: 0;
-  font-family: "Inter", sans-serif;
+  font-family: "Plus Jakarta Sans", "Inter", sans-serif;
   font-size: 15px;
   line-height: 1.6;
   color: var(--text);
-  background: var(--surface);
+  background:
+    radial-gradient(circle at 5% 0%, var(--hero-sun) 0%, transparent 28%),
+    radial-gradient(circle at 95% 0%, var(--hero-mint) 0%, transparent 24%),
+    linear-gradient(180deg, #fffefa 0%, #fff8f0 42%, #fffdfa 100%);
   overflow-x: clip;
 }
 
@@ -69,6 +75,7 @@ img {
   display: grid;
   grid-template-rows: auto 1fr auto;
   padding-top: 70px;
+  position: relative;
 }
 
 .page {
@@ -812,8 +819,21 @@ textarea {
    Newsletter Footer
    ============================================================ */
 .footer-newsletter {
-  background: linear-gradient(135deg, var(--brand-1) 0%, var(--accent-dark) 100%);
-  padding: 56px 0;
+  background: radial-gradient(circle at 12% 10%, rgba(255, 224, 175, 0.22), transparent 40%), linear-gradient(135deg, var(--brand-1) 0%, var(--accent-dark) 100%);
+  padding: 62px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-newsletter::after {
+  content: '';
+  position: absolute;
+  inset: auto -10% -120px auto;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  filter: blur(2px);
 }
 
 .footer-newsletter-inner {
@@ -824,13 +844,15 @@ textarea {
   justify-content: space-between;
   gap: 30px;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
 }
 
 .footer-newsletter h3 {
   margin: 0;
   color: #fff;
-  font-size: 24px;
-  font-weight: 700;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
 }
 
 .footer-newsletter p {
@@ -843,13 +865,16 @@ textarea {
   display: flex;
   gap: 0;
   min-width: 360px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(18, 45, 38, 0.24);
 }
 
 .newsletter-input {
   flex: 1;
   height: 48px;
   border: 0;
-  border-radius: var(--radius) 0 0 var(--radius);
+  border-radius: 0;
   padding: 0 16px;
   font: inherit;
   font-size: 14px;
@@ -857,8 +882,12 @@ textarea {
 }
 
 .newsletter-form .cta-btn {
-  border-radius: 0 var(--radius) var(--radius) 0;
+  border-radius: 0;
   white-space: nowrap;
+}
+
+.newsletter-form .cta-btn:hover {
+  box-shadow: none;
 }
 
 /* Footer brand column */
