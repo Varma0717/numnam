@@ -213,15 +213,12 @@ asset('assets/images/product_4.png'),
 
 <section class="section animate-fade-up">
     <h2>Our Best Sellers</h2>
-    <button type="button" class="product-carousel-btn" data-carousel-prev aria-label="Previous products">&#10094;</button>
-    <button type="button" class="product-carousel-btn" data-carousel-next aria-label="Next products">&#10095;</button>
-    </div>
-    @endif
-    </div>
     @if($featuredProducts->isEmpty())
     <p class="meta">No featured products yet.</p>
     @else
     <div class="product-carousel" data-product-carousel>
+        <button type="button" class="product-carousel-btn" data-carousel-prev aria-label="Previous products">&#10094;</button>
+        <button type="button" class="product-carousel-btn" data-carousel-next aria-label="Next products">&#10095;</button>
         <div class="product-carousel-viewport">
             <div class="product-carousel-track" data-carousel-track>
                 @foreach($featuredProducts as $product)
@@ -245,7 +242,7 @@ asset('assets/images/product_4.png'),
                             </div>
                             <form method="POST" action="{{ route('store.cart.add', $product) }}" class="store-actions">
                                 @csrf
-                                <button class="btn-primary" type="submit">Add to Cart</button>
+                                <button class="btn btn-primary" type="submit">Add to Cart</button>
                             </form>
                         </div>
                     </article>
