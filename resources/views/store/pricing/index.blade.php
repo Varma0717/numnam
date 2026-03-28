@@ -9,13 +9,13 @@
     <p class="meta pricing-subtitle">Save more with regular deliveries. Every plan includes free shipping and the flexibility to pause or cancel anytime.</p>
 </section>
 
-<section class="section animate-fade-up">
+<section class="section animate-fade-up" style="overflow: visible;">
     <div class="row g-4 stagger-children">
         @forelse($plans as $plan)
         @php($isBestValue = collect($plan->features ?? [])->contains(fn($feature) => strtolower((string) $feature) === 'best value'))
         @php($cycleLabel = $plan->billing_cycle === 'one_time' ? 'One time' : 'Every ' . strtolower(str_replace('_', ' ', $plan->billing_cycle)))
-        <div class="col-lg-4 col-md-6 col-12">
-            <article class="card pricing-card{{ $isBestValue ? ' card-popular glow-pulse' : '' }}">
+        <div class="col-lg-4 col-md-6 col-12" style="overflow: visible;">
+            <article class="card pricing-card{{ $isBestValue ? ' card-popular glow-pulse' : '' }}" style="overflow: visible;">
                 @if($isBestValue)
                 <span class="popular-badge">Best Value</span>
                 @endif
