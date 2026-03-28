@@ -293,7 +293,7 @@
 }
 
 .product-carousel-btn[data-carousel-prev] {
-  left: 0;
+  right: 48px;
 }
 
 .product-carousel-btn[data-carousel-next] {

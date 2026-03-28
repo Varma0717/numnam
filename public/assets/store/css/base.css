@@ -84,19 +84,18 @@ img {
 .section {
   border: 0;
   border-radius: 0;
-  background: transparent;
   box-shadow: none;
   padding: 40px 0;
 }
 
 /* Tinted background for sections that need visual separation */
 .section-tinted {
-  background: var(--surface-soft);
+  background: transparent;
 }
 
 /* Brand-soft background for CTA / highlight sections */
 .section-brand-soft {
-  background: var(--brand-1-soft);
+  background: transparent;
 }
 
 .hero {
