@@ -8,6 +8,12 @@
     align-items: start;
 }
 
+@media (min-width: 768px) {
+    .product-detail-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
 .product-info .kicker {
     margin-bottom: 8px;
 }

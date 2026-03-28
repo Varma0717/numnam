@@ -243,7 +243,8 @@ class StorefrontController extends Controller
 
     public function subscribe(Request $request, PricingPlan $plan): RedirectResponse
     {
-        $request->user()->subscriptions()->create([
+        // Create subscription
+        $subscription = $request->user()->subscriptions()->create([
             'plan_name' => $plan->name,
             'plan_type' => 'general',
             'duration' => $plan->duration ?? '1 month',
@@ -254,7 +255,57 @@ class StorefrontController extends Controller
             'next_billing_date' => now()->addMonth()->toDateString(),
         ]);
 
-        return back()->with('status', 'Subscription created successfully.');
+        // Store subscription info in session and redirect to checkout
+        $request->session()->put('subscription', [
+            'id' => $subscription->id,
+            'plan_name' => $plan->name,
+            'price' => $plan->price,
+            'frequency' => $plan->billing_cycle,
+        ]);
+
+        return redirect()->route('store.subscription.checkout')->with('status', 'Plan selected. Please complete your payment.');
+    }
+
+    public function subscriptionCheckout(Request $request)
+    {
+        $subscription = $request->session()->get('subscription');
+
+        if (!$subscription) {
+            return redirect()->route('store.pricing')->withErrors(['subscription' => 'No subscription plan selected.']);
+        }
+
+        return view('store.subscription-checkout', [
+            'subscription' => $subscription,
+            'user' => $request->user(),
+        ]);
+    }
+
+    public function placeSubscriptionOrder(Request $request): RedirectResponse
+    {
+        $subscription = $request->session()->get('subscription');
+
+        if (!$subscription) {
+            return redirect()->route('store.pricing')->withErrors(['subscription' => 'No subscription plan selected.']);
+        }
+
+        $validated = $request->validate([
+            'ship_name' => 'required|string|max:150',
+            'ship_phone' => 'required|string|max:25',
+            'ship_address' => 'required|string|max:255',
+            'ship_city' => 'required|string|max:120',
+        ]);
+
+        // Update subscription with delivery address
+        $request->user()->subscriptions()->where('id', $subscription['id'])->update([
+            'delivery_address' => $validated['ship_address'],
+            'delivery_city' => $validated['ship_city'],
+            'delivery_phone' => $validated['ship_phone'],
+        ]);
+
+        // Clear subscription from session
+        $request->session()->forget('subscription');
+
+        return redirect()->route('store.account')->with('status', 'Subscription activated successfully! Your delivery will start from next billing cycle.');
     }
 
     public function blogIndex()

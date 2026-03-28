@@ -69,6 +69,7 @@
     <link rel="stylesheet" href="{{ url('assets/store/css/pages/catalog.css') }}">
     <link rel="stylesheet" href="{{ url('assets/store/css/pages/checkout.css') }}">
     <link rel="stylesheet" href="{{ url('assets/store/css/pages/product-detail.css') }}">
+    <link rel="stylesheet" href="{{ url('assets/store/css/pages/pricing.css') }}">
     <link rel="stylesheet" href="{{ url('assets/store/css/pages/blog.css') }}">
     <link rel="stylesheet" href="{{ url('assets/store/css/pages/pages.css') }}">
     <link rel="stylesheet" href="{{ url('assets/store/css/animations.css') }}">

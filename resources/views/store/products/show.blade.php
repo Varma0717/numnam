@@ -233,11 +233,7 @@ $mainPlaceholder = $productPlaceholders[$product->id % count($productPlaceholder
 
 @if($related->isNotEmpty())
 <section class="section fade-in-up">
-    <div class="section-head">
-        <div>
-            <h3>You May Also Like</h3>
-        </div>
-    </div>
+    <h2>You May Also Like</h2>
     <div class="store-grid three">
         @foreach($related as $item)
         @php($relatedPlaceholder = $productPlaceholders[$loop->index % count($productPlaceholders)])

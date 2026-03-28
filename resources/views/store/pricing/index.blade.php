@@ -10,37 +10,39 @@
 </section>
 
 <section class="section animate-fade-up">
-    <div class="store-grid three stagger-children">
+    <div class="row g-4 stagger-children">
         @forelse($plans as $plan)
         @php($isBestValue = collect($plan->features ?? [])->contains(fn($feature) => strtolower((string) $feature) === 'best value'))
         @php($cycleLabel = $plan->billing_cycle === 'one_time' ? 'One time' : 'Every ' . strtolower(str_replace('_', ' ', $plan->billing_cycle)))
-        <article class="card pricing-card{{ $isBestValue ? ' card-popular glow-pulse' : '' }}">
-            @if($isBestValue)
-            <span class="popular-badge">Best Value</span>
-            @endif
-            <div class="card-body pricing-card-body">
-                <h4>{{ $plan->name }}</h4>
-                <p class="meta">{{ $plan->description }}</p>
-                <div class="pricing-amount">
-                    <strong>Rs {{ number_format($plan->price, 0) }}</strong>
+        <div class="col-lg-4 col-md-6 col-12">
+            <article class="card pricing-card{{ $isBestValue ? ' card-popular glow-pulse' : '' }}">
+                @if($isBestValue)
+                <span class="popular-badge">Best Value</span>
+                @endif
+                <div class="card-body pricing-card-body">
+                    <h4>{{ $plan->name }}</h4>
+                    <p class="meta">{{ $plan->description }}</p>
+                    <div class="pricing-amount">
+                        <strong>Rs {{ number_format($plan->price, 0) }}</strong>
+                    </div>
+                    <p class="meta pricing-cycle">{{ $cycleLabel }}</p>
+                    <p class="meta pricing-cycle">{{ $plan->duration }}</p>
+                    <div class="chip-row pricing-features">
+                        @foreach(($plan->features ?? []) as $feature)
+                        <span class="chip">{{ $feature }}</span>
+                        @endforeach
+                    </div>
+                    @auth
+                    <form method="POST" action="{{ route('store.pricing.subscribe', $plan) }}">
+                        @csrf
+                        <button class="btn btn-primary pricing-subscribe-btn" type="submit">Select Plan</button>
+                    </form>
+                    @else
+                    <a class="btn btn-primary pricing-subscribe-btn" href="{{ route('store.login') }}">Login to Subscribe</a>
+                    @endauth
                 </div>
-                <p class="meta pricing-cycle">{{ $cycleLabel }}</p>
-                <p class="meta pricing-cycle">{{ $plan->duration }}</p>
-                <div class="chip-row pricing-features">
-                    @foreach(($plan->features ?? []) as $feature)
-                    <span class="chip">{{ $feature }}</span>
-                    @endforeach
-                </div>
-                @auth
-                <form method="POST" action="{{ route('store.pricing.subscribe', $plan) }}">
-                    @csrf
-                    <button class="btn btn-primary pricing-subscribe-btn" type="submit">Select</button>
-                </form>
-                @else
-                <a class="btn btn-primary pricing-subscribe-btn" href="{{ route('store.login') }}">Select</a>
-                @endauth
-            </div>
-        </article>
+            </article>
+        </div>
         @empty
         <p class="meta">No active plans yet.</p>
         @endforelse

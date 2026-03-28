@@ -1,0 +1,220 @@
+/* ============================================================
+   Pricing / Subscription Plans Page
+   ============================================================ */
+
+.pricing-hero {
+    text-align: center;
+    padding: 60px 0 40px;
+}
+
+.pricing-hero h1 {
+    font-size: clamp(28px, 4vw, 44px);
+    margin-bottom: 16px;
+}
+
+.pricing-subtitle {
+    font-size: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+    color: var(--muted);
+}
+
+.pricing-card {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 2px solid var(--line);
+    border-radius: var(--radius-lg);
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.pricing-card:hover {
+    border-color: var(--brand-1);
+    box-shadow: 0 12px 32px rgba(45, 106, 79, 0.15);
+    transform: translateY(-4px);
+}
+
+.pricing-card.card-popular {
+    border-color: var(--brand-1);
+    box-shadow: 0 12px 32px rgba(45, 106, 79, 0.15);
+}
+
+.popular-badge {
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--brand-1);
+    color: white;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pricing-card-body {
+    padding: 32px 24px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.pricing-card h4 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: var(--text);
+}
+
+.pricing-card>.card-body>.meta:first-of-type {
+    color: var(--muted);
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.pricing-amount {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.pricing-amount strong {
+    font-size: 32px;
+    color: var(--brand-1);
+}
+
+.pricing-cycle {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 4px !important;
+}
+
+.pricing-features {
+    margin: 24px 0;
+    flex-grow: 1;
+}
+
+.pricing-features .chip {
+    background: var(--surface-soft);
+    color: var(--brand-1);
+    border: 1px solid var(--line);
+    font-size: 12px;
+    padding: 6px 12px;
+    display: inline-block;
+    margin-bottom: 8px;
+    margin-right: 8px;
+    border-radius: 20px;
+}
+
+.pricing-subscribe-btn {
+    width: 100%;
+    margin-top: auto;
+    padding: 14px 24px;
+    font-weight: 600;
+    border-radius: var(--radius);
+    transition: all 0.3s ease;
+}
+
+.pricing-subscribe-btn:hover {
+    transform: scale(1.02);
+}
+
+.pricing-faq {
+    margin-top: 60px;
+    padding-top: 60px;
+    border-top: 1px solid var(--line);
+}
+
+.pricing-faq h2 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.pricing-accordion {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.accordion-item {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.accordion-item:hover {
+    border-color: var(--brand-1);
+}
+
+.accordion-trigger {
+    width: 100%;
+    padding: 16px 20px;
+    background: white;
+    border: none;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    font-size: 15px;
+}
+
+.accordion-trigger:hover {
+    background: var(--surface-soft);
+}
+
+.accordion-trigger svg {
+    flex-shrink: 0;
+    margin-left: 12px;
+    transition: transform 0.3s ease;
+}
+
+.accordion-item.is-open .accordion-trigger svg {
+    transform: rotate(180deg);
+}
+
+.accordion-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: var(--surface-soft);
+}
+
+.accordion-item.is-open .accordion-panel {
+    max-height: 500px;
+    padding: 0 20px 16px;
+}
+
+.accordion-panel p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .pricing-card-body {
+        padding: 24px 16px;
+    }
+
+    .pricing-card h4 {
+        font-size: 18px;
+    }
+
+    .pricing-amount strong {
+        font-size: 28px;
+    }
+
+    .pricing-faq {
+        margin-top: 40px;
+        padding-top: 40px;
+    }
+}

@@ -87,7 +87,7 @@ img {
 .section {
   border: 0;
   border-radius: 0;
-  background: var(--surface);
+  background: transparent;
   box-shadow: none;
   padding: 40px 0;
 }

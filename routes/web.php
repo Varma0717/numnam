@@ -41,6 +41,12 @@ Route::get('/pricing', [StorefrontController::class, 'pricing'])->name('store.pr
 Route::post('/pricing/{plan}/subscribe', [StorefrontController::class, 'subscribe'])
     ->middleware('auth')
     ->name('store.pricing.subscribe');
+Route::get('/subscription-checkout', [StorefrontController::class, 'subscriptionCheckout'])
+    ->middleware('auth')
+    ->name('store.subscription.checkout');
+Route::post('/subscription-checkout', [StorefrontController::class, 'placeSubscriptionOrder'])
+    ->middleware('auth')
+    ->name('store.subscription.checkout.place-order');
 
 Route::get('/blog', [StorefrontController::class, 'blogIndex'])->name('store.blog.index');
 Route::get('/blog/{blog:slug}', [StorefrontController::class, 'blogShow'])->name('store.blog.show');
