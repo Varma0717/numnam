@@ -279,7 +279,7 @@ asset('assets/images/product_4.png'),
     <div class="ingredient-grid">
         <div class="ingredient-copy">
             <span class="kicker">Transparency First</span>
-            <h3>Know exactly what's inside</h3>
+            <h2>Know exactly what's inside</h2>
             <p class="meta">Every NumNam product lists its full ingredient deck — no hidden fillers, no mystery powders. Just clean, whole foods your baby deserves.</p>
             <ul class="ingredient-checklist">
                 <li>
@@ -344,31 +344,52 @@ asset('assets/images/product_4.png'),
 </section>
 
 <section class="section animate-fade-up">
-    <h2>Subscription Plans</h2>
-    <div class="store-grid three stagger-children">
-        @foreach($plans as $plan)
-        <article class="card">
-            <div class="card-body">
-                <h4>{{ $plan->name }}</h4>
-                <p class="meta">{{ $plan->description }}</p>
-                <div class="price"><strong>Rs {{ number_format($plan->price, 0) }}</strong></div>
+    <section class="section animate-fade-up">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:32px;">
+            <div>
+                <h2 style="margin:0 0 4px;">Subscription Plans</h2>
+                <p class="meta" style="margin:0;">Save more with regular deliveries — pause or cancel anytime.</p>
             </div>
-        </article>
-        @endforeach
-    </div>
-</section>
+            <a href="{{ route('store.pricing') }}" class="btn btn-secondary">View All Plans</a>
+        </div>
+        <div class="store-grid three stagger-children">
+            @foreach($plans->take(3) as $plan)
+            <article class="card" style="display:flex;flex-direction:column;">
+                <div class="card-body" style="display:flex;flex-direction:column;gap:10px;height:100%;">
+                    <h4 style="margin:0;">{{ $plan->name }}</h4>
+                    <p class="meta" style="margin:0;flex:1;">{{ Str::limit($plan->description, 100) }}</p>
+                    <div class="price" style="margin:4px 0;">
+                        <strong style="font-size:26px;color:var(--brand-1);">Rs {{ number_format($plan->price, 0) }}</strong>
+                        @if($plan->billing_cycle && $plan->billing_cycle !== 'one_time')
+                        <span class="meta"> / {{ str_replace('_', ' ', $plan->billing_cycle) }}</span>
+                        @endif
+                    </div>
+                    <a href="{{ route('store.pricing') }}" class="btn btn-primary" style="margin-top:auto;">Subscribe</a>
+                </div>
+            </article>
+            @endforeach
+        </div>
+    </section>
 
-<section class="section section-tinted animate-fade-up">
-    <h2>Testimonials</h2>
-    <div class="store-grid three stagger-children">
-        @foreach($testimonials as $testimonial)
-        <article class="card testimonial-card">
-            <div class="card-body">
-                <p>"{{ $testimonial['quote'] }}"</p>
-                <p class="meta"><strong>{{ $testimonial['name'] }}</strong></p>
+    <section class="section section-tinted animate-fade-up">
+        <section class="section section-tinted animate-fade-up">
+            <div style="text-align:center;margin-bottom:32px;">
+                <h2 style="margin:0 0 8px;">What Parents Say</h2>
+                <p class="meta" style="margin:0;">Real stories from families who've made NumNam part of their daily routine.</p>
             </div>
-        </article>
-        @endforeach
-    </div>
-</section>
-@endsection
+            <div class="store-grid three stagger-children">
+                @foreach($testimonials as $testimonial)
+                <article class="card testimonial-card">
+                    <div class="card-body" style="display:flex;flex-direction:column;gap:12px;">
+                        <div style="color:#f59e0b;font-size:18px;line-height:1;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                        <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:16px;line-height:1.75;margin:0;flex:1;">&ldquo;{{ $testimonial['quote'] }}&rdquo;</p>
+                        <div style="display:flex;align-items:center;gap:10px;padding-top:8px;border-top:1px solid var(--line);">
+                            <div style="width:36px;height:36px;border-radius:50%;background:var(--brand-1);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;">{{ strtoupper(substr($testimonial['name'], 0, 1)) }}</div>
+                            <span class="meta" style="margin:0;font-weight:600;color:var(--body);">{{ $testimonial['name'] }}</span>
+                        </div>
+                    </div>
+                </article>
+                @endforeach
+            </div>
+        </section>
+        @endsection

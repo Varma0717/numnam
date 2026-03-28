@@ -182,7 +182,7 @@
 }
 
 .trust-strip {
-  background: transparent;
+  /* inherits background from .section-tinted */
 }
 
 .trust-grid {
@@ -234,6 +234,7 @@
 
 .product-carousel {
   position: relative;
+  padding: 0 32px;
 }
 
 .product-carousel-viewport {
@@ -257,11 +258,14 @@
 }
 
 .product-carousel-controls {
-  display: inline-flex;
-  gap: 8px;
+  display: none;
 }
 
 .product-carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
   width: 40px;
   height: 40px;
   border: 0;
@@ -269,13 +273,15 @@
   background: var(--accent-soft);
   color: var(--brand-1);
   font-size: 22px;
-  line-height: 1;
+  line-height: 40px;
+  text-align: center;
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
 }
 
 .product-carousel-btn:hover {
-  transform: translateY(-1px);
+  transform: translateY(calc(-50% - 1px));
   background: var(--brand-1);
   color: #ffffff;
 }
@@ -283,19 +289,23 @@
 .product-carousel-btn[disabled] {
   opacity: 0.45;
   cursor: not-allowed;
-  transform: none;
+  transform: translateY(-50%);
+}
+
+.product-carousel-btn[data-carousel-prev] {
+  left: 0;
+}
+
+.product-carousel-btn[data-carousel-next] {
+  right: 0;
 }
 
 .testimonial-card {
-  text-align: center;
+  text-align: left;
 }
 
 .testimonial-card p {
   margin-top: 0;
-  font-family: "Playfair Display", serif;
-  font-style: italic;
-  font-size: 17px;
-  line-height: 30px;
   color: var(--text);
 }
 
@@ -373,7 +383,6 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  padding: 40px 0;
 }
 
 .stat-block {
@@ -415,30 +424,33 @@
 
 .step-card {
   position: relative;
-  padding-left: 64px;
-  min-height: 60px;
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  justify-content: center;
+  padding: 28px 24px 24px 76px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .08);
 }
 
 .step-card::before {
-  counter-increment: step;
   content: counter(step);
+  counter-increment: step;
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 48px;
-  height: 48px;
+  left: 16px;
+  top: 24px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--brand-1), var(--brand-1-light));
   color: #fff;
   font-weight: 700;
   font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  line-height: 44px;
+  text-align: center;
 }
 
 .step-card h4 {
