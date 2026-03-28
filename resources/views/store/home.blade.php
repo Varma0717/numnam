@@ -90,7 +90,7 @@ asset('assets/images/product_4.png'),
     </div>
 </section>
 
-<section class="section trust-strip animate-fade-up">
+<section class="section section-tinted trust-strip animate-fade-up">
     <h2>Why Parents Trust NumNam</h2>
     <div class="trust-grid stagger-children">
         @foreach($trustCards as $item)
@@ -154,7 +154,7 @@ asset('assets/images/product_4.png'),
 </section>
 
 {{-- Age Stage Navigator --}}
-<section class="section age-stage-section animate-fade-up">
+<section class="section section-tinted age-stage-section animate-fade-up">
     <h2>Shop by Stage</h2>
     <p class="meta">Nutrition tailored to your baby's growth journey</p>
     <div class="age-stage-grid stagger-children">
@@ -278,7 +278,7 @@ asset('assets/images/product_4.png'),
 </section>
 
 {{-- Ingredient Transparency --}}
-<section class="section ingredient-section animate-fade-up">
+<section class="section section-brand-soft ingredient-section animate-fade-up">
     <div class="ingredient-grid">
         <div class="ingredient-copy">
             <span class="kicker">Transparency First</span>
@@ -361,7 +361,7 @@ asset('assets/images/product_4.png'),
     </div>
 </section>
 
-<section class="section animate-fade-up">
+<section class="section section-tinted animate-fade-up">
     <h2>Testimonials</h2>
     <div class="store-grid three stagger-children">
         @foreach($testimonials as $testimonial)

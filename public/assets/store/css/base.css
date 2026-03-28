@@ -47,10 +47,7 @@ body {
   font-size: 15px;
   line-height: 1.6;
   color: var(--text);
-  background:
-    radial-gradient(circle at 5% 0%, var(--hero-sun) 0%, transparent 28%),
-    radial-gradient(circle at 95% 0%, var(--hero-mint) 0%, transparent 24%),
-    linear-gradient(180deg, #fffefa 0%, #fff8f0 42%, #fffdfa 100%);
+  background: #ffffff;
   overflow-x: clip;
 }
 
@@ -90,6 +87,16 @@ img {
   background: transparent;
   box-shadow: none;
   padding: 40px 0;
+}
+
+/* Tinted background for sections that need visual separation */
+.section-tinted {
+  background: var(--surface-soft);
+}
+
+/* Brand-soft background for CTA / highlight sections */
+.section-brand-soft {
+  background: var(--brand-1-soft);
 }
 
 .hero {
