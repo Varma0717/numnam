@@ -37,9 +37,10 @@
                         @csrf
                         <button class="btn btn-primary pricing-subscribe-btn" type="submit">Select Plan</button>
                     </form>
-                    @else
-                    <a class="btn btn-primary pricing-subscribe-btn" href="{{ route('store.login') }}">Login to Subscribe</a>
                     @endauth
+                    @guest
+                    <a class="btn btn-primary pricing-subscribe-btn" href="{{ route('store.login') }}">Login to Subscribe</a>
+                    @endguest
                 </div>
             </article>
         </div>
