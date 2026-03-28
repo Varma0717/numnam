@@ -14,6 +14,7 @@ class PaymentEvent extends Model
         'gateway',
         'event_type',
         'external_reference',
+        'fingerprint',
         'status',
         'amount',
         'currency',

@@ -18,7 +18,9 @@ use App\Http\Controllers\Api\V1\FrontendController;
 use App\Http\Controllers\Api\V1\HomepageController;
 use App\Http\Controllers\Api\V1\MediaLibraryPublicController;
 use App\Http\Controllers\Api\V1\Mobile\MobileAuthController;
+use App\Http\Controllers\Api\V1\Mobile\MobileCartController;
 use App\Http\Controllers\Api\V1\Mobile\MobileContentController;
+use App\Http\Controllers\Api\V1\Mobile\MobileEngagementController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\Payments\PaymentWebhookController;
 use App\Http\Controllers\Api\V1\PricingPlanModuleController;
@@ -63,6 +65,32 @@ Route::prefix('v1')->group(function () {
             Route::post('contact-forms', [MobileContentController::class, 'submitContactForm']);
 
             Route::get('menus', [MobileContentController::class, 'menus']);
+
+            Route::get('cart', [MobileCartController::class, 'index']);
+            Route::post('cart', [MobileCartController::class, 'store']);
+            Route::patch('cart/{product}', [MobileCartController::class, 'update']);
+            Route::delete('cart/{product}', [MobileCartController::class, 'destroy']);
+            Route::delete('cart', [MobileCartController::class, 'clear']);
+
+            Route::get('wishlist', [MobileEngagementController::class, 'wishlist']);
+            Route::post('wishlist', [MobileEngagementController::class, 'addToWishlist']);
+            Route::delete('wishlist/{product}', [MobileEngagementController::class, 'removeFromWishlist']);
+
+            Route::get('products/{product}/reviews', [MobileEngagementController::class, 'productReviews']);
+            Route::post('products/{product}/reviews', [MobileEngagementController::class, 'upsertProductReview']);
+            Route::patch('reviews/{review}', [MobileEngagementController::class, 'updateReview']);
+            Route::delete('reviews/{review}', [MobileEngagementController::class, 'deleteReview']);
+
+            Route::get('orders', [OrderController::class, 'index']);
+            Route::post('orders', [OrderController::class, 'store']);
+            Route::get('orders/{number}', [OrderController::class, 'show']);
+            Route::patch('orders/{order}/cancel', [OrderController::class, 'cancel']);
+
+            Route::get('subscriptions', [SubscriptionController::class, 'index']);
+            Route::post('subscriptions', [SubscriptionController::class, 'store']);
+            Route::patch('subscriptions/{subscription}/pause', [SubscriptionController::class, 'pause']);
+            Route::patch('subscriptions/{subscription}/resume', [SubscriptionController::class, 'resume']);
+            Route::delete('subscriptions/{subscription}', [SubscriptionController::class, 'destroy']);
         });
     });
 

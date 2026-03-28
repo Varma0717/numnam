@@ -49,7 +49,7 @@ class OrderController extends Controller
             'items'              => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity'   => 'required|integer|min:1',
-            'payment_method'     => 'required|in:upi,card,cod,netbanking',
+            'payment_method'     => 'required|in:upi,card,cod,netbanking,razorpay,stripe',
             'ship_name'          => 'required|string|max:255',
             'ship_phone'         => 'required|string|max:15',
             'ship_address'       => 'required|string',

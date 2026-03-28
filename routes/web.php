@@ -134,3 +134,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/settings', [AdminPagesController::class, 'settings'])->name('settings.index');
     });
 });
+
+Route::get('/{slug}', [StorefrontController::class, 'showPage'])->name('store.page.show');

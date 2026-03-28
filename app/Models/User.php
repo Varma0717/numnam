@@ -7,6 +7,7 @@ use App\Models\Subscription;
 use App\Models\Order;
 use App\Models\RewardLedger;
 use App\Models\Wishlist;
+use App\Models\CartItem;
 use App\Models\ProductReview;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -79,6 +80,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function wishlists()
     {
         return $this->hasMany(Wishlist::class);
+    }
+
+    public function cartItems()
+    {
+        return $this->hasMany(CartItem::class);
     }
 
     public function reviews()

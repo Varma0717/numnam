@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
+use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Order;
+use App\Models\Page;
 use App\Models\PaymentEvent;
 use App\Models\PricingPlan;
 use App\Models\Product;
@@ -221,6 +223,24 @@ class StorefrontController extends Controller
         ]);
     }
 
+    public function showPage(string $slug)
+    {
+        $page = Page::query()
+            ->where('slug', $slug)
+            ->where('status', 'published')
+            ->where(function ($query) {
+                $query->whereNull('published_at')
+                    ->orWhere('published_at', '<=', now());
+            })
+            ->with(['sections' => fn($query) => $query->where('is_active', true)->orderBy('position')])
+            ->firstOrFail();
+
+        return view('store.page', [
+            'page' => $page,
+            'sections' => $page->sections,
+        ]);
+    }
+
     public function subscribe(Request $request, PricingPlan $plan): RedirectResponse
     {
         $request->user()->subscriptions()->create([
@@ -294,19 +314,29 @@ class StorefrontController extends Controller
         }
 
         $qty = max(1, (int) $request->input('qty', 1));
-        $cart = $request->session()->get('cart', []);
-        $key = (string) $product->id;
-
-        if (isset($cart[$key])) {
-            $cart[$key]['qty'] += $qty;
-        } else {
-            $cart[$key] = [
+        if ($request->user()) {
+            $item = CartItem::query()->firstOrNew([
+                'user_id' => $request->user()->id,
                 'product_id' => $product->id,
-                'qty' => $qty,
-            ];
-        }
+            ]);
 
-        $request->session()->put('cart', $cart);
+            $item->qty = max(1, (int) $item->qty) + $qty;
+            $item->save();
+        } else {
+            $cart = $request->session()->get('cart', []);
+            $key = (string) $product->id;
+
+            if (isset($cart[$key])) {
+                $cart[$key]['qty'] += $qty;
+            } else {
+                $cart[$key] = [
+                    'product_id' => $product->id,
+                    'qty' => $qty,
+                ];
+            }
+
+            $request->session()->put('cart', $cart);
+        }
 
         return back()->with('status', 'Added to cart.');
     }
@@ -314,12 +344,20 @@ class StorefrontController extends Controller
     public function updateCart(Request $request, Product $product): RedirectResponse
     {
         $qty = max(1, (int) $request->input('qty', 1));
-        $cart = $request->session()->get('cart', []);
-        $key = (string) $product->id;
 
-        if (isset($cart[$key])) {
-            $cart[$key]['qty'] = $qty;
-            $request->session()->put('cart', $cart);
+        if ($request->user()) {
+            CartItem::query()
+                ->where('user_id', $request->user()->id)
+                ->where('product_id', $product->id)
+                ->update(['qty' => $qty]);
+        } else {
+            $cart = $request->session()->get('cart', []);
+            $key = (string) $product->id;
+
+            if (isset($cart[$key])) {
+                $cart[$key]['qty'] = $qty;
+                $request->session()->put('cart', $cart);
+            }
         }
 
         return back()->with('status', 'Cart updated.');
@@ -327,9 +365,16 @@ class StorefrontController extends Controller
 
     public function removeFromCart(Request $request, Product $product): RedirectResponse
     {
-        $cart = $request->session()->get('cart', []);
-        unset($cart[(string) $product->id]);
-        $request->session()->put('cart', $cart);
+        if ($request->user()) {
+            CartItem::query()
+                ->where('user_id', $request->user()->id)
+                ->where('product_id', $product->id)
+                ->delete();
+        } else {
+            $cart = $request->session()->get('cart', []);
+            unset($cart[(string) $product->id]);
+            $request->session()->put('cart', $cart);
+        }
 
         return back()->with('status', 'Item removed from cart.');
     }
@@ -480,6 +525,9 @@ class StorefrontController extends Controller
         });
 
         $request->session()->forget('cart');
+        if ($request->user()) {
+            CartItem::query()->where('user_id', $request->user()->id)->delete();
+        }
 
         if ($order && in_array($order->payment_gateway, ['razorpay', 'stripe'], true)) {
             if ($gatewayInitError) {
@@ -527,8 +575,8 @@ class StorefrontController extends Controller
 
     private function hydrateCart(Request $request): array
     {
-        $cartSession = $request->session()->get('cart', []);
-        $productIds = collect($cartSession)->pluck('product_id')->filter()->values();
+        $cartLines = $this->resolvedCartLines($request);
+        $productIds = collect($cartLines)->pluck('product_id')->filter()->values();
 
         $products = Product::query()
             ->whereIn('id', $productIds)
@@ -539,7 +587,7 @@ class StorefrontController extends Controller
         $items = [];
         $subtotal = 0.0;
 
-        foreach ($cartSession as $line) {
+        foreach ($cartLines as $line) {
             $product = $products->get((int) ($line['product_id'] ?? 0));
             if (! $product) {
                 continue;
@@ -569,6 +617,53 @@ class StorefrontController extends Controller
                 'total' => $subtotal + $shippingFee,
             ],
         ];
+    }
+
+    private function resolvedCartLines(Request $request): array
+    {
+        if (! $request->user()) {
+            return array_values($request->session()->get('cart', []));
+        }
+
+        $this->syncSessionCartToPersistentCart($request);
+
+        return CartItem::query()
+            ->where('user_id', $request->user()->id)
+            ->orderBy('id')
+            ->get(['product_id', 'qty'])
+            ->map(fn(CartItem $item) => [
+                'product_id' => (int) $item->product_id,
+                'qty' => max(1, (int) $item->qty),
+            ])
+            ->all();
+    }
+
+    private function syncSessionCartToPersistentCart(Request $request): void
+    {
+        $sessionCart = $request->session()->get('cart', []);
+
+        if (empty($sessionCart)) {
+            return;
+        }
+
+        foreach ($sessionCart as $line) {
+            $productId = (int) ($line['product_id'] ?? 0);
+            if ($productId <= 0) {
+                continue;
+            }
+
+            $qty = max(1, (int) ($line['qty'] ?? 1));
+
+            $item = CartItem::query()->firstOrNew([
+                'user_id' => $request->user()->id,
+                'product_id' => $productId,
+            ]);
+
+            $item->qty = max(0, (int) $item->qty) + $qty;
+            $item->save();
+        }
+
+        $request->session()->forget('cart');
     }
 
     public function wishlist(Request $request)
