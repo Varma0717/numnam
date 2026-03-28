@@ -13,11 +13,7 @@
 </section>
 
 <section class="section fade-in-up">
-    <div class="section-head">
-        <div>
-            <h3>Core Feeding Tips</h3>
-        </div>
-    </div>
+    <h2>Core Feeding Tips</h2>
     <div class="store-grid two">
         @foreach($recipeTips as $index => $tip)
         <article class="card tip-card">
@@ -114,7 +110,7 @@
 
     @if($featuredArticles->isNotEmpty())
     <div class="section-footer">
-        <a class="btn-soft" href="{{ route('store.blog.index') }}">View All Articles &rarr;</a>
+        <a class="btn btn-secondary" href="{{ route('store.blog.index') }}">View All Articles &rarr;</a>
     </div>
     @endif
 </section>

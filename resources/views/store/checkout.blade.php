@@ -29,9 +29,9 @@
 </section>
 
 <section class="section checkout-layout animate-fade-up">
-    <form method="POST" action="{{ route('store.checkout.place-order') }}" class="form-grid">
+    <form method="POST" action="{{ route('store.checkout.place-order') }}">
         @csrf
-        <h3 class="checkout-section-title">Shipping Information</h3>
+        <h2 class="checkout-section-title">Shipping Information</h2>
         <div class="store-grid two">
             <div class="form-group">
                 <label for="ship_name">Full Name</label>
@@ -61,7 +61,7 @@
             <input class="input pincode-input" id="ship_pincode" name="ship_pincode" placeholder="Pincode" value="{{ old('ship_pincode') }}" required pattern="[0-9]{6}" title="Enter 6-digit pincode">
         </div>
 
-        <h3 class="checkout-section-title checkout-payment-title">Payment Method</h3>
+        <h2 class="checkout-section-title checkout-payment-title">Payment Method</h2>
         <div class="payment-methods">
             @php
             $methods = [
@@ -120,7 +120,7 @@
             <textarea id="notes" name="notes" placeholder="Special instructions for delivery...">{{ old('notes') }}</textarea>
         </div>
 
-        <button class="cta-btn checkout-submit-btn" type="submit">
+        <button class="btn btn-primary checkout-submit-btn" type="submit">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle; margin-right:6px;">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                 <path d="M7 11V7a5 5 0 0110 0v4" />
@@ -130,7 +130,7 @@
     </form>
 
     <aside class="summary-card checkout-summary">
-        <h3 class="order-details-title">Order Summary</h3>
+        <h2 class="order-details-title">Order Summary</h2>
         @foreach($items as $item)
         <div class="summary-row">
             <span>

@@ -121,7 +121,7 @@ asset('assets/images/product_4.png'),
             </svg>
             <h3>No products found</h3>
             <p class="meta">Try adjusting your filters or search terms.</p>
-            <a class="cta-btn" href="{{ route('store.products') }}">View All Products</a>
+            <a class="btn btn-primary" href="{{ route('store.products') }}">View All Products</a>
         </div>
         @endforelse
     </div>

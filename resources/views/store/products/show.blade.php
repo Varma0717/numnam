@@ -96,8 +96,8 @@ $mainPlaceholder = $productPlaceholders[$product->id % count($productPlaceholder
             <form method="POST" action="{{ route('store.cart.add', $product) }}" class="product-actions">
                 @csrf
                 <input class="input qty-input" type="number" min="1" name="qty" value="1" aria-label="Quantity">
-                <button class="cta-btn" type="submit" {{ $product->stock <= 0 ? 'disabled' : '' }}>Add to Cart</button>
-                <a class="btn-soft" href="{{ route('store.checkout') }}">Buy Now</a>
+                <button class="btn btn-primary" type="submit" {{ $product->stock <= 0 ? 'disabled' : '' }}>Add to Cart</button>
+                <a class="btn btn-secondary" href="{{ route('store.checkout') }}">Buy Now</a>
             </form>
 
             @auth
@@ -172,14 +172,10 @@ $mainPlaceholder = $productPlaceholders[$product->id % count($productPlaceholder
 
 {{-- Customer Reviews Section --}}
 <section class="section fade-in-up">
-    <div class="section-head">
-        <div>
-            <h3>Customer Reviews</h3>
-            @php($reviewCount = $product->approvedReviews()->count())
-            @php($avgRating = $reviewCount > 0 ? round($product->approvedReviews()->avg('rating'), 1) : 0)
-            <p class="section-sub">{{ $reviewCount }} {{ Str::plural('review', $reviewCount) }}@if($avgRating > 0) &middot; {{ $avgRating }} average @endif</p>
-        </div>
-    </div>
+    <h2>Customer Reviews</h2>
+    @php($reviewCount = $product->approvedReviews()->count())
+    @php($avgRating = $reviewCount > 0 ? round($product->approvedReviews()->avg('rating'), 1) : 0)
+    <p class="meta">{{ $reviewCount }} {{ Str::plural('review', $reviewCount) }}@if($avgRating > 0) &middot; {{ $avgRating }} average @endif</p>
 
     @if($reviewCount > 0)
     <div class="store-grid three">

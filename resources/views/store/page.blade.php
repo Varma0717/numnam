@@ -15,7 +15,7 @@
     @forelse($sections as $section)
     <article class="legal-section">
         @if($section->title)
-        <h3>{{ $section->title }}</h3>
+        <h2>{{ $section->title }}</h2>
         @endif
 
         @if($section->content)

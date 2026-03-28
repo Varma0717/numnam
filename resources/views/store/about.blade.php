@@ -15,11 +15,7 @@
 <section class="section animate-fade-up">
     <div class="about-mission-grid">
         <div>
-            <div class="section-head">
-                <div>
-                    <h3>Why NumNam Exists</h3>
-                </div>
-            </div>
+            <h2>Why NumNam Exists</h2>
             <p class="about-text">Our founders experienced how hard it is to find truly transparent baby food options with balanced taste and nutrition. NumNam combines pediatric thinking, practical ingredients, and age-aware formats so feeding becomes a joyful routine instead of a daily struggle.</p>
             <p class="about-text">Every product is developed with clinical nutrition input, sourced with clean-label standards, and designed for real mealtime scenarios — from first tastes to self-feeding toddlers.</p>
         </div>
@@ -66,11 +62,7 @@
 
 {{-- NumNam Journey Timeline --}}
 <section class="section animate-fade-up">
-    <div class="section-head">
-        <div>
-            <h3>Our Journey</h3>
-        </div>
-    </div>
+    <h2>Our Journey</h2>
     <div class="journey-timeline stagger-children">
         <div class="journey-step animate-fade-up">
             <span class="journey-year">2022</span>
@@ -104,11 +96,7 @@
 </section>
 
 <section class="section animate-fade-up">
-    <div class="section-head">
-        <div>
-            <h3>Meet The Founders</h3>
-        </div>
-    </div>
+    <h2>Meet The Founders</h2>
     <div class="store-grid three stagger-children">
         @foreach($founders as $founder)
         <article class="card founder-card hover-up">
@@ -127,8 +115,8 @@
     <h3>Ready to try NumNam?</h3>
     <p class="meta">Discover stage-wise nutrition made with ingredients you can trust.</p>
     <div class="hero-actions about-cta-actions">
-        <a class="cta-btn" href="{{ route('store.products') }}">Shop Products</a>
-        <a class="btn-soft" href="{{ route('store.contact') }}">Get in Touch</a>
+        <a class="btn btn-primary" href="{{ route('store.products') }}">Shop Products</a>
+        <a class="btn btn-secondary" href="{{ route('store.contact') }}">Get in Touch</a>
     </div>
 </section>
 @endsection

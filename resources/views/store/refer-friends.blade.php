@@ -51,11 +51,7 @@
 </section>
 
 <section class="section animate-fade-up">
-    <div class="section-head">
-        <div>
-            <h3>How It Works</h3>
-        </div>
-    </div>
+    <h2>How It Works</h2>
     <div class="referral-steps stagger-children">
         <article class="referral-step-card">
             <div class="referral-step-number">1</div>
@@ -120,7 +116,7 @@
 <section class="section animate-fade-up" style="text-align:center;">
     <h3>Ready to Start Earning?</h3>
     <p class="meta" style="margin-bottom:16px;">Create an account to get your referral code and start sharing.</p>
-    <a class="cta-btn" href="{{ route('store.register') }}">Create Account</a>
+    <a class="btn btn-primary" href="{{ route('store.register') }}">Create Account</a>
 </section>
 @endguest
 @endsection

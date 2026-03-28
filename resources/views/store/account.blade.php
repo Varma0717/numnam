@@ -50,7 +50,7 @@
         @if($orders->isEmpty())
         <div class="empty-state">
             <p>You haven't placed any orders yet.</p>
-            <a class="cta-btn" href="{{ route('store.products') }}">Start Shopping</a>
+            <a class="btn btn-primary" href="{{ route('store.products') }}">Start Shopping</a>
         </div>
         @else
         <div class="responsive-table-wrap">
@@ -85,7 +85,7 @@
         @if($subscriptions->isEmpty())
         <div class="empty-state">
             <p>No active subscriptions.</p>
-            <a class="cta-btn" href="{{ route('store.pricing') }}">View Plans</a>
+            <a class="btn btn-primary" href="{{ route('store.pricing') }}">View Plans</a>
         </div>
         @else
         <div class="table-responsive">
@@ -158,7 +158,7 @@
         @if($rewards->isEmpty())
         <div class="empty-state">
             <p>No reward transactions yet. Refer friends to earn rewards!</p>
-            <a class="cta-btn" href="{{ route('store.refer-friends') }}">Learn About Referrals</a>
+            <a class="btn btn-primary" href="{{ route('store.refer-friends') }}">Learn About Referrals</a>
         </div>
         @else
         <div class="table-responsive">

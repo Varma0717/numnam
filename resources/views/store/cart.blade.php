@@ -30,7 +30,7 @@ asset('assets/images/product_4.png'),
         </svg>
         <h3>Your cart is empty</h3>
         <p class="meta" style="margin-bottom:16px;">Looks like you haven't added anything yet.</p>
-        <a class="cta-btn" href="{{ route('store.products') }}">Browse Products</a>
+        <a class="btn btn-primary" href="{{ route('store.products') }}">Browse Products</a>
     </div>
     @else
     <div class="cart-layout animate-fade-up">
@@ -88,7 +88,7 @@ asset('assets/images/product_4.png'),
             </p>
             @endif
             <div class="summary-row total"><span>Total</span><strong>Rs {{ number_format($totals['total'], 0) }}</strong></div>
-            <a class="cta-btn" href="{{ route('store.checkout') }}" style="display:block;text-align:center;margin-top:12px;">Proceed to Checkout</a>
+            <a class="btn btn-primary" href="{{ route('store.checkout') }}" style="display:block;text-align:center;margin-top:12px;">Proceed to Checkout</a>
             <a href="{{ route('store.products') }}" class="meta" style="display:block;text-align:center;margin-top:10px;">Continue Shopping &rarr;</a>
         </aside>
     </div>

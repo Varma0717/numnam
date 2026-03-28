@@ -12,7 +12,7 @@
         </div>
         <div class="cookie-consent-actions">
             <button type="button" class="btn-primary" onclick="acceptCookies()">Accept All</button>
-            <button type="button" class="btn-ghost" onclick="dismissCookies()">Decline</button>
+            <button type="button" class="btn btn-secondary" onclick="dismissCookies()">Decline</button>
         </div>
     </div>
 </div>

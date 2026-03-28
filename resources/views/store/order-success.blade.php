@@ -24,8 +24,8 @@
     <p class="meta order-success-message">We've received your order and will begin processing it soon. You'll receive an email confirmation with tracking details.</p>
 
     <div class="order-success-actions">
-        <a class="cta-btn" href="{{ route('store.account') }}">View My Orders</a>
-        <a class="btn-soft" href="{{ route('store.products') }}">Continue Shopping</a>
+        <a class="btn btn-primary" href="{{ route('store.account') }}">View My Orders</a>
+        <a class="btn btn-secondary" href="{{ route('store.products') }}">Continue Shopping</a>
     </div>
 </section>
 

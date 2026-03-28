@@ -34,10 +34,10 @@
                 @auth
                 <form method="POST" action="{{ route('store.pricing.subscribe', $plan) }}">
                     @csrf
-                    <button class="{{ $isBestValue ? 'cta-btn' : 'btn-primary' }} pricing-subscribe-btn" type="submit">Select</button>
+                    <button class="btn btn-primary pricing-subscribe-btn" type="submit">Select</button>
                 </form>
                 @else
-                <a class="{{ $isBestValue ? 'cta-btn' : 'btn-primary' }} pricing-subscribe-btn" href="{{ route('store.login') }}">Select</a>
+                <a class="btn btn-primary pricing-subscribe-btn" href="{{ route('store.login') }}">Select</a>
                 @endauth
             </div>
         </article>
@@ -48,7 +48,7 @@
 </section>
 
 <section class="section animate-fade-up pricing-faq">
-    <h3>Frequently Asked Questions</h3>
+    <h2>Frequently Asked Questions</h2>
     <div class="accordion pricing-accordion">
         <div class="accordion-item">
             <button class="accordion-trigger">Can I cancel anytime?<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

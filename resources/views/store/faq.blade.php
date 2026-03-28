@@ -13,11 +13,7 @@
 </section>
 
 <section class="section fade-in-up">
-    <div class="section-head">
-        <div>
-            <h3>Frequently Asked Questions</h3>
-        </div>
-    </div>
+    <h2>Frequently Asked Questions</h2>
     <div class="accordion">
         @foreach($faqs as $i => $faq)
         <div class="accordion-item{{ $i === 0 ? ' open' : '' }}">
@@ -38,6 +34,6 @@
 <section class="section fade-in-up faq-cta">
     <h3>Still have questions?</h3>
     <p class="meta faq-cta-text">Our care team is here to help you with anything.</p>
-    <a class="cta-btn" href="{{ route('store.contact') }}">Contact Us</a>
+    <a class="btn btn-primary" href="{{ route('store.contact') }}">Contact Us</a>
 </section>
 @endsection

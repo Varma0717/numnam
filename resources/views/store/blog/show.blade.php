@@ -28,6 +28,6 @@
 </section>
 
 <section class="section fade-in-up blog-back">
-    <a class="btn-soft" href="{{ route('store.blog.index') }}">&larr; Back to Blog</a>
+    <a class="btn btn-secondary" href="{{ route('store.blog.index') }}">&larr; Back to Blog</a>
 </section>
 @endsection

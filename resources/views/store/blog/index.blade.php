@@ -31,7 +31,7 @@
         @empty
         <div class="empty-state">
             <p>No published blog posts yet.</p>
-            <a class="cta-btn" href="{{ route('store.home') }}">Back to Home</a>
+            <a class="btn btn-primary" href="{{ route('store.home') }}">Back to Home</a>
         </div>
         @endforelse
     </div>

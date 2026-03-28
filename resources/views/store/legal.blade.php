@@ -14,7 +14,7 @@
 <section class="section">
     @foreach($page['sections'] as $section)
     <article class="legal-section">
-        <h3>{{ $section['heading'] }}</h3>
+        <h2>{{ $section['heading'] }}</h2>
         <p class="meta">{{ $section['text'] }}</p>
     </article>
     @endforeach

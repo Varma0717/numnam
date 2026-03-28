@@ -44,8 +44,8 @@ asset('assets/images/product_4.png'),
                     <h1>{{ $homepageSections['hero_title'] ?? 'Smart baby nutrition, delivered with parent-friendly convenience.' }}</h1>
                     <p>{{ $homepageSections['hero_subtitle'] ?? 'Discover stage-wise foods, subscriptions, and transparent ingredients built for modern families.' }}</p>
                     <div class="hero-actions d-flex flex-wrap gap-2">
-                        <a class="cta-btn" href="{{ route('store.products') }}">Shop Products</a>
-                        <a class="btn-soft" href="{{ route('store.pricing') }}">Build Subscription</a>
+                        <a class="btn btn-primary" href="{{ route('store.products') }}">Shop Products</a>
+                        <a class="btn btn-secondary" href="{{ route('store.pricing') }}">Build Subscription</a>
                     </div>
                 </div>
             </div>
@@ -91,11 +91,7 @@ asset('assets/images/product_4.png'),
 </section>
 
 <section class="section trust-strip animate-fade-up">
-    <div class="section-head">
-        <div>
-            <h3>Why Parents Trust Num Nam</h3>
-        </div>
-    </div>
+    <h2>Why Parents Trust NumNam</h2>
     <div class="trust-grid stagger-children">
         @foreach($trustCards as $item)
         <article class="trust-card">
@@ -159,12 +155,8 @@ asset('assets/images/product_4.png'),
 
 {{-- Age Stage Navigator --}}
 <section class="section age-stage-section animate-fade-up">
-    <div class="section-head">
-        <div>
-            <h3>Shop by Stage</h3>
-            <p class="section-sub">Nutrition tailored to your baby's growth journey</p>
-        </div>
-    </div>
+    <h2>Shop by Stage</h2>
+    <p class="meta">Nutrition tailored to your baby's growth journey</p>
     <div class="age-stage-grid stagger-children">
         <a href="{{ route('store.products', ['age_group' => '4-6 Months']) }}" class="age-stage-card">
             <div class="age-stage-icon">
@@ -220,16 +212,11 @@ asset('assets/images/product_4.png'),
 </section>
 
 <section class="section animate-fade-up">
-    <div class="section-head">
-        <div>
-            <h3>Our Best Sellers</h3>
-        </div>
-        @if($featuredProducts->count() > 3)
-        <div class="product-carousel-controls" aria-label="Best sellers controls">
-            <button type="button" class="product-carousel-btn" data-carousel-prev aria-label="Previous products">&#10094;</button>
-            <button type="button" class="product-carousel-btn" data-carousel-next aria-label="Next products">&#10095;</button>
-        </div>
-        @endif
+    <h2>Our Best Sellers</h2>
+    <button type="button" class="product-carousel-btn" data-carousel-prev aria-label="Previous products">&#10094;</button>
+    <button type="button" class="product-carousel-btn" data-carousel-next aria-label="Next products">&#10095;</button>
+    </div>
+    @endif
     </div>
     @if($featuredProducts->isEmpty())
     <p class="meta">No featured products yet.</p>
@@ -272,12 +259,8 @@ asset('assets/images/product_4.png'),
 
 {{-- How It Works --}}
 <section class="section animate-fade-up">
-    <div class="section-head">
-        <div>
-            <h3>How It Works</h3>
-            <p class="section-sub">Getting started is simple</p>
-        </div>
-    </div>
+    <h2>How It Works</h2>
+    <p class="meta">Getting started is simple</p>
     <div class="store-grid three how-it-works stagger-children">
         <div class="step-card">
             <h4>Choose Your Stage</h4>
@@ -300,7 +283,7 @@ asset('assets/images/product_4.png'),
         <div class="ingredient-copy">
             <span class="kicker">Transparency First</span>
             <h3>Know exactly what's inside</h3>
-            <p class="section-sub">Every NumNam product lists its full ingredient deck — no hidden fillers, no mystery powders. Just clean, whole foods your baby deserves.</p>
+            <p class="meta">Every NumNam product lists its full ingredient deck — no hidden fillers, no mystery powders. Just clean, whole foods your baby deserves.</p>
             <ul class="ingredient-checklist">
                 <li>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-1)" stroke-width="2.5">
@@ -327,7 +310,7 @@ asset('assets/images/product_4.png'),
                     Stage-appropriate textures & nutrients
                 </li>
             </ul>
-            <a href="{{ route('store.about') }}" class="btn-soft">Learn Our Story</a>
+            <a href="{{ route('store.about') }}" class="btn btn-secondary">Learn Our Story</a>
         </div>
         <div class="ingredient-visual">
             <div class="ingredient-badge-grid stagger-children">
@@ -364,11 +347,7 @@ asset('assets/images/product_4.png'),
 </section>
 
 <section class="section animate-fade-up">
-    <div class="section-head">
-        <div>
-            <h3>Subscription Plans</h3>
-        </div>
-    </div>
+    <h2>Subscription Plans</h2>
     <div class="store-grid three stagger-children">
         @foreach($plans as $plan)
         <article class="card">
@@ -383,11 +362,7 @@ asset('assets/images/product_4.png'),
 </section>
 
 <section class="section animate-fade-up">
-    <div class="section-head">
-        <div>
-            <h3>Testimonials</h3>
-        </div>
-    </div>
+    <h2>Testimonials</h2>
     <div class="store-grid three stagger-children">
         @foreach($testimonials as $testimonial)
         <article class="card testimonial-card">
