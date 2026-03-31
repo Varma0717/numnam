@@ -1,21 +1,32 @@
-@if(session('status'))
-    <script>
-        window.__numnamFlashQueue = window.__numnamFlashQueue || [];
-        window.__numnamFlashQueue.push({
-            message: @json(session('status')),
-            type: 'success'
-        });
-    </script>
-@endif
+@php
+$flashQueue = [];
 
-@if($errors->any())
-    <script>
-        window.__numnamFlashQueue = window.__numnamFlashQueue || [];
-        @foreach($errors->all() as $error)
-            window.__numnamFlashQueue.push({
-                message: @json($error),
-                type: 'error'
-            });
-        @endforeach
-    </script>
+if (session('status')) {
+$flashQueue[] = [
+'message' => session('status'),
+'type' => 'success',
+];
+}
+
+foreach ($errors->all() as $error) {
+$flashQueue[] = [
+'message' => $error,
+'type' => 'error',
+];
+}
+@endphp
+
+@if(!empty($flashQueue))
+<input type="hidden" id="numnam-flash-data" value="{{ e(json_encode($flashQueue)) }}">
+<script>
+    window.__numnamFlashQueue = window.__numnamFlashQueue || [];
+    const flashInput = document.getElementById('numnam-flash-data');
+    if (flashInput && flashInput.value) {
+        try {
+            window.__numnamFlashQueue.push(...JSON.parse(flashInput.value));
+        } catch (error) {
+            console.error('Failed to parse flash queue payload', error);
+        }
+    }
+</script>
 @endif
