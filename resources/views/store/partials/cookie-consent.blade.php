@@ -1,4 +1,4 @@
-@if(!request()->cookie('numnam_cookie_consent'))
+@if(!request()->cookie('numnam_cookie_consent_v2'))
 <div class="cookie-consent" id="cookieConsent" style="display:none">
     <div class="cookie-consent-inner">
         <div class="cookie-consent-text">
@@ -21,7 +21,7 @@
         var el = document.getElementById('cookieConsent');
         if (!el) return;
         if (document.cookie.split(';').some(function(c) {
-                return c.trim().indexOf('numnam_cookie_consent=') === 0;
+                return c.trim().indexOf('numnam_cookie_consent_v2=') === 0;
             })) {
             el.remove();
         } else {
@@ -30,12 +30,13 @@
     })();
 
     function acceptCookies() {
-        document.cookie = 'numnam_cookie_consent=1;path=/;max-age=31536000;SameSite=Lax';
+        document.cookie = 'numnam_cookie_consent_v2=1;path=/;max-age=31536000;SameSite=Lax';
         var el = document.getElementById('cookieConsent');
         if (el) el.remove();
     }
 
     function dismissCookies() {
+        document.cookie = 'numnam_cookie_consent_v2=dismissed;path=/;max-age=2592000;SameSite=Lax';
         var el = document.getElementById('cookieConsent');
         if (el) el.remove();
     }
