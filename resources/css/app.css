@@ -330,7 +330,7 @@
     }
 
     .payment-badge {
-        @apply inline-flex h-7 items-center rounded border border-slate-700 bg-slate-800 px-1.5 text-[10px] font-bold tracking-wide text-slate-300;
+        @apply inline-flex h-7 items-center rounded border border-slate-200 bg-white px-1.5 text-[10px] font-bold tracking-wide text-slate-600 shadow-sm;
     }
 
     .toast-container {
