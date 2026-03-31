@@ -124,41 +124,51 @@ $heroHighlights = [
 ];
 @endphp
 
-<section class="hero in-view relative isolate overflow-hidden px-4 pb-14 pt-12 sm:px-6 lg:px-8 lg:pb-20 lg:pt-16">
-    <div class="mx-auto max-w-7xl">
-        <article class="relative overflow-hidden rounded-3xl border border-white/40 bg-gradient-to-br from-[#fff9f2] via-white to-[#eef9f6] px-6 py-10 shadow-soft sm:px-10 sm:py-14 lg:px-14 lg:py-16">
-            <div class="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-numnam-200/45 blur-3xl sm:h-72 sm:w-72"></div>
-            <div class="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-pastel-mint/65 blur-3xl sm:h-72 sm:w-72"></div>
+<section class="hero-fullbleed in-view" style="background: linear-gradient(135deg, #1a0e14 0%, #2c1a2a 35%, #142030 70%, #0d1a14 100%);">
+    {{-- Soft brand colour glow blobs --}}
+    <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;">
+        <div style="position:absolute;top:-8%;left:-5%;width:520px;height:520px;background:radial-gradient(circle,rgba(254,125,148,0.18) 0%,transparent 70%);border-radius:50%;"></div>
+        <div style="position:absolute;bottom:-12%;right:18%;width:420px;height:420px;background:radial-gradient(circle,rgba(168,220,193,0.12) 0%,transparent 70%);border-radius:50%;"></div>
+        <div style="position:absolute;top:15%;right:8%;width:300px;height:300px;background:radial-gradient(circle,rgba(252,93,77,0.10) 0%,transparent 70%);border-radius:50%;"></div>
+    </div>
 
-            <div class="relative z-10 max-w-2xl">
-                <p class="mb-4 inline-flex rounded-full border border-numnam-200 bg-white/85 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-numnam-700">
-                    NumNam Nutrition
-                </p>
-                <h1 class="text-balance text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
-                    {{ $homepageSections['hero_title'] ?? 'Shop clean-label, stage-wise baby nutrition made for modern families.' }}
-                </h1>
-                <p class="mt-4 max-w-xl text-base leading-relaxed text-slate-600 sm:mt-5 sm:text-lg">
-                    {{ $homepageSections['hero_subtitle'] ?? 'NumNam offers age-appropriate baby foods, practical subscriptions, and ingredient transparency so parents can choose with confidence and feed with ease.' }}
-                </p>
+    {{-- Floating product images (right side, hidden on mobile) --}}
+    <div class="pointer-events-none hidden md:block" style="position:absolute;right:0;top:0;bottom:0;width:44%;overflow:hidden;">
+        <img src="{{ asset('assets/images/Puffs/Tikka%20Puffies/front.jpg') }}" alt="" loading="eager" style="position:absolute;top:8%;right:8%;height:55%;object-fit:contain;transform:rotate(-6deg);filter:drop-shadow(0 24px 64px rgba(0,0,0,0.5));opacity:0.95;">
+        <img src="{{ asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg') }}" alt="" loading="eager" style="position:absolute;bottom:6%;right:30%;height:42%;object-fit:contain;transform:rotate(7deg);filter:drop-shadow(0 16px 48px rgba(0,0,0,0.4));opacity:0.85;">
+        {{-- Gradient to fade images into bg on left edge --}}
+        <div style="position:absolute;inset:0;background:linear-gradient(90deg,#1a0e14 0%,transparent 30%);"></div>
+    </div>
 
-                <div class="mt-6 grid gap-3 sm:grid-cols-3">
-                    @foreach($heroHighlights as $highlight)
-                    <div class="rounded-2xl border border-white/70 bg-white/80 px-4 py-3 shadow-sm backdrop-blur-sm">
-                        <p class="text-sm font-semibold text-slate-900">{{ $highlight['title'] }}</p>
-                        <p class="mt-1 text-xs leading-relaxed text-slate-600">{{ $highlight['description'] }}</p>
-                    </div>
-                    @endforeach
+    {{-- Hero content --}}
+    <div class="hero-content">
+        <div style="max-width:600px;">
+            <p class="mb-4 inline-flex rounded-full border border-numnam-400/40 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-numnam-300 backdrop-blur-sm">
+                NumNam Nutrition
+            </p>
+            <h1 class="text-balance text-3xl font-extrabold leading-tight text-white sm:text-4xl lg:text-5xl xl:text-6xl">
+                {{ $homepageSections['hero_title'] ?? 'Clean-label, stage-wise baby nutrition for modern families.' }}
+            </h1>
+            <p class="mt-4 max-w-xl text-base leading-relaxed text-slate-300 sm:mt-5 sm:text-lg">
+                {{ $homepageSections['hero_subtitle'] ?? 'NumNam offers age-appropriate baby foods, practical subscriptions, and ingredient transparency so parents can choose with confidence and feed with ease.' }}
+            </p>
+
+            <div class="mt-6 grid gap-3 sm:grid-cols-3">
+                @foreach($heroHighlights as $highlight)
+                <div class="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
+                    <p class="text-sm font-semibold text-white">{{ $highlight['title'] }}</p>
+                    <p class="mt-1 text-xs leading-relaxed text-slate-400">{{ $highlight['description'] }}</p>
                 </div>
-
-                <div class="mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
-                    <a class="hero-cta" href="{{ route('store.products') }}">Shop Products</a>
-                    <a class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-400 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-300" href="{{ route('store.pricing') }}">Build Subscription</a>
-                </div>
+                @endforeach
             </div>
-        </article>
+
+            <div class="mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
+                <a class="hero-cta" href="{{ route('store.products') }}">Shop Products</a>
+                <a class="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40" href="{{ route('store.pricing') }}">Build Subscription</a>
+            </div>
+        </div>
     </div>
 </section>
-
 <x-store.why-choose-us
     title="Why Choose Us"
     subtitle="Everything you need for confident shopping, from checkout to delivery."
@@ -318,8 +328,8 @@ $heroHighlights = [
 </section>
 
 <x-store.user-generated-content
-    title="See NumNam In Real Homes"
-    subtitle="A clean, Instagram-style gallery using placeholder customer moments for now, ready to be replaced with real community content later."
+    title="Real Families, Real Moments"
+    subtitle="Parents sharing their favourite NumNam feeding moments — from first tastes to favourite snack-time regulars."
     :items="$userGeneratedContent" />
 
 <x-store.customer-reviews

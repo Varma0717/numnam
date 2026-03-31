@@ -185,6 +185,39 @@ class StorefrontController extends Controller
 
         $gallery = collect($product->gallery ?: [])->filter()->values();
 
+        // If no gallery in DB, scan the product image directory on disk
+        if ($gallery->isEmpty()) {
+            $productName = $product->name;
+
+            // Try Puffs sub-folder (folder name = product name with spaces)
+            $puffsDir = public_path('assets/images/Puffs/' . $productName);
+            if (is_dir($puffsDir)) {
+                $files = glob($puffsDir . '/*.{jpg,jpeg,png,webp}', GLOB_BRACE) ?: [];
+                usort($files, function ($a, $b) {
+                    $an = strtolower(pathinfo($a, PATHINFO_FILENAME));
+                    $bn = strtolower(pathinfo($b, PATHINFO_FILENAME));
+                    if ($an === 'front') return -1;
+                    if ($bn === 'front') return 1;
+                    if ($an === 'back') return -1;
+                    if ($bn === 'back') return 1;
+                    return strnatcmp($an, $bn);
+                });
+                $encodedName = implode('%20', explode(' ', $productName));
+                $gallery = collect($files)->map(fn($f) => asset('assets/images/Puffs/' . $encodedName . '/' . rawurlencode(basename($f))));
+            }
+
+            // Try Purees directory — match by first word of product name
+            if ($gallery->isEmpty()) {
+                $keyword = strtolower(explode(' ', $productName)[0]);
+                $pureeGlob = glob(public_path('assets/images/Purees') . '/*.{jpg,jpeg,png,webp}', GLOB_BRACE) ?: [];
+                $matched = array_filter($pureeGlob, fn($f) => str_starts_with(strtolower(basename($f)), $keyword));
+                if (!empty($matched)) {
+                    sort($matched);
+                    $gallery = collect($matched)->map(fn($f) => asset('assets/images/Purees/' . rawurlencode(basename($f))));
+                }
+            }
+        }
+
         $recentlyViewedProducts = $this->loadRecentlyViewedProducts($request, $product->id, 4);
 
         return view('store.products.show', compact('product', 'related', 'gallery', 'recentlyViewedProducts'));

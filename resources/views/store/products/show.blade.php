@@ -1,13 +1,13 @@
 @extends('store.layouts.app')
 
 @php
-$productPlaceholders = [
+$fallbackPlaceholders = [
 asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'),
 asset('assets/images/Puffs/Tomaty%20Pumpos/front.jpg'),
 asset('assets/images/Purees/brocco%20pop%203.png'),
 asset('assets/images/Purees/mangy%20chewy%203.png'),
 ];
-$mainPlaceholder = $productPlaceholders[$product->id % count($productPlaceholders)];
+$mainPlaceholder = $gallery->isNotEmpty() ? $gallery->first() : $fallbackPlaceholders[$product->id % count($fallbackPlaceholders)];
 @endphp
 
 @section('title', 'NumNam - ' . $product->name)
@@ -42,18 +42,18 @@ $mainPlaceholder = $productPlaceholders[$product->id % count($productPlaceholder
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         {{-- Product Gallery --}}
         <div>
-            <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-                <img src="{{ $mainPlaceholder }}" alt="{{ $product->name }}" loading="lazy">
+            <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm" id="mainImageWrap">
+                <img src="{{ $mainPlaceholder }}" alt="{{ $product->name }}" loading="eager" id="mainProductImage" style="width:100%;aspect-ratio:1/1;object-fit:contain;padding:1rem;transition:opacity 0.25s ease;">
             </div>
-            @if($gallery->isNotEmpty())
-            <div class="mt-4 grid grid-cols-4 gap-3">
-                <div class="product-thumb active overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <img src="{{ $mainPlaceholder }}" alt="{{ $product->name }} main">
-                </div>
-                @foreach($gallery as $photo)
-                <div class="product-thumb overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <img src="{{ $photo }}" alt="{{ $product->name }} gallery" loading="lazy">
-                </div>
+            @if($gallery->count() > 1)
+            <div class="mt-4 grid grid-cols-5 gap-2">
+                @foreach($gallery as $i => $photo)
+                <button type="button" class="product-thumb {{ $i === 0 ? 'active' : '' }} overflow-hidden rounded-xl border-2 bg-white shadow-sm transition-all duration-200 hover:border-numnam-400 focus:outline-none"
+                    data-img="{{ $photo }}"
+                    aria-label="{{ $product->name }} image {{ $i + 1 }}"
+                    style="{{ $i === 0 ? 'border-color:#fe7d94;' : 'border-color:#e2e8f0;' }}">
+                    <img src="{{ $photo }}" alt="{{ $product->name }} view {{ $i + 1 }}" loading="{{ $i < 3 ? 'eager' : 'lazy' }}" style="width:100%;aspect-ratio:1/1;object-fit:contain;padding:4px;">
+                </button>
                 @endforeach
             </div>
             @endif
@@ -238,7 +238,50 @@ $mainPlaceholder = $productPlaceholders[$product->id % count($productPlaceholder
     <h2 class="text-2xl font-semibold tracking-tight text-slate-900">You May Also Like</h2>
     <div class="mt-5 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         @foreach($related as $item)
-        @php($relatedPlaceholder = $productPlaceholders[$loop->index % count($productPlaceholders)])
+        @php($relatedPlaceholder = $fallbackPlaceholders[$loop->index % count($fallbackPlaceholders)])
+
+        @section('scripts')
+        <script>
+            (function() {
+                var mainImg = document.getElementById('mainProductImage');
+                if (!mainImg) return;
+                var thumbs = document.querySelectorAll('.product-thumb[data-img]');
+                thumbs.forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        thumbs.forEach(function(b) {
+                            b.style.borderColor = '#e2e8f0';
+                            b.classList.remove('active');
+                        });
+                        btn.style.borderColor = '#fe7d94';
+                        btn.classList.add('active');
+                        mainImg.style.opacity = '0';
+                        setTimeout(function() {
+                            mainImg.src = btn.dataset.img;
+                            mainImg.style.opacity = '1';
+                        }, 120);
+                    });
+                });
+
+                // Click main image to open lightbox
+                var lightbox = document.getElementById('productLightbox');
+                var lightboxImg = lightbox ? lightbox.querySelector('img') : null;
+                if (lightbox && lightboxImg) {
+                    mainImg.style.cursor = 'zoom-in';
+                    mainImg.addEventListener('click', function() {
+                        lightboxImg.src = mainImg.src;
+                        lightbox.hidden = false;
+                    });
+                    var closeBtn = lightbox.querySelector('.lightbox-close');
+                    if (closeBtn) closeBtn.addEventListener('click', function() {
+                        lightbox.hidden = true;
+                    });
+                    lightbox.addEventListener('click', function(e) {
+                        if (e.target === lightbox) lightbox.hidden = true;
+                    });
+                }
+            })();
+        </script>
+        @endsection
         <article class="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
             <div class="aspect-[4/3] bg-slate-100" style="background-image:url('{{ $relatedPlaceholder }}'); background-size:cover; background-position:center;"></div>
             <div class="p-5 sm:p-6">

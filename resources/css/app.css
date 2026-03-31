@@ -30,7 +30,7 @@
     }
 
     .page {
-        @apply mx-auto w-full max-w-[1200px] px-4 pb-16 pt-6 sm:px-6 lg:px-8;
+        @apply mx-auto w-full max-w-[1400px] px-4 pb-16 pt-6 sm:px-6 lg:px-8;
     }
 
     .site-header {
@@ -46,7 +46,7 @@
     }
 
     .site-header-inner {
-        @apply mx-auto flex w-full max-w-[1200px] items-center gap-3 px-4 py-3 sm:px-6 lg:px-8;
+        @apply mx-auto flex w-full max-w-[1400px] items-center gap-3 px-4 py-3 sm:px-6 lg:px-8;
     }
 
     .brand {
@@ -142,7 +142,7 @@
     }
 
     .store-container {
-        @apply mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8;
+        @apply mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8;
     }
 
     .section {
@@ -236,19 +236,22 @@
     }
 
     .footer-newsletter {
-        @apply mt-16 border-y border-slate-200 bg-white/80;
+        @apply mt-0;
+        background: #151a27;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     }
 
     .footer-newsletter-inner {
-        @apply mx-auto flex w-full max-w-[1200px] flex-col gap-4 px-4 py-8 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8;
+        @apply mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-4 py-8 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8;
     }
 
     .newsletter-copy h3 {
-        @apply text-2xl font-semibold tracking-tight text-slate-900;
+        @apply text-2xl font-semibold tracking-tight text-white;
     }
 
     .newsletter-copy p {
-        @apply mt-1 text-sm text-slate-600;
+        @apply mt-1 text-sm text-slate-400;
     }
 
     .newsletter-form {
@@ -260,11 +263,13 @@
     }
 
     .site-footer {
-        @apply border-t border-slate-200 bg-white;
+        background: #1a2030;
+        color: #e2e8f0;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .site-footer-inner {
-        @apply mx-auto grid w-full max-w-[1200px] grid-cols-1 gap-8 px-4 py-10 sm:px-6 md:grid-cols-2 lg:grid-cols-5 lg:px-8;
+        @apply mx-auto grid w-full max-w-[1400px] grid-cols-1 gap-8 px-4 py-10 sm:px-6 md:grid-cols-2 lg:grid-cols-5 lg:px-8;
     }
 
     .footer-col {
@@ -272,11 +277,11 @@
     }
 
     .footer-col strong {
-        @apply mb-1 text-sm font-semibold uppercase tracking-wide text-slate-900;
+        @apply mb-1 text-sm font-semibold uppercase tracking-wide text-white;
     }
 
     .footer-col a {
-        @apply text-sm text-slate-600 transition-colors duration-200 hover:text-slate-900;
+        @apply text-sm text-slate-400 transition-colors duration-200 hover:text-white;
     }
 
     .footer-brand-col {
@@ -284,11 +289,11 @@
     }
 
     .footer-logo {
-        @apply mb-3 inline-flex items-center gap-2.5 text-lg font-bold text-slate-900;
+        @apply mb-3 inline-flex items-center gap-2.5 text-lg font-bold text-white;
     }
 
     .meta {
-        @apply text-sm leading-relaxed text-slate-600;
+        @apply text-sm leading-relaxed text-slate-400;
     }
 
     .footer-contact-info {
@@ -304,11 +309,12 @@
     }
 
     .box-socials-footer a {
-        @apply inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition-colors duration-200 hover:border-slate-300 hover:text-slate-900;
+        @apply inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-700 text-slate-400 transition-colors duration-200 hover:border-slate-500 hover:text-white;
     }
 
     .footer-bottom {
-        @apply mx-auto flex w-full max-w-[1200px] flex-col gap-3 border-t border-slate-200 px-4 py-5 text-xs text-slate-500 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8;
+        @apply mx-auto flex w-full max-w-[1400px] flex-col gap-3 px-4 py-5 text-xs text-slate-400 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .footer-payment-methods {
@@ -316,15 +322,15 @@
     }
 
     .footer-label {
-        @apply text-xs font-semibold uppercase tracking-wide text-slate-500;
+        @apply text-xs font-semibold uppercase tracking-wide text-slate-400;
     }
 
     .payment-icons {
-        @apply flex flex-wrap gap-2;
+        @apply flex flex-wrap items-center gap-3;
     }
 
     .payment-badge {
-        @apply rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-600;
+        @apply inline-flex h-7 items-center rounded border border-slate-700 bg-slate-800 px-1.5 text-[10px] font-bold tracking-wide text-slate-300;
     }
 
     .toast-container {
@@ -405,6 +411,139 @@
     }
 
     /* Account tabs */
+    /* ── Hero + Inner Banner ─────────────────────────────────────── */
+    /* ── Breadcrumbs ─────────────────────────────────────────────── */
+    .breadcrumbs {
+        @apply py-2 text-xs;
+    }
+
+    .breadcrumbs ol {
+        @apply flex flex-wrap items-center gap-0 list-none m-0 p-0;
+    }
+
+    .breadcrumbs li {
+        @apply inline-flex items-center text-slate-500;
+    }
+
+    .breadcrumbs li+li::before {
+        content: "›";
+        @apply mx-1.5 text-slate-400;
+    }
+
+    .breadcrumbs a {
+        @apply text-numnam-600 transition-colors duration-200 hover:text-numnam-700 hover:underline;
+    }
+
+    .breadcrumbs [aria-current="page"] {
+        @apply text-slate-500;
+    }
+
+    .inner-banner .breadcrumbs {
+        @apply mt-1.5;
+    }
+
+    .inner-banner .breadcrumbs a {
+        @apply text-numnam-700;
+    }
+
+    .section>.breadcrumbs {
+        @apply pb-3 pt-0;
+    }
+
+    .store-home main.page {
+        @apply max-w-none p-0;
+    }
+
+    .hero-fullbleed {
+        position: relative;
+        width: 100%;
+        min-height: 540px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+    }
+
+    @media (min-width: 768px) {
+        .hero-fullbleed {
+            min-height: 620px;
+        }
+    }
+
+    .hero-bg {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transform: scale(1.02);
+        transition: transform 8s ease;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(115deg, rgba(26, 32, 48, 0.82) 0%, rgba(26, 32, 48, 0.50) 55%, rgba(26, 32, 48, 0.14) 100%);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 3.5rem 1.5rem;
+    }
+
+    @media (min-width: 1024px) {
+        .hero-content {
+            padding: 5rem 2rem;
+        }
+    }
+
+    .inner-banner {
+        position: relative;
+        width: 100%;
+        min-height: 180px;
+        overflow: hidden;
+        display: flex;
+        align-items: flex-end;
+        background: linear-gradient(135deg, #fff0f5 0%, #fce4ec 40%, #e8f5f0 100%);
+    }
+
+    .inner-banner-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(254, 125, 148, 0.15) 0%, rgba(238, 249, 246, 0.25) 100%);
+    }
+
+    .inner-banner-content {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 1.5rem;
+    }
+
+    .inner-banner-title {
+        @apply text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl;
+    }
+
+    /* ── Footer newsletter dark theming ──────────────────────────── */
+    .footer-newsletter {
+        background: #151a27;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .footer-newsletter .newsletter-copy h3 {
+        @apply text-white;
+    }
+
+    .footer-newsletter .newsletter-copy p {
+        @apply text-slate-400;
+    }
+
     .account-tab {
         @apply flex-1 whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium text-slate-500 transition;
     }

@@ -85,10 +85,56 @@
         @include('store.partials.header')
 
         <main id="main-content" class="page" role="main">
-            {{-- Breadcrumbs (excluded on home + product detail — product show places them inline) --}}
+            {{-- Inner page banner (shown on all non-home pages) --}}
             @unless(request()->routeIs('store.home') || request()->routeIs('store.product.show'))
-            @include('store.partials.breadcrumbs')
+            @php
+            $innerBannerMap = [
+            'store.products' => 'Shop All Products',
+            'store.about' => 'About NumNam',
+            'store.blog.index' => 'Blog & Updates',
+            'store.blog.show' => 'Blog',
+            'store.contact' => 'Get In Touch',
+            'store.faq' => 'Help & FAQ',
+            'store.pricing' => 'Subscription Plans',
+            'store.cart' => 'Your Cart',
+            'store.checkout' => 'Checkout',
+            'store.recipes' => 'Baby-Friendly Recipes',
+            'store.account' => 'My Account',
+            'store.login' => 'Sign In',
+            'store.register' => 'Get Started',
+            'store.refer-friends' => 'Refer & Earn',
+            'store.wishlist' => 'My Wishlist',
+            'store.order-success' => 'Order Confirmed',
+            'store.category.show' => 'Category',
+            'store.legal.terms' => 'Terms & Conditions',
+            'store.legal.privacy' => 'Privacy Policy',
+            'store.legal.shipping' => 'Shipping Policy',
+            'store.legal.refund' => 'Refund Policy',
+            'store.legal.cookie' => 'Cookie Policy',
+            'store.legal.payment-methods' => 'Payment Methods',
+            'store.page' => 'NumNam',
+            ];
+            $currentRoute = Route::currentRouteName();
+            $innerBannerTitle = $innerBannerMap[$currentRoute] ?? null;
+            if (!$innerBannerTitle && $currentRoute) {
+            // Derive human-readable title from route name as fallback
+            $parts = explode('.', $currentRoute);
+            $innerBannerTitle = ucwords(str_replace(['-', '_'], ' ', end($parts)));
+            }
+            @endphp
+            <div class="inner-banner">
+                <div class="inner-banner-overlay"></div>
+                {{-- Decorative product image right side --}}
+                <div class="pointer-events-none hidden lg:block" style="position:absolute;right:0;top:0;bottom:0;width:260px;overflow:hidden;opacity:0.18;">
+                    <img src="{{ asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg') }}" alt="" style="height:100%;width:100%;object-fit:contain;object-position:right center;transform:rotate(10deg) scale(1.1);">
+                </div>
+                <div class="inner-banner-content">
+                    <h1 class="inner-banner-title">{{ $innerBannerTitle }}</h1>
+                    @include('store.partials.breadcrumbs')
+                </div>
+            </div>
             @endunless
+            {{-- Breadcrumbs are shown in the inner-banner above (for inner pages). Product show has inline breadcrumbs. --}}
 
             @include('store.partials.alerts')
             @yield('content')
