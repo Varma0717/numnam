@@ -1,4 +1,4 @@
-<div id="discountPopup" class="fixed inset-0 z-[70] hidden" role="dialog" aria-modal="true" aria-labelledby="discountPopupTitle">
+<div id="discountPopup" class="fixed inset-0 z-[90] hidden" role="dialog" aria-modal="true" aria-labelledby="discountPopupTitle">
     <button type="button" class="absolute inset-0 bg-slate-900/50 backdrop-blur-[1px]" data-discount-close aria-label="Dismiss discount popup"></button>
 
     <div class="relative mx-auto mt-20 w-[min(92vw,28rem)] rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl sm:mt-28 sm:p-7">

@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ====== First-Time Discount Popup ====== */
   const discountPopup = document.getElementById('discountPopup');
   if (discountPopup) {
+    const body = document.body;
     const popupDismissKey = 'numnam_discount_popup_dismissed_v2';
     const dismissButtons = discountPopup.querySelectorAll('[data-discount-close]');
     const copyBtn = discountPopup.querySelector('[data-copy-discount]');
@@ -43,12 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const closePopup = () => {
       discountPopup.classList.add('hidden');
+      if (body) body.classList.remove('discount-popup-open');
       safeStorage.set(popupDismissKey, '1');
     };
 
     if (safeStorage.get(popupDismissKey) !== '1') {
       window.setTimeout(() => {
         discountPopup.classList.remove('hidden');
+        if (body) body.classList.add('discount-popup-open');
       }, 1400);
     }
 

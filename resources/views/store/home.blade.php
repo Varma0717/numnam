@@ -205,27 +205,6 @@ $heroHighlights = [
     </div>
 </section>
 
-<section class="px-4 pb-4 sm:px-6 lg:px-8 lg:pb-6">
-    <div class="mx-auto grid max-w-7xl gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:grid-cols-2 lg:grid-cols-4">
-        <div>
-            <p class="text-3xl font-extrabold text-slate-900" data-count-to="10000">0+</p>
-            <p class="mt-1 text-sm text-slate-600">Happy Families</p>
-        </div>
-        <div>
-            <p class="text-3xl font-extrabold text-slate-900" data-count-to="15">0+</p>
-            <p class="mt-1 text-sm text-slate-600">Unique Products</p>
-        </div>
-        <div>
-            <p class="text-3xl font-extrabold text-slate-900" data-count-to="100">0%</p>
-            <p class="mt-1 text-sm text-slate-600">Natural Ingredients</p>
-        </div>
-        <div>
-            <p class="text-3xl font-extrabold text-slate-900" data-count-to="4">0.9â˜…</p>
-            <p class="mt-1 text-sm text-slate-600">Average Rating</p>
-        </div>
-    </div>
-</section>
-
 <section class="px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
     <div class="mx-auto max-w-7xl">
         <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">

@@ -18,23 +18,29 @@
 </div>
 <script>
     (function() {
+        var body = document.body;
         var el = document.getElementById('cookieConsent');
         if (!el) return;
         if (document.cookie.split(';').some(function(c) {
                 return c.trim().indexOf('numnam_cookie_consent_v3=') === 0;
             })) {
+            if (body) body.classList.remove('cookie-banner-visible');
             el.remove();
+        } else {
+            if (body) body.classList.add('cookie-banner-visible');
         }
     })();
 
     function acceptCookies() {
         document.cookie = 'numnam_cookie_consent_v3=1;path=/;max-age=31536000;SameSite=Lax';
+        document.body.classList.remove('cookie-banner-visible');
         var el = document.getElementById('cookieConsent');
         if (el) el.remove();
     }
 
     function dismissCookies() {
         document.cookie = 'numnam_cookie_consent_v3=dismissed;path=/;max-age=2592000;SameSite=Lax';
+        document.body.classList.remove('cookie-banner-visible');
         var el = document.getElementById('cookieConsent');
         if (el) el.remove();
     }
