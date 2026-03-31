@@ -3,20 +3,26 @@
 @section('title', 'NumNam - ' . $page['title'])
 
 @section('content')
-<section class="hero section in-view">
-    <div>
-        <span class="kicker">Policy</span>
-        <h1>{{ $page['title'] }}</h1>
-        <p>Please review this policy before placing orders or using platform features.</p>
+<section class="section pb-8 pt-4 sm:pt-8">
+    <div class="relative overflow-hidden rounded-3xl border border-slate-200/90 bg-gradient-to-br from-[#fffaf4] via-white to-[#fff3e6] px-6 py-10 sm:px-10 lg:px-12">
+        <div class="pointer-events-none absolute -left-16 -top-20 h-56 w-56 rounded-full bg-numnam-200/45 blur-3xl"></div>
+        <div class="pointer-events-none absolute -bottom-20 -right-16 h-56 w-56 rounded-full bg-orange-100/65 blur-3xl"></div>
+        <div class="relative max-w-3xl">
+            <span class="inline-flex w-fit rounded-full border border-numnam-200 bg-white/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-numnam-700">Policy</span>
+            <h1 class="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">{{ $page['title'] }}</h1>
+            <p class="mt-3 max-w-2xl text-base leading-relaxed text-slate-600">Please review this policy before placing orders or using platform features.</p>
+        </div>
     </div>
 </section>
 
-<section class="section">
-    @foreach($page['sections'] as $section)
-    <article class="legal-section">
-        <h2>{{ $section['heading'] }}</h2>
-        <p class="meta">{{ $section['text'] }}</p>
-    </article>
-    @endforeach
+<section class="section pb-12">
+    <div class="mx-auto max-w-3xl space-y-6">
+        @foreach($page['sections'] as $section)
+        <article class="rounded-2xl border border-slate-200 bg-white px-6 py-6 shadow-sm">
+            <h2 class="text-lg font-bold text-slate-900">{{ $section['heading'] }}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-slate-600">{{ $section['text'] }}</p>
+        </article>
+        @endforeach
+    </div>
 </section>
 @endsection

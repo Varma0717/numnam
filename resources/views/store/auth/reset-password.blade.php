@@ -2,35 +2,31 @@
 @section('title', 'Reset Password — NumNam')
 
 @section('content')
-<section class="auth-section section-pad">
-    <div class="store-container">
-        <div class="auth-card animate-fade-up">
-            <h1 class="auth-title">Reset Password</h1>
-            <p class="auth-subtitle">Enter your new password below.</p>
+<section class="section py-12 sm:py-16">
+    <div class="mx-auto w-full max-w-md px-4">
+        <div class="rounded-3xl border border-slate-200 bg-white px-7 py-8 shadow-sm sm:px-9 sm:py-10">
+            <span class="inline-flex rounded-full border border-numnam-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-numnam-700">Password Reset</span>
+            <h1 class="mt-4 text-2xl font-extrabold tracking-tight text-slate-900">Set New Password</h1>
+            <p class="mt-1 text-sm text-slate-500">Enter your new password below.</p>
 
-            <form method="POST" action="{{ route('store.password.update') }}">
+            <form class="mt-6 space-y-4" method="POST" action="{{ route('store.password.update') }}">
                 @csrf
                 <input type="hidden" name="token" value="{{ $token }}">
-
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" class="input" required
-                        value="{{ old('email', $email) }}">
-                    @error('email') <span class="form-error">{{ $message }}</span> @enderror
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-slate-700" for="email">Email Address</label>
+                    <input class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 outline-none transition focus:border-numnam-400 focus:ring-2 focus:ring-numnam-200" id="email" type="email" name="email" required value="{{ old('email', $email) }}">
+                    @error('email')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                 </div>
-
-                <div class="form-group">
-                    <label for="password">New Password</label>
-                    <input type="password" id="password" name="password" class="input" required minlength="8">
-                    @error('password') <span class="form-error">{{ $message }}</span> @enderror
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-slate-700" for="password">New Password</label>
+                    <input class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 outline-none transition focus:border-numnam-400 focus:ring-2 focus:ring-numnam-200" id="password" type="password" name="password" required minlength="8">
+                    @error('password')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                 </div>
-
-                <div class="form-group">
-                    <label for="password_confirmation">Confirm Password</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation" class="input" required>
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-slate-700" for="password_confirmation">Confirm Password</label>
+                    <input class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 outline-none transition focus:border-numnam-400 focus:ring-2 focus:ring-numnam-200" id="password_confirmation" type="password" name="password_confirmation" required>
                 </div>
-
-                <button type="submit" class="btn-primary btn-full">Reset Password</button>
+                <button class="h-11 w-full rounded-full bg-numnam-600 text-sm font-semibold text-white transition hover:bg-numnam-700 focus:outline-none focus:ring-2 focus:ring-numnam-400 focus:ring-offset-2" type="submit">Reset Password</button>
             </form>
         </div>
     </div>

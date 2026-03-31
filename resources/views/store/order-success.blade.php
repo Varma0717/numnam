@@ -3,51 +3,82 @@
 @section('title', 'Order Confirmed - NumNam')
 
 @section('content')
-<section class="section">
-    <div class="checkout-steps">
-        <div class="checkout-step completed">Cart</div>
-        <div class="checkout-step-line completed"></div>
-        <div class="checkout-step completed">Checkout</div>
-        <div class="checkout-step-line completed"></div>
-        <div class="checkout-step active">Confirmation</div>
+{{-- Progress Steps --}}
+<section class="section pb-4 pt-6">
+    <div class="flex items-center justify-center gap-2 text-xs font-semibold sm:gap-3">
+        <span class="flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-emerald-700">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Cart
+        </span>
+        <span class="h-px w-6 bg-emerald-300 sm:w-10"></span>
+        <span class="flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-emerald-700">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Checkout
+        </span>
+        <span class="h-px w-6 bg-emerald-300 sm:w-10"></span>
+        <span class="rounded-full border border-numnam-300 bg-numnam-600 px-3 py-1 text-white">Confirmation</span>
     </div>
 </section>
 
-<section class="section order-success fade-in-up">
-    <div class="order-success-icon">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="20 6 9 17 4 12" />
-        </svg>
-    </div>
-    <h1>Thank You for Your Order!</h1>
-    <p class="order-number">Order #{{ $order->order_number }}</p>
-    <p class="meta order-success-message">We've received your order and will begin processing it soon. You'll receive an email confirmation with tracking details.</p>
-
-    <div class="order-success-actions">
-        <a class="btn btn-primary" href="{{ route('store.account') }}">View My Orders</a>
-        <a class="btn btn-secondary" href="{{ route('store.products') }}">Continue Shopping</a>
-    </div>
-</section>
-
-<section class="section fade-in-up order-details-section">
-    <div class="summary-card">
-        <h3 class="order-details-title">Order Details</h3>
-        @foreach($order->items as $item)
-        <div class="summary-row">
-            <span>{{ $item->product_name }} <span class="meta">&times; {{ $item->quantity }}</span></span>
-            <strong>Rs {{ number_format($item->line_total, 0) }}</strong>
+{{-- Success Banner --}}
+<section class="section pb-6">
+    <div class="rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white px-6 py-10 text-center shadow-sm sm:py-14">
+        <span class="inline-flex h-16 w-16 items-center justify-center rounded-full border border-emerald-200 bg-emerald-100 text-emerald-600">
+            <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+        </span>
+        <h1 class="mt-5 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">Thank You for Your Order!</h1>
+        <p class="mt-1 text-sm font-semibold text-slate-500">Order #{{ $order->order_number }}</p>
+        <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-500">We've received your order and will begin processing it soon. You'll receive an email confirmation with tracking details.</p>
+        <div class="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <a class="inline-flex h-11 items-center rounded-full bg-numnam-600 px-7 text-sm font-semibold text-white transition hover:bg-numnam-700" href="{{ route('store.account') }}">View My Orders</a>
+            <a class="inline-flex h-11 items-center rounded-full border border-slate-200 bg-white px-7 text-sm font-semibold text-slate-700 transition hover:bg-slate-50" href="{{ route('store.products') }}">Continue Shopping</a>
         </div>
-        @endforeach
-        <div class="summary-row"><span>Subtotal</span><strong>Rs {{ number_format($order->subtotal, 0) }}</strong></div>
-        @if($order->discount > 0)
-        <div class="summary-row"><span>Discount</span><strong class="text-success">-Rs {{ number_format($order->discount, 0) }}</strong></div>
-        @endif
-        <div class="summary-row"><span>Shipping</span><strong>{{ $order->shipping_fee > 0 ? 'Rs ' . number_format($order->shipping_fee, 0) : 'Free' }}</strong></div>
-        <div class="summary-row total"><span>Total</span><strong>Rs {{ number_format($order->total, 0) }}</strong></div>
+    </div>
+</section>
 
-        <div class="order-details-footer">
-            <p class="meta"><strong>Payment:</strong> {{ strtoupper($order->payment_gateway ?: $order->payment_method ?? 'Pending') }}</p>
-            <p class="meta"><strong>Shipping to:</strong> {{ $order->ship_name }}, {{ $order->ship_address }}, {{ $order->ship_city }} - {{ $order->ship_pincode }}</p>
+{{-- Order Summary --}}
+<section class="section pb-14">
+    <div class="mx-auto max-w-xl">
+        <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+            <div class="border-b border-slate-100 px-6 py-4">
+                <h3 class="text-base font-bold text-slate-900">Order Details</h3>
+            </div>
+            <div class="divide-y divide-slate-100 px-6">
+                @foreach($order->items as $item)
+                <div class="flex items-center justify-between py-3">
+                    <span class="text-sm text-slate-700">{{ $item->product_name }} <span class="text-slate-400">&times; {{ $item->quantity }}</span></span>
+                    <strong class="text-sm font-semibold text-slate-900">Rs {{ number_format($item->line_total, 0) }}</strong>
+                </div>
+                @endforeach
+                <div class="flex items-center justify-between py-3">
+                    <span class="text-sm text-slate-500">Subtotal</span>
+                    <strong class="text-sm text-slate-900">Rs {{ number_format($order->subtotal, 0) }}</strong>
+                </div>
+                @if($order->discount > 0)
+                <div class="flex items-center justify-between py-3">
+                    <span class="text-sm text-slate-500">Discount</span>
+                    <strong class="text-sm text-emerald-600">-Rs {{ number_format($order->discount, 0) }}</strong>
+                </div>
+                @endif
+                <div class="flex items-center justify-between py-3">
+                    <span class="text-sm text-slate-500">Shipping</span>
+                    <strong class="text-sm text-slate-900">{{ $order->shipping_fee > 0 ? 'Rs ' . number_format($order->shipping_fee, 0) : 'Free' }}</strong>
+                </div>
+                <div class="flex items-center justify-between py-4">
+                    <span class="font-semibold text-slate-900">Total</span>
+                    <strong class="text-lg font-extrabold text-numnam-700">Rs {{ number_format($order->total, 0) }}</strong>
+                </div>
+            </div>
+            <div class="border-t border-slate-100 bg-slate-50/60 px-6 py-4 text-sm text-slate-500">
+                <p><strong class="text-slate-700">Payment:</strong> {{ strtoupper($order->payment_gateway ?: $order->payment_method ?? 'Pending') }}</p>
+                <p class="mt-1"><strong class="text-slate-700">Shipping to:</strong> {{ $order->ship_name }}, {{ $order->ship_address }}, {{ $order->ship_city }} - {{ $order->ship_pincode }}</p>
+            </div>
         </div>
     </div>
 </section>
