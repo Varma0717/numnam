@@ -184,132 +184,68 @@ $heroHighlights = [
 </section>
 @endif
 
-<section class="section ticker-strip">
-    <div class="ticker-track">
-        @php $tickerText = 'Fresh ingredients ★ Clean whole food ★ No preservatives ★ Stage-wise textures ★ Doctor founded ★ Subscription friendly ★ '; @endphp
-        <p>{{ $tickerText }}</p>
-        <p aria-hidden="true">{{ $tickerText }}</p>
-    </div>
-</section>
-
-<section class="section trust-strip animate-fade-up">
-    <h2>Why Parents Trust NumNam</h2>
-    <div class="trust-grid stagger-children">
+<section class="px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
+    <div class="mx-auto grid max-w-7xl gap-4 md:grid-cols-2 xl:grid-cols-4">
         @foreach($trustCards as $item)
-        <article class="trust-card">
-            <span class="trust-icon" aria-hidden="true">
-                @switch($item['icon'])
-                @case('shield')
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z" />
-                    <path d="M9 12l2 2 4-4" />
-                </svg>
-                @break
-                @case('leaf')
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M6 21c6 0 12-6 12-12V3h-6C6 3 3 6 3 12s3 9 3 9z" />
-                    <path d="M7 17c3-3 6-6 11-8" />
-                </svg>
-                @break
-                @case('drop')
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2s6 7 6 11a6 6 0 11-12 0c0-4 6-11 6-11z" />
-                </svg>
-                @break
-                @default
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2l1.9 4.9L19 9l-5.1 2.1L12 16l-1.9-4.9L5 9l5.1-2.1L12 2z" />
-                    <path d="M5 19l1-2 2-1-2-1-1-2-1 2-2 1 2 1 1 2z" />
-                    <path d="M19 19l.7-1.3L21 17l-1.3-.7L19 15l-.7 1.3L17 17l1.3.7L19 19z" />
-                </svg>
-                @endswitch
-            </span>
-            <div>
-                <h4>{{ $item['title'] }}</h4>
-                <p class="meta">{{ $item['subtitle'] }}</p>
-            </div>
+        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+            <h3 class="text-sm font-semibold uppercase tracking-[0.14em] text-numnam-700">{{ $item['title'] }}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-slate-600">{{ $item['subtitle'] }}</p>
         </article>
         @endforeach
     </div>
 </section>
 
-{{-- Stats Counter --}}
-<section class="section animate-fade-up">
-    <div class="stats-row">
-        <div class="stat-block">
-            <div class="stat-number" data-count-to="10000">0<span class="suffix">+</span></div>
-            <div class="stat-desc">Happy Families</div>
+<section class="px-4 pb-4 sm:px-6 lg:px-8 lg:pb-6">
+    <div class="mx-auto grid max-w-7xl gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+            <p class="text-3xl font-extrabold text-slate-900" data-count-to="10000">0+</p>
+            <p class="mt-1 text-sm text-slate-600">Happy Families</p>
         </div>
-        <div class="stat-block">
-            <div class="stat-number" data-count-to="15">0<span class="suffix">+</span></div>
-            <div class="stat-desc">Unique Products</div>
+        <div>
+            <p class="text-3xl font-extrabold text-slate-900" data-count-to="15">0+</p>
+            <p class="mt-1 text-sm text-slate-600">Unique Products</p>
         </div>
-        <div class="stat-block">
-            <div class="stat-number" data-count-to="100">0<span class="suffix">%</span></div>
-            <div class="stat-desc">Natural Ingredients</div>
+        <div>
+            <p class="text-3xl font-extrabold text-slate-900" data-count-to="100">0%</p>
+            <p class="mt-1 text-sm text-slate-600">Natural Ingredients</p>
         </div>
-        <div class="stat-block">
-            <div class="stat-number" data-count-to="4">0<span class="suffix">.9★</span></div>
-            <div class="stat-desc">Average Rating</div>
+        <div>
+            <p class="text-3xl font-extrabold text-slate-900" data-count-to="4">0.9★</p>
+            <p class="mt-1 text-sm text-slate-600">Average Rating</p>
         </div>
     </div>
 </section>
 
-{{-- Age Stage Navigator --}}
-<section class="section age-stage-section animate-fade-up">
-    <h2>Shop by Stage</h2>
-    <p class="meta">Nutrition tailored to your baby's growth journey</p>
-    <div class="age-stage-grid stagger-children">
-        <a href="{{ route('store.products', ['age_group' => '4-6 Months']) }}" class="age-stage-card">
-            <div class="age-stage-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <circle cx="12" cy="8" r="4" />
-                    <path d="M6 21v-2a4 4 0 014-4h4" />
-                    <path d="M15 19l2 2 4-4" />
-                </svg>
+<section class="px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <div class="mx-auto max-w-7xl">
+        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <h2 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Shop by Stage</h2>
+                <p class="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">Nutrition tailored to your baby's growth journey.</p>
             </div>
-            <h4>Stage 1</h4>
-            <p class="meta">4–6 Months</p>
-            <span class="age-stage-label">First Tastes</span>
-        </a>
-        <a href="{{ route('store.products', ['age_group' => '6-8 Months']) }}" class="age-stage-card">
-            <div class="age-stage-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z" />
-                    <circle cx="12" cy="9" r="2.5" />
-                </svg>
-            </div>
-            <h4>Stage 2</h4>
-            <p class="meta">6–8 Months</p>
-            <span class="age-stage-label">Exploring Flavours</span>
-        </a>
-        <a href="{{ route('store.products', ['age_group' => '8-12 Months']) }}" class="age-stage-card">
-            <div class="age-stage-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M23 21v-2a4 4 0 00-3-3.87" />
-                    <path d="M16 3.13a4 4 0 010 7.75" />
-                </svg>
-            </div>
-            <h4>Stage 3</h4>
-            <p class="meta">8–12 Months</p>
-            <span class="age-stage-label">Textured Meals</span>
-        </a>
-        <a href="{{ route('store.products', ['age_group' => '12+ Months']) }}" class="age-stage-card">
-            <div class="age-stage-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M18 8h1a4 4 0 010 8h-1" />
-                    <path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
-                    <line x1="6" y1="1" x2="6" y2="4" />
-                    <line x1="10" y1="1" x2="10" y2="4" />
-                    <line x1="14" y1="1" x2="14" y2="4" />
-                </svg>
-            </div>
-            <h4>Stage 4</h4>
-            <p class="meta">12+ Months</p>
-            <span class="age-stage-label">Family Foods</span>
-        </a>
+        </div>
+        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <a href="{{ route('store.products', ['age' => '4-6']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                <h3 class="text-base font-semibold text-slate-900">Stage 1</h3>
+                <p class="mt-1 text-sm text-slate-600">4–6 months</p>
+                <p class="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-numnam-700">First Tastes</p>
+            </a>
+            <a href="{{ route('store.products', ['age' => '6-8']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                <h3 class="text-base font-semibold text-slate-900">Stage 2</h3>
+                <p class="mt-1 text-sm text-slate-600">6–8 months</p>
+                <p class="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-numnam-700">Exploring Flavours</p>
+            </a>
+            <a href="{{ route('store.products', ['age' => '8-12']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                <h3 class="text-base font-semibold text-slate-900">Stage 3</h3>
+                <p class="mt-1 text-sm text-slate-600">8–12 months</p>
+                <p class="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-numnam-700">Textured Meals</p>
+            </a>
+            <a href="{{ route('store.products', ['age' => '12+']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                <h3 class="text-base font-semibold text-slate-900">Stage 4</h3>
+                <p class="mt-1 text-sm text-slate-600">12+ months</p>
+                <p class="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-numnam-700">Family Foods</p>
+            </a>
+        </div>
     </div>
 </section>
 
@@ -333,119 +269,51 @@ $heroHighlights = [
     empty-text="Your recently viewed products will appear here." />
 @endif
 
-{{-- How It Works --}}
-<section class="section animate-fade-up">
-    <h2>How It Works</h2>
-    <p class="meta">Getting started is simple</p>
-    <div class="store-grid three how-it-works stagger-children">
-        <div class="step-card">
-            <h4>Choose Your Stage</h4>
-            <p>Select products matched to your baby's age and developmental stage.</p>
+<section class="px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <div class="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">How It Works</h2>
+            <p class="mt-2 text-sm text-slate-600">From stage selection to doorstep delivery, the process is simple and parent-friendly.</p>
         </div>
-        <div class="step-card">
-            <h4>We Prepare Fresh</h4>
-            <p>Every batch is made with clean, whole ingredients — no preservatives ever.</p>
-        </div>
-        <div class="step-card">
-            <h4>Delivered to You</h4>
-            <p>Fast, reliable delivery straight to your door. Subscribe for extra savings.</p>
-        </div>
-    </div>
-</section>
-
-{{-- Ingredient Transparency --}}
-<section class="section ingredient-section animate-fade-up">
-    <div class="ingredient-grid">
-        <div class="ingredient-copy">
-            <span class="kicker">Transparency First</span>
-            <h2>Know exactly what's inside</h2>
-            <p class="meta">Every NumNam product lists its full ingredient deck — no hidden fillers, no mystery powders. Just clean, whole foods your baby deserves.</p>
-            <ul class="ingredient-checklist">
-                <li>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-1)" stroke-width="2.5">
-                        <path d="M20 6L9 17l-5-5" />
-                    </svg>
-                    100% natural, whole-food ingredients
-                </li>
-                <li>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-1)" stroke-width="2.5">
-                        <path d="M20 6L9 17l-5-5" />
-                    </svg>
-                    Zero added sugar, salt or preservatives
-                </li>
-                <li>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-1)" stroke-width="2.5">
-                        <path d="M20 6L9 17l-5-5" />
-                    </svg>
-                    European nutrition standards
-                </li>
-                <li>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-1)" stroke-width="2.5">
-                        <path d="M20 6L9 17l-5-5" />
-                    </svg>
-                    Stage-appropriate textures & nutrients
-                </li>
-            </ul>
-            <a href="{{ route('store.about') }}" class="btn btn-secondary">Learn Our Story</a>
-        </div>
-        <div class="ingredient-visual">
-            <div class="ingredient-badge-grid stagger-children">
-                <div class="ingredient-badge">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M6 21c6 0 12-6 12-12V3h-6C6 3 3 6 3 12s3 9 3 9z" />
-                    </svg>
-                    <span>Organic Veggies</span>
-                </div>
-                <div class="ingredient-badge">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-                        <line x1="9" y1="9" x2="9.01" y2="9" />
-                        <line x1="15" y1="9" x2="15.01" y2="9" />
-                    </svg>
-                    <span>No Artificial Flavours</span>
-                </div>
-                <div class="ingredient-badge">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M12 2s6 7 6 11a6 6 0 11-12 0c0-4 6-11 6-11z" />
-                    </svg>
-                    <span>No Added Sugar</span>
-                </div>
-                <div class="ingredient-badge">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z" />
-                    </svg>
-                    <span>FSSAI Certified</span>
-                </div>
+        <div class="grid gap-4 md:grid-cols-3">
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                <h3 class="text-base font-semibold text-slate-900">Choose Your Stage</h3>
+                <p class="mt-2 text-sm text-slate-600">Select products matched to your baby's age and developmental milestone.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                <h3 class="text-base font-semibold text-slate-900">We Prepare Fresh</h3>
+                <p class="mt-2 text-sm text-slate-600">Every batch is crafted with clean ingredients and transparent nutrition labels.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                <h3 class="text-base font-semibold text-slate-900">Delivered To You</h3>
+                <p class="mt-2 text-sm text-slate-600">Fast shipping and flexible subscriptions help families stay stocked without stress.</p>
             </div>
         </div>
     </div>
 </section>
 
-<section class="section animate-fade-up">
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:32px;">
-        <div>
-            <h2 style="margin:0 0 4px;">Subscription Plans</h2>
-            <p class="meta" style="margin:0;">Save more with regular deliveries — pause or cancel anytime.</p>
-        </div>
-        <a href="{{ route('store.pricing') }}" class="btn btn-secondary">View All Plans</a>
-    </div>
-    <div class="store-grid three stagger-children">
-        @foreach($plans->take(3) as $plan)
-        <article class="card" style="display:flex;flex-direction:column;">
-            <div class="card-body" style="display:flex;flex-direction:column;gap:10px;height:100%;">
-                <h4 style="margin:0;">{{ $plan->name }}</h4>
-                <p class="meta" style="margin:0;flex:1;">{{ Str::limit($plan->description, 100) }}</p>
-                <div class="price" style="margin:4px 0;">
-                    <strong style="font-size:26px;color:var(--brand-1);">Rs {{ number_format($plan->price, 0) }}</strong>
-                    @if($plan->billing_cycle && $plan->billing_cycle !== 'one_time')
-                    <span class="meta"> / {{ str_replace('_', ' ', $plan->billing_cycle) }}</span>
-                    @endif
-                </div>
-                <a href="{{ route('store.pricing') }}" class="btn btn-primary" style="margin-top:auto;">Subscribe</a>
+<section class="px-4 pb-8 sm:px-6 lg:px-8 lg:pb-10">
+    <div class="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-gradient-to-br from-[#fff9f2] via-white to-[#fff4e8] p-6 shadow-soft sm:p-8 lg:p-10">
+        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <h2 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Subscription Plans</h2>
+                <p class="mt-2 text-sm text-slate-600">Save more with regular deliveries. Pause or cancel anytime.</p>
             </div>
-        </article>
-        @endforeach
+            <a href="{{ route('store.pricing') }}" class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-400 hover:text-slate-900">View all plans</a>
+        </div>
+        <div class="grid gap-4 md:grid-cols-3">
+            @foreach($plans->take(3) as $plan)
+            <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <h3 class="text-lg font-semibold text-slate-900">{{ $plan->name }}</h3>
+                <p class="mt-2 text-sm text-slate-600">{{ Str::limit($plan->description, 100) }}</p>
+                <p class="mt-4 text-2xl font-bold text-slate-900">Rs {{ number_format($plan->price, 0) }}</p>
+                @if($plan->billing_cycle && $plan->billing_cycle !== 'one_time')
+                <p class="text-sm text-slate-500">/{{ str_replace('_', ' ', $plan->billing_cycle) }}</p>
+                @endif
+                <a href="{{ route('store.pricing') }}" class="hero-cta mt-5 w-full">Subscribe</a>
+            </article>
+            @endforeach
+        </div>
     </div>
 </section>
 
