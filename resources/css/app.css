@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+
+    html,
+    body {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: 'Poppins', sans-serif;
+    }
+}
+
 @layer components {
     .skip-link {
         @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-slate-900 focus:shadow-xl;
@@ -9,7 +26,7 @@
 
     .page-shell {
         @apply min-h-screen;
-        background: linear-gradient(180deg, #fff7ef 0%, #ffffff 45%, #f8fbfa 100%);
+        background: linear-gradient(180deg, #fff0f5 0%, #ffffff 40%, #f0fbf8 100%);
     }
 
     .page {
@@ -402,5 +419,97 @@
 
     .account-panel.active {
         display: block;
+    }
+
+    /* ── Bird Mascot ───────────────────────────────────────────────── */
+    .bird-mascot {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        width: 72px;
+        height: 72px;
+        pointer-events: none;
+        will-change: left, top;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    .bird-svg {
+        width: 100%;
+        height: 100%;
+        animation: birdBob 2.6s ease-in-out infinite;
+        filter: drop-shadow(0 6px 14px rgba(252, 93, 77, 0.22));
+    }
+
+    @keyframes birdBob {
+
+        0%,
+        100% {
+            transform: translateY(0px) rotate(-3deg);
+        }
+
+        50% {
+            transform: translateY(-7px) rotate(3deg);
+        }
+    }
+
+    .bird-wing-back {
+        transform-box: fill-box;
+        transform-origin: 85% 55%;
+        animation: wingFlapBack 0.44s ease-in-out infinite alternate;
+    }
+
+    .bird-wing-front {
+        transform-box: fill-box;
+        transform-origin: 85% 55%;
+        animation: wingFlapFront 0.44s ease-in-out 0.09s infinite alternate;
+    }
+
+    @keyframes wingFlapBack {
+        from {
+            transform: rotate(-28deg) scaleY(0.32);
+        }
+
+        to {
+            transform: rotate(18deg) scaleY(1);
+        }
+    }
+
+    @keyframes wingFlapFront {
+        from {
+            transform: rotate(-22deg) scaleY(0.42);
+        }
+
+        to {
+            transform: rotate(12deg) scaleY(1);
+        }
+    }
+
+    .bird-excited .bird-wing-back,
+    .bird-excited .bird-wing-front {
+        animation-duration: 0.12s;
+    }
+
+    .bird-excited .bird-svg {
+        animation: birdJump 0.4s ease-out;
+    }
+
+    @keyframes birdJump {
+        0% {
+            transform: translateY(0) scale(1);
+        }
+
+        35% {
+            transform: translateY(-16px) scale(1.12);
+        }
+
+        70% {
+            transform: translateY(4px) scale(0.96);
+        }
+
+        100% {
+            transform: translateY(0) scale(1);
+        }
     }
 }

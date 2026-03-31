@@ -1,4 +1,4 @@
-@extends('store.layouts.app')
+﻿@extends('store.layouts.app')
 
 @section('title', 'NumNam - Home')
 
@@ -126,9 +126,9 @@ $heroHighlights = [
 
 <section class="hero in-view relative isolate overflow-hidden px-4 pb-14 pt-12 sm:px-6 lg:px-8 lg:pb-20 lg:pt-16">
     <div class="mx-auto max-w-7xl">
-        <article class="relative overflow-hidden rounded-3xl border border-white/40 bg-gradient-to-br from-[#fff9f2] via-white to-[#fff3e6] px-6 py-10 shadow-soft sm:px-10 sm:py-14 lg:px-14 lg:py-16">
+        <article class="relative overflow-hidden rounded-3xl border border-white/40 bg-gradient-to-br from-[#fff9f2] via-white to-[#eef9f6] px-6 py-10 shadow-soft sm:px-10 sm:py-14 lg:px-14 lg:py-16">
             <div class="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-numnam-200/45 blur-3xl sm:h-72 sm:w-72"></div>
-            <div class="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-orange-100/65 blur-3xl sm:h-72 sm:w-72"></div>
+            <div class="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-pastel-mint/65 blur-3xl sm:h-72 sm:w-72"></div>
 
             <div class="relative z-10 max-w-2xl">
                 <p class="mb-4 inline-flex rounded-full border border-numnam-200 bg-white/85 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-numnam-700">
@@ -210,7 +210,7 @@ $heroHighlights = [
             <p class="mt-1 text-sm text-slate-600">Natural Ingredients</p>
         </div>
         <div>
-            <p class="text-3xl font-extrabold text-slate-900" data-count-to="4">0.9★</p>
+            <p class="text-3xl font-extrabold text-slate-900" data-count-to="4">0.9â˜…</p>
             <p class="mt-1 text-sm text-slate-600">Average Rating</p>
         </div>
     </div>
@@ -227,17 +227,17 @@ $heroHighlights = [
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <a href="{{ route('store.products', ['age' => '4-6']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
                 <h3 class="text-base font-semibold text-slate-900">Stage 1</h3>
-                <p class="mt-1 text-sm text-slate-600">4–6 months</p>
+                <p class="mt-1 text-sm text-slate-600">4â€“6 months</p>
                 <p class="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-numnam-700">First Tastes</p>
             </a>
             <a href="{{ route('store.products', ['age' => '6-8']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
                 <h3 class="text-base font-semibold text-slate-900">Stage 2</h3>
-                <p class="mt-1 text-sm text-slate-600">6–8 months</p>
+                <p class="mt-1 text-sm text-slate-600">6â€“8 months</p>
                 <p class="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-numnam-700">Exploring Flavours</p>
             </a>
             <a href="{{ route('store.products', ['age' => '8-12']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
                 <h3 class="text-base font-semibold text-slate-900">Stage 3</h3>
-                <p class="mt-1 text-sm text-slate-600">8–12 months</p>
+                <p class="mt-1 text-sm text-slate-600">8â€“12 months</p>
                 <p class="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-numnam-700">Textured Meals</p>
             </a>
             <a href="{{ route('store.products', ['age' => '12+']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">

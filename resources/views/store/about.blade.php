@@ -1,4 +1,4 @@
-@extends('store.layouts.app')
+﻿@extends('store.layouts.app')
 
 @section('title', 'NumNam - About Us')
 @section('meta_description', 'Learn about NumNam, our brand story, mission, vision, and the trust we have built with families seeking clean-label baby nutrition.')
@@ -79,7 +79,7 @@ $trustHighlights = [
 @section('content')
 <section class="px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
     <div class="mx-auto max-w-7xl">
-        <div class="overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-[#fffaf4] via-white to-[#fff5ea] px-6 py-10 shadow-soft sm:px-10 lg:px-14 lg:py-14">
+        <div class="overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-[#fff5f8] via-white to-[#fff5ea] px-6 py-10 shadow-soft sm:px-10 lg:px-14 lg:py-14">
             <div class="max-w-3xl">
                 <span class="inline-flex rounded-full border border-numnam-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-numnam-700">About NumNam</span>
                 <h1 class="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">From clinical insight to a trusted everyday feeding brand</h1>

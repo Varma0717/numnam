@@ -6,18 +6,31 @@ module.exports = {
     ],
     theme: {
         extend: {
+            fontFamily: {
+                sans: ['Poppins', 'sans-serif'],
+            },
             colors: {
                 numnam: {
-                    50: '#fff8f1',
-                    100: '#feecd8',
-                    200: '#fcd5aa',
-                    300: '#f9b977',
-                    400: '#f59a4c',
-                    500: '#f2812d',
-                    600: '#e36521',
-                    700: '#bc4b1d',
-                    800: '#963c20',
-                    900: '#79331d',
+                    50: '#fff5f8',
+                    100: '#ffe2ec',
+                    200: '#fcc3d4',
+                    300: '#fea0b4',
+                    400: '#fe7d94',
+                    500: '#fd6772',
+                    600: '#fc5d4d',
+                    700: '#e04030',
+                    800: '#bc2e1f',
+                    900: '#961e12',
+                },
+                pastel: {
+                    pink: '#fe7d94',
+                    yellow: '#fecd26',
+                    lavender: '#b3b7ec',
+                    green: '#4c760e',
+                    coral: '#fc5d4d',
+                    cyan: '#60d5d8',
+                    mint: '#8cd9bf',
+                    cream: '#f1dbc0',
                 },
             },
             boxShadow: {

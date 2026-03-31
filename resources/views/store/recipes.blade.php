@@ -1,13 +1,13 @@
-@extends('store.layouts.app')
+﻿@extends('store.layouts.app')
 
 @section('title', 'NumNam - Recipes & Nutrition Tips')
 @section('meta_description', 'Simple, stage-aware recipes and feeding tips for infants and toddlers.')
 
 @section('content')
 <section class="section pb-8 pt-4 sm:pt-8">
-    <div class="relative overflow-hidden rounded-3xl border border-slate-200/90 bg-gradient-to-br from-[#fffaf4] via-white to-[#fff3e6] px-6 py-10 sm:px-10 lg:px-12">
+    <div class="relative overflow-hidden rounded-3xl border border-slate-200/90 bg-gradient-to-br from-[#fff5f8] via-white to-[#eef9f6] px-6 py-10 sm:px-10 lg:px-12">
         <div class="pointer-events-none absolute -left-16 -top-20 h-56 w-56 rounded-full bg-numnam-200/45 blur-3xl"></div>
-        <div class="pointer-events-none absolute -bottom-20 -right-16 h-56 w-56 rounded-full bg-orange-100/65 blur-3xl"></div>
+        <div class="pointer-events-none absolute -bottom-20 -right-16 h-56 w-56 rounded-full bg-pastel-mint/65 blur-3xl"></div>
         <div class="relative max-w-3xl">
             <span class="inline-flex w-fit rounded-full border border-numnam-200 bg-white/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-numnam-700">Recipes</span>
             <h1 class="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">Infant nutrition recipes and practical feeding tips</h1>
@@ -71,7 +71,7 @@
                     <li class="flex gap-3"><span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-numnam-100 text-xs font-bold text-numnam-700">1</span>Peel and chop carrot into small chunks.</li>
                     <li class="flex gap-3"><span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-numnam-100 text-xs font-bold text-numnam-700">2</span>Steam until very soft (about 10 minutes).</li>
                     <li class="flex gap-3"><span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-numnam-100 text-xs font-bold text-numnam-700">3</span>Blend with a little water until smooth.</li>
-                    <li class="flex gap-3"><span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-numnam-100 text-xs font-bold text-numnam-700">4</span>Serve warm and fresh — spoon-friendly consistency.</li>
+                    <li class="flex gap-3"><span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-numnam-100 text-xs font-bold text-numnam-700">4</span>Serve warm and fresh â€” spoon-friendly consistency.</li>
                 </ol>
             </div>
         </div>
