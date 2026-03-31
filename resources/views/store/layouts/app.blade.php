@@ -79,9 +79,6 @@
     <a href="#main-content" class="skip-link">Skip to content</a>
 
     <div class="page-shell">
-        {{-- Announcement Bar --}}
-        @include('store.partials.announcement-bar')
-
         @include('store.partials.header')
 
         <main id="main-content" class="page" role="main">

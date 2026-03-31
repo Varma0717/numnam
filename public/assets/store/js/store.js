@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ====== First-Time Discount Popup ====== */
   const discountPopup = document.getElementById('discountPopup');
   if (discountPopup) {
-    const popupDismissKey = 'numnam_discount_popup_dismissed_v1';
+    const popupDismissKey = 'numnam_discount_popup_dismissed_v2';
     const dismissButtons = discountPopup.querySelectorAll('[data-discount-close]');
     const copyBtn = discountPopup.querySelector('[data-copy-discount]');
     const codeNode = discountPopup.querySelector('#discountCode');
