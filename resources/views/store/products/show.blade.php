@@ -2,10 +2,10 @@
 
 @php
 $productPlaceholders = [
-asset('assets/images/product_1.png'),
-asset('assets/images/product_2.png'),
-asset('assets/images/product_3.png'),
-asset('assets/images/product_4.png'),
+asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'),
+asset('assets/images/Puffs/Tomaty%20Pumpos/front.jpg'),
+asset('assets/images/Purees/brocco%20pop%203.png'),
+asset('assets/images/Purees/mangy%20chewy%203.png'),
 ];
 $mainPlaceholder = $productPlaceholders[$product->id % count($productPlaceholders)];
 @endphp
@@ -99,6 +99,8 @@ $mainPlaceholder = $productPlaceholders[$product->id % count($productPlaceholder
                 <button class="btn btn-primary" type="submit" {{ $product->stock <= 0 ? 'disabled' : '' }}>Add to Cart</button>
                 <a class="btn btn-secondary" href="{{ route('store.checkout') }}">Buy Now</a>
             </form>
+
+            <x-store.social-proof customers="10,000+" rating="4.8" />
 
             @auth
             <form method="POST" action="{{ route('store.wishlist.toggle', $product) }}" class="wishlist-action">
@@ -251,10 +253,19 @@ $mainPlaceholder = $productPlaceholders[$product->id % count($productPlaceholder
                     @csrf
                     <button class="btn-primary" type="submit">Add to Cart</button>
                 </form>
+                <x-store.social-proof customers="10,000+" rating="4.8" compact="true" />
             </div>
         </article>
         @endforeach
     </div>
 </section>
+@endif
+
+@if(($recentlyViewedProducts ?? collect())->isNotEmpty())
+<x-store.product-showcase
+    title="Recently Viewed"
+    subtitle="A quick way to revisit products you looked at recently."
+    :products="$recentlyViewedProducts"
+    empty-text="Your recently viewed products will appear here." />
 @endif
 @endsection

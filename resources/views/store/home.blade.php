@@ -27,60 +27,162 @@ $trustCards = [
 ],
 ];
 
-$productPlaceholders = [
-asset('assets/images/product_1.png'),
-asset('assets/images/product_2.png'),
-asset('assets/images/product_3.png'),
-asset('assets/images/product_4.png'),
+$whyChooseUsBenefits = [
+[
+'icon' => 'truck',
+'title' => 'Fast Delivery',
+'description' => 'Quick dispatch and dependable delivery across major cities.',
+],
+[
+'icon' => 'lock',
+'title' => 'Secure Payment',
+'description' => 'Protected checkout with encrypted transactions and trusted gateways.',
+],
+[
+'icon' => 'badge',
+'title' => 'Quality Products',
+'description' => 'Carefully sourced products with strict quality checks at every step.',
+],
+[
+'icon' => 'refresh',
+'title' => 'Easy Returns',
+'description' => 'Hassle-free returns with responsive support when plans change.',
+],
+];
+
+$customerReviews = [
+[
+'name' => 'Ananya Reddy',
+'rating' => 5,
+'comment' => 'NumNam has made meal planning so much easier. My baby loves the textures and I love the clean ingredients.',
+],
+[
+'name' => 'Rohit Sharma',
+'rating' => 5,
+'comment' => 'Fast delivery and consistent quality every time. The subscription option is super convenient for busy parents.',
+],
+[
+'name' => 'Megha Patel',
+'rating' => 4,
+'comment' => 'Great variety and transparent labels. Support team is quick to help when we have questions.',
+],
+[
+'name' => 'Karan & Nisha',
+'rating' => 5,
+'comment' => 'We switched to NumNam recently and saw a big improvement in our little one\'s mealtime routine.',
+],
+];
+
+$averageCustomerRating = 4.8;
+
+$userGeneratedContent = [
+[
+'image' => asset('assets/images/Purees/appi%20pooch%201.png'),
+'handle' => '@ananya.parents',
+'caption' => 'Our breakfast routine is finally stress-free. Baby actually finishes the bowl.',
+],
+[
+'image' => asset('assets/images/Purees/berry%20swush%201.png'),
+'handle' => '@littlebiteswithriya',
+'caption' => 'A clean-label option we feel good about keeping stocked every week.',
+],
+[
+'image' => asset('assets/images/Purees/brocco%20pop%201.png'),
+'handle' => '@mealtimesbymegha',
+'caption' => 'Texture progression feels so much easier when the products are built by stage.',
+],
+[
+'image' => asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'),
+'handle' => '@raisingwithrohit',
+'caption' => 'Fast delivery and zero guesswork. Exactly what busy parents need.',
+],
+[
+'image' => asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'),
+'handle' => '@numnam.family',
+'caption' => 'Loved for travel days, daycare packing, and everything in between.',
+],
+[
+'image' => asset('assets/images/Purees/mangy%20chewy%201.png'),
+'handle' => '@snacktimewithtara',
+'caption' => 'Parents approve the ingredient list. Kids approve the taste.',
+],
+];
+
+$heroHighlights = [
+[
+'title' => 'Doctor-Founded',
+'description' => 'Nutritional thinking shaped by real pediatric insight.',
+],
+[
+'title' => 'Stage-Wise Choices',
+'description' => 'Products built for each feeding milestone and age range.',
+],
+[
+'title' => 'Clean-Label Convenience',
+'description' => 'Transparent ingredients with easy delivery for busy families.',
+],
 ];
 @endphp
 
-<section class="hero-slider in-view">
-    <div class="hero-slide-track" data-hero-track>
-        <article class="hero-slide" style="background-image:url('{{ asset('assets/images/hero.jpg') }}');">
-            <div class="hero-slide-overlay">
-                <div class="hero-slide-copy container-xxl px-0">
-                    <span class="kicker">NumNam Nutrition</span>
-                    <h1>{{ $homepageSections['hero_title'] ?? 'Smart baby nutrition, delivered with parent-friendly convenience.' }}</h1>
-                    <p>{{ $homepageSections['hero_subtitle'] ?? 'Discover stage-wise foods, subscriptions, and transparent ingredients built for modern families.' }}</p>
-                    <div class="hero-actions d-flex flex-wrap gap-2">
-                        <a class="btn btn-primary" href="{{ route('store.products') }}">Shop Products</a>
-                        <a class="btn btn-secondary" href="{{ route('store.pricing') }}">Build Subscription</a>
+<section class="hero in-view relative isolate overflow-hidden px-4 pb-14 pt-12 sm:px-6 lg:px-8 lg:pb-20 lg:pt-16">
+    <div class="mx-auto max-w-7xl">
+        <article class="relative overflow-hidden rounded-3xl border border-white/40 bg-gradient-to-br from-[#fff9f2] via-white to-[#fff3e6] px-6 py-10 shadow-soft sm:px-10 sm:py-14 lg:px-14 lg:py-16">
+            <div class="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-numnam-200/45 blur-3xl sm:h-72 sm:w-72"></div>
+            <div class="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-orange-100/65 blur-3xl sm:h-72 sm:w-72"></div>
+
+            <div class="relative z-10 max-w-2xl">
+                <p class="mb-4 inline-flex rounded-full border border-numnam-200 bg-white/85 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-numnam-700">
+                    NumNam Nutrition
+                </p>
+                <h1 class="text-balance text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
+                    {{ $homepageSections['hero_title'] ?? 'Shop clean-label, stage-wise baby nutrition made for modern families.' }}
+                </h1>
+                <p class="mt-4 max-w-xl text-base leading-relaxed text-slate-600 sm:mt-5 sm:text-lg">
+                    {{ $homepageSections['hero_subtitle'] ?? 'NumNam offers age-appropriate baby foods, practical subscriptions, and ingredient transparency so parents can choose with confidence and feed with ease.' }}
+                </p>
+
+                <div class="mt-6 grid gap-3 sm:grid-cols-3">
+                    @foreach($heroHighlights as $highlight)
+                    <div class="rounded-2xl border border-white/70 bg-white/80 px-4 py-3 shadow-sm backdrop-blur-sm">
+                        <p class="text-sm font-semibold text-slate-900">{{ $highlight['title'] }}</p>
+                        <p class="mt-1 text-xs leading-relaxed text-slate-600">{{ $highlight['description'] }}</p>
                     </div>
+                    @endforeach
                 </div>
-            </div>
-        </article>
-        <article class="hero-slide" style="background-image:url('{{ asset('assets/images/hero_1.jpg') }}');">
-            <div class="hero-slide-overlay">
-                <div class="hero-slide-copy container-xxl px-0">
-                    <span class="kicker">Stage-Wise Growth</span>
-                    <h2>Nutrition crafted for each milestone.</h2>
-                    <p>From first tastes to self-feeding confidence, every bite is made to support healthy development.</p>
-                </div>
-            </div>
-        </article>
-        <article class="hero-slide" style="background-image:url('{{ asset('assets/images/background_img.jpg') }}');">
-            <div class="hero-slide-overlay">
-                <div class="hero-slide-copy container-xxl px-0">
-                    <span class="kicker">Parent Friendly</span>
-                    <h2>Fast delivery, clean labels, no mealtime stress.</h2>
-                    <p>Enjoy predictable subscriptions, transparent ingredients, and support built for modern families.</p>
-                </div>
-            </div>
-        </article>
-    </div>
 
-    <div class="hero-slider-controls" aria-label="Hero slider controls">
-        <button type="button" class="hero-nav prev" data-hero-prev aria-label="Previous slide">&#10094;</button>
-        <button type="button" class="hero-nav next" data-hero-next aria-label="Next slide">&#10095;</button>
-    </div>
-
-    <div class="hero-slider-pagination" data-hero-pagination>
-        <button type="button" class="hero-dot is-active" data-hero-dot="0" aria-label="Go to slide 1"></button>
-        <button type="button" class="hero-dot" data-hero-dot="1" aria-label="Go to slide 2"></button>
-        <button type="button" class="hero-dot" data-hero-dot="2" aria-label="Go to slide 3"></button>
+                <div class="mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
+                    <a class="hero-cta" href="{{ route('store.products') }}">Shop Products</a>
+                    <a class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-400 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-300" href="{{ route('store.pricing') }}">Build Subscription</a>
+                </div>
+            </div>
+        </article>
     </div>
 </section>
+
+<x-store.why-choose-us
+    title="Why Choose Us"
+    subtitle="Everything you need for confident shopping, from checkout to delivery."
+    :benefits="$whyChooseUsBenefits" />
+
+@if($topCategories->isNotEmpty())
+<section class="px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <div class="mx-auto max-w-7xl">
+        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <h2 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Shop Top Categories</h2>
+                <p class="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">Browse our most-loved categories with dedicated landing pages and products tailored to every stage.</p>
+            </div>
+            <a href="{{ route('store.products') }}" class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-400 hover:text-slate-900">View all products</a>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            @foreach($topCategories as $category)
+            <x-store.category-card :category="$category" />
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
 
 <section class="section ticker-strip">
     <div class="ticker-track">
@@ -211,48 +313,25 @@ asset('assets/images/product_4.png'),
     </div>
 </section>
 
-<section class="section animate-fade-up">
-    <h2>Our Best Sellers</h2>
-    @if($featuredProducts->isEmpty())
-    <p class="meta">No featured products yet.</p>
-    @else
-    <div class="product-carousel" data-product-carousel>
-        <button type="button" class="product-carousel-btn" data-carousel-prev aria-label="Previous products">&#10094;</button>
-        <button type="button" class="product-carousel-btn" data-carousel-next aria-label="Next products">&#10095;</button>
-        <div class="product-carousel-viewport">
-            <div class="product-carousel-track" data-carousel-track>
-                @foreach($featuredProducts as $product)
-                @php($placeholderImage = $productPlaceholders[$loop->index % count($productPlaceholders)])
-                <div class="product-carousel-item">
-                    <article class="card hover-up">
-                        <div class="media" style="background-image:url('{{ $placeholderImage }}'); background-size:cover;">
-                            @if($product->sale_price)
-                            <span class="badge-sale">-{{ round((1 - $product->sale_price / $product->price) * 100) }}%</span>
-                            @endif
-                        </div>
-                        <div class="card-body">
-                            <span class="kicker">{{ $product->age_group }}</span>
-                            <h4><a href="{{ route('store.product.show', $product) }}">{{ $product->name }}</a></h4>
-                            <p class="meta">{{ \Illuminate\Support\Str::limit($product->short_description ?: $product->description, 90) }}</p>
-                            <div class="price">
-                                <strong>Rs {{ number_format($product->sale_price ?: $product->price, 0) }}</strong>
-                                @if($product->sale_price)
-                                <del>Rs {{ number_format($product->price, 0) }}</del>
-                                @endif
-                            </div>
-                            <form method="POST" action="{{ route('store.cart.add', $product) }}" class="store-actions">
-                                @csrf
-                                <button class="btn btn-primary" type="submit">Add to Cart</button>
-                            </form>
-                        </div>
-                    </article>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-    @endif
-</section>
+<x-store.product-showcase
+    title="Best Sellers"
+    subtitle="The products families reorder most often for quality, convenience, and consistent results."
+    :products="$bestSellerProducts"
+    empty-text="Best sellers will appear here once orders start coming in." />
+
+<x-store.product-showcase
+    title="Featured Products"
+    subtitle="Handpicked standout products from our latest collection, designed to make shopping easier."
+    :products="$featuredProducts"
+    empty-text="Featured products will appear here soon." />
+
+@if(($recentlyViewedProducts ?? collect())->isNotEmpty())
+<x-store.product-showcase
+    title="Recently Viewed"
+    subtitle="Pick up where you left off with the products you explored most recently."
+    :products="$recentlyViewedProducts"
+    empty-text="Your recently viewed products will appear here." />
+@endif
 
 {{-- How It Works --}}
 <section class="section animate-fade-up">
@@ -370,24 +449,14 @@ asset('assets/images/product_4.png'),
     </div>
 </section>
 
-<section class="section animate-fade-up">
-    <div style="text-align:center;margin-bottom:32px;">
-        <h2 style="margin:0 0 8px;">What Parents Say</h2>
-        <p class="meta" style="margin:0;">Real stories from families who've made NumNam part of their daily routine.</p>
-    </div>
-    <div class="store-grid three stagger-children">
-        @foreach($testimonials as $testimonial)
-        <article class="card testimonial-card">
-            <div class="card-body" style="display:flex;flex-direction:column;gap:12px;">
-                <div style="color:#f59e0b;font-size:18px;line-height:1;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:16px;line-height:1.75;margin:0;flex:1;">&ldquo;{{ $testimonial['quote'] }}&rdquo;</p>
-                <div style="display:flex;align-items:center;gap:10px;padding-top:8px;border-top:1px solid var(--line);">
-                    <div style="width:36px;height:36px;border-radius:50%;background:var(--brand-1);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;">{{ strtoupper(substr($testimonial['name'], 0, 1)) }}</div>
-                    <span class="meta" style="margin:0;font-weight:600;color:var(--body);">{{ $testimonial['name'] }}</span>
-                </div>
-            </div>
-        </article>
-        @endforeach
-    </div>
-</section>
+<x-store.user-generated-content
+    title="See NumNam In Real Homes"
+    subtitle="A clean, Instagram-style gallery using placeholder customer moments for now, ready to be replaced with real community content later."
+    :items="$userGeneratedContent" />
+
+<x-store.customer-reviews
+    title="Customer Reviews"
+    subtitle="Real feedback from parents who trust NumNam for everyday nutrition."
+    :average-rating="$averageCustomerRating"
+    :reviews="$customerReviews" />
 @endsection

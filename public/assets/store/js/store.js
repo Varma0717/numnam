@@ -1,5 +1,79 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  const safeStorage = {
+    get(key) {
+      try {
+        return window.localStorage.getItem(key);
+      } catch (_) {
+        return null;
+      }
+    },
+    set(key, value) {
+      try {
+        window.localStorage.setItem(key, value);
+      } catch (_) {
+        // Ignore storage write failures (private mode, disabled storage, etc.)
+      }
+    }
+  };
+
+  /* ====== Top Offer Banner ====== */
+  const announcementBar = document.getElementById('announcementBar');
+  if (announcementBar) {
+    const announcementKey = announcementBar.dataset.announcementKey || 'numnam_announcement_closed_v1';
+    const closeAnnouncementBtn = announcementBar.querySelector('[data-announcement-close]');
+
+    if (safeStorage.get(announcementKey) === '1') {
+      announcementBar.remove();
+    } else if (closeAnnouncementBtn) {
+      closeAnnouncementBtn.addEventListener('click', () => {
+        safeStorage.set(announcementKey, '1');
+        announcementBar.remove();
+      });
+    }
+  }
+
+  /* ====== First-Time Discount Popup ====== */
+  const discountPopup = document.getElementById('discountPopup');
+  if (discountPopup) {
+    const popupDismissKey = 'numnam_discount_popup_dismissed_v1';
+    const dismissButtons = discountPopup.querySelectorAll('[data-discount-close]');
+    const copyBtn = discountPopup.querySelector('[data-copy-discount]');
+    const codeNode = discountPopup.querySelector('#discountCode');
+
+    const closePopup = () => {
+      discountPopup.classList.add('hidden');
+      safeStorage.set(popupDismissKey, '1');
+    };
+
+    if (safeStorage.get(popupDismissKey) !== '1') {
+      window.setTimeout(() => {
+        discountPopup.classList.remove('hidden');
+      }, 1400);
+    }
+
+    dismissButtons.forEach((btn) => {
+      btn.addEventListener('click', closePopup);
+    });
+
+    if (copyBtn && codeNode) {
+      copyBtn.addEventListener('click', async () => {
+        const code = codeNode.textContent ? codeNode.textContent.trim() : '';
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code);
+          copyBtn.textContent = 'Copied';
+          window.setTimeout(() => {
+            copyBtn.textContent = 'Copy Code';
+          }, 1800);
+        } catch (_) {
+          copyBtn.textContent = code;
+        }
+      });
+    }
+  }
+
   /* ====== Breadcrumb Position (Below Banner) ====== */
   const mainContent = document.getElementById('main-content');
   if (mainContent) {
@@ -114,6 +188,133 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !searchOverlay.hidden) searchOverlay.hidden = true;
+    });
+  }
+
+  /* ====== Search Autocomplete ====== */
+  const searchForms = document.querySelectorAll('[data-search-form]');
+  if (searchForms.length) {
+    const formatCurrency = new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0,
+    });
+
+    const escapeHtml = (value) => String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+
+    const debounce = (fn, wait) => {
+      let timer = null;
+      return (...args) => {
+        if (timer) window.clearTimeout(timer);
+        timer = window.setTimeout(() => fn(...args), wait);
+      };
+    };
+
+    searchForms.forEach((form) => {
+      const input = form.querySelector('[data-search-input]');
+      const resultsBox = form.querySelector('[data-search-results]');
+      const suggestUrl = form.dataset.suggestUrl;
+
+      if (!input || !resultsBox || !suggestUrl) return;
+
+      let latestQuery = '';
+      let controller = null;
+
+      const hideResults = () => {
+        resultsBox.classList.add('hidden');
+      };
+
+      const renderResults = (items, query) => {
+        if (!items.length) {
+          resultsBox.innerHTML = `<p class="search-suggest-empty">No products found for "${escapeHtml(query)}".</p>`;
+          resultsBox.classList.remove('hidden');
+          return;
+        }
+
+        const html = items.map((item) => {
+          const price = Number(item.price || 0);
+          const rating = escapeHtml(item.rating || '4.8');
+          const reviewCount = Number(item.reviewCount || 0).toLocaleString('en-IN');
+
+          return `
+            <a href="${escapeHtml(item.url || '#')}" class="search-suggest-item" data-search-suggest-link>
+              <span class="truncate font-medium text-slate-800">${escapeHtml(item.name || '')}</span>
+              <span class="shrink-0 text-xs text-slate-500">${formatCurrency.format(price)} • ${rating}★ (${reviewCount})</span>
+            </a>
+          `;
+        }).join('');
+
+        resultsBox.innerHTML = html;
+        resultsBox.classList.remove('hidden');
+      };
+
+      const fetchSuggestions = async (query) => {
+        if (controller) controller.abort();
+        controller = new AbortController();
+
+        try {
+          const url = new URL(suggestUrl, window.location.origin);
+          url.searchParams.set('q', query);
+
+          const response = await fetch(url.toString(), {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' },
+            signal: controller.signal,
+          });
+
+          if (!response.ok) throw new Error('Suggestion request failed');
+
+          const payload = await response.json();
+          if (query !== latestQuery) return;
+
+          const items = Array.isArray(payload.items) ? payload.items : [];
+          renderResults(items, query);
+        } catch (error) {
+          if (error && error.name === 'AbortError') return;
+          if (query !== latestQuery) return;
+          renderResults([], query);
+        }
+      };
+
+      const handleInput = debounce(() => {
+        const query = input.value.trim();
+        latestQuery = query;
+
+        if (query.length < 2) {
+          resultsBox.innerHTML = '';
+          hideResults();
+          return;
+        }
+
+        fetchSuggestions(query);
+      }, 220);
+
+      input.addEventListener('input', handleInput);
+
+      input.addEventListener('focus', () => {
+        if (resultsBox.innerHTML.trim() && input.value.trim().length >= 2) {
+          resultsBox.classList.remove('hidden');
+        }
+      });
+
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') hideResults();
+      });
+
+      form.addEventListener('submit', hideResults);
+
+      form.addEventListener('click', (event) => {
+        if (event.target.closest('[data-search-suggest-link]')) hideResults();
+      });
+
+      document.addEventListener('click', (event) => {
+        if (!form.contains(event.target)) hideResults();
+      });
     });
   }
 

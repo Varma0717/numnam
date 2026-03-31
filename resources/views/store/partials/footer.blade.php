@@ -20,10 +20,7 @@
         <div class="footer-col footer-brand-col">
             <div class="footer-logo">
                 <span class="brand-dot">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M11 20A7 7 0 0 1 9.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-3.5 10-10 10Z" />
-                        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
-                    </svg>
+                    <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="22" height="22" loading="lazy">
                 </span>
                 <strong>NumNam</strong>
             </div>
@@ -32,10 +29,20 @@
                 <p class="meta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                         <polyline points="22,6 12,13 2,6" />
-                    </svg> info@numnam.com</p>
+                    </svg>
+                    <a href="mailto:info@numnam.com" class="hover:text-slate-900 transition-colors duration-200">info@numnam.com</a>
+                </p>
                 <p class="meta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
-                    </svg> +91-9014252278</p>
+                    </svg>
+                    <a href="tel:+919014252278" class="hover:text-slate-900 transition-colors duration-200">+91 90142 52278</a>
+                </p>
+                <p class="meta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 11.5A8.5 8.5 0 005.3 6.7 8.4 8.4 0 003.5 16.4L2 22l5.8-1.5A8.5 8.5 0 1021 11.5z" />
+                        <path d="M8.5 9.5c.2 1 1.1 2.4 2.1 3.4s2.4 1.9 3.4 2.1c.5.1 1-.1 1.3-.5l.8-1" />
+                    </svg>
+                    <a href="https://wa.me/919014252278" target="_blank" rel="noopener noreferrer" class="hover:text-slate-900 transition-colors duration-200">WhatsApp Support</a>
+                </p>
             </div>
             <div class="box-socials-footer">
                 <a href="https://www.instagram.com/numnam_baby" target="_blank" rel="noopener noreferrer" aria-label="Instagram">

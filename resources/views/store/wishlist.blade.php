@@ -8,10 +8,10 @@
 
 @php
 $productPlaceholders = [
-asset('assets/images/product_1.png'),
-asset('assets/images/product_2.png'),
-asset('assets/images/product_3.png'),
-asset('assets/images/product_4.png'),
+asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'),
+asset('assets/images/Puffs/Tomaty%20Pumpos/front.jpg'),
+asset('assets/images/Purees/mangy%20chewy%201.png'),
+asset('assets/images/Purees/brocco%20pop%201.png'),
 ];
 @endphp
 
@@ -50,6 +50,7 @@ asset('assets/images/product_4.png'),
                             </button>
                         </form>
                     </div>
+                    <x-store.social-proof customers="10,000+" rating="4.8" compact="true" />
                 </div>
             </article>
             @endif

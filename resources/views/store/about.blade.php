@@ -1,122 +1,191 @@
 @extends('store.layouts.app')
 
 @section('title', 'NumNam - About Us')
-@section('meta_description', 'Learn how NumNam was built by parents and doctors to make clean-label baby food safer and more practical for busy families.')
+@section('meta_description', 'Learn about NumNam, our brand story, mission, vision, and the trust we have built with families seeking clean-label baby nutrition.')
+
+@php
+$trustMetrics = [
+[
+'value' => '3+',
+'label' => 'Years Building Better Nutrition',
+],
+[
+'value' => '10,000+',
+'label' => 'Families Served',
+],
+[
+'value' => '15+',
+'label' => 'Stage-Wise Products',
+],
+[
+'value' => '4.8/5',
+'label' => 'Average Parent Rating',
+],
+];
+
+$brandPillars = [
+[
+'title' => 'Brand Story',
+'description' => 'NumNam started with a simple question: why should parents have to choose between convenience and trust when feeding their children?',
+],
+[
+'title' => 'Mission',
+'description' => 'To make stage-appropriate, clean-label baby nutrition easier to access, easier to understand, and easier to trust.',
+],
+[
+'title' => 'Vision',
+'description' => 'To become the most trusted nutrition partner for modern families from first tastes to confident self-feeding.',
+],
+];
+
+$trustHighlights = [
+[
+'title' => 'Clinical Thinking',
+'description' => 'Guided by pediatric and nutrition expertise so every product supports the needs of growing children.',
+'icon' => 'shield',
+],
+[
+'title' => 'Clean Ingredient Standards',
+'description' => 'No unnecessary additives, no hidden fillers, and transparent labels that parents can read in seconds.',
+'icon' => 'leaf',
+],
+[
+'title' => 'Built For Real Families',
+'description' => 'Designed for busy schedules, changing routines, and the realities of everyday parenting.',
+'icon' => 'heart',
+],
+];
+@endphp
+
+@section('structured_data')
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "AboutPage",
+        "name": "About NumNam",
+        "url": "{{ route('store.about') }}",
+        "description": "Learn about NumNam, our story, mission, vision, and approach to clean-label baby nutrition.",
+        "mainEntity": {
+            "@type": "Organization",
+            "name": "NumNam",
+            "url": "{{ url('/') }}",
+            "email": "info@numnam.com",
+            "telephone": "+91-9014252278"
+        }
+    }
+</script>
+@endsection
 
 @section('content')
-<section class="hero section in-view">
-    <div>
-        <span class="kicker">Our Story</span>
-        <h1>From clinical care to everyday baby nutrition</h1>
-        <p>NumNam was built by parents and doctors to make clean-label baby food easier, safer, and more practical for busy families.</p>
+<section class="px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+    <div class="mx-auto max-w-7xl">
+        <div class="overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-[#fffaf4] via-white to-[#fff5ea] px-6 py-10 shadow-soft sm:px-10 lg:px-14 lg:py-14">
+            <div class="max-w-3xl">
+                <span class="inline-flex rounded-full border border-numnam-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-numnam-700">About NumNam</span>
+                <h1 class="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">From clinical insight to a trusted everyday feeding brand</h1>
+                <p class="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">NumNam was built to give modern families a more confident way to feed their little ones: clean-label products, transparent ingredients, and practical formats shaped by real parenting needs.</p>
+            </div>
+
+            <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                @foreach($trustMetrics as $metric)
+                <article class="rounded-2xl border border-white/70 bg-white/90 p-5 shadow-sm">
+                    <p class="text-2xl font-bold text-slate-900 sm:text-3xl">{{ $metric['value'] }}</p>
+                    <p class="mt-1 text-sm leading-relaxed text-slate-600">{{ $metric['label'] }}</p>
+                </article>
+                @endforeach
+            </div>
+        </div>
     </div>
 </section>
 
-<section class="section animate-fade-up">
-    <div class="about-mission-grid">
-        <div>
-            <h2>Why NumNam Exists</h2>
-            <p class="about-text">Our founders experienced how hard it is to find truly transparent baby food options with balanced taste and nutrition. NumNam combines pediatric thinking, practical ingredients, and age-aware formats so feeding becomes a joyful routine instead of a daily struggle.</p>
-            <p class="about-text">Every product is developed with clinical nutrition input, sourced with clean-label standards, and designed for real mealtime scenarios — from first tastes to self-feeding toddlers.</p>
+<section class="px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <div class="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+        <article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+            <h2 class="text-2xl font-bold tracking-tight text-slate-900">Our Brand Story</h2>
+            <p class="mt-4 text-base leading-relaxed text-slate-600">NumNam began with a problem our founders knew personally: many parents want food that is genuinely nutritious and transparent, but the market often forces a compromise between quality, convenience, and trust. We believed there had to be a better standard.</p>
+            <p class="mt-4 text-base leading-relaxed text-slate-600">So we built NumNam around three simple principles: ingredient clarity, stage-appropriate nutrition, and parent-friendly convenience. Every product is designed to reduce decision fatigue and bring more confidence to mealtime.</p>
+            <p class="mt-4 text-base leading-relaxed text-slate-600">Today, NumNam continues to grow with families who want thoughtfully made products backed by real nutritional intent rather than marketing shortcuts.</p>
+        </article>
+
+        <div class="grid gap-4">
+            @foreach($brandPillars as $pillar)
+            <article class="rounded-3xl border border-slate-200 bg-slate-50/70 p-6 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-900">{{ $pillar['title'] }}</h2>
+                <p class="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">{{ $pillar['description'] }}</p>
+            </article>
+            @endforeach
         </div>
-        <div class="about-values stagger-children">
-            <div class="about-value-card">
-                <span class="about-value-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    </div>
+</section>
+
+<section class="px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <div class="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
+        <div class="max-w-2xl">
+            <h2 class="text-2xl font-bold tracking-tight text-slate-900">Why Families Trust NumNam</h2>
+            <p class="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">Our approach combines nutritional rigor with practical product design so parents get clarity, consistency, and confidence in every order.</p>
+        </div>
+
+        <div class="mt-8 grid gap-4 lg:grid-cols-3">
+            @foreach($trustHighlights as $item)
+            <article class="rounded-2xl border border-slate-200 bg-slate-50/60 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-numnam-200 hover:bg-white hover:shadow-md">
+                <span class="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-numnam-200 bg-white text-numnam-700" aria-hidden="true">
+                    @switch($item['icon'])
+                    @case('shield')
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z" />
                     </svg>
-                </span>
-                <div>
-                    <h4>Safety First</h4>
-                    <p class="meta">Every batch tested for purity and age-appropriate composition.</p>
-                </div>
-            </div>
-            <div class="about-value-card">
-                <span class="about-value-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    @break
+                    @case('leaf')
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M6 21c6 0 12-6 12-12V3h-6C6 3 3 6 3 12s3 9 3 9z" />
                     </svg>
-                </span>
-                <div>
-                    <h4>Clean Ingredients</h4>
-                    <p class="meta">No preservatives, no refined sugar, no artificial flavors.</p>
-                </div>
-            </div>
-            <div class="about-value-card">
-                <span class="about-value-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-                        <line x1="9" y1="9" x2="9.01" y2="9" />
-                        <line x1="15" y1="9" x2="15.01" y2="9" />
+                    @break
+                    @default
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
                     </svg>
+                    @endswitch
                 </span>
-                <div>
-                    <h4>Parent-Friendly</h4>
-                    <p class="meta">Designed for real families, busy mornings, and fuss-free feeding.</p>
+                <h3 class="text-lg font-semibold text-slate-900">{{ $item['title'] }}</h3>
+                <p class="mt-2 text-sm leading-relaxed text-slate-600">{{ $item['description'] }}</p>
+            </article>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+<section class="px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <div class="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
+        <h2 class="text-2xl font-bold tracking-tight text-slate-900">Meet The Founders</h2>
+        <p class="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">NumNam is guided by people who understand both the science of nutrition and the realities of modern parenting.</p>
+
+        <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            @foreach($founders as $founder)
+            <article class="rounded-2xl border border-slate-200 bg-slate-50/60 p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-md">
+                <div class="flex items-start gap-4">
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-numnam-600 text-sm font-bold text-white">{{ strtoupper(substr($founder['name'], 0, 1) . substr(strstr($founder['name'], ' '), 1, 1)) }}</div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900">{{ $founder['name'] }}</h3>
+                        <p class="mt-1 inline-flex rounded-full bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-numnam-700">{{ $founder['role'] }}</p>
+                        <p class="mt-3 text-sm leading-relaxed text-slate-600">{{ $founder['bio'] }}</p>
+                    </div>
                 </div>
-            </div>
+            </article>
+            @endforeach
         </div>
-    </div>
 </section>
 
-{{-- NumNam Journey Timeline --}}
-<section class="section animate-fade-up">
-    <h2>Our Journey</h2>
-    <div class="journey-timeline stagger-children">
-        <div class="journey-step animate-fade-up">
-            <span class="journey-year">2022</span>
-            <div class="journey-content">
-                <h4>The Idea</h4>
-                <p class="meta">Frustrated by the gap between clinical nutrition and what's actually available on shelves, our founders set out to build something better.</p>
-            </div>
+<section class="px-4 pb-14 pt-8 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-slate-900 px-6 py-8 text-white shadow-soft sm:px-8 lg:flex lg:items-center lg:justify-between lg:gap-8">
+        <div class="max-w-2xl">
+            <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">Building trust into every stage of feeding</h2>
+            <p class="mt-3 text-sm leading-relaxed text-slate-300 sm:text-base">Explore stage-wise products developed to bring more confidence, clarity, and convenience to your family routine.</p>
         </div>
-        <div class="journey-step animate-fade-up">
-            <span class="journey-year">2023</span>
-            <div class="journey-content">
-                <h4>First Recipes</h4>
-                <p class="meta">Over 50 recipe iterations with pediatric dietitians to nail taste, texture, and age-appropriate nutrition in every pack.</p>
-            </div>
+        <div class="mt-6 flex flex-wrap gap-3 lg:mt-0">
+            <a class="hero-cta" href="{{ route('store.products') }}">Shop Products</a>
+            <a class="inline-flex items-center justify-center rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/45 hover:bg-white/10" href="{{ route('store.contact') }}">Get in Touch</a>
         </div>
-        <div class="journey-step animate-fade-up">
-            <span class="journey-year">2024</span>
-            <div class="journey-content">
-                <h4>Launch Day</h4>
-                <p class="meta">NumNam goes live — stage-based baby food designed for real Indian families, shipped fresh across the country.</p>
-            </div>
-        </div>
-        <div class="journey-step animate-fade-up">
-            <span class="journey-year">Now</span>
-            <div class="journey-content">
-                <h4>Growing Together</h4>
-                <p class="meta">New formats, new flavors, and a growing community of parents who trust clean-label choices for their little ones.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="section animate-fade-up">
-    <h2>Meet The Founders</h2>
-    <div class="store-grid three stagger-children">
-        @foreach($founders as $founder)
-        <article class="card founder-card hover-up">
-            <div class="founder-avatar">{{ strtoupper(substr($founder['name'], 0, 1) . substr(strstr($founder['name'], ' '), 1, 1)) }}</div>
-            <div class="card-body founder-body">
-                <h4>{{ $founder['name'] }}</h4>
-                <span class="chip">{{ $founder['role'] }}</span>
-                <p class="meta founder-bio">{{ $founder['bio'] }}</p>
-            </div>
-        </article>
-        @endforeach
-    </div>
-</section>
-
-<section class="section animate-fade-up about-cta-section">
-    <h3>Ready to try NumNam?</h3>
-    <p class="meta">Discover stage-wise nutrition made with ingredients you can trust.</p>
-    <div class="hero-actions about-cta-actions">
-        <a class="btn btn-primary" href="{{ route('store.products') }}">Shop Products</a>
-        <a class="btn btn-secondary" href="{{ route('store.contact') }}">Get in Touch</a>
     </div>
 </section>
 @endsection

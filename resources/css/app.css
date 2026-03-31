@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .hero-cta {
+        @apply inline-flex items-center justify-center rounded-full bg-numnam-600 px-6 py-3 text-sm font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-numnam-700 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-numnam-300;
+    }
+
+    .social-proof-strip {
+        @apply mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-600;
+    }
+
+    .social-proof-strip-compact {
+        @apply mt-2 gap-x-3 text-xs;
+    }
+
+    .social-proof-item {
+        @apply inline-flex items-center gap-1.5;
+    }
+
+    .social-proof-icon {
+        @apply h-4 w-4 text-numnam-600;
+    }
+
+    .social-proof-stars {
+        @apply text-xs tracking-[0.12em] text-amber-400;
+    }
+
+    .search-suggest-box {
+        @apply absolute left-0 right-0 top-full z-30 mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl;
+    }
+
+    .search-overlay-form,
+    .mobile-search-form {
+        @apply relative;
+    }
+
+    .search-suggest-item {
+        @apply flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3 text-sm text-slate-700 transition-colors duration-200 hover:bg-slate-50;
+    }
+
+    .search-suggest-item:last-child {
+        @apply border-b-0;
+    }
+
+    .search-suggest-empty {
+        @apply px-4 py-3 text-sm text-slate-500;
+    }
+}

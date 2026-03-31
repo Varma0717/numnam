@@ -19,6 +19,7 @@ use App\Models\Subscription;
 use App\Models\Wishlist;
 use App\Services\Commerce\DiscountService;
 use App\Services\Commerce\PaymentGatewayService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -37,11 +38,30 @@ class StorefrontController extends Controller
 
     public function home()
     {
+        $productCardQuery = fn() => Product::query()
+            ->with('category')
+            ->withCount('approvedReviews')
+            ->withAvg('approvedReviews', 'rating')
+            ->where('is_active', true);
+
+        $recentlyViewedProducts = $this->loadRecentlyViewedProducts(request());
+
         $featuredProducts = Product::query()
+            ->with('category')
+            ->withCount('approvedReviews')
+            ->withAvg('approvedReviews', 'rating')
             ->where('is_active', true)
             ->where('is_featured', true)
             ->latest('id')
-            ->take(8)
+            ->take(4)
+            ->get();
+
+        $bestSellerProducts = $productCardQuery()
+            ->withCount('orderItems')
+            ->orderByDesc('order_items_count')
+            ->orderByDesc('approved_reviews_avg_rating')
+            ->latest('id')
+            ->take(4)
             ->get();
 
         $plans = PricingPlan::query()
@@ -58,9 +78,11 @@ class StorefrontController extends Controller
 
         $topCategories = Category::query()
             ->where('is_active', true)
+            ->where('slug', '!=', 'all-products')
             ->withCount(['products' => fn($query) => $query->where('is_active', true)])
+            ->having('products_count', '>', 0)
             ->orderByDesc('products_count')
-            ->take(6)
+            ->take(4)
             ->get();
 
         $homepageSections = SiteSetting::query()
@@ -81,7 +103,7 @@ class StorefrontController extends Controller
             ['name' => 'Meera K.', 'quote' => 'Ingredients and nutrition information are very transparent.'],
         ];
 
-        return view('store.home', compact('featuredProducts', 'plans', 'latestBlogs', 'topCategories', 'homepageSections', 'trustHighlights', 'testimonials'));
+        return view('store.home', compact('featuredProducts', 'bestSellerProducts', 'recentlyViewedProducts', 'plans', 'latestBlogs', 'topCategories', 'homepageSections', 'trustHighlights', 'testimonials'));
     }
 
     public function products(Request $request)
@@ -113,11 +135,47 @@ class StorefrontController extends Controller
         return view('store.products.index', compact('products', 'categories'));
     }
 
-    public function product(Product $product)
+    public function searchSuggestions(Request $request): JsonResponse
+    {
+        $query = trim((string) $request->query('q', ''));
+        if ($query === '') {
+            return response()->json(['items' => []]);
+        }
+
+        $products = Product::query()
+            ->withCount('approvedReviews')
+            ->withAvg('approvedReviews', 'rating')
+            ->where('is_active', true)
+            ->where(function ($builder) use ($query) {
+                $builder->where('name', 'like', '%' . $query . '%')
+                    ->orWhere('short_description', 'like', '%' . $query . '%');
+            })
+            ->latest('id')
+            ->take(6)
+            ->get();
+
+        $items = $products->map(function (Product $product) {
+            return [
+                'name' => $product->name,
+                'url' => route('store.product.show', $product),
+                'price' => (int) ($product->sale_price ?: $product->price),
+                'rating' => number_format((float) ($product->approved_reviews_avg_rating ?? 4.8), 1),
+                'reviewCount' => (int) ($product->approved_reviews_count ?? 0),
+            ];
+        })->values();
+
+        return response()->json(['items' => $items]);
+    }
+
+    public function product(Request $request, Product $product)
     {
         abort_unless($product->is_active, 404);
 
+        $this->storeRecentlyViewedProduct($request, $product->id);
+
         $related = Product::query()
+            ->withCount('approvedReviews')
+            ->withAvg('approvedReviews', 'rating')
             ->where('is_active', true)
             ->where('id', '!=', $product->id)
             ->where('category_id', $product->category_id)
@@ -127,7 +185,73 @@ class StorefrontController extends Controller
 
         $gallery = collect($product->gallery ?: [])->filter()->values();
 
-        return view('store.products.show', compact('product', 'related', 'gallery'));
+        $recentlyViewedProducts = $this->loadRecentlyViewedProducts($request, $product->id, 4);
+
+        return view('store.products.show', compact('product', 'related', 'gallery', 'recentlyViewedProducts'));
+    }
+
+    public function category(Category $category)
+    {
+        abort_unless($category->is_active, 404);
+
+        $products = Product::query()
+            ->with('category')
+            ->where('is_active', true)
+            ->where('category_id', $category->id)
+            ->latest('id')
+            ->paginate(12);
+
+        $relatedCategories = Category::query()
+            ->where('is_active', true)
+            ->where('id', '!=', $category->id)
+            ->where('slug', '!=', 'all-products')
+            ->withCount(['products' => fn($query) => $query->where('is_active', true)])
+            ->having('products_count', '>', 0)
+            ->orderByDesc('products_count')
+            ->take(3)
+            ->get();
+
+        return view('store.categories.show', compact('category', 'products', 'relatedCategories'));
+    }
+
+    private function storeRecentlyViewedProduct(Request $request, int $productId, int $limit = 6): void
+    {
+        $recentIds = collect($request->session()->get('recently_viewed_products', []))
+            ->map(fn($id) => (int) $id)
+            ->reject(fn($id) => $id === $productId)
+            ->prepend($productId)
+            ->take($limit)
+            ->values()
+            ->all();
+
+        $request->session()->put('recently_viewed_products', $recentIds);
+    }
+
+    private function loadRecentlyViewedProducts(Request $request, ?int $excludeProductId = null, int $limit = 6): Collection
+    {
+        $recentIds = collect($request->session()->get('recently_viewed_products', []))
+            ->map(fn($id) => (int) $id)
+            ->when($excludeProductId, fn($ids) => $ids->reject(fn($id) => $id === $excludeProductId))
+            ->take($limit)
+            ->values();
+
+        if ($recentIds->isEmpty()) {
+            return collect();
+        }
+
+        $products = Product::query()
+            ->with('category')
+            ->withCount('approvedReviews')
+            ->withAvg('approvedReviews', 'rating')
+            ->where('is_active', true)
+            ->whereIn('id', $recentIds)
+            ->get()
+            ->keyBy('id');
+
+        return $recentIds
+            ->map(fn($id) => $products->get($id))
+            ->filter()
+            ->values();
     }
 
     public function pricing()

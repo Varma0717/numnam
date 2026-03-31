@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'NumNam – Doctor-Founded Baby Nutrition')</title>
+    <title>@yield('title', 'NumNam | Doctor-Founded Baby Nutrition')</title>
     <meta name="description" content="@yield('meta_description', 'NumNam delivers doctor-founded, clean-label baby nutrition with stage-wise foods, subscriptions and transparent ingredients for modern families.')">
     <meta name="keywords" content="baby food, baby nutrition, infant food, organic baby food, stage-wise nutrition, baby food subscription, NumNam">
     <meta name="author" content="NumNam">
@@ -15,20 +15,30 @@
     {{-- Open Graph --}}
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NumNam">
-    <meta property="og:title" content="@yield('title', 'NumNam – Doctor-Founded Baby Nutrition')">
+    <meta property="og:title" content="@yield('title', 'NumNam | Doctor-Founded Baby Nutrition')">
     <meta property="og:description" content="@yield('meta_description', 'Clean-label baby nutrition with stage-wise foods, subscriptions and transparent ingredients.')">
     <meta property="og:image" content="@yield('og_image', asset('assets/images/hero.jpg'))">
     <meta property="og:url" content="{{ url()->current() }}">
 
     {{-- Twitter Cards --}}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@yield('title', 'NumNam – Doctor-Founded Baby Nutrition')">
+    <meta name="twitter:title" content="@yield('title', 'NumNam | Doctor-Founded Baby Nutrition')">
+
+    {{-- Browser appearance --}}
+    <meta name="theme-color" content="#195b48">
+    <meta name="msapplication-TileColor" content="#195b48">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="NumNam">
+    <meta name="application-name" content="NumNam">
     <meta name="twitter:description" content="@yield('meta_description', 'Clean-label baby nutrition for modern families.')">
     <meta name="twitter:image" content="@yield('og_image', asset('assets/images/hero.jpg'))">
 
     {{-- Favicon --}}
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/images/favicon.svg') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/favicon.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/Logo/TM.png') }}">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
     {{-- JSON-LD Structured Data --}}
     <script type="application/ld+json">
@@ -37,7 +47,7 @@
             "@type": "Organization",
             "name": "NumNam",
             "url": "{{ url('/') }}",
-            "logo": "{{ asset('assets/images/logo.png') }}",
+            "logo": "{{ asset('assets/images/Logo/TM.png') }}",
             "description": "Doctor-founded baby nutrition platform with clean ingredients, subscriptions, and parent education content.",
             "contactPoint": {
                 "@type": "ContactPoint",
@@ -73,6 +83,7 @@
     <link rel="stylesheet" href="{{ url('assets/store/css/pages/blog.css') }}">
     <link rel="stylesheet" href="{{ url('assets/store/css/pages/pages.css') }}">
     <link rel="stylesheet" href="{{ url('assets/store/css/animations.css') }}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('head')
 </head>
 
@@ -108,6 +119,12 @@
 
     {{-- Cookie Consent --}}
     @include('store.partials.cookie-consent')
+
+    {{-- Sticky contact bar + floating WhatsApp --}}
+    @include('store.partials.contact-actions')
+
+    {{-- First-time discount popup --}}
+    @include('store.partials.discount-popup')
 
     {{-- Toast notifications container --}}
     <div id="toast-container" class="toast-container" aria-live="polite"></div>

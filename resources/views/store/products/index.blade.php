@@ -5,10 +5,10 @@
 @section('content')
 @php
 $productPlaceholders = [
-asset('assets/images/product_1.png'),
-asset('assets/images/product_2.png'),
-asset('assets/images/product_3.png'),
-asset('assets/images/product_4.png'),
+asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'),
+asset('assets/images/Puffs/Manchurian%20Munchos/front.jpg'),
+asset('assets/images/Purees/appi%20pooch%202.png'),
+asset('assets/images/Purees/berry%20swush%202.png'),
 ];
 @endphp
 
@@ -111,6 +111,7 @@ asset('assets/images/product_4.png'),
                     @csrf
                     <button class="btn-primary" type="submit">Add to Cart</button>
                 </form>
+                <x-store.social-proof customers="10,000+" rating="4.8" compact="true" />
             </div>
         </article>
         @empty

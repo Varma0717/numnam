@@ -5,10 +5,10 @@
 @section('content')
 @php
 $productPlaceholders = [
-asset('assets/images/product_1.png'),
-asset('assets/images/product_2.png'),
-asset('assets/images/product_3.png'),
-asset('assets/images/product_4.png'),
+asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'),
+asset('assets/images/Puffs/Manchurian%20Munchos/front.jpg'),
+asset('assets/images/Purees/appi%20pooch%201.png'),
+asset('assets/images/Purees/berry%20swush%201.png'),
 ];
 @endphp
 

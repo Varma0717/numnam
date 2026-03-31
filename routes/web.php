@@ -29,8 +29,10 @@ Route::get('/', [StorefrontController::class, 'home'])->name('store.home');
 
 Route::get('/products', [StorefrontController::class, 'products'])->name('store.products');
 Route::get('/products/{product:slug}', [StorefrontController::class, 'product'])->name('store.product.show');
+Route::get('/search/suggestions', [StorefrontController::class, 'searchSuggestions'])->name('store.search.suggestions');
+Route::get('/categories/{category:slug}', [StorefrontController::class, 'category'])->name('store.category.show');
 Route::get('/category/{slug}', function (string $slug) {
-    return redirect()->route('store.products', ['category' => $slug]);
+    return redirect()->route('store.category.show', ['category' => $slug]);
 })->name('store.category.redirect');
 Route::get('/aboutus', [StorefrontController::class, 'about'])->name('store.about');
 Route::get('/general-5', [StorefrontController::class, 'recipes'])->name('store.recipes');

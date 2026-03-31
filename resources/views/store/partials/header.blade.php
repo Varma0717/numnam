@@ -2,10 +2,7 @@
     <div class="site-header-inner">
         <a href="{{ route('store.home') }}" class="brand">
             <span class="brand-dot">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M11 20A7 7 0 0 1 9.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-3.5 10-10 10Z" />
-                    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
-                </svg>
+                <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="22" height="22" loading="lazy">
             </span>
             <span>NumNam</span>
         </a>
@@ -36,6 +33,20 @@
         </nav>
 
         <div class="site-actions">
+            <a href="tel:+919014252278" class="hidden lg:inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 transition-colors duration-200 hover:text-slate-900" aria-label="Call +91 90142 52278">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
+                </svg>
+                <span>+91 90142 52278</span>
+            </a>
+            <a href="mailto:info@numnam.com" class="hidden xl:inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 transition-colors duration-200 hover:text-slate-900" aria-label="Email info@numnam.com">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                    <path d="M22 7l-10 7L2 7" />
+                </svg>
+                <span>info@numnam.com</span>
+            </a>
+
             {{-- Search toggle --}}
             <button type="button" class="header-icon-btn" data-search-toggle aria-label="Search">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -77,20 +88,22 @@
 
     {{-- Search overlay --}}
     <div class="search-overlay" id="searchOverlay" hidden>
-        <form method="GET" action="{{ route('store.products') }}" class="search-overlay-form">
+        <form method="GET" action="{{ route('store.products') }}" class="search-overlay-form" data-search-form data-suggest-url="{{ route('store.search.suggestions') }}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2">
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
-            <input type="search" name="q" placeholder="Search products, recipes, articles..." autocomplete="off" class="search-overlay-input" value="{{ request('q') }}">
+            <input type="search" name="q" placeholder="Search products, recipes, articles..." autocomplete="off" class="search-overlay-input" data-search-input value="{{ request('q') }}">
             <button type="button" class="search-overlay-close" data-search-close aria-label="Close search">&times;</button>
+            <div class="search-suggest-box hidden" data-search-results></div>
         </form>
     </div>
 
     {{-- Mobile nav --}}
     <nav class="mobile-nav" data-mobile-nav aria-label="Mobile navigation">
-        <form method="GET" action="{{ route('store.products') }}" class="mobile-search-form">
-            <input type="search" name="q" placeholder="Search products..." class="input" value="{{ request('q') }}">
+        <form method="GET" action="{{ route('store.products') }}" class="mobile-search-form" data-search-form data-suggest-url="{{ route('store.search.suggestions') }}">
+            <input type="search" name="q" placeholder="Search products..." class="input" data-search-input value="{{ request('q') }}">
+            <div class="search-suggest-box hidden" data-search-results></div>
         </form>
         <a href="{{ route('store.home') }}">Home</a>
         <a href="{{ route('store.products') }}">Shop</a>
@@ -101,6 +114,9 @@
         <a href="{{ route('store.refer-friends') }}">Refer Friends</a>
         <a href="{{ route('store.about') }}">About</a>
         <a href="{{ route('store.contact') }}">Contact</a>
+        <a href="tel:+919014252278">Call: +91 90142 52278</a>
+        <a href="https://wa.me/919014252278" target="_blank" rel="noopener noreferrer">WhatsApp Support</a>
+        <a href="mailto:info@numnam.com">Email: info@numnam.com</a>
         <a href="{{ route('store.cart') }}">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px">
                 <circle cx="9" cy="21" r="1" />
