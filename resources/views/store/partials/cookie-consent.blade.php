@@ -1,5 +1,5 @@
-@if(!request()->cookie('numnam_cookie_consent_v2'))
-<div class="cookie-consent" id="cookieConsent" style="display:none">
+@if(!request()->cookie('numnam_cookie_consent_v3'))
+<div class="cookie-consent" id="cookieConsent">
     <div class="cookie-consent-inner">
         <div class="cookie-consent-text">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -21,22 +21,20 @@
         var el = document.getElementById('cookieConsent');
         if (!el) return;
         if (document.cookie.split(';').some(function(c) {
-                return c.trim().indexOf('numnam_cookie_consent_v2=') === 0;
+                return c.trim().indexOf('numnam_cookie_consent_v3=') === 0;
             })) {
             el.remove();
-        } else {
-            el.style.display = '';
         }
     })();
 
     function acceptCookies() {
-        document.cookie = 'numnam_cookie_consent_v2=1;path=/;max-age=31536000;SameSite=Lax';
+        document.cookie = 'numnam_cookie_consent_v3=1;path=/;max-age=31536000;SameSite=Lax';
         var el = document.getElementById('cookieConsent');
         if (el) el.remove();
     }
 
     function dismissCookies() {
-        document.cookie = 'numnam_cookie_consent_v2=dismissed;path=/;max-age=2592000;SameSite=Lax';
+        document.cookie = 'numnam_cookie_consent_v3=dismissed;path=/;max-age=2592000;SameSite=Lax';
         var el = document.getElementById('cookieConsent');
         if (el) el.remove();
     }
