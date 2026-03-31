@@ -2,9 +2,8 @@
     <div class="site-header-inner">
         <a href="{{ route('store.home') }}" class="brand">
             <span class="brand-dot">
-                <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="22" height="22" loading="lazy">
+                <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="32" height="32" loading="lazy" class="h-full w-full object-cover">
             </span>
-            <span>NumNam</span>
         </a>
 
         <button type="button" class="nav-toggle" data-nav-toggle aria-label="Toggle navigation">
