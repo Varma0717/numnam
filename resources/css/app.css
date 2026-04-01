@@ -26,7 +26,48 @@
 
     .page-shell {
         @apply min-h-screen;
-        background: linear-gradient(180deg, #fff0f5 0%, #ffffff 40%, #f0fbf8 100%);
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 14% 18%, rgba(255, 189, 210, 0.45) 0, rgba(255, 189, 210, 0) 34%),
+            radial-gradient(circle at 86% 12%, rgba(255, 231, 152, 0.4) 0, rgba(255, 231, 152, 0) 31%),
+            linear-gradient(180deg, #fff8fd 0%, #ffffff 46%, #eefbf6 100%);
+    }
+
+    .page-shell::before,
+    .page-shell::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .page-shell::before {
+        background-image: url('/assets/images/background_img.jpg');
+        background-size: 720px auto;
+        background-repeat: repeat;
+        opacity: 0.13;
+        mix-blend-mode: multiply;
+        animation: kidPatternDrift 32s linear infinite;
+        transform-origin: center;
+    }
+
+    .page-shell::after {
+        inset: -8% -4%;
+        background:
+            radial-gradient(52px 52px at 10% 24%, rgba(255, 164, 177, 0.26) 0 58%, rgba(255, 164, 177, 0) 59%),
+            radial-gradient(38px 38px at 84% 30%, rgba(127, 222, 190, 0.3) 0 56%, rgba(127, 222, 190, 0) 57%),
+            radial-gradient(28px 28px at 24% 76%, rgba(141, 194, 255, 0.24) 0 54%, rgba(141, 194, 255, 0) 55%),
+            radial-gradient(45px 45px at 74% 84%, rgba(255, 214, 130, 0.26) 0 60%, rgba(255, 214, 130, 0) 61%);
+        opacity: 0.75;
+        animation: kidBubblesFloat 12s ease-in-out infinite;
+    }
+
+    .page-shell>* {
+        position: relative;
+        z-index: 1;
     }
 
     .page {
@@ -84,11 +125,16 @@
     }
 
     .brand {
-        @apply inline-flex items-center gap-2.5;
+        @apply inline-flex items-center;
     }
 
     .brand-dot {
         @apply inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-numnam-200;
+    }
+
+    .brand-logo-img {
+        @apply block h-auto w-auto;
+        max-height: 42px;
     }
 
     .brand-text {
@@ -347,7 +393,7 @@
     }
 
     .footer-logo {
-        @apply mb-3 inline-flex items-center gap-2.5 text-lg font-bold text-white;
+        @apply mb-3 inline-flex items-center;
     }
 
     .meta {
@@ -737,6 +783,51 @@
 
     .bird-excited .bird-svg {
         animation: birdJump 0.4s ease-out;
+    }
+
+    @keyframes kidPatternDrift {
+        0% {
+            transform: translate3d(0, 0, 0);
+        }
+
+        50% {
+            transform: translate3d(-28px, -18px, 0);
+        }
+
+        100% {
+            transform: translate3d(-56px, -36px, 0);
+        }
+    }
+
+    @keyframes kidBubblesFloat {
+
+        0%,
+        100% {
+            transform: translateY(0) scale(1);
+        }
+
+        50% {
+            transform: translateY(-14px) scale(1.015);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .page-shell::before {
+            background-size: 520px auto;
+            opacity: 0.09;
+        }
+
+        .page-shell::after {
+            opacity: 0.52;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+        .page-shell::before,
+        .page-shell::after {
+            animation: none;
+        }
     }
 
     @keyframes birdJump {

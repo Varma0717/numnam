@@ -30,10 +30,7 @@
             </button>
 
             <a href="{{ route('store.home') }}" class="brand" aria-label="NumNam Home">
-                <span class="brand-dot">
-                    <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="32" height="32" loading="lazy" class="h-full w-full object-cover">
-                </span>
-                <span class="brand-text">NumNam</span>
+                <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="40" height="40" loading="lazy" class="brand-logo-img">
             </a>
 
             <form method="GET" action="{{ route('store.products') }}" class="header-search" data-search-form data-suggest-url="{{ route('store.search.suggestions') }}">
