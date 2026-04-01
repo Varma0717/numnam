@@ -132,12 +132,11 @@ $heroHighlights = [
         <div style="position:absolute;top:15%;right:8%;width:300px;height:300px;background:radial-gradient(circle,rgba(252,93,77,0.10) 0%,transparent 70%);border-radius:50%;"></div>
     </div>
 
-    {{-- Floating product images (right side, hidden on mobile) --}}
-    <div class="pointer-events-none hidden md:block" style="position:absolute;right:0;top:0;bottom:0;width:44%;overflow:hidden;">
-        <img src="{{ asset('assets/images/Puffs/Tikka%20Puffies/front.jpg') }}" alt="" loading="eager" style="position:absolute;top:8%;right:8%;height:55%;object-fit:contain;transform:rotate(-6deg);filter:drop-shadow(0 24px 64px rgba(0,0,0,0.5));opacity:0.95;">
-        <img src="{{ asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg') }}" alt="" loading="eager" style="position:absolute;bottom:6%;right:30%;height:42%;object-fit:contain;transform:rotate(7deg);filter:drop-shadow(0 16px 48px rgba(0,0,0,0.4));opacity:0.85;">
-        {{-- Gradient to fade images into bg on left edge --}}
-        <div style="position:absolute;inset:0;background:linear-gradient(90deg,#1a0e14 0%,transparent 30%);"></div>
+    {{-- Hero visual (single image) --}}
+    <div class="hero-kids-visual pointer-events-none hidden md:flex" aria-hidden="true">
+        <div class="hero-kids-frame">
+            <img src="{{ asset('assets/images/0-18months.webp') }}" alt="" loading="eager" class="hero-kids-image">
+        </div>
     </div>
 
     {{-- Hero content --}}
