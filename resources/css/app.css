@@ -520,19 +520,45 @@
         @apply flex shrink-0 items-center gap-2;
     }
 
+    .mobile-app-item {
+        @apply relative inline-flex flex-col items-center justify-center gap-1 rounded-xl px-1.5 py-2 text-slate-500 transition-all duration-200;
+    }
+
+    .mobile-app-item:hover {
+        @apply bg-slate-100 text-slate-800;
+    }
+
+    .mobile-app-item.is-active {
+        @apply bg-amber-100/80 text-amber-700;
+    }
+
+    .mobile-app-icon {
+        @apply relative inline-flex h-6 w-6 items-center justify-center;
+    }
+
+    .mobile-app-label {
+        @apply text-[11px] font-semibold leading-none;
+    }
+
+    .mobile-app-count {
+        @apply absolute -right-2 -top-1 inline-flex min-h-[18px] min-w-[18px] items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-bold leading-none text-white;
+    }
+
     @media (max-width: 1023px) {
-        body.cookie-banner-visible .mobile-contact-actions {
+        .page {
+            padding-bottom: 6.5rem;
+        }
+
+        body.cookie-banner-visible .mobile-app-navbar {
             bottom: 6.5rem;
         }
 
-        body.cookie-banner-visible .floating-whatsapp,
         body.cookie-banner-visible .back-to-top {
             bottom: 12rem;
         }
     }
 
-    body.discount-popup-open .mobile-contact-actions,
-    body.discount-popup-open .floating-whatsapp,
+    body.discount-popup-open .mobile-app-navbar,
     body.discount-popup-open .back-to-top,
     body.discount-popup-open .cookie-consent {
         opacity: 0;
