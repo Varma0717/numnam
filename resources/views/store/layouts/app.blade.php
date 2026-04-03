@@ -85,6 +85,11 @@
             <img src="{{ asset('assets/images/kids-icons/bird_2.png') }}" alt="" class="kids-shape kids-shape-3" loading="lazy">
             <img src="{{ asset('assets/images/kids-icons/twobirds_1.png') }}" alt="" class="kids-shape kids-shape-4" loading="lazy">
             <img src="{{ asset('assets/images/kids-icons/animated_animals.png') }}" alt="" class="kids-shape kids-shape-5" loading="lazy">
+            <img src="{{ asset('assets/images/kids-icons/bg_yellow_dots.png') }}" alt="" class="kids-shape kids-shape-6" loading="lazy">
+            <img src="{{ asset('assets/images/kids-icons/twobirds_2.png') }}" alt="" class="kids-shape kids-shape-7" loading="lazy">
+            <img src="{{ asset('assets/images/kids-icons/value-shape-3.png') }}" alt="" class="kids-shape kids-shape-8" loading="lazy">
+            <img src="{{ asset('assets/images/kids-icons/animalwithballons.png') }}" alt="" class="kids-shape kids-shape-9" loading="lazy">
+            <img src="{{ asset('assets/images/kids-icons/animated_crocodile.png') }}" alt="" class="kids-shape kids-shape-10" loading="lazy">
         </div>
 
         @include('store.partials.header')

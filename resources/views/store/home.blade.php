@@ -215,17 +215,17 @@ $heroHighlights = [
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <a href="{{ route('store.products', ['age' => '4-6']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
                 <h3 class="text-base font-semibold text-slate-900">Stage 1</h3>
-                <p class="mt-1 text-sm text-slate-600">4â€“6 months</p>
+                <p class="mt-1 text-sm text-slate-600">4-6 months</p>
                 <p class="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-numnam-700">First Tastes</p>
             </a>
             <a href="{{ route('store.products', ['age' => '6-8']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
                 <h3 class="text-base font-semibold text-slate-900">Stage 2</h3>
-                <p class="mt-1 text-sm text-slate-600">6â€“8 months</p>
+                <p class="mt-1 text-sm text-slate-600">6-8 months</p>
                 <p class="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-numnam-700">Exploring Flavours</p>
             </a>
             <a href="{{ route('store.products', ['age' => '8-12']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
                 <h3 class="text-base font-semibold text-slate-900">Stage 3</h3>
-                <p class="mt-1 text-sm text-slate-600">8â€“12 months</p>
+                <p class="mt-1 text-sm text-slate-600">8-12 months</p>
                 <p class="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-numnam-700">Textured Meals</p>
             </a>
             <a href="{{ route('store.products', ['age' => '12+']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">

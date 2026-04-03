@@ -102,6 +102,53 @@
         animation-delay: 0.7s;
     }
 
+    .kids-shape-6 {
+        top: 46%;
+        left: 8%;
+        width: 140px;
+        opacity: 0.22;
+        animation-duration: 7.4s;
+        animation-delay: 0.9s;
+    }
+
+    .kids-shape-7 {
+        top: 8%;
+        right: 30%;
+        width: 132px;
+        opacity: 0.3;
+        animation-name: kidsIconFloatWide;
+        animation-duration: 7.2s;
+        animation-delay: 1.6s;
+    }
+
+    .kids-shape-8 {
+        bottom: 18%;
+        left: 18%;
+        width: 124px;
+        opacity: 0.25;
+        animation-duration: 6.8s;
+        animation-delay: 2s;
+    }
+
+    .kids-shape-9 {
+        bottom: 14%;
+        right: 16%;
+        width: 168px;
+        opacity: 0.24;
+        animation-name: kidsIconFloatWide;
+        animation-duration: 7.8s;
+        animation-delay: 1.3s;
+    }
+
+    .kids-shape-10 {
+        top: 72%;
+        right: 36%;
+        width: 130px;
+        opacity: 0.24;
+        animation-duration: 6.4s;
+        animation-delay: 2.4s;
+    }
+
     .page {
         @apply mx-auto w-full max-w-[1400px] px-4 pb-16 pt-6 sm:px-6 lg:px-8;
     }
@@ -169,6 +216,15 @@
     .brand-logo-img {
         @apply block h-auto w-auto;
         max-height: 42px;
+    }
+
+    .brand-buddy {
+        width: 26px;
+        height: 26px;
+        margin-left: 6px;
+        opacity: 0.86;
+        animation: headerBuddyFloat 3.4s ease-in-out infinite;
+        filter: drop-shadow(0 6px 12px rgba(34, 57, 104, 0.24));
     }
 
     .brand-text {
@@ -284,7 +340,53 @@
     }
 
     .section {
+        position: relative;
         @apply py-10 sm:py-12;
+    }
+
+    .page>section:not(.hero-fullbleed)::before,
+    .page>section:not(.hero-fullbleed)::after {
+        content: "";
+        position: absolute;
+        pointer-events: none;
+        opacity: 0.15;
+        background-repeat: no-repeat;
+        background-size: contain;
+        z-index: 0;
+        will-change: transform;
+    }
+
+    .page>section:not(.hero-fullbleed)::before {
+        width: 86px;
+        height: 86px;
+        left: -26px;
+        top: 18px;
+        background-image: url('/assets/images/kids-icons/value-shape-1.png');
+        animation: kidsIconFloat 6.8s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+    }
+
+    .page>section:not(.hero-fullbleed)::after {
+        width: 94px;
+        height: 94px;
+        right: -28px;
+        bottom: 18px;
+        background-image: url('/assets/images/kids-icons/twobirds_2.png');
+        animation: kidsIconFloatWide 7.4s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+    }
+
+    .page>section:not(.hero-fullbleed)>* {
+        position: relative;
+        z-index: 1;
+    }
+
+    .page>section:nth-of-type(even):not(.hero-fullbleed)::before {
+        background-image: url('/assets/images/kids-icons/bg_yellow_dots.png');
+        opacity: 0.12;
+    }
+
+    .page>section:nth-of-type(even):not(.hero-fullbleed)::after {
+        background-image: url('/assets/images/kids-icons/value-shape-3.png');
+        opacity: 0.14;
     }
 
     .card {
@@ -376,9 +478,21 @@
 
     .footer-newsletter {
         @apply mt-0;
+        position: relative;
+        overflow: hidden;
         background: #151a27;
         border-top: 1px solid rgba(255, 255, 255, 0.07);
         border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .newsletter-kids-deco {
+        position: absolute;
+        right: 5%;
+        bottom: -16px;
+        width: 128px;
+        opacity: 0.28;
+        pointer-events: none;
+        animation: footerDecoBob 5.4s ease-in-out infinite;
     }
 
     .footer-newsletter-inner {
@@ -402,9 +516,32 @@
     }
 
     .site-footer {
+        position: relative;
+        overflow: hidden;
         background: #1a2030;
         color: #e2e8f0;
         border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .footer-kids-deco {
+        position: absolute;
+        pointer-events: none;
+        opacity: 0.2;
+        z-index: 0;
+    }
+
+    .footer-kids-deco-left {
+        left: -20px;
+        bottom: 68px;
+        width: 124px;
+        animation: footerDecoBob 5.8s ease-in-out infinite;
+    }
+
+    .footer-kids-deco-right {
+        right: -18px;
+        bottom: 84px;
+        width: 112px;
+        animation: kidsIconFloat 6.4s cubic-bezier(0.33, 1, 0.68, 1) infinite;
     }
 
     .site-footer-inner {
@@ -412,6 +549,8 @@
     }
 
     .footer-col {
+        position: relative;
+        z-index: 1;
         @apply flex flex-col gap-2;
     }
 
@@ -452,6 +591,8 @@
     }
 
     .footer-bottom {
+        position: relative;
+        z-index: 1;
         @apply mx-auto flex w-full max-w-[1400px] flex-col gap-3 px-4 py-5 text-xs text-slate-400 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8;
         border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
@@ -626,7 +767,17 @@
     /* ── Hero + Inner Banner ─────────────────────────────────────── */
     /* ── Breadcrumbs ─────────────────────────────────────────────── */
     .breadcrumbs {
+        @apply flex items-center justify-between;
         @apply py-2 text-xs;
+    }
+
+    .breadcrumbs-buddy {
+        width: 24px;
+        height: 24px;
+        margin-left: 10px;
+        opacity: 0.75;
+        flex-shrink: 0;
+        animation: breadcrumbHop 3s ease-in-out infinite;
     }
 
     .breadcrumbs ol {
@@ -880,6 +1031,42 @@
         }
     }
 
+    @keyframes headerBuddyFloat {
+
+        0%,
+        100% {
+            transform: translateY(0) rotate(-4deg);
+        }
+
+        50% {
+            transform: translateY(-6px) rotate(4deg);
+        }
+    }
+
+    @keyframes footerDecoBob {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    @keyframes breadcrumbHop {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-4px);
+        }
+    }
+
     @keyframes spinRing {
         from {
             transform: rotate(0deg);
@@ -1001,6 +1188,17 @@
         .kids-shape-5 {
             right: -48px;
         }
+
+        .kids-shape-7,
+        .kids-shape-9,
+        .kids-shape-10 {
+            display: none;
+        }
+
+        .newsletter-kids-deco {
+            width: 96px;
+            opacity: 0.2;
+        }
     }
 
     @media (max-width: 767px) {
@@ -1014,7 +1212,11 @@
         }
 
         .kids-shape-4,
-        .kids-shape-5 {
+        .kids-shape-5,
+        .kids-shape-6,
+        .kids-shape-8,
+        .kids-shape-9,
+        .kids-shape-10 {
             display: none;
         }
 
@@ -1027,6 +1229,13 @@
             right: -38px;
         }
 
+        .brand-buddy,
+        .breadcrumbs-buddy,
+        .footer-kids-deco,
+        .newsletter-kids-deco {
+            display: none;
+        }
+
         .page-shell {
             background: linear-gradient(180deg, #fffef6 0%, #f5fbff 50%, #fff9fb 100%);
         }
@@ -1034,6 +1243,13 @@
 
     @media (prefers-reduced-motion: reduce) {
         .kids-shape {
+            animation-duration: 10s;
+        }
+
+        .brand-buddy,
+        .breadcrumbs-buddy,
+        .newsletter-kids-deco,
+        .footer-kids-deco {
             animation-duration: 10s;
         }
 
