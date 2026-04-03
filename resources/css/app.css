@@ -344,6 +344,14 @@
         @apply py-10 sm:py-12;
     }
 
+    .home-mobile-tabs {
+        display: none;
+    }
+
+    .home-mobile-panel {
+        display: block;
+    }
+
     .page>section:not(.hero-fullbleed)::before,
     .page>section:not(.hero-fullbleed)::after {
         content: "";
@@ -1202,6 +1210,62 @@
     }
 
     @media (max-width: 767px) {
+        .store-home main.page {
+            padding-bottom: 8.5rem;
+        }
+
+        .home-mobile-tabs {
+            position: sticky;
+            top: 74px;
+            z-index: 35;
+            margin: 0.5rem 0.25rem 0.75rem;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.35rem;
+            padding: 0.35rem;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .home-mobile-tab {
+            border: 0;
+            border-radius: 0.8rem;
+            background: transparent;
+            color: #334155;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 0.48rem 0.32rem;
+            letter-spacing: 0.02em;
+            transition: all 0.2s ease;
+        }
+
+        .home-mobile-tab.is-active {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #1f2937;
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.28);
+        }
+
+        .home-mobile-panel {
+            display: none;
+            animation: homePanelIn 0.25s ease;
+        }
+
+        .home-mobile-panel.is-active {
+            display: block;
+        }
+
+        .home-mobile-panel .hero-fullbleed {
+            min-height: 460px;
+        }
+
+        .home-mobile-panel .section,
+        .home-mobile-panel section {
+            margin-top: 0;
+        }
+
         .kids-shape {
             opacity: 0.16;
             max-width: 96px;
@@ -1238,6 +1302,18 @@
 
         .page-shell {
             background: linear-gradient(180deg, #fffef6 0%, #f5fbff 50%, #fff9fb 100%);
+        }
+    }
+
+    @keyframes homePanelIn {
+        from {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
     }
 
