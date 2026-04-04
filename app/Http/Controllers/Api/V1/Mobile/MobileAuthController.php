@@ -87,6 +87,34 @@ class MobileAuthController extends BaseMobileController
         ], 'Authenticated user profile.');
     }
 
+    public function updateProfile(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|max:255|unique:users,email,' . $user->id,
+        ]);
+
+        if (array_key_exists('name', $validated)) {
+            $user->name = $validated['name'];
+        }
+
+        if (array_key_exists('email', $validated)) {
+            $user->email = $validated['email'];
+        }
+
+        if ($user->isDirty()) {
+            $user->save();
+        }
+
+        return $this->success([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+        ], 'Profile updated successfully.');
+    }
+
     public function refresh(Request $request): JsonResponse
     {
         $user = $request->user();

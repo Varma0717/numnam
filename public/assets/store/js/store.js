@@ -398,23 +398,91 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ====== Account Tabs ====== */
-  document.querySelectorAll('.account-tab').forEach((tab) => {
-    tab.addEventListener('click', () => {
-      const target = tab.dataset.tab;
-      const tabList = tab.closest('.account-tabs');
-      if (tabList) {
-        tabList.querySelectorAll('.account-tab').forEach(t => {
-          t.classList.remove('active');
-          t.setAttribute('aria-selected', 'false');
+  const setupTabGroup = ({
+    tabSelector,
+    panelSelector,
+    targetAttribute,
+    activeTabClass,
+    activePanelClass,
+    tabListSelector,
+  }) => {
+    const tabs = Array.from(document.querySelectorAll(tabSelector));
+    if (!tabs.length) return;
+
+    const moveFocus = (tabList, currentTab, direction) => {
+      const scopedTabs = Array.from(tabList.querySelectorAll(tabSelector));
+      if (!scopedTabs.length) return;
+
+      const currentIndex = scopedTabs.indexOf(currentTab);
+      if (currentIndex === -1) return;
+
+      let nextIndex = currentIndex;
+      if (direction === 'next') nextIndex = (currentIndex + 1) % scopedTabs.length;
+      if (direction === 'prev') nextIndex = (currentIndex - 1 + scopedTabs.length) % scopedTabs.length;
+      if (direction === 'first') nextIndex = 0;
+      if (direction === 'last') nextIndex = scopedTabs.length - 1;
+
+      scopedTabs[nextIndex].focus();
+      scopedTabs[nextIndex].click();
+    };
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const tabList = tabListSelector ? tab.closest(tabListSelector) : tab.closest('[role="tablist"]');
+        const targetId = tab.getAttribute(targetAttribute);
+        if (!targetId) return;
+
+        const scopedTabs = tabList ? Array.from(tabList.querySelectorAll(tabSelector)) : tabs;
+        const allPanels = Array.from(document.querySelectorAll(panelSelector));
+
+        scopedTabs.forEach((item) => {
+          item.classList.remove(activeTabClass);
+          item.setAttribute('aria-selected', 'false');
+          item.setAttribute('tabindex', '-1');
         });
-      }
-      tab.classList.add('active');
-      tab.setAttribute('aria-selected', 'true');
-      document.querySelectorAll('.account-panel').forEach(p => p.classList.remove('active'));
-      const panel = document.querySelector('[data-panel="' + target + '"]');
-      if (panel) panel.classList.add('active');
+
+        allPanels.forEach((panel) => panel.classList.remove(activePanelClass));
+
+        tab.classList.add(activeTabClass);
+        tab.setAttribute('aria-selected', 'true');
+        tab.setAttribute('tabindex', '0');
+
+        const targetPanel = document.getElementById(targetId) || document.querySelector(`${panelSelector}[data-panel="${targetId}"]`);
+        if (targetPanel) targetPanel.classList.add(activePanelClass);
+      });
+
+      tab.addEventListener('keydown', (event) => {
+        const tabList = tabListSelector ? tab.closest(tabListSelector) : tab.closest('[role="tablist"]');
+        if (!tabList) return;
+
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+          event.preventDefault();
+          moveFocus(tabList, tab, 'next');
+        }
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          moveFocus(tabList, tab, 'prev');
+        }
+        if (event.key === 'Home') {
+          event.preventDefault();
+          moveFocus(tabList, tab, 'first');
+        }
+        if (event.key === 'End') {
+          event.preventDefault();
+          moveFocus(tabList, tab, 'last');
+        }
+      });
     });
+  };
+
+  /* ====== Account Tabs ====== */
+  setupTabGroup({
+    tabSelector: '.account-tab',
+    panelSelector: '.account-panel',
+    targetAttribute: 'data-tab',
+    activeTabClass: 'active',
+    activePanelClass: 'active',
+    tabListSelector: '.account-tabs',
   });
 
   /* ====== Homepage Mobile Tabs ====== */
@@ -517,81 +585,75 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ====== Hero Slider ====== */
   const slider = document.querySelector('.hero-slider');
-  if (!slider) return;
+  if (slider) {
+    const track = slider.querySelector('[data-hero-track]');
+    const slides = Array.from(slider.querySelectorAll('.hero-slide'));
+    const prevBtn = slider.querySelector('[data-hero-prev]');
+    const nextBtn = slider.querySelector('[data-hero-next]');
+    const dots = Array.from(slider.querySelectorAll('[data-hero-dot]'));
 
-  const track = slider.querySelector('[data-hero-track]');
-  const slides = Array.from(slider.querySelectorAll('.hero-slide'));
-  const prevBtn = slider.querySelector('[data-hero-prev]');
-  const nextBtn = slider.querySelector('[data-hero-next]');
-  const dots = Array.from(slider.querySelectorAll('[data-hero-dot]'));
+    if (track && slides.length) {
+      let currentIndex = 0;
+      let autoplayTimer = null;
 
-  if (!track || !slides.length) return;
+      const render = () => {
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        dots.forEach((dot, index) => {
+          dot.classList.toggle('is-active', index === currentIndex);
+        });
+      };
 
-  let currentIndex = 0;
-  let autoplayTimer = null;
+      const next = () => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        render();
+      };
 
-  const render = () => {
-    track.style.transform = `translateX(-${currentIndex * 100}%)`;
-    dots.forEach((dot, index) => {
-      dot.classList.toggle('is-active', index === currentIndex);
-    });
-  };
+      const prev = () => {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        render();
+      };
 
-  const next = () => {
-    currentIndex = (currentIndex + 1) % slides.length;
-    render();
-  };
+      const restartAutoplay = () => {
+        if (autoplayTimer) {
+          window.clearInterval(autoplayTimer);
+        }
+        autoplayTimer = window.setInterval(next, 5000);
+      };
 
-  const prev = () => {
-    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-    render();
-  };
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          next();
+          restartAutoplay();
+        });
+      }
 
-  const restartAutoplay = () => {
-    if (autoplayTimer) {
-      window.clearInterval(autoplayTimer);
-    }
-    autoplayTimer = window.setInterval(next, 5000);
-  };
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          prev();
+          restartAutoplay();
+        });
+      }
 
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      next();
-      restartAutoplay();
-    });
-  }
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          currentIndex = index;
+          render();
+          restartAutoplay();
+        });
+      });
 
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      prev();
-      restartAutoplay();
-    });
-  }
-
-  dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => {
-      currentIndex = index;
       render();
       restartAutoplay();
-    });
-  });
-
-  render();
-  restartAutoplay();
+    }
+  }
 
   /* ====== Product Detail Tabs ====== */
-  const tabBtns = document.querySelectorAll('.product-tab[data-tab]');
-  if (tabBtns.length) {
-    tabBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const targetId = btn.getAttribute('data-tab');
-        document.querySelectorAll('.product-tab').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
-        document.querySelectorAll('.product-tab-panel').forEach(p => p.classList.remove('active'));
-        btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
-        const panel = document.getElementById(targetId);
-        if (panel) panel.classList.add('active');
-      });
-    });
-  }
+  setupTabGroup({
+    tabSelector: '.product-tab[data-tab]',
+    panelSelector: '.product-tab-panel',
+    targetAttribute: 'data-tab',
+    activeTabClass: 'active',
+    activePanelClass: 'active',
+    tabListSelector: '.product-tab-nav',
+  });
 });

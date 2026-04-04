@@ -19,7 +19,7 @@
 
 {{-- Stats --}}
 <section class="section pb-4">
-    <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         <div class="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
             <p class="text-3xl font-extrabold text-slate-900">{{ $orders->count() }}</p>
             <p class="mt-1 text-sm text-slate-500">Orders</p>
@@ -40,8 +40,8 @@
 </section>
 
 {{-- Tabs --}}
-<section class="section pb-14">
-    <div class="flex gap-1 overflow-x-auto rounded-2xl border border-slate-200 bg-slate-100 p-1" role="tablist">
+<section class="section pb-14 account-section">
+    <div class="account-tabs flex gap-1 overflow-x-auto rounded-2xl border border-slate-200 bg-slate-100 p-1" role="tablist" aria-label="Account sections">
         <button class="account-tab active" data-tab="orders" role="tab" aria-selected="true" aria-controls="panel-orders">Orders</button>
         <button class="account-tab" data-tab="subscriptions" role="tab" aria-selected="false" aria-controls="panel-subscriptions">Subscriptions</button>
         <button class="account-tab" data-tab="referrals" role="tab" aria-selected="false" aria-controls="panel-referrals">Referrals</button>

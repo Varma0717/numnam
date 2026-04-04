@@ -1,3 +1,5 @@
+@php($kidsIllustrations = config('storefront.kids_illustrations', []))
+
 <header class="site-header">
     <div class="header-row header-row-top">
         <div class="header-wrap header-top-inner">
@@ -31,7 +33,7 @@
 
             <a href="{{ route('store.home') }}" class="brand" aria-label="NumNam Home">
                 <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="40" height="40" loading="lazy" class="brand-logo-img">
-                <img src="{{ asset('assets/images/kids-icons/bird.png') }}" alt="" aria-hidden="true" class="brand-buddy" loading="lazy">
+                <img src="{{ asset($kidsIllustrations['header_buddy'] ?? 'assets/images/kids-icons/bird.png') }}" alt="" aria-hidden="true" class="brand-buddy" loading="lazy">
             </a>
 
             <form method="GET" action="{{ route('store.products') }}" class="header-search" data-search-form data-suggest-url="{{ route('store.search.suggestions') }}">

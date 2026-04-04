@@ -56,6 +56,8 @@ $crumbs[] = ['label' => 'Order Confirmed', 'url' => null];
 }
 @endphp
 
+@php($kidsIllustrations = config('storefront.kids_illustrations', []))
+
 @if(count($crumbs) > 1)
 <nav class="breadcrumbs" aria-label="Breadcrumb">
     <ol itemscope itemtype="https://schema.org/BreadcrumbList">
@@ -70,6 +72,6 @@ $crumbs[] = ['label' => 'Order Confirmed', 'url' => null];
         </li>
         @endforeach
     </ol>
-    <img src="{{ asset('assets/images/kids-icons/bird_2.png') }}" alt="" aria-hidden="true" class="breadcrumbs-buddy" loading="lazy">
+    <img src="{{ asset($kidsIllustrations['breadcrumb_buddy'] ?? 'assets/images/kids-icons/bird_2.png') }}" alt="" aria-hidden="true" class="breadcrumbs-buddy" loading="lazy">
 </nav>
 @endif

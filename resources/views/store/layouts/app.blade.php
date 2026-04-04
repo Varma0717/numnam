@@ -79,17 +79,11 @@
     <a href="#main-content" class="skip-link">Skip to content</a>
 
     <div class="page-shell">
+        @php($kidsIllustrations = config('storefront.kids_illustrations', []))
         <div class="kids-theme-layer" aria-hidden="true">
-            <img src="{{ asset('assets/images/kids-icons/banner-bg-shape-1.png') }}" alt="" class="kids-shape kids-shape-1" loading="lazy">
-            <img src="{{ asset('assets/images/kids-icons/value-shape-2.png') }}" alt="" class="kids-shape kids-shape-2" loading="lazy">
-            <img src="{{ asset('assets/images/kids-icons/bird_2.png') }}" alt="" class="kids-shape kids-shape-3" loading="lazy">
-            <img src="{{ asset('assets/images/kids-icons/twobirds_1.png') }}" alt="" class="kids-shape kids-shape-4" loading="lazy">
-            <img src="{{ asset('assets/images/kids-icons/animated_animals.png') }}" alt="" class="kids-shape kids-shape-5" loading="lazy">
-            <img src="{{ asset('assets/images/kids-icons/bg_yellow_dots.png') }}" alt="" class="kids-shape kids-shape-6" loading="lazy">
-            <img src="{{ asset('assets/images/kids-icons/twobirds_2.png') }}" alt="" class="kids-shape kids-shape-7" loading="lazy">
-            <img src="{{ asset('assets/images/kids-icons/value-shape-3.png') }}" alt="" class="kids-shape kids-shape-8" loading="lazy">
-            <img src="{{ asset('assets/images/kids-icons/animalwithballons.png') }}" alt="" class="kids-shape kids-shape-9" loading="lazy">
-            <img src="{{ asset('assets/images/kids-icons/animated_crocodile.png') }}" alt="" class="kids-shape kids-shape-10" loading="lazy">
+            @foreach(($kidsIllustrations['theme_layer'] ?? []) as $index => $illustration)
+            <img src="{{ asset($illustration) }}" alt="" class="kids-shape kids-shape-{{ $index + 1 }}" loading="lazy">
+            @endforeach
         </div>
 
         @include('store.partials.header')
@@ -106,6 +100,17 @@
 
         @include('store.partials.footer')
     </div>
+
+    <nav class="mobile-app-nav" aria-label="Mobile quick navigation">
+        <a href="{{ route('store.home') }}" class="{{ request()->routeIs('store.home') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.home') ? 'page' : 'false' }}">Home</a>
+        <a href="{{ route('store.products') }}" class="{{ request()->routeIs('store.products*') || request()->routeIs('store.product.show') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.products*') || request()->routeIs('store.product.show') ? 'page' : 'false' }}">Shop</a>
+        <a href="{{ route('store.cart') }}" class="{{ request()->routeIs('store.cart') || request()->routeIs('store.checkout') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.cart') || request()->routeIs('store.checkout') ? 'page' : 'false' }}">Cart</a>
+        @auth
+        <a href="{{ route('store.account') }}" class="{{ request()->routeIs('store.account') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.account') ? 'page' : 'false' }}">Account</a>
+        @else
+        <a href="{{ route('store.login') }}" class="{{ request()->routeIs('store.login') || request()->routeIs('store.register') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.login') || request()->routeIs('store.register') ? 'page' : 'false' }}">Account</a>
+        @endauth
+    </nav>
 
     {{-- Back to top button --}}
     <button type="button" class="back-to-top" id="backToTop" aria-label="Back to top">
