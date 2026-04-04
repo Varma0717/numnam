@@ -8,7 +8,12 @@ class AppConfig {
     if (fromEnv != null && fromEnv.isNotEmpty) {
       return fromEnv;
     }
-    return 'http://10.0.2.2/numnam-api/public/api/v1';
+    return 'https://numnum.pmratnam.com/api/v1';
+  }
+
+  static String get healthEndpoint {
+    final baseUri = Uri.parse(apiBaseUrl);
+    return baseUri.replace(path: '/api/health').toString();
   }
 
   static Duration get apiTimeout => const Duration(seconds: 20);
