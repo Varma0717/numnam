@@ -6,49 +6,20 @@
 (function () {
     'use strict';
 
-    /* ── SVG markup ──────────────────────────────────────────────────── */
-    var BIRD_SVG = [
-        '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="bird-svg" aria-hidden="true">',
+    var VIEW_SRC = {
+        sideLeft: '/assets/images/mascot-bird/side_left_view.svg',
+        sideRight: '/assets/images/mascot-bird/side_right_view.svg',
+        front: '/assets/images/mascot-bird/front_view.svg',
+        back: '/assets/images/mascot-bird/back_view.svg',
+        threeQuarter: '/assets/images/mascot-bird/3by4th_view.svg'
+    };
 
-        /* Back wing */
-        '<g class="bird-wing-back">',
-        '  <ellipse cx="34" cy="54" rx="18" ry="9" fill="#fecd26" transform="rotate(-22 34 54)"/>',
-        '</g>',
-
-        /* Body */
-        '<ellipse cx="42" cy="57" rx="20" ry="16" fill="#fe7d94"/>',
-
-        /* Belly highlight */
-        '<ellipse cx="46" cy="62" rx="11" ry="9" fill="#f1dbc0"/>',
-
-        /* Head */
-        '<circle cx="59" cy="42" r="14" fill="#fe7d94"/>',
-
-        /* Beak */
-        '<polygon points="70,39 83,44 70,49" fill="#fecd26"/>',
-
-        /* Eye white */
-        '<circle cx="62" cy="39" r="5" fill="white"/>',
-
-        /* Pupil */
-        '<circle cx="63" cy="39" r="2.4" fill="#1a1a2e"/>',
-
-        /* Eye shine */
-        '<circle cx="64" cy="38" r="1.1" fill="white"/>',
-
-        /* Cheek blush */
-        '<ellipse cx="67" cy="47" rx="4.5" ry="3" fill="#fc5d4d" opacity="0.35"/>',
-
-        /* Front wing */
-        '<g class="bird-wing-front">',
-        '  <ellipse cx="30" cy="51" rx="14" ry="7" fill="#fc5d4d" transform="rotate(-18 30 51)"/>',
-        '</g>',
-
-        /* Tail feathers */
-        '<polygon points="24,62 6,70 11,62 6,74 26,66" fill="#b3b7ec"/>',
-
-        '</svg>',
-    ].join('');
+    function preloadViews() {
+        Object.keys(VIEW_SRC).forEach(function (key) {
+            var img = new Image();
+            img.src = VIEW_SRC[key];
+        });
+    }
 
     /* ── Create DOM element ──────────────────────────────────────────── */
     function buildBird() {
@@ -56,14 +27,36 @@
         el.id = 'bird-mascot';
         el.className = 'bird-mascot';
         el.setAttribute('aria-hidden', 'true');
-        el.innerHTML = BIRD_SVG;
+
+        var img = document.createElement('img');
+        img.className = 'bird-svg';
+        img.alt = '';
+        img.decoding = 'async';
+        img.loading = 'eager';
+        img.src = VIEW_SRC.sideRight;
+        img.setAttribute('data-bird-view', 'sideRight');
+        img.style.transformOrigin = 'center center';
+
+        el.appendChild(img);
         document.body.appendChild(el);
         return el;
     }
 
+    function setBirdView(birdImg, view) {
+        var currentView = birdImg.getAttribute('data-bird-view');
+        var desiredSrc = VIEW_SRC[view] || VIEW_SRC.sideRight;
+
+        if (currentView !== view) {
+            birdImg.src = desiredSrc;
+            birdImg.setAttribute('data-bird-view', view);
+        }
+    }
+
     /* ── Animation loop ─────────────────────────────────────────────── */
     function init() {
+        preloadViews();
         var bird = buildBird();
+        var birdImg = bird.querySelector('.bird-svg');
 
         /* Current bird position */
         var bx = window.innerWidth * 0.65;
@@ -76,9 +69,6 @@
         /* Velocity */
         var vx = 0;
         var vy = 0;
-
-        /* Flipped (facing left) state */
-        var flipped = false;
 
         /* Idle wander state */
         var idle = true;
@@ -128,13 +118,26 @@
             bx = Math.max(0, Math.min(window.innerWidth - 72, bx));
             by = Math.max(0, Math.min(window.innerHeight - 72, by));
 
-            /* Flip to face direction of travel */
-            if (vx < -1.2) { flipped = true; }
-            else if (vx > 1.2) { flipped = false; }
+            var absX = Math.abs(vx);
+            var absY = Math.abs(vy);
+            var view = 'front';
+            var mirror = false;
+
+            /* Pick one of the 5 supplied mascot views from motion vector */
+            if (absX > 1.1 && absY > 1.1) {
+                view = 'threeQuarter';
+                mirror = vx < 0;
+            } else if (absX >= absY) {
+                view = vx < 0 ? 'sideLeft' : 'sideRight';
+            } else {
+                view = vy < 0 ? 'back' : 'front';
+            }
+
+            setBirdView(birdImg, view);
 
             bird.style.left = Math.round(bx) + 'px';
             bird.style.top = Math.round(by) + 'px';
-            bird.style.transform = flipped ? 'scaleX(-1)' : 'none';
+            bird.style.transform = mirror ? 'scaleX(-1)' : 'none';
 
             requestAnimationFrame(tick);
         }

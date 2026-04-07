@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-57ef3dad.css",
+    "file": "assets/app-523587e4.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
@@ -21,7 +21,7 @@
     "src": "resources/images/kids-icons/value-shape-3.png"
   },
   "resources/js/app.js": {
-    "file": "assets/app-6e7f5dc3.js",
+    "file": "assets/app-b0c816ae.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }
