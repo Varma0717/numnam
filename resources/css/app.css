@@ -417,6 +417,45 @@
         display: block;
     }
 
+    /* Kids-themed illustration accents for plain white homepage sections */
+    .home-mobile-panel>section:not(.hero-fullbleed) {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+    }
+
+    .home-mobile-panel>section:not(.hero-fullbleed)::before,
+    .home-mobile-panel>section:not(.hero-fullbleed)::after {
+        content: "";
+        position: absolute;
+        pointer-events: none;
+        background-repeat: no-repeat;
+        background-size: contain;
+        z-index: 0;
+        opacity: 0.14;
+    }
+
+    .home-mobile-panel>section:not(.hero-fullbleed)::before {
+        width: 110px;
+        height: 110px;
+        top: 16px;
+        left: -22px;
+        background-image: url('../images/kids-icons/value-shape-1.png');
+    }
+
+    .home-mobile-panel>section:not(.hero-fullbleed)::after {
+        width: 120px;
+        height: 120px;
+        right: -26px;
+        bottom: 16px;
+        background-image: url('../images/kids-icons/twobirds_2.png');
+    }
+
+    .home-mobile-panel>section:not(.hero-fullbleed)>* {
+        position: relative;
+        z-index: 1;
+    }
+
     .page>section:not(.hero-fullbleed)::before,
     .page>section:not(.hero-fullbleed)::after {
         content: "";
@@ -434,7 +473,7 @@
         height: 86px;
         left: -26px;
         top: 18px;
-        background-image: url('../images/kids-icons/value-shape-1.png');
+        background-image: url('../images/kids-online/balloon.svg');
         animation: kidsIconFloat 6.8s cubic-bezier(0.33, 1, 0.68, 1) infinite;
     }
 
@@ -443,7 +482,7 @@
         height: 94px;
         right: -28px;
         bottom: 18px;
-        background-image: url('../images/kids-icons/twobirds_2.png');
+        background-image: url('../images/kids-online/kite.svg');
         animation: kidsIconFloatWide 7.4s cubic-bezier(0.33, 1, 0.68, 1) infinite;
     }
 
@@ -453,12 +492,12 @@
     }
 
     .page>section:nth-of-type(even):not(.hero-fullbleed)::before {
-        background-image: url('../images/kids-icons/bg_yellow_dots.png');
+        background-image: url('../images/kids-online/rainbow.svg');
         opacity: 0.12;
     }
 
     .page>section:nth-of-type(even):not(.hero-fullbleed)::after {
-        background-image: url('../images/kids-icons/value-shape-3.png');
+        background-image: url('../images/kids-online/party-popper.svg');
         opacity: 0.14;
     }
 
@@ -587,58 +626,58 @@
         opacity: 0.28;
         pointer-events: none;
         animation: footerDecoBob 5.4s ease-in-out infinite;
-    }
+        background-image: url('../images/kids-online/teddy-bear.svg');
 
-    .footer-newsletter-inner {
-        @apply mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-4 py-8 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8;
-    }
+        .footer-newsletter-inner {
+            @apply mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-4 py-8 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8;
+        }
 
-    .newsletter-copy h3 {
-        @apply text-2xl font-semibold tracking-tight text-white;
-    }
+        .newsletter-copy h3 {
+            @apply text-2xl font-semibold tracking-tight text-white;
+        }
 
-    .newsletter-copy p {
-        @apply mt-1 text-sm text-slate-400;
-    }
+        .newsletter-copy p {
+            @apply mt-1 text-sm text-slate-400;
+        }
 
-    .newsletter-form {
-        @apply flex w-full flex-col gap-3 sm:flex-row lg:max-w-xl;
-    }
+        .newsletter-form {
+            @apply flex w-full flex-col gap-3 sm:flex-row lg:max-w-xl;
+        }
 
-    .newsletter-input {
-        @apply flex-1;
-    }
+        .newsletter-input {
+            @apply flex-1;
+        }
 
-    .site-footer {
-        position: relative;
-        overflow: hidden;
-        background: #1a2030;
-        color: #e2e8f0;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-    }
+        .site-footer {
+            position: relative;
+            overflow: hidden;
+            background: #1a2030;
+            color: #e2e8f0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
 
-    .footer-kids-deco {
-        position: absolute;
-        pointer-events: none;
-        opacity: 0.2;
-        z-index: 0;
-    }
+        .footer-kids-deco {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.2;
+            z-index: 0;
+        }
 
-    .footer-kids-deco-left {
-        left: -20px;
-        bottom: 68px;
-        width: 124px;
-        animation: footerDecoBob 5.8s ease-in-out infinite;
-    }
+        .footer-kids-deco-left {
+            left: -20px;
+            bottom: 68px;
+            width: 124px;
+            animation: footerDecoBob 5.8s ease-in-out infinite;
+        }
 
-    .footer-kids-deco-right {
-        right: -18px;
-        bottom: 84px;
-        width: 112px;
-        animation: kidsIconFloat 6.4s cubic-bezier(0.33, 1, 0.68, 1) infinite;
-    }
+        .footer-kids-deco-right {
+            right: -18px;
+            bottom: 84px;
+            width: 112px;
+            animation: kidsIconFloat 6.4s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+        }
 
-    .site-footer-inner {
+        background-image: url('../images/kids-online/lollipop.svg');
         @apply mx-auto grid w-full max-w-[1400px] grid-cols-1 gap-8 px-4 py-10 sm:px-6 md:grid-cols-2 lg:grid-cols-5 lg:px-8;
     }
 
@@ -782,6 +821,10 @@
     @media (max-width: 1023px) {
         .page {
             padding-bottom: 6.5rem;
+        }
+
+        .bird-mascot {
+            display: none !important;
         }
 
         body.cookie-banner-visible .mobile-app-navbar {
@@ -1478,6 +1521,29 @@
         .home-mobile-panel .section,
         .home-mobile-panel section {
             margin-top: 0;
+        }
+
+        .home-mobile-panel>section:not(.hero-fullbleed)::before {
+            width: 84px;
+            height: 84px;
+            left: -20px;
+            top: 10px;
+            opacity: 0.16;
+        }
+
+        .home-mobile-panel>section:not(.hero-fullbleed)::after {
+            width: 92px;
+            height: 92px;
+            right: -22px;
+            bottom: 10px;
+            opacity: 0.16;
+        }
+
+        .hero-kids-frame,
+        .hero-kids-frame::before,
+        .why-choose-media-ring,
+        .why-choose-media-ring::before {
+            animation: none !important;
         }
 
         .kids-shape {

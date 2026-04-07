@@ -52,8 +52,20 @@
         }
     }
 
+    function shouldDisableBird() {
+        if (typeof window === 'undefined' || !window.matchMedia) {
+            return false;
+        }
+
+        return window.matchMedia('(max-width: 1023px), (hover: none) and (pointer: coarse)').matches;
+    }
+
     /* ── Animation loop ─────────────────────────────────────────────── */
     function init() {
+        if (shouldDisableBird()) {
+            return;
+        }
+
         preloadViews();
         var bird = buildBird();
         var birdImg = bird.querySelector('.bird-svg');
