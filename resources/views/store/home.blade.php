@@ -140,78 +140,107 @@ $heroHighlights = [
             <div style="position:absolute;bottom:-12%;right:18%;width:420px;height:420px;background:radial-gradient(circle,rgba(168,220,193,0.12) 0%,transparent 70%);border-radius:50%;"></div>
             <div style="position:absolute;top:15%;right:8%;width:300px;height:300px;background:radial-gradient(circle,rgba(252,93,77,0.10) 0%,transparent 70%);border-radius:50%;"></div>
         </div>
-
-        {{-- Hero visual (single image) --}}
-        <div class="hero-kids-visual pointer-events-none hidden md:flex" aria-hidden="true">
-            <div class="hero-kids-frame">
-                <img src="{{ asset('assets/images/0-18months.webp') }}" alt="" loading="eager" class="hero-kids-image">
+        <section class="hero-fullbleed in-view" style="background: linear-gradient(135deg, #FFF0F5 0%, #FFFBE6 38%, #E8FCF8 72%, #F5EFFF 100%);">
+            {{-- Dot-pattern deco at full opacity for visible kids texture --}}
+            <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;" aria-hidden="true">
+                <img src="{{ asset('assets/images/kids-icons/bg_yellow_dots.png') }}" alt="" style="position:absolute;top:8%;left:2%;width:220px;opacity:0.50;" loading="eager">
+                <img src="{{ asset('assets/images/kids-icons/animalwithballons.png') }}" alt="" style="position:absolute;bottom:0;left:0;width:170px;opacity:0.82;" loading="eager">
             </div>
-        </div>
 
-        {{-- Hero content --}}
-        <div class="hero-content">
-            <div style="max-width:600px;">
-                <p class="mb-4 inline-flex rounded-full border border-numnam-400/40 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-numnam-300 backdrop-blur-sm">
-                    NumNam Nutrition
-                </p>
-                <h1 class="text-balance text-3xl font-extrabold leading-tight text-white sm:text-4xl lg:text-5xl xl:text-6xl">
-                    {{ $homepageSections['hero_title'] ?? 'Clean-label, stage-wise baby nutrition for modern families.' }}
-                </h1>
-                <p class="mt-4 max-w-xl text-base leading-relaxed text-slate-300 sm:mt-5 sm:text-lg">
-                    {{ $homepageSections['hero_subtitle'] ?? 'NumNam offers age-appropriate baby foods, practical subscriptions, and ingredient transparency so parents can choose with confidence and feed with ease.' }}
-                </p>
+            {{-- Hero visual (single image) --}}
+            <div class="hero-kids-visual pointer-events-none hidden md:flex" aria-hidden="true">
+                <div class="hero-kids-frame">
+                    <img src="{{ asset('assets/images/0-18months.webp') }}" alt="" loading="eager" class="hero-kids-image">
+                </div>
+            </div>
 
-                <div class="mt-6 grid gap-3 sm:grid-cols-3">
-                    @foreach($heroHighlights as $highlight)
-                    <div class="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
-                        <p class="text-sm font-semibold text-white">{{ $highlight['title'] }}</p>
-                        <p class="mt-1 text-xs leading-relaxed text-slate-400">{{ $highlight['description'] }}</p>
+            {{-- Hero content --}}
+            <div class="hero-content">
+                <div style="max-width:600px;">
+                    <p class="mb-4 inline-flex rounded-full border border-numnam-400/40 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-numnam-300 backdrop-blur-sm">
+                        NumNam Nutrition
+                    </p>
+                    <h1 class="text-balance text-3xl font-extrabold leading-tight text-white sm:text-4xl lg:text-5xl xl:text-6xl">
+                        {{ $homepageSections['hero_title'] ?? 'Clean-label, stage-wise baby nutrition for modern families.' }}
+                    </h1>
+                    <p class="mt-4 max-w-xl text-base leading-relaxed text-slate-300 sm:mt-5 sm:text-lg">
+                        {{ $homepageSections['hero_subtitle'] ?? 'NumNam offers age-appropriate baby foods, practical subscriptions, and ingredient transparency so parents can choose with confidence and feed with ease.' }}
+                    </p>
+
+                    <div class="mt-6 grid gap-3 sm:grid-cols-3">
+                        @foreach($heroHighlights as $highlight)
+                        <div class="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
+                            <p class="text-sm font-semibold text-white">{{ $highlight['title'] }}</p>
+                            <p class="mt-1 text-xs leading-relaxed text-slate-400">{{ $highlight['description'] }}</p>
+                        </div>
+                        @endforeach
                     </div>
+
+                    <div class="mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
+                        <a class="hero-cta" href="{{ route('store.products') }}">Shop Products</a>
+                        <a class="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40" href="{{ route('store.pricing') }}">Build Subscription</a>
+                    </div>
+                    <p class="mb-4 inline-flex rounded-full border border-numnam-200 bg-white/80 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-numnam-600">
+                        NumNam Nutrition
+                    </p>
+                    <h1 class="text-balance text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl lg:text-5xl xl:text-6xl">
+                        {{ $homepageSections['hero_title'] ?? 'Clean-label, stage-wise baby nutrition for modern families.' }}
+                    </h1>
+                    <p class="mt-4 max-w-xl text-base leading-relaxed text-slate-700 sm:mt-5 sm:text-lg">
+                        {{ $homepageSections['hero_subtitle'] ?? 'NumNam offers age-appropriate baby foods, practical subscriptions, and ingredient transparency so parents can choose with confidence and feed with ease.' }}
+                    </p>
+
+                    <div class="mt-6 grid gap-3 sm:grid-cols-3">
+                        @foreach($heroHighlights as $highlight)
+                        <div class="rounded-2xl border border-white/80 bg-white/70 px-4 py-3 shadow-sm">
+                            <p class="text-sm font-bold text-slate-900">{{ $highlight['title'] }}</p>
+                            <p class="mt-1 text-xs leading-relaxed text-slate-600">{{ $highlight['description'] }}</p>
+                        </div>
+                        @endforeach
+                    </div>
+
+                    <div class="mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
+                        <a class="hero-cta" href="{{ route('store.products') }}">Shop Products</a>
+                        <a class="inline-flex items-center justify-center rounded-full border-2 border-numnam-200 bg-white px-6 py-3 text-sm font-bold text-numnam-700 transition-all duration-300 hover:-translate-y-0.5 hover:bg-numnam-50 hover:border-numnam-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-numnam-300" href="{{ route('store.pricing') }}">Build Subscription</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <x-store.why-choose-us
+            title="Why Choose Us"
+            subtitle="Everything you need for confident shopping, from checkout to delivery."
+            :benefits="$whyChooseUsBenefits" />
+
+        @if($topCategories->isNotEmpty())
+        <section class="px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+            <div class="mx-auto max-w-7xl">
+                <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Shop Top Categories</h2>
+                        <p class="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">Browse our most-loved categories with dedicated landing pages and products tailored to every stage.</p>
+                    </div>
+                    <a href="{{ route('store.products') }}" class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-400 hover:text-slate-900">View all products</a>
+                </div>
+
+                <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                    @foreach($topCategories as $category)
+                    <x-store.category-card :category="$category" />
                     @endforeach
                 </div>
-
-                <div class="mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
-                    <a class="hero-cta" href="{{ route('store.products') }}">Shop Products</a>
-                    <a class="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40" href="{{ route('store.pricing') }}">Build Subscription</a>
-                </div>
             </div>
-        </div>
-    </section>
-    <x-store.why-choose-us
-        title="Why Choose Us"
-        subtitle="Everything you need for confident shopping, from checkout to delivery."
-        :benefits="$whyChooseUsBenefits" />
+        </section>
+        @endif
 
-    @if($topCategories->isNotEmpty())
-    <section class="px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-        <div class="mx-auto max-w-7xl">
-            <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                    <h2 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Shop Top Categories</h2>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">Browse our most-loved categories with dedicated landing pages and products tailored to every stage.</p>
-                </div>
-                <a href="{{ route('store.products') }}" class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-400 hover:text-slate-900">View all products</a>
-            </div>
-
-            <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                @foreach($topCategories as $category)
-                <x-store.category-card :category="$category" />
+        <section class="px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
+            <div class="mx-auto grid max-w-7xl gap-4 md:grid-cols-2 xl:grid-cols-4">
+                @foreach($trustCards as $item)
+                <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                    <h3 class="text-sm font-semibold uppercase tracking-[0.14em] text-numnam-700">{{ $item['title'] }}</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-600">{{ $item['subtitle'] }}</p>
+                </article>
                 @endforeach
             </div>
-        </div>
-    </section>
-    @endif
-
-    <section class="px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
-        <div class="mx-auto grid max-w-7xl gap-4 md:grid-cols-2 xl:grid-cols-4">
-            @foreach($trustCards as $item)
-            <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-                <h3 class="text-sm font-semibold uppercase tracking-[0.14em] text-numnam-700">{{ $item['title'] }}</h3>
-                <p class="mt-2 text-sm leading-relaxed text-slate-600">{{ $item['subtitle'] }}</p>
-            </article>
-            @endforeach
-        </div>
-    </section>
+        </section>
 
 </div>
 

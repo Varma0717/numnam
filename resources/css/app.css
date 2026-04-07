@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -35,6 +35,46 @@
             linear-gradient(180deg, #fffdf2 0%, #f2fbff 52%, #fff6fb 100%);
     }
 
+    .page-shell {
+        background: #FFFCF5;
+    }
+
+    /* Make footer app-like on mobile: hide big columns, keep copyright */
+    .site-footer-inner {
+        display: none;
+    }
+
+    .page-shell {
+        .footer-newsletter {
+            display: none;
+        }
+
+        @apply min-h-screen;
+
+        .footer-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1rem 1rem 6rem;
+        }
+
+        position: relative;
+
+        .footer-payment-methods {
+            justify-content: center;
+        }
+
+        isolation: isolate;
+        overflow: hidden;
+        /* Bright, warm kids-store gradient â€” no ghostly blobs */
+        background: linear-gradient(160deg,
+            #FFFEF0 0%,
+            #FFF5F8 30%,
+            #F5FFFC 60%,
+            #FFF8F0 100%);
+    }
+
     .page-shell>* {
         position: relative;
         z-index: 2;
@@ -57,6 +97,11 @@
         filter: drop-shadow(0 12px 30px rgba(23, 42, 79, 0.16));
         animation: kidsIconFloat 5.2s cubic-bezier(0.33, 1, 0.68, 1) infinite;
         will-change: transform;
+    }
+
+    /* â”€â”€ Kids shape decorations: hidden globally; illustrations placed explicitly in content â”€â”€ */
+    .kids-shape {
+        display: none;
     }
 
     .kids-shape-1 {
@@ -157,6 +202,26 @@
         @apply sticky top-0 z-50 border-b border-sky-100/70 bg-white/90;
         -webkit-backdrop-filter: blur(10px);
         backdrop-filter: blur(10px);
+    }
+
+    .site-header {
+        @apply sticky top-0 z-50 bg-white/95;
+        border-bottom: 2px solid #FFD6E5;
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+        /* Rainbow top accent stripe */
+        box-shadow: inset 0 3px 0 0 transparent;
+    }
+
+    .site-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #FF6B8A 0%, #FFD93D 33%, #4ECDC4 66%, #9B8EC4 100%);
+        z-index: 1;
     }
 
     .site-header.scrolled {
@@ -369,7 +434,7 @@
         height: 86px;
         left: -26px;
         top: 18px;
-        background-image: url('/assets/images/kids-icons/value-shape-1.png');
+        background-image: url('../images/kids-icons/value-shape-1.png');
         animation: kidsIconFloat 6.8s cubic-bezier(0.33, 1, 0.68, 1) infinite;
     }
 
@@ -378,7 +443,7 @@
         height: 94px;
         right: -28px;
         bottom: 18px;
-        background-image: url('/assets/images/kids-icons/twobirds_2.png');
+        background-image: url('../images/kids-icons/twobirds_2.png');
         animation: kidsIconFloatWide 7.4s cubic-bezier(0.33, 1, 0.68, 1) infinite;
     }
 
@@ -388,18 +453,32 @@
     }
 
     .page>section:nth-of-type(even):not(.hero-fullbleed)::before {
-        background-image: url('/assets/images/kids-icons/bg_yellow_dots.png');
+        background-image: url('../images/kids-icons/bg_yellow_dots.png');
         opacity: 0.12;
     }
 
     .page>section:nth-of-type(even):not(.hero-fullbleed)::after {
-        background-image: url('/assets/images/kids-icons/value-shape-3.png');
+        background-image: url('../images/kids-icons/value-shape-3.png');
         opacity: 0.14;
+    }
+
+    /* â”€â”€ Section alternating pastel backgrounds (kids store style) â”€â”€ */
+    .page>section:not(.hero-fullbleed):nth-child(even) {
+        background: rgba(255, 248, 230, 0.55);
+        border-radius: 1.5rem;
+        margin-inline: -0.5rem;
+        padding-inline: 0.5rem;
     }
 
     .card {
         @apply overflow-hidden rounded-[2rem] border border-white/70 bg-white/90 shadow-sm;
         box-shadow: 0 14px 40px rgba(35, 71, 112, 0.08);
+    }
+
+    .card {
+        @apply overflow-hidden rounded-[2rem] bg-white;
+        border: 2px solid #FFD6E5;
+        box-shadow: 0 8px 28px rgba(255, 107, 138, 0.12);
     }
 
     .card-body {
@@ -418,6 +497,13 @@
     .cta-btn,
     .btn-primary {
         @apply bg-amber-400 text-slate-900 hover:bg-amber-300;
+    }
+
+    .cta-btn,
+    .btn-primary {
+        @apply bg-amber-400 text-slate-900 hover:bg-amber-300 active:scale-95;
+        box-shadow: 0 6px 20px rgba(251, 191, 36, 0.40);
+        font-weight: 700;
     }
 
     .btn-secondary,
@@ -730,6 +816,11 @@
         @apply inline-flex items-center justify-center rounded-full bg-numnam-600 px-6 py-3 text-sm font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-numnam-700 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-numnam-300;
     }
 
+    .hero-cta {
+        @apply inline-flex items-center justify-center rounded-full bg-numnam-400 px-6 py-3 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-numnam-500 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-numnam-300;
+        box-shadow: 0 8px 24px rgba(255, 107, 138, 0.35);
+    }
+
     .social-proof-strip {
         @apply mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-600;
     }
@@ -772,8 +863,8 @@
     }
 
     /* Account tabs */
-    /* ── Hero + Inner Banner ─────────────────────────────────────── */
-    /* ── Breadcrumbs ─────────────────────────────────────────────── */
+    /* â”€â”€ Hero + Inner Banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* â”€â”€ Breadcrumbs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .breadcrumbs {
         @apply flex items-center justify-between;
         @apply py-2 text-xs;
@@ -797,7 +888,7 @@
     }
 
     .breadcrumbs li+li::before {
-        content: "›";
+        content: "â€º";
         @apply mx-1.5 text-slate-400;
     }
 
@@ -885,6 +976,22 @@
         position: absolute;
         inset: 0;
         background: linear-gradient(135deg, rgba(254, 125, 148, 0.15) 0%, rgba(238, 249, 246, 0.25) 100%);
+    }
+
+    .inner-banner {
+        position: relative;
+        width: 100%;
+        min-height: 180px;
+        overflow: hidden;
+        display: flex;
+        align-items: flex-end;
+        background: linear-gradient(135deg, #FFF0F5 0%, #FFFBE6 50%, #E8FCF8 100%);
+    }
+
+    .inner-banner-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255, 107, 138, 0.08) 0%, rgba(78, 205, 196, 0.06) 100%);
     }
 
     .inner-banner-content {
@@ -975,7 +1082,7 @@
         z-index: 1;
     }
 
-    /* ── Footer newsletter dark theming ──────────────────────────── */
+    /* â”€â”€ Footer newsletter dark theming â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .footer-newsletter {
         background: #151a27;
         border-top: 1px solid rgba(255, 255, 255, 0.07);
@@ -1015,7 +1122,7 @@
         display: none;
     }
 
-    /* ── Bird Mascot ───────────────────────────────────────────────── */
+    /* â”€â”€ Bird Mascot â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .bird-mascot {
         position: fixed;
         top: 0;
@@ -1218,6 +1325,15 @@
         }
     }
 
+    @media (max-width: 1024px) {
+
+        /* kids-shape already globally hidden; newsletter deco kept smaller */
+        .newsletter-kids-deco {
+            width: 96px;
+            opacity: 0.45;
+        }
+    }
+
     @media (max-width: 767px) {
         .store-home main.page {
             padding-bottom: 8.5rem;
@@ -1246,6 +1362,25 @@
             -webkit-backdrop-filter: blur(10px);
         }
 
+        .mobile-app-nav {
+            position: fixed;
+            left: 50%;
+            bottom: 0.85rem;
+            transform: translateX(-50%);
+            width: min(94vw, 520px);
+            z-index: 80;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.35rem;
+            padding: 0.5rem;
+            border: 2px solid rgba(255, 107, 138, 0.20);
+            border-radius: 1.25rem;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 16px 36px rgba(255, 107, 138, 0.18), 0 4px 12px rgba(0, 0, 0, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
         .mobile-app-nav a {
             display: inline-flex;
             flex-direction: column;
@@ -1266,6 +1401,12 @@
             background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
             color: #1f2937;
             box-shadow: 0 8px 16px rgba(245, 158, 11, 0.28);
+        }
+
+        .mobile-app-nav a.active {
+            background: linear-gradient(135deg, #FF6B8A 0%, #FFD93D 100%);
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(255, 107, 138, 0.38);
         }
 
         .account-section .account-tabs {
@@ -1313,6 +1454,12 @@
             background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
             color: #1f2937;
             box-shadow: 0 6px 16px rgba(245, 158, 11, 0.28);
+        }
+
+        .home-mobile-tab.is-active {
+            background: linear-gradient(135deg, #FF6B8A 0%, #FFD93D 100%);
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(255, 107, 138, 0.32);
         }
 
         .home-mobile-panel {
@@ -1367,8 +1514,44 @@
             display: none;
         }
 
+        .why-choose-media-ring {
+            width: 200px;
+        }
+
+        .brand-buddy,
+        .breadcrumbs-buddy,
+        .footer-kids-deco,
+        .newsletter-kids-deco {
+            display: none;
+        }
+
         .page-shell {
             background: linear-gradient(180deg, #fffef6 0%, #f5fbff 50%, #fff9fb 100%);
+        }
+
+        /* Make footer app-like on mobile */
+        .site-footer-inner {
+            display: none;
+        }
+
+        .footer-newsletter {
+            display: none;
+        }
+
+        .footer-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1rem 1rem 6rem;
+        }
+
+        .footer-payment-methods {
+            justify-content: center;
+        }
+
+        .page-shell {
+            background: #FFFCF5;
         }
     }
 

@@ -27,6 +27,48 @@
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+:root {
+  /* ── Kids store brand colours ──────────────────────────── */
+  --brand-1: #FF6B8A;
+  /* kids coral-pink */
+  --brand-1-light: #FF8FAF;
+  --brand-1-dark: #DD3259;
+  --brand-1-soft: #FFF0F5;
+  --brand-2: #FFD93D;
+  /* sunny yellow */
+  --brand-3: #4ECDC4;
+  /* mint teal */
+  --accent: #9B8EC4;
+  /* soft lavender */
+  --accent-dark: #7B6BA8;
+  --accent-soft: #F5EFFF;
+  /* ── Semantic ─────────────────────────────────────────── */
+  --text: #1a1a2e;
+  /* deep navy — more playful than black */
+  --muted: #5e6478;
+  --surface: #FFFCF5;
+  /* warm cream */
+  --surface-soft: #FFF5F8;
+  /* soft pink */
+  --surface-warm: #FFFBE6;
+  /* soft yellow */
+  --line: #FFD6E5;
+  /* pink rule lines */
+  --danger: #EF4444;
+  /* ── Hero accents ──────────────────────────────────────── */
+  --hero-sun: #FFFBE6;
+  --hero-mint: #E8FCF8;
+  --hero-coral: #FFF0F5;
+  /* ── Shape / Shadow / Motion ───────────────────────────── */
+  --radius: 14px;
+  --radius-sm: 8px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow: 0 8px 28px rgba(255, 107, 138, 0.12);
+  --shadow-lg: 0 20px 48px rgba(255, 107, 138, 0.18);
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 * {
   box-sizing: border-box;
 }

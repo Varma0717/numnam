@@ -1,8 +1,24 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-935673d2.css",
+    "file": "assets/app-57ef3dad.css",
     "isEntry": true,
     "src": "resources/css/app.css"
+  },
+  "resources/images/kids-icons/bg_yellow_dots.png": {
+    "file": "assets/bg_yellow_dots-47f964be.png",
+    "src": "resources/images/kids-icons/bg_yellow_dots.png"
+  },
+  "resources/images/kids-icons/twobirds_2.png": {
+    "file": "assets/twobirds_2-15bd3927.png",
+    "src": "resources/images/kids-icons/twobirds_2.png"
+  },
+  "resources/images/kids-icons/value-shape-1.png": {
+    "file": "assets/value-shape-1-6e3148bf.png",
+    "src": "resources/images/kids-icons/value-shape-1.png"
+  },
+  "resources/images/kids-icons/value-shape-3.png": {
+    "file": "assets/value-shape-3-caaf8b5d.png",
+    "src": "resources/images/kids-icons/value-shape-3.png"
   },
   "resources/js/app.js": {
     "file": "assets/app-6e7f5dc3.js",
