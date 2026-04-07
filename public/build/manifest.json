@@ -1,16 +1,24 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-765329ac.css",
+    "file": "assets/app-2ed2740f.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
-  "resources/images/kids-icons/twobirds_2.png": {
-    "file": "assets/twobirds_2-15bd3927.png",
-    "src": "resources/images/kids-icons/twobirds_2.png"
+  "resources/images/kids-illustrations/dancing.svg": {
+    "file": "assets/dancing-595e589d.svg",
+    "src": "resources/images/kids-illustrations/dancing.svg"
   },
-  "resources/images/kids-icons/value-shape-1.png": {
-    "file": "assets/value-shape-1-6e3148bf.png",
-    "src": "resources/images/kids-icons/value-shape-1.png"
+  "resources/images/kids-illustrations/reading.svg": {
+    "file": "assets/reading-90293488.svg",
+    "src": "resources/images/kids-illustrations/reading.svg"
+  },
+  "resources/images/kids-illustrations/sitting.svg": {
+    "file": "assets/sitting-6245f1c3.svg",
+    "src": "resources/images/kids-illustrations/sitting.svg"
+  },
+  "resources/images/kids-illustrations/sprinting.svg": {
+    "file": "assets/sprinting-de4c1307.svg",
+    "src": "resources/images/kids-illustrations/sprinting.svg"
   },
   "resources/images/kids-online/balloon.svg": {
     "file": "assets/balloon-3dbba8b3.svg",

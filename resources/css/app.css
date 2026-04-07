@@ -39,43 +39,7 @@
         background: #FFFCF5;
     }
 
-    /* Make footer app-like on mobile: hide big columns, keep copyright */
-    .site-footer-inner {
-        display: none;
-    }
-
-    .page-shell {
-        .footer-newsletter {
-            display: none;
-        }
-
-        @apply min-h-screen;
-
-        .footer-bottom {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 1rem 1rem 6rem;
-        }
-
-        position: relative;
-
-        .footer-payment-methods {
-            justify-content: center;
-        }
-
-        isolation: isolate;
-        overflow: hidden;
-        /* Bright, warm kids-store gradient â€” no ghostly blobs */
-        background: linear-gradient(160deg,
-            #FFFEF0 0%,
-            #FFF5F8 30%,
-            #F5FFFC 60%,
-            #FFF8F0 100%);
-    }
-
-    .page-shell>* {
+        .page-shell>* {
         position: relative;
         z-index: 2;
     }
@@ -432,23 +396,38 @@
         background-repeat: no-repeat;
         background-size: contain;
         z-index: 0;
-        opacity: 0.14;
+        opacity: 0.40;
+        width: 140px;
+        height: 140px;
     }
 
     .home-mobile-panel>section:not(.hero-fullbleed)::before {
-        width: 110px;
-        height: 110px;
-        top: 16px;
-        left: -22px;
-        background-image: url('../images/kids-icons/value-shape-1.png');
+        top: 8px;
+        right: 8px;
+        background-image: url('../images/kids-online/balloon.svg');
+        animation: kidsIconFloat 6.5s cubic-bezier(0.33, 1, 0.68, 1) infinite;
     }
 
     .home-mobile-panel>section:not(.hero-fullbleed)::after {
-        width: 120px;
-        height: 120px;
-        right: -26px;
-        bottom: 16px;
-        background-image: url('../images/kids-icons/twobirds_2.png');
+        bottom: 8px;
+        left: 8px;
+        background-image: url('../images/kids-online/kite.svg');
+        animation: kidsIconFloatWide 7s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+    }
+
+    .home-mobile-panel>section:not(.hero-fullbleed):nth-child(4n+2) {
+        background: #FFF0F5;
+        border-radius: 1.25rem;
+    }
+
+    .home-mobile-panel>section:not(.hero-fullbleed):nth-child(4n+3) {
+        background: #F0FFF8;
+        border-radius: 1.25rem;
+    }
+
+    .home-mobile-panel>section:not(.hero-fullbleed):nth-child(4n+4) {
+        background: #F5F0FF;
+        border-radius: 1.25rem;
     }
 
     .home-mobile-panel>section:not(.hero-fullbleed)>* {
@@ -456,34 +435,13 @@
         z-index: 1;
     }
 
-    .page>section:not(.hero-fullbleed)::before,
-    .page>section:not(.hero-fullbleed)::after {
-        content: "";
-        position: absolute;
-        pointer-events: none;
-        opacity: 0.15;
-        background-repeat: no-repeat;
-        background-size: contain;
-        z-index: 0;
-        will-change: transform;
-    }
-
-    .page>section:not(.hero-fullbleed)::before {
-        width: 86px;
-        height: 86px;
-        left: -26px;
-        top: 18px;
-        background-image: url('../images/kids-online/balloon.svg');
-        animation: kidsIconFloat 6.8s cubic-bezier(0.33, 1, 0.68, 1) infinite;
-    }
-
-    .page>section:not(.hero-fullbleed)::after {
-        width: 94px;
-        height: 94px;
-        right: -28px;
-        bottom: 18px;
-        background-image: url('../images/kids-online/kite.svg');
-        animation: kidsIconFloatWide 7.4s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+    /* Large visible section illustration decorators */
+    .page>section:not(.hero-fullbleed) {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        border-radius: 1.5rem;
+        margin-block: 0.5rem;
     }
 
     .page>section:not(.hero-fullbleed)>* {
@@ -491,24 +449,70 @@
         z-index: 1;
     }
 
-    .page>section:nth-of-type(even):not(.hero-fullbleed)::before {
+    /* Alternating pastel section backgrounds -- kids store colourful */
+    .page>section:not(.hero-fullbleed):nth-child(4n+2) {
+        background: #FFF0F5;
+    }
+
+    .page>section:not(.hero-fullbleed):nth-child(4n+3) {
+        background: #F0FFF8;
+    }
+
+    .page>section:not(.hero-fullbleed):nth-child(4n+4) {
+        background: #F5F0FF;
+    }
+
+    /* Large kids illustration decorators per section */
+    .page>section:not(.hero-fullbleed)::before,
+    .page>section:not(.hero-fullbleed)::after {
+        content: "";
+        position: absolute;
+        pointer-events: none;
+        background-repeat: no-repeat;
+        background-size: contain;
+        z-index: 0;
+        opacity: 0.48;
+        width: 200px;
+        height: 200px;
+    }
+
+    .page>section:not(.hero-fullbleed)::before {
+        top: 0;
+        right: 0;
+        background-image: url('../images/kids-illustrations/sitting.svg');
+        animation: kidsIconFloat 7s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+    }
+
+    .page>section:not(.hero-fullbleed)::after {
+        bottom: 0;
+        left: 0;
+        background-image: url('../images/kids-illustrations/dancing.svg');
+        animation: kidsIconFloatWide 8s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+    }
+
+    .page>section:not(.hero-fullbleed):nth-child(4n+2)::before {
+        background-image: url('../images/kids-illustrations/reading.svg');
+    }
+
+    .page>section:not(.hero-fullbleed):nth-child(4n+2)::after {
+        background-image: url('../images/kids-illustrations/sprinting.svg');
+    }
+
+    .page>section:not(.hero-fullbleed):nth-child(4n+3)::before {
         background-image: url('../images/kids-online/rainbow.svg');
-        opacity: 0.12;
     }
 
-    .page>section:nth-of-type(even):not(.hero-fullbleed)::after {
+    .page>section:not(.hero-fullbleed):nth-child(4n+3)::after {
         background-image: url('../images/kids-online/party-popper.svg');
-        opacity: 0.14;
     }
 
-    /* â”€â”€ Section alternating pastel backgrounds (kids store style) â”€â”€ */
-    .page>section:not(.hero-fullbleed):nth-child(even) {
-        background: rgba(255, 248, 230, 0.55);
-        border-radius: 1.5rem;
-        margin-inline: -0.5rem;
-        padding-inline: 0.5rem;
+    .page>section:not(.hero-fullbleed):nth-child(4n+4)::before {
+        background-image: url('../images/kids-online/teddy-bear.svg');
     }
 
+    .page>section:not(.hero-fullbleed):nth-child(4n+4)::after {
+        background-image: url('../images/kids-online/lollipop.svg');
+    }
     .card {
         @apply overflow-hidden rounded-[2rem] border border-white/70 bg-white/90 shadow-sm;
         box-shadow: 0 14px 40px rgba(35, 71, 112, 0.08);
@@ -618,6 +622,7 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     }
 
+
     .newsletter-kids-deco {
         position: absolute;
         right: 5%;
@@ -627,58 +632,111 @@
         pointer-events: none;
         animation: footerDecoBob 5.4s ease-in-out infinite;
         background-image: url('../images/kids-online/teddy-bear.svg');
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
 
+    .footer-newsletter-inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+    }
+
+    @media (min-width: 1024px) {
         .footer-newsletter-inner {
-            @apply mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-4 py-8 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8;
+            flex-wrap: nowrap;
+            padding: 2.5rem 2rem;
         }
+    }
 
-        .newsletter-copy h3 {
-            @apply text-2xl font-semibold tracking-tight text-white;
+    .newsletter-copy h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #ffffff;
+        letter-spacing: -0.025em;
+    }
+
+    .newsletter-copy p {
+        margin-top: 0.25rem;
+        font-size: 0.875rem;
+        color: #94a3b8;
+    }
+
+    .newsletter-form {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+        .newsletter-form { flex-direction: row; }
+    }
+
+    @media (min-width: 1024px) {
+        .newsletter-form { max-width: 36rem; }
+    }
+
+    .newsletter-input {
+        flex: 1 1 0%;
+    }
+
+    .site-footer {
+        position: relative;
+        overflow: hidden;
+        background: #1a2030;
+        color: #e2e8f0;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .site-footer-inner {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2.5rem 1rem;
+    }
+
+    @media (min-width: 768px) {
+        .site-footer-inner {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+    }
 
-        .newsletter-copy p {
-            @apply mt-1 text-sm text-slate-400;
+    @media (min-width: 1024px) {
+        .site-footer-inner {
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            padding: 2.5rem 2rem;
         }
+    }
 
-        .newsletter-form {
-            @apply flex w-full flex-col gap-3 sm:flex-row lg:max-w-xl;
-        }
+    .footer-kids-deco {
+        position: absolute;
+        pointer-events: none;
+        opacity: 0.2;
+        z-index: 0;
+    }
 
-        .newsletter-input {
-            @apply flex-1;
-        }
+    .footer-kids-deco-left {
+        left: -20px;
+        bottom: 68px;
+        width: 124px;
+        animation: footerDecoBob 5.8s ease-in-out infinite;
+    }
 
-        .site-footer {
-            position: relative;
-            overflow: hidden;
-            background: #1a2030;
-            color: #e2e8f0;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .footer-kids-deco {
-            position: absolute;
-            pointer-events: none;
-            opacity: 0.2;
-            z-index: 0;
-        }
-
-        .footer-kids-deco-left {
-            left: -20px;
-            bottom: 68px;
-            width: 124px;
-            animation: footerDecoBob 5.8s ease-in-out infinite;
-        }
-
-        .footer-kids-deco-right {
-            right: -18px;
-            bottom: 84px;
-            width: 112px;
-            animation: kidsIconFloat 6.4s cubic-bezier(0.33, 1, 0.68, 1) infinite;
-        }
-
-        background-image: url('../images/kids-online/lollipop.svg');
-        @apply mx-auto grid w-full max-w-[1400px] grid-cols-1 gap-8 px-4 py-10 sm:px-6 md:grid-cols-2 lg:grid-cols-5 lg:px-8;
+    .footer-kids-deco-right {
+        right: -18px;
+        bottom: 84px;
+        width: 112px;
+        animation: kidsIconFloat 6.4s cubic-bezier(0.33, 1, 0.68, 1) infinite;
     }
 
     .footer-col {
@@ -1161,6 +1219,70 @@
         display: block;
     }
 
+    /* Product detail page tabs */
+    .product-tab-panel {
+        display: none;
+    }
+
+    .product-tab-panel.active {
+        display: block;
+    }
+
+    .product-tab.active {
+        background: #FF6B8A !important;
+        color: #ffffff !important;
+        border-color: #FF6B8A !important;
+        box-shadow: 0 4px 14px rgba(255, 107, 138, 0.35);
+    }
+
+    /* Product detail page tabs */
+    .product-tab-panel {
+        display: none;
+    }
+
+    .product-tab-panel.active {
+        display: block;
+    }
+
+    .product-tab.active {
+        background: #FF6B8A !important;
+        color: #ffffff !important;
+        border-color: #FF6B8A !important;
+        box-shadow: 0 4px 14px rgba(255, 107, 138, 0.35);
+    }
+
+    /* Product detail page tabs */
+    .product-tab-panel {
+        display: none;
+    }
+
+    .product-tab-panel.active {
+        display: block;
+    }
+
+    .product-tab.active {
+        background: #FF6B8A !important;
+        color: #ffffff !important;
+        border-color: #FF6B8A !important;
+        box-shadow: 0 4px 14px rgba(255, 107, 138, 0.35);
+    }
+
+    /* Product detail page tabs */
+    .product-tab-panel {
+        display: none;
+    }
+
+    .product-tab-panel.active {
+        display: block;
+    }
+
+    .product-tab.active {
+        background: #FF6B8A !important;
+        color: #ffffff !important;
+        border-color: #FF6B8A !important;
+        box-shadow: 0 4px 14px rgba(255, 107, 138, 0.35);
+    }
+
     .mobile-app-nav {
         display: none;
     }
@@ -1524,19 +1646,21 @@
         }
 
         .home-mobile-panel>section:not(.hero-fullbleed)::before {
-            width: 84px;
-            height: 84px;
-            left: -20px;
-            top: 10px;
-            opacity: 0.16;
+            width: 100px;
+            height: 100px;
+            right: 4px;
+            top: 4px;
+            left: auto;
+            opacity: 0.35;
         }
 
         .home-mobile-panel>section:not(.hero-fullbleed)::after {
-            width: 92px;
-            height: 92px;
-            right: -22px;
-            bottom: 10px;
-            opacity: 0.16;
+            width: 100px;
+            height: 100px;
+            left: 4px;
+            bottom: 4px;
+            right: auto;
+            opacity: 0.35;
         }
 
         .hero-kids-frame,
