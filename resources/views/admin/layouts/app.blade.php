@@ -160,6 +160,29 @@
                         Blog Categories
                     </a>
                 </li>
+                <li class="{{ request()->routeIs('admin.pages*') ? 'current' : '' }}">
+                    <a href="{{ route('admin.pages.index') }}">
+                        <span class="menu-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                            </svg>
+                        </span>
+                        Pages
+                    </a>
+                </li>
+                <li class="{{ request()->routeIs('admin.menus*') ? 'current' : '' }}">
+                    <a href="{{ route('admin.menus.index') }}">
+                        <span class="menu-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="3" y1="12" x2="21" y2="12" />
+                                <line x1="3" y1="6" x2="21" y2="6" />
+                                <line x1="3" y1="18" x2="21" y2="18" />
+                            </svg>
+                        </span>
+                        Menus
+                    </a>
+                </li>
                 <li class="{{ request()->routeIs('admin.contacts*') ? 'current' : '' }}">
                     <a href="{{ route('admin.contacts.index') }}">
                         <span class="menu-icon">
@@ -204,6 +227,19 @@
                         Media
                     </a>
                 </li>
+                <li class="{{ request()->routeIs('admin.reports*') ? 'current' : '' }}">
+                    <a href="{{ route('admin.reports.sales') }}">
+                        <span class="menu-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="20" x2="18" y2="10" />
+                                <line x1="12" y1="20" x2="12" y2="4" />
+                                <line x1="6" y1="20" x2="6" y2="14" />
+                            </svg>
+                        </span>
+                        Reports
+                    </a>
+                </li>
+                <li class="menu-separator"></li>
                 <li class="{{ request()->routeIs('admin.settings*') ? 'current' : '' }}">
                     <a href="{{ route('admin.settings.index') }}">
                         <span class="menu-icon">
@@ -245,6 +281,7 @@
             </main>
         </div>
     </div>
+    <script src="{{ url('assets/admin/js/admin.js') }}"></script>
 </body>
 
 </html>

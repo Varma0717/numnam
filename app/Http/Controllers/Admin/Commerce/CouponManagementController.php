@@ -74,4 +74,23 @@ class CouponManagementController extends Controller
 
         return back()->with('status', 'Coupon deleted successfully.');
     }
+
+    public function bulk(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'bulk_action' => 'required|in:activate,deactivate,delete',
+            'ids'         => 'required|array',
+            'ids.*'       => 'integer|exists:coupons,id',
+        ]);
+
+        $ids = $request->input('ids');
+
+        match ($request->input('bulk_action')) {
+            'activate'   => Coupon::whereIn('id', $ids)->update(['is_active' => true]),
+            'deactivate' => Coupon::whereIn('id', $ids)->update(['is_active' => false]),
+            'delete'     => Coupon::whereIn('id', $ids)->delete(),
+        };
+
+        return redirect()->route('admin.coupons.index')->with('status', 'Bulk action applied to ' . count($ids) . ' coupons.');
+    }
 }

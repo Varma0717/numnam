@@ -14,6 +14,10 @@ use App\Http\Controllers\Admin\Commerce\ReferralManagementController;
 use App\Http\Controllers\Admin\ContactManagementController;
 use App\Http\Controllers\Admin\CustomerManagementController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\ShippingController;
+use App\Http\Controllers\Admin\PageManagementController;
+use App\Http\Controllers\Admin\MenuManagementController;
+use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\SubscriptionManagementController;
 use App\Http\Controllers\Web\CustomerAuthController;
 use App\Http\Controllers\Web\Payments\CheckoutPaymentController;
@@ -171,6 +175,36 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/settings/create', [SettingsController::class, 'create'])->name('settings.create');
         Route::post('/settings/store', [SettingsController::class, 'store'])->name('settings.store');
         Route::delete('/settings/{setting}', [SettingsController::class, 'destroy'])->name('settings.destroy');
+
+        // Shipping Zones (settings sub-resource)
+        Route::resource('shipping/zones', ShippingController::class)
+            ->parameters(['zones' => 'zone'])
+            ->names([
+                'index'   => 'shipping.zones.index',
+                'create'  => 'shipping.zones.create',
+                'store'   => 'shipping.zones.store',
+                'edit'    => 'shipping.zones.edit',
+                'update'  => 'shipping.zones.update',
+                'destroy' => 'shipping.zones.destroy',
+            ])
+            ->except('show');
+
+        // Pages
+        Route::resource('pages', PageManagementController::class)->except('show');
+
+        // Menus
+        Route::resource('menus', MenuManagementController::class)->except('show');
+
+        // Reports
+        Route::get('/reports/sales', [ReportsController::class, 'sales'])->name('reports.sales');
+        Route::get('/reports/customers', [ReportsController::class, 'customers'])->name('reports.customers');
+        Route::get('/reports/stock', [ReportsController::class, 'stock'])->name('reports.stock');
+
+        // Bulk actions
+        Route::post('/products/bulk', [ProductManagementController::class, 'bulk'])->name('products.bulk');
+        Route::post('/orders/bulk', [OrderManagementController::class, 'bulk'])->name('orders.bulk');
+        Route::post('/blogs/bulk', [BlogManagementController::class, 'bulk'])->name('blogs.bulk');
+        Route::post('/coupons/bulk', [CouponManagementController::class, 'bulk'])->name('coupons.bulk');
     });
 });
 

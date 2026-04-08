@@ -14,8 +14,8 @@ class OrderManagementController extends Controller
     {
         $orders = Order::query()
             ->with('user')
-            ->when($request->filled('status'), fn ($query) => $query->where('status', $request->string('status')))
-            ->when($request->filled('payment_status'), fn ($query) => $query->where('payment_status', $request->string('payment_status')))
+            ->when($request->filled('status'), fn($query) => $query->where('status', $request->string('status')))
+            ->when($request->filled('payment_status'), fn($query) => $query->where('payment_status', $request->string('payment_status')))
             ->latest('id')
             ->paginate(20)
             ->withQueryString();
@@ -25,7 +25,7 @@ class OrderManagementController extends Controller
 
     public function show(Order $order)
     {
-        $order->load(['items.product', 'paymentEvents' => fn ($query) => $query->latest('id')]);
+        $order->load(['items.product', 'paymentEvents' => fn($query) => $query->latest('id')]);
 
         return view('admin.orders.show', compact('order'));
     }
@@ -77,5 +77,19 @@ class OrderManagementController extends Controller
         ]);
 
         return back()->with('status', 'Timeline note added.');
+    }
+
+    public function bulk(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'bulk_action' => 'required|in:processing,shipped,delivered,cancelled',
+            'ids'         => 'required|array',
+            'ids.*'       => 'integer|exists:orders,id',
+        ]);
+
+        $ids = $request->input('ids');
+        Order::whereIn('id', $ids)->update(['status' => $request->input('bulk_action')]);
+
+        return redirect()->route('admin.orders.index')->with('status', 'Bulk action applied to ' . count($ids) . ' orders.');
     }
 }

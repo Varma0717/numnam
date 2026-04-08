@@ -615,10 +615,40 @@ class StorefrontController extends Controller
             'ship_city' => 'required|string|max:120',
             'ship_state' => 'required|string|max:120',
             'ship_pincode' => 'required|string|max:20',
-            'payment_method' => 'required|in:upi,card,cod,netbanking,razorpay,stripe',
+            'payment_method' => 'required|in:razorpay,cod',
             'coupon_code' => 'nullable|string|max:32',
             'notes' => 'nullable|string|max:1200',
         ]);
+
+        // Server-side COD validation
+        if ($validated['payment_method'] === 'cod') {
+            $codSettings = SiteSetting::whereIn('key', [
+                'payment_cod_enabled',
+                'payment_cod_min_order',
+                'payment_cod_max_order',
+                'payment_cod_allowed_pincodes',
+            ])->pluck('value', 'key');
+
+            if (($codSettings['payment_cod_enabled'] ?? '0') !== '1') {
+                return redirect()->back()->withErrors(['payment_method' => 'Cash on Delivery is not available.'])->withInput();
+            }
+
+            $codMin = (float) ($codSettings['payment_cod_min_order'] ?? 0);
+            $codMax = (float) ($codSettings['payment_cod_max_order'] ?? 0);
+            $cartTotal = (float) $cart['totals']['total'];
+
+            if ($codMin > 0 && $cartTotal < $codMin) {
+                return redirect()->back()->withErrors(['payment_method' => 'Cash on Delivery requires a minimum order of ₹' . number_format($codMin, 0) . '.'])->withInput();
+            }
+            if ($codMax > 0 && $cartTotal > $codMax) {
+                return redirect()->back()->withErrors(['payment_method' => 'Cash on Delivery is not available for orders above ₹' . number_format($codMax, 0) . '.'])->withInput();
+            }
+
+            $codPincodes = array_filter(array_map('trim', explode(',', $codSettings['payment_cod_allowed_pincodes'] ?? '')));
+            if (!empty($codPincodes) && !in_array($validated['ship_pincode'], $codPincodes, true)) {
+                return redirect()->back()->withErrors(['payment_method' => 'Cash on Delivery is not available for your pincode.'])->withInput();
+            }
+        }
 
         DB::transaction(function () use ($request, $validated, $cart, &$order, &$gatewayInitError) {
             $user = $request->user();
@@ -629,21 +659,44 @@ class StorefrontController extends Controller
                 $validated['coupon_code'] ?? null,
             );
 
+            // Tax calculation
+            $taxSettings = SiteSetting::whereIn('key', ['tax_gst_enabled', 'tax_gst_rate', 'tax_inclusive'])
+                ->pluck('value', 'key');
+            $gstEnabled = ($taxSettings['tax_gst_enabled'] ?? '0') === '1';
+            $gstRate = (float) ($taxSettings['tax_gst_rate'] ?? 0);
+            $taxInclusive = ($taxSettings['tax_inclusive'] ?? '1') === '1';
+            $taxAmount = 0;
+
+            $subtotalAfterDiscount = max(0, (float) $cart['totals']['subtotal'] - (float) $discounts['total_discount']);
+
+            if ($gstEnabled && $gstRate > 0) {
+                if ($taxInclusive) {
+                    // Tax is included in prices; extract it for display
+                    $taxAmount = round($subtotalAfterDiscount - ($subtotalAfterDiscount / (1 + $gstRate / 100)), 2);
+                } else {
+                    // Tax is added on top
+                    $taxAmount = round($subtotalAfterDiscount * ($gstRate / 100), 2);
+                }
+            }
+
             $payableTotal = max(
                 0,
-                ((float) $cart['totals']['subtotal'] - (float) $discounts['total_discount']) + (float) $cart['totals']['shipping_fee']
+                $subtotalAfterDiscount + ($taxInclusive ? 0 : $taxAmount) + (float) $cart['totals']['shipping_fee']
             );
+
+            $isCod = $validated['payment_method'] === 'cod';
 
             $order = Order::create([
                 'user_id' => $user->id,
-                'status' => 'pending',
+                'status' => $isCod ? 'processing' : 'pending',
                 'subtotal' => $cart['totals']['subtotal'],
                 'discount' => $discounts['total_discount'],
+                'tax_amount' => $taxAmount,
                 'shipping_fee' => $cart['totals']['shipping_fee'],
                 'total' => $payableTotal,
-                'payment_method' => in_array($validated['payment_method'], ['razorpay', 'upi'], true) ? 'upi' : (in_array($validated['payment_method'], ['stripe', 'card'], true) ? 'card' : $validated['payment_method']),
-                'payment_gateway' => in_array($validated['payment_method'], ['razorpay', 'stripe'], true) ? $validated['payment_method'] : null,
-                'payment_status' => 'pending',
+                'payment_method' => $isCod ? 'cod' : 'upi',
+                'payment_gateway' => $isCod ? null : 'razorpay',
+                'payment_status' => $isCod ? 'cod_pending' : 'pending',
                 'coupon_code' => $discounts['coupon']?->code,
                 'ship_name' => $validated['ship_name'],
                 'ship_phone' => $validated['ship_phone'],
@@ -700,10 +753,8 @@ class StorefrontController extends Controller
                 ]);
             }
 
-            if (in_array($order->payment_gateway, ['razorpay', 'stripe'], true)) {
-                $gatewayResult = $order->payment_gateway === 'razorpay'
-                    ? $this->paymentGatewayService->createRazorpayOrder($order)
-                    : $this->paymentGatewayService->createStripePaymentIntent($order);
+            if (in_array($order->payment_gateway, ['razorpay'], true)) {
+                $gatewayResult = $this->paymentGatewayService->createRazorpayOrder($order);
 
                 PaymentEvent::create([
                     'order_id' => $order->id,
@@ -734,7 +785,7 @@ class StorefrontController extends Controller
             CartItem::query()->where('user_id', $request->user()->id)->delete();
         }
 
-        if ($order && in_array($order->payment_gateway, ['razorpay', 'stripe'], true)) {
+        if ($order && in_array($order->payment_gateway, ['razorpay'], true)) {
             if ($gatewayInitError) {
                 return redirect()->route('store.account')->withErrors(['payment' => $gatewayInitError]);
             }

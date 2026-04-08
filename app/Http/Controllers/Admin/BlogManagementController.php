@@ -94,4 +94,23 @@ class BlogManagementController extends Controller
 
         return redirect()->route('admin.blogs.index')->with('status', 'Blog post deleted.');
     }
+
+    public function bulk(Request $request)
+    {
+        $request->validate([
+            'bulk_action' => 'required|in:publish,draft,delete',
+            'ids'         => 'required|array',
+            'ids.*'       => 'integer|exists:blogs,id',
+        ]);
+
+        $ids = $request->input('ids');
+
+        match ($request->input('bulk_action')) {
+            'publish' => Blog::whereIn('id', $ids)->update(['status' => 'published', 'published_at' => now()]),
+            'draft'   => Blog::whereIn('id', $ids)->update(['status' => 'draft', 'published_at' => null]),
+            'delete'  => Blog::whereIn('id', $ids)->delete(),
+        };
+
+        return redirect()->route('admin.blogs.index')->with('status', 'Bulk action applied to ' . count($ids) . ' posts.');
+    }
 }

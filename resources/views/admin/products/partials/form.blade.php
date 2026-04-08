@@ -1,43 +1,184 @@
 @php($isEdit = isset($product))
 
-<div class="admin-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));">
-    <select name="category_id">
-        <option value="">Select category</option>
-        @foreach($categories as $category)
-            <option value="{{ $category->id }}" @selected(old('category_id', $product->category_id ?? null) == $category->id)>{{ $category->name }}</option>
-        @endforeach
-    </select>
+<div class="admin-editor-layout">
+    {{-- Main Column --}}
+    <div class="admin-editor-main">
+        {{-- Product Name --}}
+        <div class="admin-form-row" style="margin-bottom:16px;">
+            <input type="text" name="name" value="{{ old('name', $product->name ?? '') }}" placeholder="Product name" required style="font-size:18px; padding:8px 12px; width:100%; border:1px solid #8c8f94; border-radius:4px;">
+        </div>
+        <div class="admin-form-row" style="margin-bottom:16px;">
+            <label style="font-size:12px; color:var(--wp-muted);">Slug</label>
+            <input type="text" name="slug" value="{{ old('slug', $product->slug ?? '') }}" placeholder="Auto-generated from name if blank" style="width:100%; border:1px solid #8c8f94; border-radius:4px; padding:4px 8px; font-size:13px;">
+        </div>
 
-    <input name="name" value="{{ old('name', $product->name ?? '') }}" placeholder="Product name" required>
+        {{-- Short Description --}}
+        <section class="postbox" style="margin-bottom:16px;">
+            <div class="postbox-header">
+                <h3>Short Description</h3>
+            </div>
+            <div class="inside" style="padding:0;">
+                <textarea name="short_description" id="short_description" style="width:100%; min-height:100px; border:none; padding:8px 12px; resize:vertical; font-size:13px; font-family:inherit;">{{ old('short_description', $product->short_description ?? '') }}</textarea>
+            </div>
+        </section>
 
-    <input name="slug" value="{{ old('slug', $product->slug ?? '') }}" placeholder="Slug (optional)">
-    <input name="age_group" value="{{ old('age_group', $product->age_group ?? '6M+') }}" placeholder="Age group (e.g. 6M+)" required>
+        {{-- Full Description (WYSIWYG) --}}
+        <section class="postbox" style="margin-bottom:16px;">
+            <div class="postbox-header">
+                <h3>Description</h3>
+            </div>
+            <div class="inside" style="padding:0;">
+                <textarea name="description" id="product_description" class="wysiwyg-editor" style="width:100%; min-height:250px; border:none; padding:8px 12px; resize:vertical;">{{ old('description', $product->description ?? '') }}</textarea>
+            </div>
+        </section>
 
-    <select name="type" required>
-        @foreach(['puree' => 'Puree', 'puffs' => 'Puffs', 'cookies' => 'Cookies'] as $key => $label)
-            <option value="{{ $key }}" @selected(old('type', $product->type ?? 'puree') === $key)>{{ $label }}</option>
-        @endforeach
-    </select>
+        {{-- Ingredients --}}
+        <section class="postbox" style="margin-bottom:16px;">
+            <div class="postbox-header">
+                <h3>Ingredients</h3>
+            </div>
+            <div class="inside" style="padding:0;">
+                <textarea name="ingredients" id="ingredients" style="width:100%; min-height:100px; border:none; padding:8px 12px; resize:vertical; font-size:13px; font-family:inherit;">{{ old('ingredients', $product->ingredients ?? '') }}</textarea>
+            </div>
+        </section>
 
-    <input name="stock" type="number" min="0" value="{{ old('stock', $product->stock ?? 0) }}" placeholder="Stock" required>
+        {{-- Product Data (WooCommerce-style tabs) --}}
+        <section class="postbox" style="margin-bottom:16px;">
+            <div class="postbox-header">
+                <h3>Product Data</h3>
+            </div>
+            <div class="inside">
+                <div class="admin-form-grid-2">
+                    <div class="admin-form-row">
+                        <label>Price (₹)</label>
+                        <input type="number" step="0.01" min="0" name="price" value="{{ old('price', $product->price ?? '') }}" placeholder="Regular price" required>
+                    </div>
+                    <div class="admin-form-row">
+                        <label>Sale Price (₹)</label>
+                        <input type="number" step="0.01" min="0" name="sale_price" value="{{ old('sale_price', $product->sale_price ?? '') }}" placeholder="Leave blank for no sale">
+                    </div>
+                    <div class="admin-form-row">
+                        <label>Stock Quantity</label>
+                        <input type="number" min="0" name="stock" value="{{ old('stock', $product->stock ?? 0) }}" required>
+                    </div>
+                    <div class="admin-form-row">
+                        <label>Age Group</label>
+                        <input type="text" name="age_group" value="{{ old('age_group', $product->age_group ?? '6M+') }}" placeholder="e.g. 6M+" required>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <input name="price" type="number" step="0.01" min="0" value="{{ old('price', $product->price ?? '') }}" placeholder="Price" required>
-    <input name="sale_price" type="number" step="0.01" min="0" value="{{ old('sale_price', $product->sale_price ?? '') }}" placeholder="Sale price">
+        {{-- Nutrition Facts --}}
+        <section class="postbox">
+            <div class="postbox-header">
+                <h3>Nutrition Facts</h3>
+            </div>
+            <div class="inside">
+                <p class="admin-field-desc">Enter as JSON, e.g. {"protein":"13g","carbs":"20g"}</p>
+                <textarea name="nutrition_facts" style="width:100%; min-height:80px; font-family:monospace; font-size:12px;" placeholder='{"protein":"13g"}'>{{ old('nutrition_facts', isset($product) ? json_encode($product->nutrition_facts ?? [], JSON_PRETTY_PRINT) : '') }}</textarea>
+            </div>
+        </section>
+    </div>
+
+    {{-- Sidebar --}}
+    <div class="admin-editor-sidebar">
+        {{-- Publish --}}
+        <section class="postbox">
+            <div class="postbox-header">
+                <h3>Publish</h3>
+            </div>
+            <div class="inside">
+                <label class="admin-toggle-label" style="margin-bottom:12px;">
+                    <input type="hidden" name="is_active" value="0">
+                    <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $product->is_active ?? true))>
+                    <span>Active</span>
+                </label>
+                <label class="admin-toggle-label" style="margin-bottom:16px;">
+                    <input type="hidden" name="is_featured" value="0">
+                    <input type="checkbox" name="is_featured" value="1" @checked(old('is_featured', $product->is_featured ?? false))>
+                    <span>Featured</span>
+                </label>
+                <button class="admin-btn" type="submit" style="width:100%;">{{ $isEdit ? 'Update Product' : 'Publish Product' }}</button>
+            </div>
+        </section>
+
+        {{-- Category --}}
+        <section class="postbox">
+            <div class="postbox-header">
+                <h3>Category</h3>
+            </div>
+            <div class="inside">
+                <select name="category_id" style="width:100%;">
+                    <option value="">— No Category —</option>
+                    @foreach($categories as $category)
+                    <option value="{{ $category->id }}" @selected(old('category_id', $product->category_id ?? null) == $category->id)>{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </section>
+
+        {{-- Product Type --}}
+        <section class="postbox">
+            <div class="postbox-header">
+                <h3>Type</h3>
+            </div>
+            <div class="inside">
+                <select name="type" style="width:100%;" required>
+                    @foreach(['puree' => 'Puree', 'puffs' => 'Puffs', 'cookies' => 'Cookies'] as $key => $label)
+                    <option value="{{ $key }}" @selected(old('type', $product->type ?? 'puree') === $key)>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </section>
+
+        {{-- Product Image --}}
+        <section class="postbox">
+            <div class="postbox-header">
+                <h3>Product Image</h3>
+            </div>
+            <div class="inside">
+                <input type="text" name="image" value="{{ old('image', $product->image ?? '') }}" placeholder="Image URL" style="width:100%; margin-bottom:8px;">
+                @if(!empty($product->image ?? null))
+                <img src="{{ $product->image }}" alt="" style="max-width:100%; height:auto; border:1px solid var(--wp-border); border-radius:4px;">
+                @endif
+            </div>
+        </section>
+
+        {{-- Gallery --}}
+        <section class="postbox">
+            <div class="postbox-header">
+                <h3>Gallery</h3>
+            </div>
+            <div class="inside">
+                <p class="admin-field-desc">One URL per line</p>
+                <textarea name="gallery" style="width:100%; min-height:80px; font-size:12px;" placeholder="https://...">{{ old('gallery', isset($product) ? implode(PHP_EOL, $product->gallery ?? []) : '') }}</textarea>
+            </div>
+        </section>
+
+        {{-- Badges --}}
+        <section class="postbox">
+            <div class="postbox-header">
+                <h3>Badges</h3>
+            </div>
+            <div class="inside">
+                <p class="admin-field-desc">Comma separated</p>
+                <input type="text" name="badges" value="{{ old('badges', isset($product) ? implode(', ', $product->badges ?? []) : '') }}" placeholder="Organic, New, Best Seller" style="width:100%;">
+            </div>
+        </section>
+    </div>
 </div>
 
-<input name="image" value="{{ old('image', $product->image ?? '') }}" placeholder="Primary image URL">
-
-<textarea name="short_description" placeholder="Short description">{{ old('short_description', $product->short_description ?? '') }}</textarea>
-<textarea name="description" placeholder="Long description">{{ old('description', $product->description ?? '') }}</textarea>
-<textarea name="ingredients" placeholder="Ingredients">{{ old('ingredients', $product->ingredients ?? '') }}</textarea>
-
-<textarea name="gallery" placeholder="Gallery URLs (one per line)">{{ old('gallery', isset($product) ? implode(PHP_EOL, $product->gallery ?? []) : '') }}</textarea>
-<textarea name="badges" placeholder="Badges (comma separated)">{{ old('badges', isset($product) ? implode(', ', $product->badges ?? []) : '') }}</textarea>
-<textarea name="nutrition_facts" placeholder='Nutrition facts JSON, e.g. {"protein":"13g"}'>{{ old('nutrition_facts', isset($product) ? json_encode($product->nutrition_facts ?? [], JSON_PRETTY_PRINT) : '') }}</textarea>
-
-<div style="display:flex; gap:.8rem; margin:.5rem 0;">
-    <label style="display:flex; align-items:center; gap:.35rem;"><input type="checkbox" name="is_active" value="1" @checked(old('is_active', $product->is_active ?? true))> Active</label>
-    <label style="display:flex; align-items:center; gap:.35rem;"><input type="checkbox" name="is_featured" value="1" @checked(old('is_featured', $product->is_featured ?? false))> Featured</label>
-</div>
-
-<button class="admin-btn" type="submit">{{ $isEdit ? 'Update Product' : 'Create Product' }}</button>
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: '.wysiwyg-editor',
+        height: 300,
+        menubar: false,
+        plugins: 'lists link image code table',
+        toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image | code',
+        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; }',
+        branding: false,
+        promotion: false,
+    });
+</script>

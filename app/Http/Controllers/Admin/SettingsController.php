@@ -8,25 +8,39 @@ use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
-    public function index()
-    {
-        $settings = SiteSetting::all()->groupBy('group');
+    private array $tabs = ['general', 'payment', 'shipping', 'tax', 'email'];
 
-        return view('admin.settings.index', compact('settings'));
+    public function index(Request $request)
+    {
+        $activeTab = $request->get('tab', 'general');
+        if (!in_array($activeTab, $this->tabs, true)) {
+            $activeTab = 'general';
+        }
+
+        $settings = SiteSetting::all()->keyBy('key');
+
+        return view('admin.settings.index', compact('settings', 'activeTab'));
     }
 
     public function update(Request $request)
     {
+        $tab = $request->input('_tab', 'general');
+
         $request->validate([
             'settings'   => 'required|array',
-            'settings.*' => 'nullable|string|max:2000',
+            'settings.*' => 'nullable|string|max:5000',
         ]);
 
         foreach ($request->input('settings', []) as $key => $value) {
-            SiteSetting::where('key', $key)->update(['value' => $value]);
+            SiteSetting::updateOrCreate(
+                ['key' => $key],
+                ['value' => $value]
+            );
         }
 
-        return redirect()->route('admin.settings.index')->with('status', 'Settings saved.');
+        return redirect()
+            ->route('admin.settings.index', ['tab' => $tab])
+            ->with('status', ucfirst($tab) . ' settings saved.');
     }
 
     public function create()

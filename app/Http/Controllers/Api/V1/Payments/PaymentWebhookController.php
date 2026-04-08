@@ -69,56 +69,6 @@ class PaymentWebhookController extends Controller
         return response()->json(['received' => true]);
     }
 
-    public function stripe(Request $request): JsonResponse
-    {
-        $payload = $request->getContent();
-        $signature = (string) $request->header('Stripe-Signature');
-        $valid = $this->paymentGatewayService->verifyStripeWebhook($payload, $signature);
-        $data = $request->json()->all();
-        $eventType = (string) ($data['type'] ?? 'unknown');
-
-        if (! $valid) {
-            $this->recordInvalidEvent('stripe', $eventType, $data);
-            return response()->json(['error' => 'Invalid signature.'], 403);
-        }
-
-        $object = $data['data']['object'] ?? [];
-        $intentId = $object['id'] ?? null;
-        $metadata = $object['metadata'] ?? [];
-        $orderId = isset($metadata['order_id']) ? (int) $metadata['order_id'] : null;
-        $status = (string) ($object['status'] ?? 'unknown');
-        $amount = isset($object['amount_received']) ? ((float) $object['amount_received'] / 100) : null;
-
-        $order = $orderId ? Order::query()->find($orderId) : null;
-
-        $fingerprint = $this->buildFingerprint('stripe', $eventType, (string) ($data['id'] ?? $intentId), $data);
-        $created = $this->recordEventIfNew([
-            'order_id' => $order?->id,
-            'gateway' => 'stripe',
-            'event_type' => $eventType,
-            'external_reference' => $intentId,
-            'fingerprint' => $fingerprint,
-            'status' => $status,
-            'amount' => $amount,
-            'currency' => strtoupper((string) ($object['currency'] ?? 'INR')),
-            'signature_valid' => true,
-            'payload' => $data,
-        ]);
-
-        if ($created && $order) {
-            $this->reconcileOrderPaymentState(
-                $order,
-                'stripe',
-                $intentId,
-                $eventType,
-                ['payment_intent.succeeded', 'charge.succeeded'],
-                ['payment_intent.payment_failed', 'charge.failed']
-            );
-        }
-
-        return response()->json(['received' => true]);
-    }
-
     private function recordInvalidEvent(string $gateway, string $eventType, array $payload): void
     {
         PaymentEvent::query()->create([

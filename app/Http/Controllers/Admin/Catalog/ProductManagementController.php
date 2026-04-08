@@ -68,6 +68,25 @@ class ProductManagementController extends Controller
         return redirect()->route('admin.products.index')->with('status', 'Product deleted successfully.');
     }
 
+    public function bulk(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'bulk_action' => 'required|in:activate,deactivate,delete',
+            'ids'         => 'required|array',
+            'ids.*'       => 'integer|exists:products,id',
+        ]);
+
+        $ids = $request->input('ids');
+
+        match ($request->input('bulk_action')) {
+            'activate'   => Product::whereIn('id', $ids)->update(['is_active' => true, 'status' => 'published']),
+            'deactivate' => Product::whereIn('id', $ids)->update(['is_active' => false, 'status' => 'draft']),
+            'delete'     => Product::whereIn('id', $ids)->delete(),
+        };
+
+        return redirect()->route('admin.products.index')->with('status', 'Bulk action applied to ' . count($ids) . ' products.');
+    }
+
     private function validatePayload(Request $request, ?int $productId = null): array
     {
         $validated = $request->validate([
@@ -96,13 +115,13 @@ class ProductManagementController extends Controller
         $validated['status'] = $validated['is_active'] ? 'published' : 'draft';
 
         $validated['gallery'] = collect(preg_split('/\r\n|\r|\n/', (string) ($validated['gallery'] ?? '')))
-            ->map(fn ($value) => trim($value))
+            ->map(fn($value) => trim($value))
             ->filter()
             ->values()
             ->all();
 
         $validated['badges'] = collect(explode(',', (string) ($validated['badges'] ?? '')))
-            ->map(fn ($value) => trim($value))
+            ->map(fn($value) => trim($value))
             ->filter()
             ->values()
             ->all();

@@ -1,7 +1,7 @@
 @extends('store.layouts.app')
 
 @section('title', 'NumNam - Checkout')
-@section('meta_description', 'Complete your NumNam order. Secure checkout with Razorpay, Stripe, UPI and COD.')
+@section('meta_description', 'Complete your NumNam order. Secure checkout with Razorpay and Cash on Delivery.')
 
 @section('content')
 <section class="section pb-4 pt-2">
@@ -56,39 +56,61 @@
             <h2 class="mt-8 text-xl font-semibold tracking-tight text-slate-900">Payment Method</h2>
             <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 @php
-                $methods = [
-                ['value' => 'razorpay', 'label' => 'Razorpay', 'desc' => 'UPI, Cards, Wallets', 'icon' => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                $paymentSettings = \App\Models\SiteSetting::whereIn('key', [
+                'payment_razorpay_enabled', 'payment_cod_enabled',
+                'payment_cod_min_order', 'payment_cod_max_order', 'payment_cod_allowed_pincodes',
+                ])->pluck('value', 'key');
+
+                $methods = [];
+
+                // Razorpay is always available (primary gateway)
+                if (($paymentSettings['payment_razorpay_enabled'] ?? '1') === '1') {
+                $methods[] = ['value' => 'razorpay', 'label' => 'Razorpay', 'desc' => 'UPI, Cards, Wallets', 'icon' => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="1" y="4" width="22" height="16" rx="2" />
                     <line x1="1" y1="10" x2="23" y2="10" />
-                </svg>'],
-                ['value' => 'stripe', 'label' => 'Stripe', 'desc' => 'International Cards', 'icon' => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="1" y="4" width="22" height="16" rx="2" />
-                    <line x1="1" y1="10" x2="23" y2="10" />
-                </svg>'],
-                ['value' => 'upi', 'label' => 'Manual UPI', 'desc' => 'Pay via UPI ID', 'icon' => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                </svg>'],
-                ['value' => 'cod', 'label' => 'Cash on Delivery', 'desc' => 'Pay when delivered', 'icon' => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="2" y="6" width="20" height="12" rx="2" />
-                    <circle cx="12" cy="12" r="3" />
-                </svg>'],
-                ['value' => 'netbanking', 'label' => 'Net Banking', 'desc' => 'Bank transfer', 'icon' => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3" />
-                </svg>'],
-                ];
-                @endphp
-                @foreach($methods as $method)
-                <label class="relative block cursor-pointer">
-                    <input class="peer sr-only" type="radio" name="payment_method" value="{{ $method['value'] }}" {{ old('payment_method') === $method['value'] ? 'checked' : '' }} required>
-                    <span class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 transition-all duration-200 peer-checked:border-numnam-300 peer-checked:bg-numnam-50">
-                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-700 peer-checked:bg-white">{!! $method['icon'] !!}</span>
-                        <span>
-                            <strong class="block text-sm text-slate-900">{{ $method['label'] }}</strong>
-                            <span class="text-xs text-slate-600">{{ $method['desc'] }}</span>
+                </svg>'];
+                }
+
+                // COD: only if admin-enabled AND order meets conditions
+                $codEnabled = ($paymentSettings['payment_cod_enabled'] ?? '0') === '1';
+                $codMinOrder = (float) ($paymentSettings['payment_cod_min_order'] ?? 0);
+                $codMaxOrder = (float) ($paymentSettings['payment_cod_max_order'] ?? 0);
+                $codPincodes = array_filter(array_map('trim', explode(',', $paymentSettings['payment_cod_allowed_pincodes'] ?? '')));
+                $orderTotal = $totals['total'] ?? 0;
+
+                $codAvailable = $codEnabled;
+                if ($codAvailable && $codMinOrder > 0 && $orderTotal < $codMinOrder) {
+                    $codAvailable=false;
+                    }
+                    if ($codAvailable && $codMaxOrder> 0 && $orderTotal > $codMaxOrder) {
+                    $codAvailable = false;
+                    }
+                    // Pincode check deferred to JS / server-side on submit
+
+                    if ($codAvailable) {
+                    $codDesc = 'Pay when delivered';
+                    if ($codMinOrder > 0) $codDesc .= ' · Min ₹' . number_format($codMinOrder, 0);
+                    $methods[] = ['value' => 'cod', 'label' => 'Cash on Delivery', 'desc' => $codDesc, 'icon' => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="6" width="20" height="12" rx="2" />
+                        <circle cx="12" cy="12" r="3" />
+                    </svg>'];
+                    }
+                    @endphp
+                    @foreach($methods as $method)
+                    <label class="relative block cursor-pointer">
+                        <input class="peer sr-only" type="radio" name="payment_method" value="{{ $method['value'] }}" {{ old('payment_method') === $method['value'] ? 'checked' : '' }} required>
+                        <span class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 transition-all duration-200 peer-checked:border-numnam-300 peer-checked:bg-numnam-50">
+                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-700 peer-checked:bg-white">{!! $method['icon'] !!}</span>
+                            <span>
+                                <strong class="block text-sm text-slate-900">{{ $method['label'] }}</strong>
+                                <span class="text-xs text-slate-600">{{ $method['desc'] }}</span>
+                            </span>
                         </span>
-                    </span>
-                </label>
-                @endforeach
+                    </label>
+                    @endforeach
+                    @if(empty($methods))
+                    <p class="text-sm text-red-600">No payment methods available. Please contact support.</p>
+                    @endif
             </div>
 
             <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">

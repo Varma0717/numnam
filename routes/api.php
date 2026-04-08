@@ -242,5 +242,4 @@ Route::get('health', fn() => response()->json([
 
 Route::prefix('v1/payments/webhooks')->group(function () {
     Route::post('razorpay', [PaymentWebhookController::class, 'razorpay']);
-    Route::post('stripe', [PaymentWebhookController::class, 'stripe']);
 });
