@@ -122,7 +122,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
-        Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+        Route::match(['get', 'post'], '/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
         Route::get('/orders', [OrderManagementController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order}', [OrderManagementController::class, 'show'])->name('orders.show');
