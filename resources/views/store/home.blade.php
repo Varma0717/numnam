@@ -55,48 +55,49 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
 </section>
 
 {{-- ===== BLURBS — Why Parents Trust NumNam ===== --}}
-<section class="px-4 py-10 sm:px-6 lg:px-8" style="background:#FFFDF8;">
+<section class="px-4 py-12 sm:px-6 sm:py-16 lg:px-8" style="background:linear-gradient(180deg, #FFF0F5 0%, #FFFDF8 100%);">
     <div class="mx-auto max-w-6xl">
-        <h2 class="text-center font-heading text-2xl font-bold sm:text-3xl" style="color:#2D2D3F;">Why Parents Trust NumNam</h2>
-        <div class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-            <div class="rounded-[2rem] border-3 bg-white p-5 text-center" style="border-color:#FFD6E5;">
-                <div class="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full" style="background:#FFF0F5;">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF6B8A" stroke-width="2">
+        <h2 class="text-center font-heading text-3xl font-bold sm:text-4xl" style="color:#FF6B8A;">Why Parents Trust NumNam</h2>
+        <p class="mx-auto mt-3 max-w-lg text-center text-base" style="color:#5e6478;">Clean ingredients, doctor-approved recipes, and zero compromise.</p>
+        <div class="mt-10 grid grid-cols-2 gap-5 lg:grid-cols-4">
+            <div class="rounded-[2rem] border-3 p-6 text-center transition-transform duration-200 hover:-translate-y-1" style="border-color:#FF6B8A; background:#FFF0F5;">
+                <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full" style="background:#fff; box-shadow: 0 4px 0 rgba(255,107,138,0.15);">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FF6B8A" stroke-width="2">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     </svg>
                 </div>
-                <h3 class="font-heading text-sm font-bold sm:text-base" style="color:#2D2D3F;">Doctor-Founded</h3>
-                <p class="mt-1 text-xs" style="color:#5e6478;">Backed by European Nutrition</p>
+                <h3 class="font-heading text-base font-bold sm:text-lg" style="color:#FF6B8A;">Doctor-Founded</h3>
+                <p class="mt-2 text-sm" style="color:#5e6478;">Backed by European Nutrition Standards</p>
             </div>
-            <div class="rounded-[2rem] border-3 bg-white p-5 text-center" style="border-color:#C8F7DC;">
-                <div class="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full" style="background:#ECFFF4;">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4ECDC4" stroke-width="2">
+            <div class="rounded-[2rem] border-3 p-6 text-center transition-transform duration-200 hover:-translate-y-1" style="border-color:#4ECDC4; background:#ECFFF4;">
+                <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full" style="background:#fff; box-shadow: 0 4px 0 rgba(78,205,196,0.15);">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4ECDC4" stroke-width="2">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.85 0 3.58-.5 5.07-1.38" />
                         <path d="M17 8c-2 0-5 2.5-5 6" />
                         <path d="M15 2c2.5 4 3 8.5 1 13" />
                     </svg>
                 </div>
-                <h3 class="font-heading text-sm font-bold sm:text-base" style="color:#2D2D3F;">Vegetable Forward</h3>
-                <p class="mt-1 text-xs" style="color:#5e6478;">Rich in Veggies</p>
+                <h3 class="font-heading text-base font-bold sm:text-lg" style="color:#4ECDC4;">Vegetable Forward</h3>
+                <p class="mt-2 text-sm" style="color:#5e6478;">Rich in Real Veggies & Fruits</p>
             </div>
-            <div class="rounded-[2rem] border-3 bg-white p-5 text-center" style="border-color:#FFE8B8;">
-                <div class="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full" style="background:#FFFBF0;">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FFD93D" stroke-width="2">
+            <div class="rounded-[2rem] border-3 p-6 text-center transition-transform duration-200 hover:-translate-y-1" style="border-color:#FFD93D; background:#FFFBF0;">
+                <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full" style="background:#fff; box-shadow: 0 4px 0 rgba(255,217,61,0.2);">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FFD93D" stroke-width="2">
                         <circle cx="12" cy="12" r="10" />
                         <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
                     </svg>
                 </div>
-                <h3 class="font-heading text-sm font-bold sm:text-base" style="color:#2D2D3F;">No Added Sugar</h3>
-                <p class="mt-1 text-xs" style="color:#5e6478;">Naturally sweet</p>
+                <h3 class="font-heading text-base font-bold sm:text-lg" style="color:#E5A800;">No Added Sugar</h3>
+                <p class="mt-2 text-sm" style="color:#5e6478;">Naturally Sweet, Always Clean</p>
             </div>
-            <div class="rounded-[2rem] border-3 bg-white p-5 text-center" style="border-color:#DDD6F3;">
-                <div class="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full" style="background:#F5F0FF;">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9B8EC4" stroke-width="2">
+            <div class="rounded-[2rem] border-3 p-6 text-center transition-transform duration-200 hover:-translate-y-1" style="border-color:#9B8EC4; background:#F5F0FF;">
+                <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full" style="background:#fff; box-shadow: 0 4px 0 rgba(155,142,196,0.15);">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#9B8EC4" stroke-width="2">
                         <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
                     </svg>
                 </div>
-                <h3 class="font-heading text-sm font-bold sm:text-base" style="color:#2D2D3F;">No Preservatives</h3>
-                <p class="mt-1 text-xs" style="color:#5e6478;">Totally clean</p>
+                <h3 class="font-heading text-base font-bold sm:text-lg" style="color:#9B8EC4;">No Preservatives</h3>
+                <p class="mt-2 text-sm" style="color:#5e6478;">Totally Clean, Totally Safe</p>
             </div>
         </div>
     </div>
@@ -107,29 +108,31 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
 
 {{-- ===== CATEGORIES — 2×2 mobile, 4-col desktop ===== --}}
 @if($topCategories->isNotEmpty())
-<section class="px-4 py-8 sm:px-6 lg:px-8" style="background:#FFFDF8;">
+<section class="px-4 py-12 sm:px-6 sm:py-16 lg:px-8" style="background:#FFFDF8;">
     <div class="mx-auto max-w-6xl text-center">
-        <h2 class="font-heading text-2xl font-bold sm:text-3xl" style="color:#2D2D3F;">Shop by Category</h2>
-        <p class="mx-auto mt-2 max-w-md text-sm" style="color:#5e6478;">Find the perfect products for every stage of your little one's journey.</p>
+        <h2 class="font-heading text-3xl font-bold sm:text-4xl" style="color:#4ECDC4;">Shop by Category</h2>
+        <p class="mx-auto mt-3 max-w-lg text-base" style="color:#5e6478;">Find the perfect products for every stage of your little one's journey.</p>
 
-        <div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        <div class="mt-8 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
             @foreach($topCategories->take(4) as $category)
             @php($catImage = $category->image ? asset($category->image) : $categoryPlaceholders[$loop->index % count($categoryPlaceholders)])
+            @php($cardColors = [['bg' => '#FFF0F5', 'border' => '#FF6B8A'], ['bg' => '#ECFFF4', 'border' => '#4ECDC4'], ['bg' => '#FFFBF0', 'border' => '#FFD93D'], ['bg' => '#F5F0FF', 'border' => '#9B8EC4']])
+            @php($cc = $cardColors[$loop->index % 4])
             <a href="{{ route('store.products', ['category' => $category->slug]) }}"
-                class="group block rounded-[2rem] border-3 bg-white p-4 text-center transition-transform duration-200 hover:-translate-y-1"
-                style="border-color:#FFD6E5;">
+                class="group block rounded-[2rem] border-3 p-5 text-center transition-transform duration-200 hover:-translate-y-1"
+                style="border-color:{{ $cc['border'] }}; background:{{ $cc['bg'] }};">
                 <img src="{{ $catImage }}" alt="{{ $category->name }}" loading="lazy"
-                    class="mx-auto mb-3 h-20 w-20 rounded-full object-cover sm:h-24 sm:w-24"
-                    style="border:3px solid #FFD93D;">
-                <h3 class="font-heading text-sm font-bold sm:text-base" style="color:#2D2D3F;">{{ $category->name }}</h3>
+                    class="mx-auto mb-4 h-24 w-24 rounded-full object-cover sm:h-28 sm:w-28"
+                    style="border:3px solid {{ $cc['border'] }}; box-shadow: 0 4px 0 {{ $cc['border'] }}33;">
+                <h3 class="font-heading text-base font-bold sm:text-lg" style="color:#2D2D3F;">{{ $category->name }}</h3>
                 @if($category->products_count)
-                <p class="mt-1 text-xs" style="color:#9B8EC4;">{{ $category->products_count }} products</p>
+                <p class="mt-1 text-sm font-semibold" style="color:{{ $cc['border'] }};">{{ $category->products_count }} products</p>
                 @endif
             </a>
             @endforeach
         </div>
 
-        <a href="{{ route('store.products') }}" class="mt-6 inline-flex items-center gap-1 font-heading text-sm font-bold" style="color:#FF6B8A;">
+        <a href="{{ route('store.products') }}" class="mt-8 inline-flex items-center gap-1 rounded-full border-2 px-5 py-2.5 font-heading text-sm font-bold transition-colors duration-200 hover:bg-[#FFF0F5]" style="color:#FF6B8A; border-color:#FF6B8A;">
             View All Products &rarr;
         </a>
     </div>
@@ -137,39 +140,41 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
 @endif
 
 {{-- ===== FEATURED PRODUCTS STRIP ===== --}}
-<section class="px-4 py-8 sm:px-6 lg:px-8" style="background:#FFFDF8;">
+<section class="px-4 py-12 sm:px-6 sm:py-16 lg:px-8" style="background:linear-gradient(180deg, #FFFDF8 0%, #F5F0FF 100%);">
     <div class="mx-auto max-w-6xl">
-        <div class="mb-5 flex items-end justify-between">
+        <div class="mb-6 flex items-end justify-between">
             <div>
-                <h2 class="font-heading text-2xl font-bold sm:text-3xl" style="color:#2D2D3F;">Best Sellers</h2>
-                <p class="mt-1 text-sm" style="color:#5e6478;">The products families reorder most.</p>
+                <h2 class="font-heading text-3xl font-bold sm:text-4xl" style="color:#9B8EC4;">Best Sellers</h2>
+                <p class="mt-2 text-base" style="color:#5e6478;">The products families reorder most.</p>
             </div>
-            <a href="{{ route('store.products') }}" class="hidden font-heading text-sm font-bold sm:inline-flex" style="color:#FF6B8A;">See all &rarr;</a>
+            <a href="{{ route('store.products') }}" class="hidden rounded-full border-2 px-4 py-2 font-heading text-sm font-bold transition-colors duration-200 hover:bg-[#F5F0FF] sm:inline-flex" style="color:#9B8EC4; border-color:#9B8EC4;">See all &rarr;</a>
         </div>
 
         @if($bestSellerProducts->isNotEmpty())
-        <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        <div class="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
             @foreach($bestSellerProducts->take(4) as $product)
             @php($prodImage = $product->image ? asset($product->image) : $productPlaceholders[$loop->index % count($productPlaceholders)])
+            @php($prodColors = [['bg' => '#FFF0F5', 'border' => '#FF6B8A'], ['bg' => '#ECFFF4', 'border' => '#4ECDC4'], ['bg' => '#FFFBF0', 'border' => '#FFD93D'], ['bg' => '#F5F0FF', 'border' => '#9B8EC4']])
+            @php($pc = $prodColors[$loop->index % 4])
             <a href="{{ route('store.product.show', $product->slug) }}"
                 class="group block overflow-hidden rounded-[2rem] border-3 bg-white transition-transform duration-200 hover:-translate-y-1"
-                style="border-color:#FFD6E5;">
-                <div class="aspect-square overflow-hidden" style="background:#FFF0F5;">
+                style="border-color:{{ $pc['border'] }};">
+                <div class="aspect-square overflow-hidden" style="background:{{ $pc['bg'] }};">
                     <img src="{{ $prodImage }}" alt="{{ $product->name }}" loading="lazy"
                         class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
                 </div>
-                <div class="p-3 sm:p-4">
-                    <h3 class="font-heading text-sm font-bold leading-snug sm:text-base" style="color:#2D2D3F;">{{ $product->name }}</h3>
-                    <p class="mt-1 font-heading text-sm font-bold" style="color:#FF6B8A;">Rs {{ number_format($product->price, 0) }}</p>
+                <div class="p-4 sm:p-5">
+                    <h3 class="font-heading text-base font-bold leading-snug sm:text-lg" style="color:#2D2D3F;">{{ $product->name }}</h3>
+                    <p class="mt-2 font-heading text-base font-bold sm:text-lg" style="color:#FF6B8A;">Rs {{ number_format($product->price, 0) }}</p>
                 </div>
             </a>
             @endforeach
         </div>
         @else
-        <p class="text-center text-sm" style="color:#5e6478;">Best sellers coming soon!</p>
+        <p class="text-center text-base" style="color:#5e6478;">Best sellers coming soon!</p>
         @endif
 
-        <a href="{{ route('store.products') }}" class="mt-4 block text-center font-heading text-sm font-bold sm:hidden" style="color:#FF6B8A;">See all products &rarr;</a>
+        <a href="{{ route('store.products') }}" class="mt-6 block text-center font-heading text-base font-bold sm:hidden" style="color:#9B8EC4;">See all products &rarr;</a>
     </div>
 </section>
 
