@@ -149,7 +149,7 @@
             ${item.file_path ? `<img src="${item.file_path}" alt="${item.alt_text || item.title || ''}" style="width:100%;height:120px;object-fit:cover;border-radius:2px;margin-bottom:8px;background:#f0f0f1;">` : ''}
             <div class="admin-media-title">#${item.id} ${item.title || item.file_name}</div>
             <p class="admin-media-meta">folder: ${item.folder} / ${item.collection}</p>
-            <p class="admin-media-meta">linked: ${(item.links || []).map(x => \`\${x.entity_type}:\${x.entity_id}\`).join(', ') || 'none'}</p>
+            <p class="admin-media-meta">linked: ${(item.links || []).map(x => `${x.entity_type}:${x.entity_id}`).join(', ') || 'none'}</p>
         </article>
     `).join('') || '<article class="admin-media-item"><p class="admin-media-meta">No media found.</p></article>';
 
