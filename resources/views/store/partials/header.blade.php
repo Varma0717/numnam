@@ -30,87 +30,94 @@
         </div>
     </div>
 
-    <div class="header-row header-row-main">
-        <div class="header-wrap header-main-inner">
-            <button type="button" class="nav-toggle" data-nav-toggle aria-label="Toggle navigation">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="3" y1="6" x2="21" y2="6" />
-                    <line x1="3" y1="12" x2="21" y2="12" />
-                    <line x1="3" y1="18" x2="21" y2="18" />
-                </svg>
-            </button>
-
-            <a href="{{ route('store.home') }}" class="brand" aria-label="NumNam Home">
-                <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="75" height="75" loading="lazy" class="brand-logo-img">
-            </a>
-
-            <form method="GET" action="{{ route('store.products') }}" class="header-search" data-search-form data-suggest-url="{{ route('store.search.suggestions') }}">
-                <input type="search" name="q" placeholder="Search products, recipes, articles..." autocomplete="off" class="header-search-input" data-search-input value="{{ request('q') }}">
-                <button type="submit" class="header-search-submit" aria-label="Search">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8" />
-                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    <div class="header-row header-row-combined">
+        <div class="header-wrap header-combined-grid">
+            {{-- Logo column — spans both rows on desktop --}}
+            <div class="header-logo-col">
+                <button type="button" class="nav-toggle" data-nav-toggle aria-label="Toggle navigation">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
                     </svg>
                 </button>
-                <div class="search-suggest-box hidden" data-search-results></div>
-            </form>
-
-            <div class="site-actions">
-                <button type="button" class="header-icon-btn md:hidden" data-search-toggle aria-label="Search">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8" />
-                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                    </svg>
-                </button>
-
-                <a href="{{ route('store.cart') }}" class="header-icon-btn cart-icon-link {{ request()->routeIs('store.cart') ? 'active' : '' }}" aria-label="Cart">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                    @if(($cartItemCount ?? 0) > 0)
-                    <span class="number-tag">{{ $cartItemCount }}</span>
-                    @endif
+                <a href="{{ route('store.home') }}" class="brand" aria-label="NumNam Home">
+                    <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="100" height="100" loading="lazy" class="brand-logo-img">
                 </a>
-
-                @auth
-                <a class="header-icon-btn" href="{{ route('store.account') }}" aria-label="My Account">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg>
-                </a>
-                <form method="POST" action="{{ route('store.logout') }}" class="inline-form hidden lg:inline-flex">
-                    @csrf
-                    <button type="submit" class="cta-btn cta-btn-sm">Logout</button>
-                </form>
-                @else
-                <a class="btn-ghost btn-ghost-sm hidden lg:inline-flex" href="{{ route('store.login') }}">Login</a>
-                <a class="cta-btn cta-btn-sm hidden lg:inline-flex" href="{{ route('store.register') }}">Register</a>
-                @endauth
             </div>
-        </div>
-    </div>
 
-    <div class="header-row header-row-nav">
-        <div class="header-wrap">
-            <nav class="site-nav" role="navigation" aria-label="Main navigation">
-                <a href="{{ route('store.home') }}" class="{{ request()->routeIs('store.home') ? 'active' : '' }}">Home</a>
-                <a href="{{ route('store.products') }}" class="{{ request()->routeIs('store.products*') ? 'active' : '' }}">Shop</a>
-                <a href="{{ route('store.pricing') }}" class="{{ request()->routeIs('store.pricing*') ? 'active' : '' }}">Subscriptions</a>
-                <div class="nav-item has-submenu">
-                    <a href="{{ route('store.blog.index') }}" class="{{ request()->routeIs('store.blog*') || request()->routeIs('store.recipes') || request()->routeIs('store.faq') || request()->routeIs('store.refer-friends') ? 'active' : '' }}">Learn</a>
-                    <ul class="submenu" role="menu" aria-label="Learn submenu">
-                        <li><a href="{{ route('store.blog.index') }}">Blog</a></li>
-                        <li><a href="{{ route('store.recipes') }}">Recipes</a></li>
-                        <li><a href="{{ route('store.faq') }}">FAQ</a></li>
-                        <li><a href="{{ route('store.refer-friends') }}">Refer Friends</a></li>
-                    </ul>
+            {{-- Right area — stacked: search row + nav row --}}
+            <div class="header-right-col">
+                {{-- Row 1: Search + actions --}}
+                <div class="header-right-top">
+                    <form method="GET" action="{{ route('store.products') }}" class="header-search" data-search-form data-suggest-url="{{ route('store.search.suggestions') }}">
+                        <input type="search" name="q" placeholder="Search products, recipes, articles..." autocomplete="off" class="header-search-input" data-search-input value="{{ request('q') }}">
+                        <button type="submit" class="header-search-submit" aria-label="Search">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8" />
+                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                            </svg>
+                        </button>
+                        <div class="search-suggest-box hidden" data-search-results></div>
+                    </form>
+
+                    <div class="site-actions">
+                        <button type="button" class="header-icon-btn md:hidden" data-search-toggle aria-label="Search">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8" />
+                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                            </svg>
+                        </button>
+
+                        <a href="{{ route('store.cart') }}" class="header-icon-btn cart-icon-link {{ request()->routeIs('store.cart') ? 'active' : '' }}" aria-label="Cart">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                            @if(($cartItemCount ?? 0) > 0)
+                            <span class="number-tag">{{ $cartItemCount }}</span>
+                            @endif
+                        </a>
+
+                        @auth
+                        <a class="header-icon-btn" href="{{ route('store.account') }}" aria-label="My Account">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                        </a>
+                        <form method="POST" action="{{ route('store.logout') }}" class="inline-form hidden lg:inline-flex">
+                            @csrf
+                            <button type="submit" class="cta-btn cta-btn-sm">Logout</button>
+                        </form>
+                        @else
+                        <a class="btn-ghost btn-ghost-sm hidden lg:inline-flex" href="{{ route('store.login') }}">Login</a>
+                        <a class="cta-btn cta-btn-sm hidden lg:inline-flex" href="{{ route('store.register') }}">Register</a>
+                        @endauth
+                    </div>
                 </div>
-                <a href="{{ route('store.about') }}" class="{{ request()->routeIs('store.about') ? 'active' : '' }}">About</a>
-                <a href="{{ route('store.contact') }}" class="{{ request()->routeIs('store.contact') ? 'active' : '' }}">Contact</a>
-            </nav>
+
+                {{-- Row 2: Navigation --}}
+                <div class="header-right-bottom">
+                    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+                        <a href="{{ route('store.home') }}" class="{{ request()->routeIs('store.home') ? 'active' : '' }}">Home</a>
+                        <a href="{{ route('store.products') }}" class="{{ request()->routeIs('store.products*') ? 'active' : '' }}">Shop</a>
+                        <a href="{{ route('store.pricing') }}" class="{{ request()->routeIs('store.pricing*') ? 'active' : '' }}">Subscriptions</a>
+                        <div class="nav-item has-submenu">
+                            <a href="{{ route('store.blog.index') }}" class="{{ request()->routeIs('store.blog*') || request()->routeIs('store.recipes') || request()->routeIs('store.faq') || request()->routeIs('store.refer-friends') ? 'active' : '' }}">Learn</a>
+                            <ul class="submenu" role="menu" aria-label="Learn submenu">
+                                <li><a href="{{ route('store.blog.index') }}">Blog</a></li>
+                                <li><a href="{{ route('store.recipes') }}">Recipes</a></li>
+                                <li><a href="{{ route('store.faq') }}">FAQ</a></li>
+                                <li><a href="{{ route('store.refer-friends') }}">Refer Friends</a></li>
+                            </ul>
+                        </div>
+                        <a href="{{ route('store.about') }}" class="{{ request()->routeIs('store.about') ? 'active' : '' }}">About</a>
+                        <a href="{{ route('store.contact') }}" class="{{ request()->routeIs('store.contact') ? 'active' : '' }}">Contact</a>
+                    </nav>
+                </div>
+            </div>
         </div>
     </div>
 
