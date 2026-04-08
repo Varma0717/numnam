@@ -3,11 +3,18 @@
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminPagesController;
+use App\Http\Controllers\Admin\BlogCategoryController;
+use App\Http\Controllers\Admin\BlogManagementController;
+use App\Http\Controllers\Admin\Catalog\CategoryManagementController;
 use App\Http\Controllers\Admin\Catalog\ProductManagementController;
 use App\Http\Controllers\Admin\Commerce\CouponManagementController;
 use App\Http\Controllers\Admin\Commerce\OrderManagementController;
 use App\Http\Controllers\Admin\Commerce\ReviewModerationController;
 use App\Http\Controllers\Admin\Commerce\ReferralManagementController;
+use App\Http\Controllers\Admin\ContactManagementController;
+use App\Http\Controllers\Admin\CustomerManagementController;
+use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\SubscriptionManagementController;
 use App\Http\Controllers\Web\CustomerAuthController;
 use App\Http\Controllers\Web\Payments\CheckoutPaymentController;
 use App\Http\Controllers\Web\PasswordResetController;
@@ -124,6 +131,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::resource('coupons', CouponManagementController::class)->except('show');
         Route::resource('products', ProductManagementController::class)->except('show');
+        Route::resource('categories', CategoryManagementController::class)->except('show');
+        Route::resource('blogs', BlogManagementController::class)->except('show');
+        Route::resource('blog-categories', BlogCategoryController::class)->except('show');
 
         Route::get('/referrals', [ReferralManagementController::class, 'index'])->name('referrals.index');
         Route::post('/referrals/adjustments', [ReferralManagementController::class, 'storeAdjustment'])
@@ -135,16 +145,32 @@ Route::prefix('admin')->name('admin.')->group(function () {
             return view('admin.media.index');
         })->name('media');
 
-        Route::get('/customers', [AdminPagesController::class, 'customers'])->name('customers.index');
-        Route::get('/categories', [AdminPagesController::class, 'categories'])->name('categories.index');
-        Route::get('/blogs', [AdminPagesController::class, 'blogs'])->name('blogs.index');
-        Route::get('/contacts', [AdminPagesController::class, 'contacts'])->name('contacts.index');
-        Route::get('/subscriptions', [AdminPagesController::class, 'subscriptions'])->name('subscriptions.index');
+        // Customers
+        Route::get('/customers', [CustomerManagementController::class, 'index'])->name('customers.index');
+        Route::get('/customers/{customer}', [CustomerManagementController::class, 'show'])->name('customers.show');
+
+        // Contacts
+        Route::get('/contacts', [ContactManagementController::class, 'index'])->name('contacts.index');
+        Route::get('/contacts/{contact}', [ContactManagementController::class, 'show'])->name('contacts.show');
+        Route::delete('/contacts/{contact}', [ContactManagementController::class, 'destroy'])->name('contacts.destroy');
+
+        // Subscriptions
+        Route::get('/subscriptions', [SubscriptionManagementController::class, 'index'])->name('subscriptions.index');
+        Route::get('/subscriptions/{subscription}', [SubscriptionManagementController::class, 'show'])->name('subscriptions.show');
+        Route::put('/subscriptions/{subscription}', [SubscriptionManagementController::class, 'update'])->name('subscriptions.update');
+
+        // Reviews
         Route::get('/reviews', [ReviewModerationController::class, 'index'])->name('reviews.index');
         Route::patch('/reviews/{review}/approve', [ReviewModerationController::class, 'approve'])->name('reviews.approve');
         Route::patch('/reviews/{review}/reject', [ReviewModerationController::class, 'reject'])->name('reviews.reject');
         Route::delete('/reviews/{review}', [ReviewModerationController::class, 'destroy'])->name('reviews.destroy');
-        Route::get('/settings', [AdminPagesController::class, 'settings'])->name('settings.index');
+
+        // Settings
+        Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+        Route::post('/settings', [SettingsController::class, 'update'])->name('settings.update');
+        Route::get('/settings/create', [SettingsController::class, 'create'])->name('settings.create');
+        Route::post('/settings/store', [SettingsController::class, 'store'])->name('settings.store');
+        Route::delete('/settings/{setting}', [SettingsController::class, 'destroy'])->name('settings.destroy');
     });
 });
 

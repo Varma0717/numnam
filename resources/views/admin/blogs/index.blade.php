@@ -3,36 +3,72 @@
 @section('title', 'Blog Posts - NumNam Admin')
 
 @section('content')
-<div class="admin-page-header">
-    <h2>Blog Posts</h2>
-    <p class="admin-desc">Manage blog content</p>
+<div class="admin-page-header" style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+    <div>
+        <h2>Blog Posts</h2>
+        <p class="admin-desc">{{ $blogs->total() }} posts</p>
+    </div>
+    <a href="{{ route('admin.blogs.create') }}" class="admin-btn" style="text-decoration:none;">Add Post</a>
 </div>
 
 <section class="admin-panel">
-    <table class="admin-table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Slug</th>
-            <th>Status</th>
-            <th>Published</th>
-        </tr>
-        </thead>
-        <tbody>
-        @forelse($blogs as $blog)
-            <tr>
-                <td>{{ $blog->id }}</td>
-                <td><strong>{{ $blog->title }}</strong></td>
-                <td>{{ $blog->slug }}</td>
-                <td>{{ ucfirst($blog->status ?? 'draft') }}</td>
-                <td>{{ $blog->published_at ? $blog->published_at->format('d M Y') : '-' }}</td>
-            </tr>
-        @empty
-            <tr><td colspan="5">No blog posts found.</td></tr>
-        @endforelse
-        </tbody>
-    </table>
-    <div style="margin-top:16px;">{{ $blogs->links() }}</div>
+    <form method="GET" class="admin-search-bar" style="padding:10px 12px;">
+        <input type="search" name="q" value="{{ request('q') }}" placeholder="Search posts...">
+        <select name="status" style="width:auto; min-width:120px; border:1px solid #8c8f94; border-radius:4px; padding:0 8px; font-size:14px; line-height:2; min-height:30px;">
+            <option value="">All Status</option>
+            <option value="draft" @selected(request('status')==='draft' )>Draft</option>
+            <option value="published" @selected(request('status')==='published' )>Published</option>
+        </select>
+        <button class="admin-btn" type="submit">Filter</button>
+        @if(request('q') || request('status'))
+        <a href="{{ route('admin.blogs.index') }}" class="admin-btn-secondary" style="text-decoration:none;">Clear</a>
+        @endif
+    </form>
+
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th style="width:50px;">ID</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Author</th>
+                    <th>Status</th>
+                    <th>Published</th>
+                    <th style="width:120px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($blogs as $blog)
+                <tr>
+                    <td>{{ $blog->id }}</td>
+                    <td><strong>{{ $blog->title }}</strong></td>
+                    <td>{{ $blog->category?->name ?? '—' }}</td>
+                    <td>{{ $blog->author?->name ?? '—' }}</td>
+                    <td>
+                        <span class="status-badge status-badge--{{ $blog->status === 'published' ? 'active' : 'pending' }}">
+                            {{ ucfirst($blog->status ?? 'draft') }}
+                        </span>
+                    </td>
+                    <td>{{ $blog->published_at ? $blog->published_at->format('d M Y') : '—' }}</td>
+                    <td>
+                        <a href="{{ route('admin.blogs.edit', $blog) }}" class="admin-link">Edit</a>
+                        <span style="color:var(--wp-border); margin:0 4px;">|</span>
+                        <form method="POST" action="{{ route('admin.blogs.destroy', $blog) }}" style="display:inline;" onsubmit="return confirm('Delete this post?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="admin-btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="7" class="admin-empty">No blog posts found.</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    <div style="padding:12px;">{{ $blogs->links() }}</div>
 </section>
 @endsection
