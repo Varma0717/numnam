@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\AdminPagesController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogManagementController;
 use App\Http\Controllers\Admin\Catalog\CategoryManagementController;
@@ -116,12 +115,10 @@ Route::post('/logout', [CustomerAuthController::class, 'logout'])
     ->name('store.logout');
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::middleware('guest')->group(function () {
-        Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
-        Route::post('/login', [AdminAuthController::class, 'login'])
-            ->middleware('throttle:8,1')
-            ->name('login.submit');
-    });
+    Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login'])
+        ->middleware('throttle:8,1')
+        ->name('login.submit');
 
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
