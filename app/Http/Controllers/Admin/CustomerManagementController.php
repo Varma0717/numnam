@@ -14,8 +14,10 @@ class CustomerManagementController extends Controller
         $customers = User::query()
             ->where('is_admin', false)
             ->withCount('orders')
-            ->when($request->q, fn($q) => $q->where('name', 'like', "%{$request->q}%")
-                ->orWhere('email', 'like', "%{$request->q}%"))
+            ->when($request->q, fn($q) => $q->where(function ($sub) use ($request) {
+                $sub->where('name', 'like', "%{$request->q}%")
+                    ->orWhere('email', 'like', "%{$request->q}%");
+            }))
             ->latest('id')
             ->paginate(25)
             ->withQueryString();

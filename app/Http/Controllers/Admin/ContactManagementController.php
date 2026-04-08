@@ -11,8 +11,10 @@ class ContactManagementController extends Controller
     public function index(Request $request)
     {
         $contacts = Contact::query()
-            ->when($request->q, fn($q) => $q->where('first_name', 'like', "%{$request->q}%")
-                ->orWhere('email', 'like', "%{$request->q}%"))
+            ->when($request->q, fn($q) => $q->where(function ($sub) use ($request) {
+                $sub->where('first_name', 'like', "%{$request->q}%")
+                    ->orWhere('email', 'like', "%{$request->q}%");
+            }))
             ->when($request->has('unread'), fn($q) => $q->where('is_read', false))
             ->latest('id')
             ->paginate(25)

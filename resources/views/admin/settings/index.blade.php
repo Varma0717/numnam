@@ -27,11 +27,7 @@
                         {{ ucwords(str_replace(['_', '-'], ' ', $setting->key)) }}
                         <span style="font-weight:400; color:var(--wp-muted); font-size:12px;">{{ $setting->key }}</span>
                     </label>
-                    <form method="POST" action="{{ route('admin.settings.destroy', $setting) }}" style="display:inline;" onsubmit="return confirm('Delete this setting?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="admin-btn-danger" style="font-size:11px;">Remove</button>
-                    </form>
+                    <button type="button" class="admin-btn-danger" style="font-size:11px;" onclick="if(confirm('Delete this setting?')){let f=document.createElement('form');f.method='POST';f.action='{{ route('admin.settings.destroy', $setting) }}';f.innerHTML='@csrf @method(\'DELETE\')';document.body.appendChild(f);f.submit();}">Remove</button>
                 </div>
                 @if(($setting->type ?? 'text') === 'textarea')
                 <textarea id="setting_{{ $setting->key }}" name="settings[{{ $setting->key }}]" style="min-height:80px;">{{ $setting->value }}</textarea>
