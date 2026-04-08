@@ -35,7 +35,7 @@ Route::get('/category/{slug}', function (string $slug) {
     return redirect()->route('store.category.show', ['category' => $slug]);
 })->name('store.category.redirect');
 Route::get('/aboutus', [StorefrontController::class, 'about'])->name('store.about');
-Route::get('/general-5', [StorefrontController::class, 'recipes'])->name('store.recipes');
+Route::get('/recipes', [StorefrontController::class, 'recipes'])->name('store.recipes');
 Route::get('/faq', [StorefrontController::class, 'faq'])->name('store.faq');
 Route::get('/refer-friends', [StorefrontController::class, 'referFriends'])->name('store.refer-friends');
 

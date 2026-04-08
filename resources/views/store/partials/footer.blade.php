@@ -20,7 +20,7 @@
     <div class="site-footer-inner">
         <div class="footer-col footer-brand-col">
             <div class="footer-logo">
-                <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="36" height="36" loading="lazy" class="brand-logo-img">
+                <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="56" height="56" loading="lazy" class="brand-logo-img">
             </div>
             <p class="meta">Doctor-founded baby nutrition with clean ingredients, subscriptions, and parent education content.</p>
             <div class="footer-contact-info">
@@ -167,6 +167,6 @@
                 </span>
             </div>
         </div>
-        <p>&copy; {{ date('Y') }} NumNam. All rights reserved. | Doctor-founded baby nutrition.</p>
+        <p>&copy; {{ date('Y') }} NumNam. All rights reserved. | Designed by <a href="https://pmrwebagency.com" target="_blank" rel="noopener noreferrer" style="color:#FF6B8A;text-decoration:underline;">PMR Web Agency</a></p>
     </div>
 </footer>

@@ -122,12 +122,12 @@
     }
 
     .header-search-input {
-        @apply h-11 w-full rounded-full border-2 border-numnam-200 bg-white pl-4 pr-12 text-sm outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400;
+        @apply h-9 w-full max-w-md rounded-full border-2 border-numnam-200 bg-white pl-4 pr-10 text-sm outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400;
         color: #2D2D3F;
     }
 
     .header-search-submit {
-        @apply absolute right-1.5 top-1.5 inline-flex h-8 w-8 items-center justify-center rounded-full text-white transition-colors duration-200;
+        @apply absolute right-1 top-1 inline-flex h-7 w-7 items-center justify-center rounded-full text-white transition-colors duration-200;
         background: #FF6B8A;
     }
 
@@ -577,7 +577,7 @@
     }
 
     .payment-badge {
-        @apply inline-flex h-7 items-center rounded-lg border border-slate-600 bg-slate-700 px-1.5 text-[10px] font-bold tracking-wide text-slate-300;
+        @apply inline-flex h-7 items-center rounded-lg border border-slate-200 bg-white px-1.5 text-[10px] font-bold tracking-wide text-slate-600;
     }
 
     /* ── Toast Notifications ──────────────────────── */
@@ -954,6 +954,147 @@
         will-change: left, top;
         -webkit-user-select: none;
         user-select: none;
+    }
+
+    /* ── Header Top Row ─────────────────────────────── */
+    .header-row-top {
+        @apply hidden lg:block;
+        background: #2D2D3F;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.75rem;
+    }
+
+    .header-top-inner {
+        @apply mx-auto flex max-w-7xl items-center justify-between px-6 py-1.5;
+    }
+
+    .header-top-left,
+    .header-top-right {
+        @apply flex items-center gap-4;
+    }
+
+    .header-top-link {
+        @apply inline-flex items-center gap-1 transition-colors duration-200;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .header-top-link:hover {
+        color: #fff;
+    }
+
+    /* ── Hero Slider ────────────────────────────────── */
+    .hero-slider {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .hero-slide-track {
+        display: flex;
+        transition: transform 0.6s ease;
+    }
+
+    .hero-slide {
+        flex: 0 0 100%;
+        position: relative;
+        min-height: 420px;
+        background-size: cover;
+        background-position: center;
+    }
+
+    @media (min-width: 768px) {
+        .hero-slide {
+            min-height: 540px;
+        }
+    }
+
+    .hero-slide-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hero-slide-copy {
+        max-width: 640px;
+        text-align: center;
+        padding: 2rem 1.5rem;
+    }
+
+    .hero-slide-copy h1 {
+        font-family: 'Comic Neue', cursive;
+        font-weight: 700;
+        font-size: 2rem;
+        line-height: 1.2;
+        color: #fff;
+    }
+
+    @media (min-width: 640px) {
+        .hero-slide-copy h1 {
+            font-size: 2.75rem;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .hero-slide-copy h1 {
+            font-size: 3.25rem;
+        }
+    }
+
+    .hero-slide-copy p {
+        margin-top: 1rem;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .hero-slider-controls {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%);
+        display: flex;
+        justify-content: space-between;
+        padding: 0 1rem;
+        pointer-events: none;
+    }
+
+    .hero-nav {
+        @apply inline-flex h-10 w-10 items-center justify-center rounded-full text-xl text-white transition-colors duration-200;
+        background: rgba(0, 0, 0, 0.35);
+        pointer-events: auto;
+        border: none;
+        cursor: pointer;
+    }
+
+    .hero-nav:hover {
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    .hero-slider-pagination {
+        position: absolute;
+        bottom: 1.25rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .hero-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        background: transparent;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .hero-dot.is-active {
+        background: #fff;
     }
 
     .bird-svg {

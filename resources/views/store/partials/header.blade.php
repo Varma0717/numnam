@@ -1,4 +1,35 @@
 <header class="site-header">
+    {{-- Row 1: Top bar with contact info --}}
+    <div class="header-row header-row-top">
+        <div class="header-wrap header-top-inner">
+            <div class="header-top-left">
+                <a href="tel:+919014252278" class="header-top-link">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.88.36 1.74.7 2.56a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.82.34 1.68.57 2.56.7A2 2 0 0122 16.92z" />
+                    </svg>
+                    +91 90142 52278
+                </a>
+                <a href="mailto:info@numnam.com" class="header-top-link">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                    info@numnam.com
+                </a>
+            </div>
+            <div class="header-top-right">
+                <a href="{{ route('store.blog.index') }}" class="header-top-link">Blog</a>
+                <a href="{{ route('store.faq') }}" class="header-top-link">FAQ</a>
+                <a href="{{ route('store.contact') }}" class="header-top-link">Contact</a>
+                @auth
+                <a href="{{ route('store.account') }}" class="header-top-link">My Account</a>
+                @else
+                <a href="{{ route('store.login') }}" class="header-top-link">Login</a>
+                @endauth
+            </div>
+        </div>
+    </div>
+
     <div class="header-row header-row-main">
         <div class="header-wrap header-main-inner">
             <button type="button" class="nav-toggle" data-nav-toggle aria-label="Toggle navigation">
@@ -10,7 +41,7 @@
             </button>
 
             <a href="{{ route('store.home') }}" class="brand" aria-label="NumNam Home">
-                <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="40" height="40" loading="lazy" class="brand-logo-img">
+                <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="56" height="56" loading="lazy" class="brand-logo-img">
             </a>
 
             <form method="GET" action="{{ route('store.products') }}" class="header-search" data-search-form data-suggest-url="{{ route('store.search.suggestions') }}">
