@@ -1,38 +1,68 @@
-name: Flutter Mobile Build
+name: Flutter Production CI
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  FLUTTER_VERSION: "3.22.x"
+  APP_PATH: mobile
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
+  release:
+    types: [created]
 
 jobs:
 
   android-build:
-    name: Build Android
+    name: Android Build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.22.x"
+          flutter-version: ${{ env.FLUTTER_VERSION }}
 
-      - name: Install dependencies
+      - name: Cache Flutter Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+
+      - name: Install Flutter Packages
         run: |
-          cd mobile
+          cd $APP_PATH
           flutter pub get
+
+      - name: Run Flutter Analyzer
+        run: |
+          cd $APP_PATH
+          flutter analyze
+
+      - name: Run Unit Tests
+        run: |
+          cd $APP_PATH
+          flutter test
 
       - name: Build APK
         run: |
-          cd mobile
+          cd $APP_PATH
           flutter build apk --release
 
       - name: Build App Bundle
         run: |
-          cd mobile
+          cd $APP_PATH
           flutter build appbundle --release
 
       - name: Upload APK
@@ -48,46 +78,73 @@ jobs:
           path: mobile/build/app/outputs/bundle/release/app-release.aab
 
 
+
   ios-build:
-    name: Build iOS
+    name: iOS Build
     runs-on: macos-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.22.x"
+          flutter-version: ${{ env.FLUTTER_VERSION }}
 
-      - name: Install dependencies
+      - name: Cache Flutter Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+          key: macos-pub-${{ hashFiles('**/pubspec.lock') }}
+
+      - name: Install Dependencies
         run: |
-          cd mobile
+          cd $APP_PATH
           flutter pub get
 
       - name: Install CocoaPods
         run: |
-          cd mobile/ios
+          sudo gem install cocoapods
+          cd $APP_PATH/ios
+          pod repo update
           pod install
 
       - name: Build iOS
         run: |
-          cd mobile
+          cd $APP_PATH
           flutter build ios --release --no-codesign
 
-      - name: Package IPA
-        run: |
-          cd mobile
-          mkdir -p build/ios/ipa
-          xcodebuild -workspace ios/Runner.xcworkspace \
-          -scheme Runner \
-          -configuration Release \
-          -sdk iphoneos \
-          -archivePath build/ios/archive/Runner.xcarchive archive
-
-      - name: Upload iOS build
+      - name: Upload iOS Build
         uses: actions/upload-artifact@v4
         with:
           name: ios-build
           path: mobile/build/ios
+
+
+
+  release:
+    name: Create GitHub Release Artifacts
+    needs: [android-build, ios-build]
+    runs-on: ubuntu-latest
+
+    if: github.event_name == 'release'
+
+    steps:
+      - name: Download Android APK
+        uses: actions/download-artifact@v4
+        with:
+          name: android-apk
+
+      - name: Download Android AAB
+        uses: actions/download-artifact@v4
+        with:
+          name: android-aab
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            app-release.apk
+            app-release.aab
