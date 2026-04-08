@@ -1,4 +1,4 @@
-name: Flutter CI Build
+name: Flutter iOS Build
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -7,88 +7,35 @@ env:
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
 
-  android-build:
-    name: Android Build
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-
-      - name: Install Dependencies
-        run: |
-          cd $APP_PATH
-          flutter pub get
-
-      - name: Accept Android Licenses
-        run: yes | flutter doctor --android-licenses
-
-      - name: Verify Flutter
-        run: flutter doctor
-
-      - name: Build APK
-        run: |
-          cd $APP_PATH
-          flutter build apk --release
-
-      - name: Build AAB
-        run: |
-          cd $APP_PATH
-          flutter build appbundle --release
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: apk
-          path: mobile/build/app/outputs/flutter-apk/app-release.apk
-
-      - name: Upload AAB
-        uses: actions/upload-artifact@v4
-        with:
-          name: aab
-          path: mobile/build/app/outputs/bundle/release/app-release.aab
-
-
-
   ios-build:
-    name: iOS Build
+    name: Build iOS App
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
 
-      - name: Install Dependencies
+      - name: Install Flutter Dependencies
         run: |
           cd $APP_PATH
           flutter pub get
 
       - name: Install CocoaPods
         run: |
-          sudo gem install cocoapods
           cd $APP_PATH/ios
           pod install
 
-      - name: Flutter Doctor
+      - name: Verify Build Environment
         run: flutter doctor
 
       - name: Build iOS
@@ -96,7 +43,7 @@ jobs:
           cd $APP_PATH
           flutter build ios --release --no-codesign
 
-      - name: Upload iOS Build
+      - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ios-build
