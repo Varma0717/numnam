@@ -104,10 +104,10 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
 </section>
 
 {{-- ===== CLOUD DIVIDER ===== --}}
-@include('store.partials.cloud-divider', ['color' => '#FFCC25'])
+@include('store.partials.cloud-divider', ['color' => '#DD3259'])
 
 {{-- ===== BEST SELLERS ===== --}}
-<section class="px-4 py-12 sm:px-6 sm:py-16 lg:px-8" style="background:#FFCC25;">
+<section class="px-4 py-12 sm:px-6 sm:py-16 lg:px-8" style="background:#DD3259;">
     <div class="mx-auto max-w-6xl">
         <div class="mb-6 flex items-end justify-between">
             <div>
@@ -118,27 +118,31 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
         </div>
 
         @if($bestSellerProducts->isNotEmpty())
-        <div class="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
-            @foreach($bestSellerProducts->take(4) as $product)
-            @php($prodImage = $product->image ? asset($product->image) : $productPlaceholders[$loop->index % count($productPlaceholders)])
-            @php($prodColors = [['bg' => '#FFF0F5', 'border' => '#FF6B8A'], ['bg' => '#ECFFF4', 'border' => '#4ECDC4'], ['bg' => '#FFFBF0', 'border' => '#FFD93D'], ['bg' => '#F5F0FF', 'border' => '#9B8EC4']])
-            @php($pc = $prodColors[$loop->index % 4])
-            <a href="{{ route('store.product.show', $product->slug) }}"
-                class="group block overflow-hidden rounded-[2rem] border-3 bg-white transition-transform duration-200 hover:-translate-y-1"
-                style="border-color:{{ $pc['border'] }};">
-                <div class="aspect-square overflow-hidden" style="background:{{ $pc['bg'] }};">
-                    <img src="{{ $prodImage }}" alt="{{ $product->name }}" loading="lazy"
-                        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
-                </div>
-                <div class="p-4 sm:p-5">
-                    <h3 class="font-heading text-base font-bold leading-snug sm:text-lg" style="color:#2D2D3F;">{{ $product->name }}</h3>
-                    <p class="mt-2 font-heading text-base font-bold sm:text-lg" style="color:#FF6B8A;">Rs {{ number_format($product->price, 0) }}</p>
-                </div>
-            </a>
-            @endforeach
+        <div class="relative">
+            <div class="product-slider-track flex gap-4 overflow-x-auto scroll-smooth pb-4 snap-x snap-mandatory" id="productSlider" style="scrollbar-width:none; -ms-overflow-style:none;">
+                @foreach($bestSellerProducts as $product)
+                @php($prodImage = $product->image ? asset($product->image) : $productPlaceholders[$loop->index % count($productPlaceholders)])
+                @php($prodColors = [['bg' => '#FFF0F5', 'border' => '#FF6B8A'], ['bg' => '#ECFFF4', 'border' => '#4ECDC4'], ['bg' => '#FFFBF0', 'border' => '#FFD93D'], ['bg' => '#F5F0FF', 'border' => '#9B8EC4']])
+                @php($pc = $prodColors[$loop->index % 4])
+                <a href="{{ route('store.product.show', $product->slug) }}"
+                    class="group block flex-none w-[70vw] sm:w-[45%] lg:w-[23%] snap-start overflow-hidden rounded-[2rem] border-3 bg-white transition-transform duration-200 hover:-translate-y-1"
+                    style="border-color:{{ $pc['border'] }};">
+                    <div class="aspect-square overflow-hidden" style="background:{{ $pc['bg'] }};">
+                        <img src="{{ $prodImage }}" alt="{{ $product->name }}" loading="lazy"
+                            class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                    </div>
+                    <div class="p-4 sm:p-5">
+                        <h3 class="font-heading text-base font-bold leading-snug sm:text-lg" style="color:#2D2D3F;">{{ $product->name }}</h3>
+                        <p class="mt-2 font-heading text-base font-bold sm:text-lg" style="color:#FF6B8A;">Rs {{ number_format($product->price, 0) }}</p>
+                    </div>
+                </a>
+                @endforeach
+            </div>
+            <button class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10 hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg text-xl font-bold" style="color:#DD3259;" onclick="document.getElementById('productSlider').scrollBy({left:-300,behavior:'smooth'})" aria-label="Previous">&#8249;</button>
+            <button class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10 hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg text-xl font-bold" style="color:#DD3259;" onclick="document.getElementById('productSlider').scrollBy({left:300,behavior:'smooth'})" aria-label="Next">&#8250;</button>
         </div>
         @else
-        <p class="text-center text-base" style="color:#5e6478;">Best sellers coming soon!</p>
+        <p class="text-center text-base" style="color:#fff;">Products coming soon!</p>
         @endif
 
         <a href="{{ route('store.products') }}" class="mt-6 block text-center font-heading text-base font-bold sm:hidden" style="color:#fff;">See all products &rarr;</a>

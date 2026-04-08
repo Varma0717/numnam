@@ -1033,6 +1033,11 @@
         color: #fff;
     }
 
+    /* ── Product Slider ──────────────────────────────── */
+    .product-slider-track::-webkit-scrollbar {
+        display: none;
+    }
+
     /* ── Hero Slider ────────────────────────────────── */
     .hero-slider {
         position: relative;

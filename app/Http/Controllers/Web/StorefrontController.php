@@ -57,11 +57,8 @@ class StorefrontController extends Controller
             ->get();
 
         $bestSellerProducts = $productCardQuery()
-            ->withCount('orderItems')
-            ->orderByDesc('order_items_count')
-            ->orderByDesc('approved_reviews_avg_rating')
-            ->latest('id')
-            ->take(4)
+            ->inRandomOrder()
+            ->take(8)
             ->get();
 
         $plans = PricingPlan::query()
