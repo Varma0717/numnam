@@ -118,34 +118,37 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
         </div>
 
         @if($bestSellerProducts->isNotEmpty())
-        <div class="relative">
-            <div class="product-slider-track flex gap-4 overflow-x-auto scroll-smooth pb-4 snap-x snap-mandatory" id="productSlider" style="scrollbar-width:none; -ms-overflow-style:none;">
+        <div style="position:relative;">
+            <div class="product-slider-track" id="productSlider" style="display:flex; gap:16px; overflow-x:auto; scroll-behavior:smooth; padding-bottom:16px; scrollbar-width:none; -ms-overflow-style:none; scroll-snap-type:x mandatory;">
                 @foreach($bestSellerProducts as $product)
                 @php($prodImage = $product->image ? asset($product->image) : $productPlaceholders[$loop->index % count($productPlaceholders)])
                 @php($prodColors = [['bg' => '#FFF0F5', 'border' => '#FF6B8A'], ['bg' => '#ECFFF4', 'border' => '#4ECDC4'], ['bg' => '#FFFBF0', 'border' => '#FFD93D'], ['bg' => '#F5F0FF', 'border' => '#9B8EC4']])
                 @php($pc = $prodColors[$loop->index % 4])
                 <a href="{{ route('store.product.show', $product->slug) }}"
-                    class="group block flex-none w-[70vw] sm:w-[45%] lg:w-[23%] snap-start overflow-hidden rounded-[2rem] border-3 bg-white transition-transform duration-200 hover:-translate-y-1"
-                    style="border-color:{{ $pc['border'] }};">
-                    <div class="aspect-square overflow-hidden" style="background:{{ $pc['bg'] }};">
+                    class="group"
+                    style="flex:0 0 70%; max-width:70%; scroll-snap-align:start; display:block; overflow:hidden; border-radius:2rem; border:3px solid {{ $pc['border'] }}; background:#fff; transition:transform 0.2s; text-decoration:none;">
+                    <div style="aspect-ratio:1/1; overflow:hidden; background:{{ $pc['bg'] }};">
                         <img src="{{ $prodImage }}" alt="{{ $product->name }}" loading="lazy"
-                            class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                            style="width:100%; height:100%; object-fit:cover; transition:transform 0.3s;">
                     </div>
-                    <div class="p-4 sm:p-5">
-                        <h3 class="font-heading text-base font-bold leading-snug sm:text-lg" style="color:#2D2D3F;">{{ $product->name }}</h3>
-                        <p class="mt-2 font-heading text-base font-bold sm:text-lg" style="color:#FF6B8A;">Rs {{ number_format($product->price, 0) }}</p>
+                    <div style="padding:16px;">
+                        <h3 class="font-heading" style="font-size:1rem; font-weight:700; line-height:1.3; color:#2D2D3F; margin:0;">{{ $product->name }}</h3>
+                        <p class="font-heading" style="margin:8px 0 0; font-size:1rem; font-weight:700; color:#FF6B8A;">Rs {{ number_format($product->price, 0) }}</p>
                     </div>
                 </a>
                 @endforeach
             </div>
-            <button class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10 hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg text-xl font-bold" style="color:#DD3259;" onclick="document.getElementById('productSlider').scrollBy({left:-300,behavior:'smooth'})" aria-label="Previous">&#8249;</button>
-            <button class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10 hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg text-xl font-bold" style="color:#DD3259;" onclick="document.getElementById('productSlider').scrollBy({left:300,behavior:'smooth'})" aria-label="Next">&#8250;</button>
+            <button onclick="document.getElementById('productSlider').scrollBy({left:-300,behavior:'smooth'})" aria-label="Previous"
+                style="position:absolute; left:-12px; top:50%; transform:translateY(-50%); z-index:10; display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.15); border:none; cursor:pointer; font-size:22px; font-weight:bold; color:#DD3259;">&#8249;</button>
+            <button onclick="document.getElementById('productSlider').scrollBy({left:300,behavior:'smooth'})" aria-label="Next"
+                style="position:absolute; right:-12px; top:50%; transform:translateY(-50%); z-index:10; display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.15); border:none; cursor:pointer; font-size:22px; font-weight:bold; color:#DD3259;">&#8250;</button>
         </div>
+        <style>.product-slider-track::-webkit-scrollbar{display:none}@media(min-width:640px){.product-slider-track>a{flex:0 0 48%!important;max-width:48%!important}}@media(min-width:1024px){.product-slider-track>a{flex:0 0 23.5%!important;max-width:23.5%!important}}</style>
         @else
-        <p class="text-center text-base" style="color:#fff;">Products coming soon!</p>
+        <p style="text-align:center; color:#fff;">Products coming soon!</p>
         @endif
 
-        <a href="{{ route('store.products') }}" class="mt-6 block text-center font-heading text-base font-bold sm:hidden" style="color:#fff;">See all products &rarr;</a>
+        <a href="{{ route('store.products') }}" class="font-heading" style="margin-top:24px; display:block; text-align:center; font-size:1rem; font-weight:700; color:#fff; text-decoration:none;">See all products &rarr;</a>
     </div>
 </section>
 
