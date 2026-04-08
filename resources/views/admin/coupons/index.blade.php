@@ -9,7 +9,7 @@
         <a class="admin-btn" href="{{ route('admin.coupons.create') }}">Create coupon</a>
     </div>
 
-    <form method="POST" action="{{ route('admin.coupons.bulk') }}" id="bulk-form">
+    <form method="POST" action="{{ Route::has('admin.coupons.bulk') ? route('admin.coupons.bulk') : '#' }}" id="bulk-form">
         @csrf
         <div class="admin-bulk-bar">
             <select name="bulk_action">

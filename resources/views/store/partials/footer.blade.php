@@ -167,6 +167,6 @@
                 </span>
             </div>
         </div>
-        <p>&copy; {{ date('Y') }} NumNam. All rights reserved. | Designed by <a href="https://pmratnam.com/" target="_blank" rel="noopener noreferrer" style="color:#FF6B8A;text-decoration:underline;">PMR Marketing Agency</a></p>
+        <p>&copy; {{ date('Y') }} NumNam. All rights reserved. | Designed by <a href="https://pmratnam.com/" target="_blank" rel="noopener noreferrer" style="color:#FF6B8A;text-decoration:underline;">PMR Digital Marketing Agency</a></p>
     </div>
 </footer>

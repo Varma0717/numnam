@@ -26,7 +26,7 @@
     </form>
 
     <div class="admin-table-wrap">
-        <form method="POST" action="{{ route('admin.blogs.bulk') }}" id="bulk-form">
+        <form method="POST" action="{{ Route::has('admin.blogs.bulk') ? route('admin.blogs.bulk') : '#' }}" id="bulk-form">
             @csrf
             <div class="admin-bulk-bar">
                 <select name="bulk_action">

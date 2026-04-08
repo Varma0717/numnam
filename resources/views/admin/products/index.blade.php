@@ -17,7 +17,7 @@
         @endif
     </form>
 
-    <form method="POST" action="{{ route('admin.products.bulk') }}" id="bulk-form">
+    <form method="POST" action="{{ Route::has('admin.products.bulk') ? route('admin.products.bulk') : '#' }}" id="bulk-form">
         @csrf
         <div class="admin-bulk-bar">
             <select name="bulk_action">

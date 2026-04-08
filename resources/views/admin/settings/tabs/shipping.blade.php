@@ -1,6 +1,11 @@
 {{-- Settings > Shipping Tab --}}
 @php
+try {
 $zones = \App\Models\ShippingZone::with(['regions', 'methods'])->orderBy('sort_order')->get();
+} catch (\Throwable $e) {
+$zones = collect();
+}
+$hasShippingRoutes = Route::has('admin.shipping.zones.create');
 @endphp
 
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
@@ -8,7 +13,9 @@ $zones = \App\Models\ShippingZone::with(['regions', 'methods'])->orderBy('sort_o
         <h3 style="margin:0; font-size:14px; font-weight:600;">Shipping Zones</h3>
         <p class="admin-desc" style="margin:4px 0 0;">Define shipping zones with regions and delivery methods.</p>
     </div>
+    @if($hasShippingRoutes)
     <a href="{{ route('admin.shipping.zones.create') }}" class="admin-btn" style="text-decoration:none;">Add Shipping Zone</a>
+    @endif
 </div>
 
 @if($zones->isEmpty())
@@ -21,7 +28,9 @@ $zones = \App\Models\ShippingZone::with(['regions', 'methods'])->orderBy('sort_o
             <circle cx="18.5" cy="18.5" r="2.5" />
         </svg>
         <p>No shipping zones configured yet.</p>
+        @if($hasShippingRoutes)
         <a href="{{ route('admin.shipping.zones.create') }}" class="admin-btn" style="text-decoration:none;">Create First Zone</a>
+        @endif
     </div>
 </section>
 @else
@@ -35,11 +44,13 @@ $zones = \App\Models\ShippingZone::with(['regions', 'methods'])->orderBy('sort_o
             @endif
         </h3>
         <div style="display:flex; gap:8px; padding-right:12px;">
+            @if($hasShippingRoutes)
             <a href="{{ route('admin.shipping.zones.edit', $zone) }}" class="admin-link">Edit</a>
             <form method="POST" action="{{ route('admin.shipping.zones.destroy', $zone) }}" style="display:inline;" onsubmit="return confirm('Delete this shipping zone?')">
                 @csrf @method('DELETE')
                 <button type="submit" class="admin-btn-danger">Delete</button>
             </form>
+            @endif
         </div>
     </div>
     <div class="inside">

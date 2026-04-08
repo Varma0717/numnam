@@ -160,6 +160,7 @@
                         Blog Categories
                     </a>
                 </li>
+                @if(Route::has('admin.pages.index'))
                 <li class="{{ request()->routeIs('admin.pages*') ? 'current' : '' }}">
                     <a href="{{ route('admin.pages.index') }}">
                         <span class="menu-icon">
@@ -171,6 +172,8 @@
                         Pages
                     </a>
                 </li>
+                @endif
+                @if(Route::has('admin.menus.index'))
                 <li class="{{ request()->routeIs('admin.menus*') ? 'current' : '' }}">
                     <a href="{{ route('admin.menus.index') }}">
                         <span class="menu-icon">
@@ -183,6 +186,7 @@
                         Menus
                     </a>
                 </li>
+                @endif
                 <li class="{{ request()->routeIs('admin.contacts*') ? 'current' : '' }}">
                     <a href="{{ route('admin.contacts.index') }}">
                         <span class="menu-icon">
@@ -227,6 +231,7 @@
                         Media
                     </a>
                 </li>
+                @if(Route::has('admin.reports.sales'))
                 <li class="{{ request()->routeIs('admin.reports*') ? 'current' : '' }}">
                     <a href="{{ route('admin.reports.sales') }}">
                         <span class="menu-icon">
@@ -239,6 +244,7 @@
                         Reports
                     </a>
                 </li>
+                @endif
                 <li class="menu-separator"></li>
                 <li class="{{ request()->routeIs('admin.settings*') ? 'current' : '' }}">
                     <a href="{{ route('admin.settings.index') }}">
