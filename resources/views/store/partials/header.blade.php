@@ -1,26 +1,4 @@
-@php($kidsIllustrations = config('storefront.kids_illustrations', []))
-
 <header class="site-header">
-    <div class="header-row header-row-top">
-        <div class="header-wrap header-top-inner">
-            <div class="header-meta-left">
-                <a href="tel:+919014252278" aria-label="Call +91 90142 52278">Call: +91 90142 52278</a>
-                <span class="dot-sep">|</span>
-                <a href="mailto:info@numnam.com" aria-label="Email info@numnam.com">info@numnam.com</a>
-            </div>
-            <div class="header-meta-right">
-                <a href="{{ route('store.blog.index') }}">Blog</a>
-                <a href="{{ route('store.faq') }}">FAQ</a>
-                <a href="{{ route('store.contact') }}">Contact</a>
-                @auth
-                <a href="{{ route('store.account') }}">My Account</a>
-                @else
-                <a href="{{ route('store.login') }}">Login</a>
-                @endauth
-            </div>
-        </div>
-    </div>
-
     <div class="header-row header-row-main">
         <div class="header-wrap header-main-inner">
             <button type="button" class="nav-toggle" data-nav-toggle aria-label="Toggle navigation">
@@ -33,7 +11,6 @@
 
             <a href="{{ route('store.home') }}" class="brand" aria-label="NumNam Home">
                 <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="40" height="40" loading="lazy" class="brand-logo-img">
-                <img src="{{ asset($kidsIllustrations['header_buddy'] ?? 'assets/images/kids-icons/bird.png') }}" alt="" aria-hidden="true" class="brand-buddy" loading="lazy">
             </a>
 
             <form method="GET" action="{{ route('store.products') }}" class="header-search" data-search-form data-suggest-url="{{ route('store.search.suggestions') }}">

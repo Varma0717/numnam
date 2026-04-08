@@ -1,36 +1,7 @@
 :root {
-  --brand-1: #195b48;
-  --brand-1-light: #2f8a6f;
-  --brand-1-dark: #124435;
-  --brand-1-soft: #d8eee4;
-  --brand-2: #f2a65c;
-  --brand-3: #d1603d;
-  --accent: #0f766e;
-  --accent-dark: #134e4a;
-  --accent-soft: #e3f4f1;
-  --text: #1b1f23;
-  --muted: #5e676f;
-  --surface: #fffdfa;
-  --surface-soft: #fff7ee;
-  --surface-warm: #fff4e7;
-  --line: #e7dccb;
-  --danger: #c84b31;
-  --hero-sun: #ffe8bf;
-  --hero-mint: #d8f1df;
-  --hero-coral: #ffd7cd;
-  --radius: 12px;
-  --radius-sm: 6px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --shadow: 0 8px 24px rgba(45, 106, 79, 0.08);
-  --shadow-lg: 0 20px 40px rgba(45, 106, 79, 0.12);
-  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-:root {
-  /* ── Kids store brand colours ──────────────────────────── */
+  /* ── Candy/Bubblegum Kids Theme (from logo) ──────────── */
   --brand-1: #FF6B8A;
-  /* kids coral-pink */
+  /* coral pink */
   --brand-1-light: #FF8FAF;
   --brand-1-dark: #DD3259;
   --brand-1-soft: #FFF0F5;
@@ -42,30 +13,26 @@
   /* soft lavender */
   --accent-dark: #7B6BA8;
   --accent-soft: #F5EFFF;
-  /* ── Semantic ─────────────────────────────────────────── */
-  --text: #1a1a2e;
-  /* deep navy — more playful than black */
+
+  /* ── Semantic ──────────────────────────────────────────── */
+  --text: #2D2D3F;
+  /* deep navy */
   --muted: #5e6478;
-  --surface: #FFFCF5;
+  --surface: #FFFDF8;
   /* warm cream */
   --surface-soft: #FFF5F8;
-  /* soft pink */
   --surface-warm: #FFFBE6;
-  /* soft yellow */
   --line: #FFD6E5;
-  /* pink rule lines */
   --danger: #EF4444;
-  /* ── Hero accents ──────────────────────────────────────── */
-  --hero-sun: #FFFBE6;
-  --hero-mint: #E8FCF8;
-  --hero-coral: #FFF0F5;
-  /* ── Shape / Shadow / Motion ───────────────────────────── */
-  --radius: 14px;
-  --radius-sm: 8px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-  --shadow: 0 8px 28px rgba(255, 107, 138, 0.12);
-  --shadow-lg: 0 20px 48px rgba(255, 107, 138, 0.18);
+
+  /* ── Shape / Shadow / Motion ────────────────────────────── */
+  --radius: 1.5rem;
+  --radius-sm: 1rem;
+  --radius-lg: 2rem;
+  --radius-xl: 2.5rem;
+  --shadow: 0 4px 0 rgba(221, 50, 89, 0.15);
+  /* flat candy shadow */
+  --shadow-lg: 0 6px 0 rgba(221, 50, 89, 0.18);
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -87,16 +54,16 @@ html,
 body {
   margin: 0;
   padding: 0;
-  font-family: "Plus Jakarta Sans", "Inter", sans-serif;
+  font-family: 'Nunito', 'Comic Neue', sans-serif;
   font-size: 15px;
   line-height: 1.6;
   color: var(--text);
-  background: #ffffff;
+  background: #FFFDF8;
   overflow-x: clip;
 }
 
 ::selection {
-  background: rgba(25, 91, 72, 0.16);
+  background: rgba(255, 107, 138, 0.18);
   color: var(--text);
 }
 
@@ -158,7 +125,7 @@ img {
 .hero {
   border-radius: 0;
   padding: 60px 0;
-  background: linear-gradient(135deg, #eaf5ef 0%, var(--surface) 50%, #FDF8F4 100%);
+  background: var(--surface);
   display: grid;
   gap: 2rem;
   align-items: center;
@@ -173,7 +140,7 @@ img {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  background: linear-gradient(135deg, var(--surface-warm) 0%, #eaf5ef 60%, var(--brand-1-soft) 100%);
+  background: var(--brand-1-soft);
   position: relative;
 }
 
@@ -205,7 +172,7 @@ img {
 
 .hero h1 {
   margin: 0;
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: 'Comic Neue', cursive, sans-serif;
   font-size: clamp(2rem, 5vw, 3.6rem);
   font-weight: 800;
   line-height: 1.1;
@@ -253,13 +220,14 @@ img {
   line-height: 24px;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  background: linear-gradient(145deg, var(--brand-1) 0%, var(--brand-1-dark) 100%);
+  background: var(--brand-1);
   color: #fff;
   cursor: pointer;
   transition: background 0.28s var(--ease-smooth), transform 0.22s var(--ease-smooth), box-shadow 0.28s var(--ease-smooth);
-  font-family: "Inter", sans-serif;
+  font-family: 'Comic Neue', cursive, sans-serif;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 0 var(--brand-1-dark);
 }
 
 .btn-primary::after,
@@ -284,9 +252,9 @@ img {
 
 .btn-primary:hover,
 .cta-btn:hover {
-  background: linear-gradient(145deg, var(--brand-1-light) 0%, var(--brand-1) 100%);
+  background: var(--brand-1-light);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(45, 106, 79, 0.25);
+  box-shadow: 0 6px 0 var(--brand-1-dark);
 }
 
 .btn-primary:active,
@@ -310,7 +278,7 @@ img {
   letter-spacing: 0.8px;
   cursor: pointer;
   transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-  font-family: "Inter", sans-serif;
+  font-family: 'Comic Neue', cursive, sans-serif;
 }
 
 .btn-soft:hover,
@@ -319,7 +287,7 @@ img {
   color: var(--brand-1-light);
   background: var(--accent-soft);
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(45, 106, 79, 0.12);
+  box-shadow: 0 4px 0 rgba(221, 50, 89, 0.12);
 }
 
 .store-grid {

@@ -1,9 +1,7 @@
 {{-- Newsletter section (above footer) --}}
-@php($kidsIllustrations = config('storefront.kids_illustrations', []))
 
 <div class="footer-newsletter">
     <div class="footer-newsletter-inner">
-        <img src="{{ asset($kidsIllustrations['newsletter_deco'] ?? 'assets/images/kids-icons/animalwithballons.png') }}" alt="" aria-hidden="true" class="newsletter-kids-deco" loading="lazy">
         <div class="newsletter-copy">
             <h3>Join the NumNam Family</h3>
             <p>Get parenting tips, new product alerts, and exclusive offers delivered to your inbox.</p>
@@ -19,8 +17,6 @@
 </div>
 
 <footer class="site-footer">
-    <img src="{{ asset($kidsIllustrations['footer_left_deco'] ?? 'assets/images/kids-icons/twobirds_3.png') }}" alt="" aria-hidden="true" class="footer-kids-deco footer-kids-deco-left" loading="lazy">
-    <img src="{{ asset($kidsIllustrations['footer_right_deco'] ?? 'assets/images/kids-icons/value-shape-1.png') }}" alt="" aria-hidden="true" class="footer-kids-deco footer-kids-deco-right" loading="lazy">
     <div class="site-footer-inner">
         <div class="footer-col footer-brand-col">
             <div class="footer-logo">

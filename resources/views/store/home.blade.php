@@ -1,340 +1,105 @@
 ﻿@extends('store.layouts.app')
 
-@section('title', 'NumNam - Home')
+@section('title', 'NumNam - Fueling Tiny Adventures')
 
 @section('content')
-@php
-$trustCards = [
-[
-'icon' => 'shield',
-'title' => 'Doctor-Founded',
-'subtitle' => 'Backed by European Nutrition',
-],
-[
-'icon' => 'leaf',
-'title' => 'Vegetable Forward',
-'subtitle' => 'Rich in Veggies',
-],
-[
-'icon' => 'drop',
-'title' => 'No added sugar',
-'subtitle' => 'Naturally sweet',
-],
-[
-'icon' => 'spark',
-'title' => 'No preservatives',
-'subtitle' => 'Totally clean',
-],
-];
 
-$whyChooseUsBenefits = [
-[
-'icon' => 'truck',
-'title' => 'Fast Delivery',
-'description' => 'Quick dispatch and dependable delivery across major cities.',
-],
-[
-'icon' => 'lock',
-'title' => 'Secure Payment',
-'description' => 'Protected checkout with encrypted transactions and trusted gateways.',
-],
-[
-'icon' => 'badge',
-'title' => 'Quality Products',
-'description' => 'Carefully sourced products with strict quality checks at every step.',
-],
-[
-'icon' => 'refresh',
-'title' => 'Easy Returns',
-'description' => 'Hassle-free returns with responsive support when plans change.',
-],
-];
-
-$customerReviews = [
-[
-'name' => 'Ananya Reddy',
-'rating' => 5,
-'comment' => 'NumNam has made meal planning so much easier. My baby loves the textures and I love the clean ingredients.',
-],
-[
-'name' => 'Rohit Sharma',
-'rating' => 5,
-'comment' => 'Fast delivery and consistent quality every time. The subscription option is super convenient for busy parents.',
-],
-[
-'name' => 'Megha Patel',
-'rating' => 4,
-'comment' => 'Great variety and transparent labels. Support team is quick to help when we have questions.',
-],
-[
-'name' => 'Karan & Nisha',
-'rating' => 5,
-'comment' => 'We switched to NumNam recently and saw a big improvement in our little one\'s mealtime routine.',
-],
-];
-
-$averageCustomerRating = 4.8;
-
-$userGeneratedContent = [
-[
-'image' => asset('assets/images/Purees/appi%20pooch%201.png'),
-'handle' => '@ananya.parents',
-'caption' => 'Our breakfast routine is finally stress-free. Baby actually finishes the bowl.',
-],
-[
-'image' => asset('assets/images/Purees/berry%20swush%201.png'),
-'handle' => '@littlebiteswithriya',
-'caption' => 'A clean-label option we feel good about keeping stocked every week.',
-],
-[
-'image' => asset('assets/images/Purees/brocco%20pop%201.png'),
-'handle' => '@mealtimesbymegha',
-'caption' => 'Texture progression feels so much easier when the products are built by stage.',
-],
-[
-'image' => asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'),
-'handle' => '@raisingwithrohit',
-'caption' => 'Fast delivery and zero guesswork. Exactly what busy parents need.',
-],
-[
-'image' => asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'),
-'handle' => '@numnam.family',
-'caption' => 'Loved for travel days, daycare packing, and everything in between.',
-],
-[
-'image' => asset('assets/images/Purees/mangy%20chewy%201.png'),
-'handle' => '@snacktimewithtara',
-'caption' => 'Parents approve the ingredient list. Kids approve the taste.',
-],
-];
-
-$heroHighlights = [
-[
-'title' => 'Doctor-Founded',
-'description' => 'Nutritional thinking shaped by real pediatric insight.',
-],
-[
-'title' => 'Stage-Wise Choices',
-'description' => 'Products built for each feeding milestone and age range.',
-],
-[
-'title' => 'Clean-Label Convenience',
-'description' => 'Transparent ingredients with easy delivery for busy families.',
-],
-];
-@endphp
-
-<div class="home-mobile-tabs" role="tablist" aria-label="Homepage sections">
-    <button type="button" class="home-mobile-tab is-active" data-home-tab="intro" role="tab" aria-selected="true" aria-controls="home-panel-intro">Intro</button>
-    <button type="button" class="home-mobile-tab" data-home-tab="products" role="tab" aria-selected="false" aria-controls="home-panel-products">Products</button>
-    <button type="button" class="home-mobile-tab" data-home-tab="plans" role="tab" aria-selected="false" aria-controls="home-panel-plans">Plans</button>
-    <button type="button" class="home-mobile-tab" data-home-tab="community" role="tab" aria-selected="false" aria-controls="home-panel-community">Community</button>
-</div>
-
-<div class="home-mobile-panel is-active" data-home-panel="intro" id="home-panel-intro" role="tabpanel">
-
-    <section class="hero-fullbleed in-view" style="background: linear-gradient(135deg, #FFF0F5 0%, #FFFBE6 38%, #E8FCF8 72%, #F5EFFF 100%);">
-        {{-- Dot-pattern deco at full opacity for visible kids texture --}}
-        <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;" aria-hidden="true">
-            <img src="{{ asset('assets/images/kids-icons/bg_yellow_dots.png') }}" alt="" style="position:absolute;top:8%;left:2%;width:220px;opacity:0.50;" loading="eager">
-            <img src="{{ asset('assets/images/kids-icons/animalwithballons.png') }}" alt="" style="position:absolute;bottom:0;left:0;width:170px;opacity:0.82;" loading="eager">
+{{-- ===== HERO — compact, flat candy style ===== --}}
+<section class="hero-fullbleed in-view" style="background:#FFF0F5;">
+    <div class="hero-kids-visual pointer-events-none hidden md:flex" aria-hidden="true">
+        <div class="hero-kids-frame">
+            <img src="{{ asset('assets/images/0-18months.webp') }}" alt="" loading="eager" class="hero-kids-image">
         </div>
+    </div>
 
-        {{-- Hero visual (single image) --}}
-        <div class="hero-kids-visual pointer-events-none hidden md:flex" aria-hidden="true">
-            <div class="hero-kids-frame">
-                <img src="{{ asset('assets/images/0-18months.webp') }}" alt="" loading="eager" class="hero-kids-image">
+    <div class="hero-content">
+        <div style="max-width:560px;">
+            <p class="mb-3 inline-flex items-center gap-2 rounded-full border-2 border-[#FFD93D] bg-white px-4 py-1.5 font-heading text-xs font-bold uppercase tracking-widest" style="color:#FF6B8A;">
+                Fueling Tiny Adventures
+            </p>
+            <h1 class="font-heading text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl" style="color:#2D2D3F;">
+                {{ $homepageSections['hero_title'] ?? 'Clean, yummy baby food made with love.' }}
+            </h1>
+            <p class="mt-4 max-w-lg text-base leading-relaxed sm:text-lg" style="color:#5e6478;">
+                {{ $homepageSections['hero_subtitle'] ?? 'Stage-wise nutrition, transparent ingredients, and easy subscriptions for busy families.' }}
+            </p>
+            <div class="mt-7 flex flex-wrap items-center gap-3">
+                <a class="cta-btn" href="{{ route('store.products') }}">Shop Now</a>
+                <a class="btn-ghost" href="{{ route('store.pricing') }}">Subscriptions</a>
             </div>
         </div>
+    </div>
+</section>
 
-        {{-- Hero content --}}
-        <div class="hero-content">
-            <div style="max-width:600px;">
-                <p class="mb-4 inline-flex rounded-full border border-numnam-200 bg-white/80 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-numnam-600">
-                    NumNam Nutrition
-                </p>
-                <h1 class="text-balance text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl lg:text-5xl xl:text-6xl">
-                    {{ $homepageSections['hero_title'] ?? 'Clean-label, stage-wise baby nutrition for modern families.' }}
-                </h1>
-                <p class="mt-4 max-w-xl text-base leading-relaxed text-slate-700 sm:mt-5 sm:text-lg">
-                    {{ $homepageSections['hero_subtitle'] ?? 'NumNam offers age-appropriate baby foods, practical subscriptions, and ingredient transparency so parents can choose with confidence and feed with ease.' }}
-                </p>
+{{-- ===== CLOUD DIVIDER ===== --}}
+@include('store.partials.cloud-divider', ['color' => '#FFFDF8'])
 
-                <div class="mt-6 grid gap-3 sm:grid-cols-3">
-                    @foreach($heroHighlights as $highlight)
-                    <div class="rounded-2xl border border-white/80 bg-white/70 px-4 py-3 shadow-sm">
-                        <p class="text-sm font-bold text-slate-900">{{ $highlight['title'] }}</p>
-                        <p class="mt-1 text-xs leading-relaxed text-slate-600">{{ $highlight['description'] }}</p>
-                    </div>
-                    @endforeach
-                </div>
+{{-- ===== CATEGORIES — 2×2 mobile, 4-col desktop ===== --}}
+@if($topCategories->isNotEmpty())
+<section class="px-4 py-8 sm:px-6 lg:px-8" style="background:#FFFDF8;">
+    <div class="mx-auto max-w-6xl text-center">
+        <h2 class="font-heading text-2xl font-bold sm:text-3xl" style="color:#2D2D3F;">Shop by Category</h2>
+        <p class="mx-auto mt-2 max-w-md text-sm" style="color:#5e6478;">Find the perfect products for every stage of your little one's journey.</p>
 
-                <div class="mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
-                    <a class="hero-cta" href="{{ route('store.products') }}">Shop Products</a>
-                    <a class="inline-flex items-center justify-center rounded-full border-2 border-numnam-200 bg-white px-6 py-3 text-sm font-bold text-numnam-700 transition-all duration-300 hover:-translate-y-0.5 hover:bg-numnam-50 hover:border-numnam-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-numnam-300" href="{{ route('store.pricing') }}">Build Subscription</a>
-                </div>
-            </div>
-        </div>
-    </section>
-    <x-store.why-choose-us
-        title="Why Choose Us"
-        subtitle="Everything you need for confident shopping, from checkout to delivery."
-        :benefits="$whyChooseUsBenefits" />
-
-    @if($topCategories->isNotEmpty())
-    <section class="px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-        <div class="mx-auto max-w-7xl">
-            <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                    <h2 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Shop Top Categories</h2>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">Browse our most-loved categories with dedicated landing pages and products tailored to every stage.</p>
-                </div>
-                <a href="{{ route('store.products') }}" class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-400 hover:text-slate-900">View all products</a>
-            </div>
-
-            <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                @foreach($topCategories as $category)
-                <x-store.category-card :category="$category" />
-                @endforeach
-            </div>
-        </div>
-    </section>
-    @endif
-
-    <section class="px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
-        <div class="mx-auto grid max-w-7xl gap-4 md:grid-cols-2 xl:grid-cols-4">
-            @foreach($trustCards as $item)
-            <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-                <h3 class="text-sm font-semibold uppercase tracking-[0.14em] text-numnam-700">{{ $item['title'] }}</h3>
-                <p class="mt-2 text-sm leading-relaxed text-slate-600">{{ $item['subtitle'] }}</p>
-            </article>
+        <div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+            @foreach($topCategories->take(4) as $category)
+            <a href="{{ route('store.products', ['category' => $category->slug]) }}"
+                class="group block rounded-[2rem] border-3 bg-white p-4 text-center transition-transform duration-200 hover:-translate-y-1"
+                style="border-color:#FFD6E5;">
+                @if($category->image)
+                <img src="{{ asset($category->image) }}" alt="{{ $category->name }}" loading="lazy"
+                    class="mx-auto mb-3 h-20 w-20 rounded-full object-cover sm:h-24 sm:w-24"
+                    style="border:3px solid #FFD93D;">
+                @endif
+                <h3 class="font-heading text-sm font-bold sm:text-base" style="color:#2D2D3F;">{{ $category->name }}</h3>
+                @if($category->products_count)
+                <p class="mt-1 text-xs" style="color:#9B8EC4;">{{ $category->products_count }} products</p>
+                @endif
+            </a>
             @endforeach
         </div>
-    </section>
 
-</div>
+        <a href="{{ route('store.products') }}" class="mt-6 inline-flex items-center gap-1 font-heading text-sm font-bold" style="color:#FF6B8A;">
+            View All Products &rarr;
+        </a>
+    </div>
+</section>
+@endif
 
-<div class="home-mobile-panel" data-home-panel="products" id="home-panel-products" role="tabpanel">
-
-    <section class="px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-        <div class="mx-auto max-w-7xl">
-            <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                    <h2 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Shop by Stage</h2>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">Nutrition tailored to your baby's growth journey.</p>
-                </div>
+{{-- ===== FEATURED PRODUCTS STRIP ===== --}}
+<section class="px-4 py-8 sm:px-6 lg:px-8" style="background:#FFFDF8;">
+    <div class="mx-auto max-w-6xl">
+        <div class="mb-5 flex items-end justify-between">
+            <div>
+                <h2 class="font-heading text-2xl font-bold sm:text-3xl" style="color:#2D2D3F;">Best Sellers</h2>
+                <p class="mt-1 text-sm" style="color:#5e6478;">The products families reorder most.</p>
             </div>
-            <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                <a href="{{ route('store.products', ['age' => '4-6']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-                    <h3 class="text-base font-semibold text-slate-900">Stage 1</h3>
-                    <p class="mt-1 text-sm text-slate-600">4-6 months</p>
-                    <p class="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-numnam-700">First Tastes</p>
-                </a>
-                <a href="{{ route('store.products', ['age' => '6-8']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-                    <h3 class="text-base font-semibold text-slate-900">Stage 2</h3>
-                    <p class="mt-1 text-sm text-slate-600">6-8 months</p>
-                    <p class="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-numnam-700">Exploring Flavours</p>
-                </a>
-                <a href="{{ route('store.products', ['age' => '8-12']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-                    <h3 class="text-base font-semibold text-slate-900">Stage 3</h3>
-                    <p class="mt-1 text-sm text-slate-600">8-12 months</p>
-                    <p class="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-numnam-700">Textured Meals</p>
-                </a>
-                <a href="{{ route('store.products', ['age' => '12+']) }}" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-                    <h3 class="text-base font-semibold text-slate-900">Stage 4</h3>
-                    <p class="mt-1 text-sm text-slate-600">12+ months</p>
-                    <p class="mt-3 text-xs font-medium uppercase tracking-[0.14em] text-numnam-700">Family Foods</p>
-                </a>
-            </div>
+            <a href="{{ route('store.products') }}" class="hidden font-heading text-sm font-bold sm:inline-flex" style="color:#FF6B8A;">See all &rarr;</a>
         </div>
-    </section>
 
-    <x-store.product-showcase
-        title="Best Sellers"
-        subtitle="The products families reorder most often for quality, convenience, and consistent results."
-        :products="$bestSellerProducts"
-        empty-text="Best sellers will appear here once orders start coming in." />
-
-    <x-store.product-showcase
-        title="Featured Products"
-        subtitle="Handpicked standout products from our latest collection, designed to make shopping easier."
-        :products="$featuredProducts"
-        empty-text="Featured products will appear here soon." />
-
-    @if(($recentlyViewedProducts ?? collect())->isNotEmpty())
-    <x-store.product-showcase
-        title="Recently Viewed"
-        subtitle="Pick up where you left off with the products you explored most recently."
-        :products="$recentlyViewedProducts"
-        empty-text="Your recently viewed products will appear here." />
-    @endif
-
-</div>
-
-<div class="home-mobile-panel" data-home-panel="plans" id="home-panel-plans" role="tabpanel">
-
-    <section class="px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-        <div class="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">How It Works</h2>
-                <p class="mt-2 text-sm text-slate-600">From stage selection to doorstep delivery, the process is simple and parent-friendly.</p>
-            </div>
-            <div class="grid gap-4 md:grid-cols-3">
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                    <h3 class="text-base font-semibold text-slate-900">Choose Your Stage</h3>
-                    <p class="mt-2 text-sm text-slate-600">Select products matched to your baby's age and developmental milestone.</p>
+        @if($bestSellerProducts->isNotEmpty())
+        <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+            @foreach($bestSellerProducts->take(4) as $product)
+            <a href="{{ route('store.product.show', $product->slug) }}"
+                class="group block overflow-hidden rounded-[2rem] border-3 bg-white transition-transform duration-200 hover:-translate-y-1"
+                style="border-color:#FFD6E5;">
+                <div class="aspect-square overflow-hidden" style="background:#FFF0F5;">
+                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy"
+                        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
                 </div>
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                    <h3 class="text-base font-semibold text-slate-900">We Prepare Fresh</h3>
-                    <p class="mt-2 text-sm text-slate-600">Every batch is crafted with clean ingredients and transparent nutrition labels.</p>
+                <div class="p-3 sm:p-4">
+                    <h3 class="font-heading text-sm font-bold leading-snug sm:text-base" style="color:#2D2D3F;">{{ $product->name }}</h3>
+                    <p class="mt-1 font-heading text-sm font-bold" style="color:#FF6B8A;">Rs {{ number_format($product->price, 0) }}</p>
                 </div>
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                    <h3 class="text-base font-semibold text-slate-900">Delivered To You</h3>
-                    <p class="mt-2 text-sm text-slate-600">Fast shipping and flexible subscriptions help families stay stocked without stress.</p>
-                </div>
-            </div>
+            </a>
+            @endforeach
         </div>
-    </section>
+        @else
+        <p class="text-center text-sm" style="color:#5e6478;">Best sellers coming soon!</p>
+        @endif
 
-    <section class="px-4 pb-8 sm:px-6 lg:px-8 lg:pb-10">
-        <div class="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-gradient-to-br from-[#fff9f2] via-white to-[#fff4e8] p-6 shadow-soft sm:p-8 lg:p-10">
-            <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                    <h2 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Subscription Plans</h2>
-                    <p class="mt-2 text-sm text-slate-600">Save more with regular deliveries. Pause or cancel anytime.</p>
-                </div>
-                <a href="{{ route('store.pricing') }}" class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-400 hover:text-slate-900">View all plans</a>
-            </div>
-            <div class="grid gap-4 md:grid-cols-3">
-                @foreach($plans->take(3) as $plan)
-                <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <h3 class="text-lg font-semibold text-slate-900">{{ $plan->name }}</h3>
-                    <p class="mt-2 text-sm text-slate-600">{{ Str::limit($plan->description, 100) }}</p>
-                    <p class="mt-4 text-2xl font-bold text-slate-900">Rs {{ number_format($plan->price, 0) }}</p>
-                    @if($plan->billing_cycle && $plan->billing_cycle !== 'one_time')
-                    <p class="text-sm text-slate-500">/{{ str_replace('_', ' ', $plan->billing_cycle) }}</p>
-                    @endif
-                    <a href="{{ route('store.pricing') }}" class="hero-cta mt-5 w-full">Subscribe</a>
-                </article>
-                @endforeach
-            </div>
-        </div>
-    </section>
+        <a href="{{ route('store.products') }}" class="mt-4 block text-center font-heading text-sm font-bold sm:hidden" style="color:#FF6B8A;">See all products &rarr;</a>
+    </div>
+</section>
 
-</div>
-
-<div class="home-mobile-panel" data-home-panel="community" id="home-panel-community" role="tabpanel">
-
-    <x-store.user-generated-content
-        title="Real Families, Real Moments"
-        subtitle="Parents sharing their favourite NumNam feeding moments — from first tastes to favourite snack-time regulars."
-        :items="$userGeneratedContent" />
-
-    <x-store.customer-reviews
-        title="Customer Reviews"
-        subtitle="Real feedback from parents who trust NumNam for everyday nutrition."
-        :average-rating="$averageCustomerRating"
-        :reviews="$customerReviews" />
-
-</div>
 @endsection

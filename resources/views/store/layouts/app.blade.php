@@ -25,9 +25,6 @@
     <meta name="twitter:title" content="@yield('title', 'NumNam | Doctor-Founded Baby Nutrition')">
 
     {{-- Browser appearance --}}
-    <meta name="theme-color" content="#195b48">
-    <meta name="msapplication-TileColor" content="#195b48">
-    {{-- Browser appearance --}}
     <meta name="theme-color" content="#FF6B8A">
     <meta name="msapplication-TileColor" content="#FF6B8A">
     <meta name="mobile-web-app-capable" content="yes">
@@ -71,8 +68,7 @@
     {{-- Preconnect for performance --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800;900&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400;1,700&family=Nunito:wght@400;500;600;700;800&display=swap">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('head')
@@ -83,12 +79,6 @@
     <a href="#main-content" class="skip-link">Skip to content</a>
 
     <div class="page-shell">
-        @php($kidsIllustrations = config('storefront.kids_illustrations', []))
-        <div class="kids-theme-layer" aria-hidden="true">
-            @foreach(($kidsIllustrations['theme_layer'] ?? []) as $index => $illustration)
-            <img src="{{ asset($illustration) }}" alt="" class="kids-shape kids-shape-{{ $index + 1 }}" loading="lazy">
-            @endforeach
-        </div>
 
         @include('store.partials.header')
 
@@ -106,13 +96,45 @@
     </div>
 
     <nav class="mobile-app-nav" aria-label="Mobile quick navigation">
-        <a href="{{ route('store.home') }}" class="{{ request()->routeIs('store.home') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.home') ? 'page' : 'false' }}">Home</a>
-        <a href="{{ route('store.products') }}" class="{{ request()->routeIs('store.products*') || request()->routeIs('store.product.show') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.products*') || request()->routeIs('store.product.show') ? 'page' : 'false' }}">Shop</a>
-        <a href="{{ route('store.cart') }}" class="{{ request()->routeIs('store.cart') || request()->routeIs('store.checkout') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.cart') || request()->routeIs('store.checkout') ? 'page' : 'false' }}">Cart</a>
+        <a href="{{ route('store.home') }}" class="{{ request()->routeIs('store.home') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.home') ? 'page' : 'false' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            Home
+        </a>
+        <a href="{{ route('store.products') }}" class="{{ request()->routeIs('store.products*') || request()->routeIs('store.product.show') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.products*') || request()->routeIs('store.product.show') ? 'page' : 'false' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 01-8 0" />
+            </svg>
+            Shop
+        </a>
+        <a href="{{ route('store.cart') }}" class="{{ request()->routeIs('store.cart') || request()->routeIs('store.checkout') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.cart') || request()->routeIs('store.checkout') ? 'page' : 'false' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h7.72a2 2 0 002-1.61L23 6H6" />
+            </svg>
+            Cart
+        </a>
         @auth
-        <a href="{{ route('store.account') }}" class="{{ request()->routeIs('store.account') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.account') ? 'page' : 'false' }}">Account</a>
+        <a href="{{ route('store.account') }}" class="{{ request()->routeIs('store.account') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.account') ? 'page' : 'false' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            Account
+        </a>
         @else
-        <a href="{{ route('store.login') }}" class="{{ request()->routeIs('store.login') || request()->routeIs('store.register') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.login') || request()->routeIs('store.register') ? 'page' : 'false' }}">Account</a>
+        <a href="{{ route('store.login') }}" class="{{ request()->routeIs('store.login') || request()->routeIs('store.register') ? 'active' : '' }}" aria-current="{{ request()->routeIs('store.login') || request()->routeIs('store.register') ? 'page' : 'false' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            Account
+        </a>
         @endauth
     </nav>
 

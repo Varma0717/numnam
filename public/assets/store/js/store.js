@@ -485,35 +485,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabListSelector: '.account-tabs',
   });
 
-  /* ====== Homepage Mobile Tabs ====== */
-  const homeTabs = document.querySelectorAll('.home-mobile-tab');
-  if (homeTabs.length) {
-    homeTabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        const target = tab.dataset.homeTab;
-        if (!target) return;
-
-        homeTabs.forEach((t) => {
-          t.classList.remove('is-active');
-          t.setAttribute('aria-selected', 'false');
-        });
-
-        document.querySelectorAll('.home-mobile-panel').forEach((panel) => {
-          panel.classList.remove('is-active');
-        });
-
-        tab.classList.add('is-active');
-        tab.setAttribute('aria-selected', 'true');
-
-        const activePanel = document.querySelector('.home-mobile-panel[data-home-panel="' + target + '"]');
-        if (activePanel) {
-          activePanel.classList.add('is-active');
-          activePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-    });
-  }
-
   /* ====== Product Carousel ====== */
   const productCarousels = document.querySelectorAll('[data-product-carousel]');
   productCarousels.forEach((carousel) => {

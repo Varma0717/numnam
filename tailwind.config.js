@@ -7,7 +7,9 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Poppins', 'sans-serif'],
+                sans: ['"Comic Neue"', 'cursive', 'sans-serif'],
+                heading: ['"Comic Neue"', 'cursive', 'sans-serif'],
+                body: ['Nunito', 'sans-serif'],
             },
             colors: {
                 numnam: {
@@ -30,7 +32,7 @@ module.exports = {
                     sky: '#60D5D8',
                     peach: '#FFB347',
                     green: '#6BCB77',
-                    cream: '#FFF9F0',
+                    cream: '#FFFDF8',
                     pink: '#FFF0F5',
                     blue: '#F0F9FF',
                 },
@@ -44,11 +46,25 @@ module.exports = {
                     mint: '#8cd9bf',
                     cream: '#f1dbc0',
                 },
+                candy: {
+                    bg: '#FFFDF8',
+                    text: '#2D2D3F',
+                    muted: '#5e6478',
+                },
             },
             boxShadow: {
                 soft: '0 12px 36px -18px rgba(17, 24, 39, 0.35)',
                 kids: '0 8px 28px rgba(255, 107, 138, 0.20)',
                 'kids-yellow': '0 8px 28px rgba(255, 217, 61, 0.30)',
+                'candy-coral': '0 4px 0 #dd3259',
+                'candy-yellow': '0 4px 0 #e6c235',
+                'candy-mint': '0 4px 0 #3db8b0',
+                'candy-lavender': '0 4px 0 #7B6BA8',
+            },
+            borderRadius: {
+                'candy': '1.5rem',
+                'candy-lg': '2rem',
+                'candy-xl': '2.5rem',
             },
         },
     },

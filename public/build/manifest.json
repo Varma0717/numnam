@@ -1,48 +1,8 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-2ed2740f.css",
+    "file": "assets/app-1163704f.css",
     "isEntry": true,
     "src": "resources/css/app.css"
-  },
-  "resources/images/kids-illustrations/dancing.svg": {
-    "file": "assets/dancing-595e589d.svg",
-    "src": "resources/images/kids-illustrations/dancing.svg"
-  },
-  "resources/images/kids-illustrations/reading.svg": {
-    "file": "assets/reading-90293488.svg",
-    "src": "resources/images/kids-illustrations/reading.svg"
-  },
-  "resources/images/kids-illustrations/sitting.svg": {
-    "file": "assets/sitting-6245f1c3.svg",
-    "src": "resources/images/kids-illustrations/sitting.svg"
-  },
-  "resources/images/kids-illustrations/sprinting.svg": {
-    "file": "assets/sprinting-de4c1307.svg",
-    "src": "resources/images/kids-illustrations/sprinting.svg"
-  },
-  "resources/images/kids-online/balloon.svg": {
-    "file": "assets/balloon-3dbba8b3.svg",
-    "src": "resources/images/kids-online/balloon.svg"
-  },
-  "resources/images/kids-online/kite.svg": {
-    "file": "assets/kite-2cdb60dd.svg",
-    "src": "resources/images/kids-online/kite.svg"
-  },
-  "resources/images/kids-online/lollipop.svg": {
-    "file": "assets/lollipop-940496b9.svg",
-    "src": "resources/images/kids-online/lollipop.svg"
-  },
-  "resources/images/kids-online/party-popper.svg": {
-    "file": "assets/party-popper-c27a0185.svg",
-    "src": "resources/images/kids-online/party-popper.svg"
-  },
-  "resources/images/kids-online/rainbow.svg": {
-    "file": "assets/rainbow-22abca54.svg",
-    "src": "resources/images/kids-online/rainbow.svg"
-  },
-  "resources/images/kids-online/teddy-bear.svg": {
-    "file": "assets/teddy-bear-69a583e2.svg",
-    "src": "resources/images/kids-online/teddy-bear.svg"
   },
   "resources/js/app.js": {
     "file": "assets/app-c54aad6f.js",
