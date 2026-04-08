@@ -29,12 +29,14 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
         @foreach($heroSlides as $i => $slide)
         <div class="hero-slide {{ $i === 0 ? 'is-active' : '' }}" style="background-image:url('{{ $slide['image'] }}');">
             <div class="hero-slide-overlay">
-                <div class="hero-slide-copy">
-                    <h1>{{ $slide['title'] }}</h1>
-                    <p>{{ $slide['subtitle'] }}</p>
-                    <div class="hero-slide-btns">
-                        <a class="cta-btn" href="{{ route('store.products') }}">Shop Now</a>
-                        <a class="hero-btn-outline" href="{{ route('store.pricing') }}">Subscriptions</a>
+                <div class="hero-slide-inner">
+                    <div class="hero-slide-copy">
+                        <h1>{{ $slide['title'] }}</h1>
+                        <p>{{ $slide['subtitle'] }}</p>
+                        <div class="hero-slide-btns">
+                            <a class="cta-btn" href="{{ route('store.products') }}">Shop Now</a>
+                            <a class="hero-btn-outline" href="{{ route('store.pricing') }}">Subscriptions</a>
+                        </div>
                     </div>
                 </div>
             </div>

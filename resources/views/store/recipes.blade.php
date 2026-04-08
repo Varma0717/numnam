@@ -116,5 +116,3 @@
     @endif
 </section>
 @endsection
-</section>
-@endsection
