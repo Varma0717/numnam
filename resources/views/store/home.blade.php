@@ -7,7 +7,7 @@
 $heroSlides = [
 ['image' => asset('assets/images/hero.jpg'), 'title' => $homepageSections['hero_title'] ?? 'Clean, yummy baby food made with love.', 'subtitle' => $homepageSections['hero_subtitle'] ?? 'Stage-wise nutrition, transparent ingredients, and easy subscriptions for busy families.'],
 ['image' => asset('assets/images/hero_1.jpg'), 'title' => 'Inspired by European Nutrition Standards', 'subtitle' => 'Doctor-founded recipes crafted with real fruits and vegetables for your little one.'],
-['image' => asset('assets/images/background_img.jpg'), 'title' => 'Fueling Tiny Adventures', 'subtitle' => 'From smooth purees to crunchy puffs — feeding milestones made simple.'],
+['image' => asset('assets/images/baby-choosing-what-eat-alone.jpg'), 'title' => 'Fueling Tiny Adventures', 'subtitle' => 'From smooth purees to crunchy puffs — feeding milestones made simple.'],
 ];
 $productPlaceholders = [
 asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'),
@@ -32,9 +32,9 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
                 <div class="hero-slide-copy">
                     <h1>{{ $slide['title'] }}</h1>
                     <p>{{ $slide['subtitle'] }}</p>
-                    <div class="mt-6 flex flex-wrap items-center gap-3">
+                    <div class="hero-slide-btns">
                         <a class="cta-btn" href="{{ route('store.products') }}">Shop Now</a>
-                        <a class="btn-ghost" href="{{ route('store.pricing') }}" style="color:#fff;border-color:rgba(255,255,255,0.5);">Subscriptions</a>
+                        <a class="hero-btn-outline" href="{{ route('store.pricing') }}">Subscriptions</a>
                     </div>
                 </div>
             </div>
