@@ -554,13 +554,13 @@
 
     @media (min-width: 768px) {
         .site-footer-inner {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: repeat(3, minmax(0, 1fr));
         }
     }
 
     @media (min-width: 1024px) {
         .site-footer-inner {
-            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            grid-template-columns: 2fr repeat(4, minmax(0, 1fr));
             padding: 2.5rem 2rem;
         }
     }
@@ -581,7 +581,7 @@
     }
 
     .footer-brand-col {
-        @apply lg:col-span-2;
+        @apply md:col-span-3 lg:col-span-1;
     }
 
     .footer-logo {
