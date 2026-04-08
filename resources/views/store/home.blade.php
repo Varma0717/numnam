@@ -106,48 +106,15 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
 {{-- ===== CLOUD DIVIDER ===== --}}
 @include('store.partials.cloud-divider', ['color' => '#FFCC25'])
 
-{{-- ===== CATEGORIES — 2×2 mobile, 4-col desktop ===== --}}
-@if($topCategories->isNotEmpty())
+{{-- ===== BEST SELLERS ===== --}}
 <section class="px-4 py-12 sm:px-6 sm:py-16 lg:px-8" style="background:#FFCC25;">
-    <div class="mx-auto max-w-6xl text-center">
-        <h2 class="font-heading text-3xl font-bold sm:text-4xl" style="color:#4ECDC4;">Shop by Category</h2>
-        <p class="mx-auto mt-3 max-w-lg text-base" style="color:#5e6478;">Find the perfect products for every stage of your little one's journey.</p>
-
-        <div class="mt-8 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
-            @foreach($topCategories->take(4) as $category)
-            @php($catImage = $category->image ? asset($category->image) : $categoryPlaceholders[$loop->index % count($categoryPlaceholders)])
-            @php($cardColors = [['bg' => '#FFF0F5', 'border' => '#FF6B8A'], ['bg' => '#ECFFF4', 'border' => '#4ECDC4'], ['bg' => '#FFFBF0', 'border' => '#FFD93D'], ['bg' => '#F5F0FF', 'border' => '#9B8EC4']])
-            @php($cc = $cardColors[$loop->index % 4])
-            <a href="{{ route('store.products', ['category' => $category->slug]) }}"
-                class="group block rounded-[2rem] border-3 p-5 text-center transition-transform duration-200 hover:-translate-y-1"
-                style="border-color:{{ $cc['border'] }}; background:{{ $cc['bg'] }};">
-                <img src="{{ $catImage }}" alt="{{ $category->name }}" loading="lazy"
-                    class="mx-auto mb-4 h-24 w-24 rounded-full object-cover sm:h-28 sm:w-28"
-                    style="border:3px solid {{ $cc['border'] }}; box-shadow: 0 4px 0 {{ $cc['border'] }}33;">
-                <h3 class="font-heading text-base font-bold sm:text-lg" style="color:#2D2D3F;">{{ $category->name }}</h3>
-                @if($category->products_count)
-                <p class="mt-1 text-sm font-semibold" style="color:{{ $cc['border'] }};">{{ $category->products_count }} products</p>
-                @endif
-            </a>
-            @endforeach
-        </div>
-
-        <a href="{{ route('store.products') }}" class="mt-8 inline-flex items-center gap-1 rounded-full border-2 px-5 py-2.5 font-heading text-sm font-bold transition-colors duration-200 hover:bg-[#FFF0F5]" style="color:#FF6B8A; border-color:#FF6B8A;">
-            View All Products &rarr;
-        </a>
-    </div>
-</section>
-@endif
-
-{{-- ===== FEATURED PRODUCTS STRIP ===== --}}
-<section class="px-4 py-12 sm:px-6 sm:py-16 lg:px-8" style="background:linear-gradient(180deg, #FFFDF8 0%, #F5F0FF 100%);">
     <div class="mx-auto max-w-6xl">
         <div class="mb-6 flex items-end justify-between">
             <div>
-                <h2 class="font-heading text-3xl font-bold sm:text-4xl" style="color:#9B8EC4;">Best Sellers</h2>
+                <h2 class="font-heading text-3xl font-bold sm:text-4xl" style="color:#fff;">Best Sellers</h2>
                 <p class="mt-2 text-base" style="color:#5e6478;">The products families reorder most.</p>
             </div>
-            <a href="{{ route('store.products') }}" class="hidden rounded-full border-2 px-4 py-2 font-heading text-sm font-bold transition-colors duration-200 hover:bg-[#F5F0FF] sm:inline-flex" style="color:#9B8EC4; border-color:#9B8EC4;">See all &rarr;</a>
+            <a href="{{ route('store.products') }}" class="hidden rounded-full border-2 px-4 py-2 font-heading text-sm font-bold transition-colors duration-200 hover:bg-[#FFF0F5] sm:inline-flex" style="color:#fff; border-color:#fff;">See all &rarr;</a>
         </div>
 
         @if($bestSellerProducts->isNotEmpty())
@@ -174,7 +141,7 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
         <p class="text-center text-base" style="color:#5e6478;">Best sellers coming soon!</p>
         @endif
 
-        <a href="{{ route('store.products') }}" class="mt-6 block text-center font-heading text-base font-bold sm:hidden" style="color:#9B8EC4;">See all products &rarr;</a>
+        <a href="{{ route('store.products') }}" class="mt-6 block text-center font-heading text-base font-bold sm:hidden" style="color:#fff;">See all products &rarr;</a>
     </div>
 </section>
 
@@ -196,12 +163,12 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
             @php($plc = $planColors[$loop->index % 3])
             @php($cycleLabel = match($plan->billing_cycle) { 'one_time' => 'One-time', 'weekly' => '/ week', 'monthly' => '/ month', 'quarterly' => '/ quarter', 'yearly' => '/ year', default => '/ ' . str_replace('_', ' ', $plan->billing_cycle) })
             <div class="rounded-[2rem] border-3 bg-white p-6 text-center transition-transform duration-200 hover:-translate-y-1 sm:p-8"
-                 style="border-color:{{ $plc['border'] }};">
+                style="border-color:{{ $plc['border'] }};">
                 <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full" style="background:{{ $plc['bg'] }};">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{ $plc['accent'] }}" stroke-width="2">
-                        <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
-                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-                        <line x1="12" y1="22.08" x2="12" y2="12"/>
+                        <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                        <line x1="12" y1="22.08" x2="12" y2="12" />
                     </svg>
                 </div>
                 <h3 class="font-heading text-xl font-bold" style="color:#2D2D3F;">{{ $plan->name }}</h3>
@@ -216,15 +183,17 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
                 <ul class="mx-auto mt-4 max-w-xs space-y-2 text-left text-sm" style="color:#5e6478;">
                     @foreach($plan->features as $feature)
                     <li class="flex items-start gap-2">
-                        <svg class="mt-0.5 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{ $plc['accent'] }}" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <svg class="mt-0.5 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{ $plc['accent'] }}" stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
                         {{ $feature }}
                     </li>
                     @endforeach
                 </ul>
                 @endif
                 <a href="{{ route('store.pricing') }}" class="mt-6 inline-flex items-center gap-1 rounded-full border-2 px-6 py-2.5 font-heading text-sm font-bold transition-colors duration-200 hover:text-white"
-                   style="color:{{ $plc['accent'] }}; border-color:{{ $plc['accent'] }}; --hover-bg:{{ $plc['accent'] }};"
-                   onmouseover="this.style.backgroundColor=this.style.getPropertyValue('--hover-bg')" onmouseout="this.style.backgroundColor='transparent'">
+                    style="color:{{ $plc['accent'] }}; border-color:{{ $plc['accent'] }}; --hover-bg:{{ $plc['accent'] }};"
+                    onmouseover="this.style.backgroundColor=this.style.getPropertyValue('--hover-bg')" onmouseout="this.style.backgroundColor='transparent'">
                     Subscribe Now
                 </a>
             </div>
