@@ -997,15 +997,9 @@
     .hero-slide {
         flex: 0 0 100%;
         position: relative;
-        min-height: 420px;
+        height: 75vh;
         background-size: cover;
         background-position: center;
-    }
-
-    @media (min-width: 768px) {
-        .hero-slide {
-            min-height: 540px;
-        }
     }
 
     .hero-slide-overlay {

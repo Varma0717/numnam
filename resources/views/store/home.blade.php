@@ -5,9 +5,9 @@
 @section('content')
 @php
 $heroSlides = [
-['image' => asset('assets/images/hero.jpg'), 'title' => $homepageSections['hero_title'] ?? 'Clean, yummy baby food made with love.', 'subtitle' => $homepageSections['hero_subtitle'] ?? 'Stage-wise nutrition, transparent ingredients, and easy subscriptions for busy families.'],
-['image' => asset('assets/images/hero_1.jpg'), 'title' => 'Inspired by European Nutrition Standards', 'subtitle' => 'Doctor-founded recipes crafted with real fruits and vegetables for your little one.'],
-['image' => asset('assets/images/baby-choosing-what-eat-alone.jpg'), 'title' => 'Fueling Tiny Adventures', 'subtitle' => 'From smooth purees to crunchy puffs — feeding milestones made simple.'],
+['image' => asset('assets/images/hero.png'), 'title' => $homepageSections['hero_title'] ?? 'Clean, yummy baby food made with love.', 'subtitle' => $homepageSections['hero_subtitle'] ?? 'Stage-wise nutrition, transparent ingredients, and easy subscriptions for busy families.'],
+['image' => asset('assets/images/hero_1.png'), 'title' => 'Inspired by European Nutrition Standards', 'subtitle' => 'Doctor-founded recipes crafted with real fruits and vegetables for your little one.'],
+['image' => asset('assets/images/hero_2.png'), 'title' => 'Fueling Tiny Adventures', 'subtitle' => 'From smooth purees to crunchy puffs — feeding milestones made simple.'],
 ];
 $productPlaceholders = [
 asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'),
