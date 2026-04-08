@@ -41,7 +41,7 @@
             </button>
 
             <a href="{{ route('store.home') }}" class="brand" aria-label="NumNam Home">
-                <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="56" height="56" loading="lazy" class="brand-logo-img">
+                <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="75" height="75" loading="lazy" class="brand-logo-img">
             </a>
 
             <form method="GET" action="{{ route('store.products') }}" class="header-search" data-search-form data-suggest-url="{{ route('store.search.suggestions') }}">
@@ -142,17 +142,7 @@
         <a href="{{ route('store.refer-friends') }}">Refer Friends</a>
         <a href="{{ route('store.about') }}">About</a>
         <a href="{{ route('store.contact') }}">Contact</a>
-        <a href="tel:+919014252278">Call: +91 90142 52278</a>
-        <a href="https://wa.me/919014252278" target="_blank" rel="noopener noreferrer">WhatsApp Support</a>
-        <a href="mailto:info@numnam.com">Email: info@numnam.com</a>
-        <a href="{{ route('store.cart') }}">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px">
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h7.72a2 2 0 002-1.61L23 6H6" />
-            </svg>
-            Cart ({{ $cartItemCount ?? 0 }})
-        </a>
+
         @auth
         <a href="{{ route('store.account') }}">My Account</a>
         @else

@@ -93,7 +93,14 @@
     }
 
     .header-main-inner {
-        @apply flex h-[72px] items-center gap-3 md:gap-4;
+        @apply flex items-center gap-3 md:gap-4;
+        height: 72px;
+    }
+
+    @media (min-width: 1024px) {
+        .header-main-inner {
+            height: 110px;
+        }
     }
 
     .brand {
@@ -102,7 +109,13 @@
 
     .brand-logo-img {
         @apply block h-auto w-auto;
-        max-height: 42px;
+        max-height: 60px;
+    }
+
+    @media (min-width: 1024px) {
+        .brand-logo-img {
+            max-height: 100px;
+        }
     }
 
     .brand-buddy {
@@ -118,11 +131,12 @@
     }
 
     .header-search {
-        @apply relative hidden flex-1 md:block;
+        @apply relative hidden max-w-md flex-1 md:block;
+        margin: 0 auto;
     }
 
     .header-search-input {
-        @apply h-9 w-full max-w-md rounded-full border-2 border-numnam-200 bg-white pl-4 pr-10 text-sm outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400;
+        @apply h-9 w-full rounded-full border-2 border-numnam-200 bg-white pl-4 pr-10 text-sm outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400;
         color: #2D2D3F;
     }
 
@@ -1005,7 +1019,7 @@
     .hero-slide-overlay {
         position: absolute;
         inset: 0;
-        background: rgba(0, 0, 0, 0.45);
+        background: rgba(0, 0, 0, 0.25);
         display: flex;
         align-items: center;
     }
