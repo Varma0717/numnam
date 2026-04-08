@@ -20,7 +20,7 @@
     <div class="site-footer-inner">
         <div class="footer-col footer-brand-col">
             <div class="footer-logo">
-                <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="56" height="56" loading="lazy" class="brand-logo-img">
+                <img src="{{ asset('assets/images/Logo/TM_footer.png') }}" alt="NumNam logo" width="56" height="56" loading="lazy" class="brand-logo-img">
             </div>
             <p class="meta">Doctor-founded baby nutrition with clean ingredients, subscriptions, and parent education content.</p>
             <div class="footer-contact-info">
