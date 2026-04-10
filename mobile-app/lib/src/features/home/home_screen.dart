@@ -1,93 +1,117 @@
-import 'package:flutter/material.dart';
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 18, 16, 22),
-      children: [
-        Container(
-          padding: const EdgeInsets.all(18),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            gradient: const LinearGradient(
-              colors: [Color(0xFFFDE68A), Color(0xFFF59E0B)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x332D2A4A),
-                blurRadius: 24,
-                offset: Offset(0, 10),
-              ),
-            ],
-          ),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Yummy Nutrition for Tiny Tummies',
-                style: TextStyle(
-                  color: Color(0xFF1F2937),
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  height: 1.15,
-                ),
-              ),
-              SizedBox(height: 8),
-              Text(
-                'App foundation is live. Next steps: auth, catalog, cart, checkout, and orders.',
-                style: TextStyle(
-                  color: Color(0xFF374151),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import '../../config/app_config.dart';
+import '../../core/api_client.dart';
+import '../../core/constants.dart';
+import '../../models/product.dart';
+import '../../shared/theme/colors.dart';
+import '../../shared/widgets/product_card.dart';
+import '../shop/product_detail_screen.dart';
+import '../subscriptions/subscriptions_screen.dart';
+import '../blog/blog_list_screen.dart';
 
-// ── Kids brand colours (mirrors app.dart) ────────────────────────────────
-const _kCoral    = Color(0xFFFF6B8A);
-const _kYellow   = Color(0xFFFFD93D);
-const _kMint     = Color(0xFF4ECDC4);
-const _kLavender = Color(0xFF9B8EC4);
-const _kNavy     = Color(0xFF1A1A2E);
-
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<Product> _featured = [];
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final api = context.read<ApiClient>();
+      final resp = await api.dio.get(ApiEndpoints.products, queryParameters: {
+        'per_page': 6,
+        'featured': 1,
+      });
+      final data = resp.data['data'];
+      List<dynamic> list;
+      if (data is List) {
+        list = data;
+      } else if (data is Map && data['data'] != null) {
+        list = data['data'] as List;
+      } else {
+        list = [];
+      }
+      if (mounted) {
+        setState(() {
+          _featured =
+              list.map((e) => Product.fromJson(e as Map<String, dynamic>)).toList();
+          _loading = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.zero,
-      children: const [
-        _HeroBanner(),
-        SizedBox(height: 24),
-        _SectionHeader(title: 'Shop by Stage', emoji: '🎯'),
-        SizedBox(height: 12),
-        _StageCards(),
-        SizedBox(height: 24),
-        _SectionHeader(title: 'Why NumNam', emoji: '⭐'),
-        SizedBox(height: 12),
-        _TrustCards(),
-        SizedBox(height: 24),
-        _SectionHeader(title: 'Popular Picks', emoji: '🛒'),
-        SizedBox(height: 12),
-        _ComingSoonBanner(
-          message: 'Products coming once connected to the live NumNam API!',
-        ),
-        SizedBox(height: 32),
-      ],
+    return RefreshIndicator(
+      color: kCoral,
+      onRefresh: _load,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          const _HeroBanner(),
+          const SizedBox(height: 24),
+          const _SectionHeader(title: 'Shop by Stage', emoji: '🎯'),
+          const SizedBox(height: 12),
+          const _StageCards(),
+          const SizedBox(height: 24),
+          const _SectionHeader(title: 'Why NumNam', emoji: '⭐'),
+          const SizedBox(height: 12),
+          const _TrustCards(),
+          const SizedBox(height: 24),
+          const _SectionHeader(title: 'Popular Picks', emoji: '🛒'),
+          const SizedBox(height: 12),
+          if (_loading)
+            const Padding(
+              padding: EdgeInsets.all(32),
+              child: Center(child: CircularProgressIndicator(color: kCoral)),
+            )
+          else if (_featured.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: _ComingSoonBanner(
+                message: 'No featured products yet — check back soon!',
+              ),
+            )
+          else
+            SizedBox(
+              height: 220,
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                scrollDirection: Axis.horizontal,
+                itemCount: _featured.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 12),
+                itemBuilder: (_, i) => SizedBox(
+                  width: 160,
+                  child: ProductCard(
+                    product: _featured[i],
+                    onTap: () => Navigator.of(context).pushNamed(
+                      ProductDetailScreen.routeName,
+                      arguments: _featured[i].slug,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          const SizedBox(height: 32),
+        ],
+      ),
     );
   }
 }
@@ -111,7 +135,7 @@ class _HeroBanner extends StatelessWidget {
         border: Border.all(color: const Color(0xFFFFD6E5), width: 2),
         boxShadow: [
           BoxShadow(
-            color: _kCoral.withOpacity(0.14),
+            color: kCoral.withOpacity(0.14),
             blurRadius: 28,
             offset: const Offset(0, 8),
           ),
@@ -124,16 +148,16 @@ class _HeroBanner extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: _kCoral.withOpacity(0.12),
+              color: kCoral.withOpacity(0.12),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: _kCoral.withOpacity(0.30)),
+              border: Border.all(color: kCoral.withOpacity(0.30)),
             ),
             child: Text(
               'Doctor-Founded  ·  Clean Label',
               style: GoogleFonts.poppins(
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
-                color: _kCoral,
+                color: kCoral,
                 letterSpacing: 0.8,
               ),
             ),
@@ -144,7 +168,7 @@ class _HeroBanner extends StatelessWidget {
             style: GoogleFonts.baloo2(
               fontSize: 26,
               fontWeight: FontWeight.w900,
-              color: _kNavy,
+              color: kNavy,
               height: 1.15,
             ),
           ),
@@ -165,7 +189,7 @@ class _HeroBanner extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _kCoral,
+                    backgroundColor: kCoral,
                     foregroundColor: Colors.white,
                     textStyle: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 13),
                     shape: const StadiumBorder(),
@@ -180,7 +204,7 @@ class _HeroBanner extends StatelessWidget {
                 child: OutlinedButton(
                   onPressed: () {},
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: _kNavy,
+                    foregroundColor: kNavy,
                     side: const BorderSide(color: Color(0xFFFFD6E5), width: 2),
                     textStyle: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 13),
                     shape: const StadiumBorder(),
@@ -216,7 +240,7 @@ class _SectionHeader extends StatelessWidget {
             style: GoogleFonts.baloo2(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: _kNavy,
+              color: kNavy,
             ),
           ),
         ],
@@ -230,10 +254,10 @@ class _StageCards extends StatelessWidget {
   const _StageCards();
 
   static const _stages = [
-    _Stage('Stage 1', '4-6 months', 'First Tastes', _kCoral,    Color(0xFFFFF0F5)),
-    _Stage('Stage 2', '6-8 months', 'Exploring',    _kYellow,   Color(0xFFFFFBE6)),
-    _Stage('Stage 3', '8-12 months','Textured',     _kMint,     Color(0xFFE8FCF8)),
-    _Stage('Stage 4', '12+ months', 'Family Foods', _kLavender, Color(0xFFF5EFFF)),
+    _Stage('Stage 1', '4-6 months', 'First Tastes', kCoral,    Color(0xFFFFF0F5)),
+    _Stage('Stage 2', '6-8 months', 'Exploring',    kYellow,   Color(0xFFFFFBE6)),
+    _Stage('Stage 3', '8-12 months','Textured',     kMint,     Color(0xFFE8FCF8)),
+    _Stage('Stage 4', '12+ months', 'Family Foods', kLavender, Color(0xFFF5EFFF)),
   ];
 
   @override
@@ -278,7 +302,7 @@ class _StageCard extends StatelessWidget {
           children: [
             Text(stage.stage, style: GoogleFonts.baloo2(fontSize: 15, fontWeight: FontWeight.w800, color: stage.colour)),
             const SizedBox(height: 4),
-            Text(stage.age,   style: GoogleFonts.poppins(fontSize: 10, fontWeight: FontWeight.w600, color: _kNavy)),
+            Text(stage.age,   style: GoogleFonts.poppins(fontSize: 10, fontWeight: FontWeight.w600, color: kNavy)),
             const SizedBox(height: 6),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -344,12 +368,12 @@ class _TrustRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(trust.title,    style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w700, color: _kNavy)),
+                Text(trust.title,    style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w700, color: kNavy)),
                 Text(trust.subtitle, style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF6B6B8A))),
               ],
             ),
           ),
-          Icon(Icons.chevron_right_rounded, color: _kCoral, size: 20),
+          Icon(Icons.chevron_right_rounded, color: kCoral, size: 20),
         ],
       ),
     );
