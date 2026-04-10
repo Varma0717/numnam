@@ -144,12 +144,20 @@
             },
         });
 
-        // Media picker for featured image
-        MediaPickerField.bindSingle(
-            document.getElementById('chooseBlogImage'),
-            document.getElementById('blogFeaturedImageInput'),
-            document.getElementById('blogImagePreview')
-        );
+        // Media picker for featured image (wait for admin.js globals)
+        function bindMediaPickers() {
+            if (typeof MediaPickerField === 'undefined') return;
+            MediaPickerField.bindSingle(
+                document.getElementById('chooseBlogImage'),
+                document.getElementById('blogFeaturedImageInput'),
+                document.getElementById('blogImagePreview')
+            );
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', bindMediaPickers);
+        } else {
+            bindMediaPickers();
+        }
     })();
 </script>
 @endpush

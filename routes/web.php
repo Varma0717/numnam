@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ShippingController;
 use App\Http\Controllers\Admin\PageManagementController;
 use App\Http\Controllers\Admin\MenuManagementController;
+use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\SubscriptionManagementController;
 use App\Http\Controllers\Web\CustomerAuthController;
@@ -147,6 +148,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/media', function () {
             return view('admin.media.index');
         })->name('media');
+
+        // Media JSON endpoints (session-authed, used by media picker modal)
+        Route::get('/media/json', [MediaController::class, 'index'])->name('media.json');
+        Route::get('/media/json/folders', [MediaController::class, 'folders'])->name('media.json.folders');
+        Route::post('/media/json/upload', [MediaController::class, 'store'])->name('media.json.upload');
+        Route::delete('/media/json/{media}', [MediaController::class, 'destroy'])->name('media.json.destroy');
 
         // Customers
         Route::get('/customers', [CustomerManagementController::class, 'index'])->name('customers.index');

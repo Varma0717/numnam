@@ -50,19 +50,26 @@
 window.MediaPicker = (function () {
     'use strict';
 
-    const API_BASE = (function () {
+    // Use web admin routes (session-authed) instead of API routes (JWT)
+    const ADMIN_BASE = (function () {
         const p = window.location.pathname;
         const adminIdx = p.indexOf('/admin');
-        const base = adminIdx > -1 ? p.substring(0, adminIdx) : '';
-        return `${window.location.origin}${base}/api/v1/admin`;
+        return adminIdx > -1 ? p.substring(0, adminIdx) + '/admin' : '/admin';
     })();
+
+    function csrfToken() {
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        if (meta) return meta.content;
+        const input = document.querySelector('input[name="_token"]');
+        return input ? input.value : '';
+    }
 
     let _overlay, _grid, _insertBtn, _selectedInfo, _folderFilter, _searchInput;
     let _mediaItems = [];
-    let _selected = null;       // single-select: {id, url, title}
-    let _callback = null;       // called on "Select"
+    let _selected = null;
+    let _callback = null;
     let _multiSelect = false;
-    let _selectedMulti = [];    // multi-select: [{id, url, title},...]
+    let _selectedMulti = [];
 
     function init() {
         _overlay = document.getElementById('mediaPickerOverlay');
@@ -116,9 +123,10 @@ window.MediaPicker = (function () {
                 status.textContent = 'Uploading...';
                 try {
                     const fd = new FormData(uploadForm);
-                    const resp = await fetch(`${API_BASE}/media`, {
+                    fd.set('_token', csrfToken());
+                    const resp = await fetch(`${ADMIN_BASE}/media/json/upload`, {
                         method: 'POST',
-                        headers: { Accept: 'application/json' },
+                        headers: { Accept: 'application/json', 'X-CSRF-TOKEN': csrfToken() },
                         body: fd,
                     });
                     const data = await resp.json();
@@ -126,7 +134,6 @@ window.MediaPicker = (function () {
                         status.textContent = 'Uploaded!';
                         uploadForm.reset();
                         document.getElementById('mpUploadFields').style.display = 'none';
-                        // Switch to library tab and reload
                         _overlay.querySelector('.mp-tab[data-tab="library"]').click();
                         await loadMedia();
                     } else {
@@ -150,7 +157,11 @@ window.MediaPicker = (function () {
             close();
         });
 
-        // Search filter
+        // Close on overlay background click
+        _overlay.addEventListener('click', (e) => {
+            if (e.target === _overlay) close();
+        });
+
         if (_searchInput) {
             _searchInput.addEventListener('input', renderGrid);
         }
@@ -158,12 +169,11 @@ window.MediaPicker = (function () {
             _folderFilter.addEventListener('change', () => loadMedia());
         }
 
-        // Load folders
         loadFolders();
     }
 
-    async function apiCall(path) {
-        const resp = await fetch(`${API_BASE}/${path}`, {
+    async function adminFetch(path) {
+        const resp = await fetch(`${ADMIN_BASE}/${path}`, {
             headers: { Accept: 'application/json' },
         });
         return resp.json();
@@ -171,11 +181,11 @@ window.MediaPicker = (function () {
 
     async function loadFolders() {
         try {
-            const data = await apiCall('media/folders');
+            const data = await adminFetch('media/json/folders');
             const folders = data.data || [];
             if (_folderFilter && folders.length) {
                 _folderFilter.innerHTML = '<option value="">All Folders</option>' +
-                    folders.map(f => `<option value="${f}">${f}</option>`).join('');
+                    folders.map(f => `<option value="${escapeHtml(f)}">${escapeHtml(f)}</option>`).join('');
             }
         } catch (_) { /* ignore */ }
     }
@@ -189,7 +199,7 @@ window.MediaPicker = (function () {
         params.set('per_page', '100');
 
         try {
-            const data = await apiCall(`media?${params.toString()}`);
+            const data = await adminFetch(`media/json?${params.toString()}`);
             _mediaItems = (data.data?.data || data.data || []).map(item => ({
                 id: item.id,
                 url: item.metadata?.url || (item.file_path ? `${window.location.origin}/storage/${item.file_path}` : ''),
@@ -198,7 +208,7 @@ window.MediaPicker = (function () {
             }));
             renderGrid();
         } catch (err) {
-            _grid.innerHTML = `<p style="color:var(--wp-error);padding:20px;">Failed to load media.</p>`;
+            _grid.innerHTML = '<p style="color:var(--wp-error);padding:20px;">Failed to load media.</p>';
         }
     }
 
@@ -210,7 +220,7 @@ window.MediaPicker = (function () {
         );
 
         if (!filtered.length) {
-            _grid.innerHTML = '<p style="text-align:center;color:var(--wp-muted);padding:40px;">No media found. Upload images first.</p>';
+            _grid.innerHTML = '<p style="text-align:center;color:var(--wp-muted);padding:40px;">No media found. Upload images using the Upload tab.</p>';
             return;
         }
 
@@ -224,7 +234,6 @@ window.MediaPicker = (function () {
             </div>`;
         }).join('');
 
-        // Click handlers
         _grid.querySelectorAll('.mp-item').forEach(el => {
             el.addEventListener('click', () => {
                 const mediaData = { id: Number(el.dataset.id), url: el.dataset.url, title: el.dataset.title };
@@ -257,7 +266,6 @@ window.MediaPicker = (function () {
         _insertBtn.disabled = true;
         _selectedInfo.textContent = '';
         _overlay.classList.add('active');
-        // Reset to library tab
         _overlay.querySelector('.mp-tab[data-tab="library"]').click();
         loadMedia();
     }
@@ -270,7 +278,6 @@ window.MediaPicker = (function () {
     function escapeAttr(s) { return (s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
     function escapeHtml(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
-    // Auto-init on DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {

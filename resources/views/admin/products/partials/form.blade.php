@@ -217,19 +217,25 @@
             },
         });
 
-        // Media picker for product image
-        MediaPickerField.bindSingle(
-            document.getElementById('chooseProductImage'),
-            document.getElementById('productImageInput'),
-            document.getElementById('productImagePreview')
-        );
-
-        // Media picker for gallery
-        MediaPickerField.bindGallery(
-            document.getElementById('chooseGalleryImages'),
-            document.getElementById('galleryInput'),
-            document.getElementById('galleryGrid')
-        );
+        // Media picker bindings (wait for admin.js globals)
+        function bindMediaPickers() {
+            if (typeof MediaPickerField === 'undefined') return;
+            MediaPickerField.bindSingle(
+                document.getElementById('chooseProductImage'),
+                document.getElementById('productImageInput'),
+                document.getElementById('productImagePreview')
+            );
+            MediaPickerField.bindGallery(
+                document.getElementById('chooseGalleryImages'),
+                document.getElementById('galleryInput'),
+                document.getElementById('galleryGrid')
+            );
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', bindMediaPickers);
+        } else {
+            bindMediaPickers();
+        }
     })();
 </script>
 @endpush
