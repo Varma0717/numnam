@@ -15,7 +15,7 @@
 </section>
 
 <section class="section pb-10">
-    <div class="mx-auto max-w-3xl space-y-3">
+    <div class="accordion mx-auto max-w-3xl space-y-3">
         @foreach($faqs as $i => $faq)
         <div class="accordion-item{{ $i === 0 ? ' open' : '' }} overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <button type="button" class="accordion-trigger flex w-full items-center justify-between px-5 py-4 text-left text-sm font-semibold text-slate-900 transition hover:bg-slate-50" aria-expanded="{{ $i === 0 ? 'true' : 'false' }}">
