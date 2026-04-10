@@ -51,7 +51,20 @@ class NumNamApp extends StatelessWidget {
         title: 'NumNam',
         debugShowCheckedModeBanner: false,
         theme: _buildTheme(),
-        home: const _Shell(),
+        home: Consumer<AuthProvider>(
+          builder: (context, auth, _) {
+            if (auth.isLoading) {
+              return const Scaffold(
+                backgroundColor: Colors.white,
+                body: Center(child: CircularProgressIndicator()),
+              );
+            }
+            if (auth.isAuthenticated) {
+              return const _Shell();
+            }
+            return const LoginScreen();
+          },
+        ),
         routes: {
           LoginScreen.routeName: (_) => const LoginScreen(),
           RegisterScreen.routeName: (_) => const RegisterScreen(),

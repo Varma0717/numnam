@@ -33,81 +33,112 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     final auth = context.read<AuthProvider>();
-    final ok = await auth.register(
+    await auth.register(
       _nameCtrl.text.trim(),
       _emailCtrl.text.trim(),
       _passCtrl.text,
       _confirmCtrl.text,
     );
-    if (ok && mounted) {
-      Navigator.of(context).pop(true);
-    }
+  }
+
+  void _socialLogin(String provider) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$provider sign up coming soon'),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+  }
+
+  InputDecoration _inputDecor(String hint, IconData icon) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: GoogleFonts.poppins(color: Colors.grey.shade400),
+      prefixIcon: Icon(icon, color: Colors.grey.shade400, size: 20),
+      filled: true,
+      fillColor: Colors.grey.shade50,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: Colors.grey.shade200),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: Colors.grey.shade200),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(color: kCoral, width: 1.5),
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Account')),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.symmetric(horizontal: 28),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 12),
-                Text(
-                  'Join NumNam! 🎉',
-                  style: GoogleFonts.baloo2(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w900,
-                      color: kNavy),
+                const SizedBox(height: 40),
+                Center(
+                  child: Image.asset('assets/images/logo.png', width: 80, height: 80),
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  'Create your account to start shopping',
-                  style: GoogleFonts.poppins(
-                      fontSize: 14, color: const Color(0xFF6B6B8A)),
+                const SizedBox(height: 14),
+                Center(
+                  child: Text(
+                    'Create Account',
+                    style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w700, color: kNavy),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Center(
+                  child: Text(
+                    'Join NumNam to get started',
+                    style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey.shade500),
+                  ),
                 ),
                 const SizedBox(height: 28),
                 TextFormField(
                   controller: _nameCtrl,
                   textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    labelText: 'Full Name',
-                    prefixIcon: Icon(Icons.person_outline),
-                  ),
-                  validator: (v) =>
-                      v == null || v.trim().isEmpty ? 'Name is required' : null,
+                  style: GoogleFonts.poppins(fontSize: 14),
+                  decoration: _inputDecor('Full name', Icons.person_outline),
+                  validator: (v) => v == null || v.trim().isEmpty ? 'Name is required' : null,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 TextFormField(
                   controller: _emailCtrl,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email_outlined),
-                  ),
+                  style: GoogleFonts.poppins(fontSize: 14),
+                  decoration: _inputDecor('Email address', Icons.email_outlined),
                   validator: (v) {
                     if (v == null || v.trim().isEmpty) return 'Email is required';
                     if (!v.contains('@')) return 'Enter a valid email';
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 TextFormField(
                   controller: _passCtrl,
                   obscureText: _obscure,
                   textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: const Icon(Icons.lock_outline),
+                  style: GoogleFonts.poppins(fontSize: 14),
+                  decoration: _inputDecor('Password', Icons.lock_outline).copyWith(
                     suffixIcon: IconButton(
                       icon: Icon(
-                          _obscure ? Icons.visibility_off : Icons.visibility),
+                        _obscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                        color: Colors.grey.shade400,
+                        size: 20,
+                      ),
                       onPressed: () => setState(() => _obscure = !_obscure),
                     ),
                   ),
@@ -117,71 +148,154 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 TextFormField(
                   controller: _confirmCtrl,
                   obscureText: true,
                   textInputAction: TextInputAction.done,
                   onFieldSubmitted: (_) => _submit(),
-                  decoration: const InputDecoration(
-                    labelText: 'Confirm Password',
-                    prefixIcon: Icon(Icons.lock_outline),
-                  ),
+                  style: GoogleFonts.poppins(fontSize: 14),
+                  decoration: _inputDecor('Confirm password', Icons.lock_outline),
                   validator: (v) {
                     if (v != _passCtrl.text) return 'Passwords do not match';
                     return null;
                   },
                 ),
                 if (auth.error != null) ...[
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 14),
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFEDED),
-                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.red.shade50,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(auth.error!,
-                        style: GoogleFonts.poppins(
-                            fontSize: 13, color: const Color(0xFFB91C1C))),
+                    child: Text(
+                      auth.error!,
+                      style: GoogleFonts.poppins(fontSize: 13, color: Colors.red.shade700),
+                    ),
                   ),
                 ],
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
                 SizedBox(
                   height: 52,
-                  child: FilledButton(
+                  child: ElevatedButton(
                     onPressed: auth.isLoading ? null : _submit,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: kCoral,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      textStyle: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600),
+                    ),
                     child: auth.isLoading
                         ? const SizedBox(
                             width: 22,
                             height: 22,
-                            child: CircularProgressIndicator(
-                                strokeWidth: 2, color: Colors.white))
+                            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          )
                         : const Text('Create Account'),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    Expanded(child: Divider(color: Colors.grey.shade200)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        'or sign up with',
+                        style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade400),
+                      ),
+                    ),
+                    Expanded(child: Divider(color: Colors.grey.shade200)),
+                  ],
+                ),
+                const SizedBox(height: 18),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Already have an account? ',
-                        style: GoogleFonts.poppins(fontSize: 13)),
+                    _SocialButton(
+                      icon: Icons.g_mobiledata_rounded,
+                      color: const Color(0xFFDB4437),
+                      label: 'Google',
+                      onTap: () => _socialLogin('Google'),
+                    ),
+                    const SizedBox(width: 16),
+                    _SocialButton(
+                      icon: Icons.facebook_rounded,
+                      color: const Color(0xFF1877F2),
+                      label: 'Facebook',
+                      onTap: () => _socialLogin('Facebook'),
+                    ),
+                    const SizedBox(width: 16),
+                    _SocialButton(
+                      icon: Icons.shopping_bag_outlined,
+                      color: const Color(0xFFFF9900),
+                      label: 'Amazon',
+                      onTap: () => _socialLogin('Amazon'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 28),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Already have an account? ',
+                      style: GoogleFonts.poppins(fontSize: 13, color: Colors.grey.shade500),
+                    ),
                     GestureDetector(
-                      onTap: () => Navigator.of(context)
-                          .pushReplacementNamed(LoginScreen.routeName),
+                      onTap: () => Navigator.of(context).pushReplacementNamed(LoginScreen.routeName),
                       child: Text(
-                        'Login',
-                        style: GoogleFonts.poppins(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          color: kCoral,
-                        ),
+                        'Sign In',
+                        style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w600, color: kCoral),
                       ),
                     ),
                   ],
                 ),
+                const SizedBox(height: 28),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SocialButton extends StatelessWidget {
+  const _SocialButton({
+    required this.icon,
+    required this.color,
+    required this.label,
+    required this.onTap,
+  });
+  final IconData icon;
+  final Color color;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 80,
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade50,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.grey.shade200),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: 28),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: GoogleFonts.poppins(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.grey.shade600),
+            ),
+          ],
         ),
       ),
     );

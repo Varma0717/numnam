@@ -8,7 +8,7 @@ class AppConfig {
     if (fromEnv != null && fromEnv.isNotEmpty) {
       return fromEnv;
     }
-    return 'https://numnum.pmratnam.com/api/v1';
+    return 'https://numnam.pmratnam.com/api/v1';
   }
 
   static String get siteBaseUrl {
