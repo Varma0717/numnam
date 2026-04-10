@@ -6,8 +6,9 @@ import '../../shared/theme/colors.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  const RegisterScreen({super.key, this.onToggle});
   static const routeName = '/register';
+  final VoidCallback? onToggle;
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -33,12 +34,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     final auth = context.read<AuthProvider>();
-    await auth.register(
+    final ok = await auth.register(
       _nameCtrl.text.trim(),
       _emailCtrl.text.trim(),
       _passCtrl.text,
       _confirmCtrl.text,
     );
+    if (ok && mounted && widget.onToggle == null) {
+      Navigator.of(context).pop(true);
+    }
   }
 
   void _socialLogin(String provider) {
@@ -245,7 +249,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       style: GoogleFonts.poppins(fontSize: 13, color: Colors.grey.shade500),
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.of(context).pushReplacementNamed(LoginScreen.routeName),
+                      onTap: widget.onToggle ?? () => Navigator.of(context).pushReplacementNamed(LoginScreen.routeName),
                       child: Text(
                         'Sign In',
                         style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w600, color: kCoral),

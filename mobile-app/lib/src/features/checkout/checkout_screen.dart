@@ -5,6 +5,7 @@ import '../../config/app_config.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../shared/theme/colors.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 import '../cart/cart_provider.dart';
 import 'order_success_screen.dart';
 
@@ -174,6 +175,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final cart = context.watch<CartProvider>();
     return Scaffold(
       appBar: AppBar(title: const Text('Checkout')),
+      bottomNavigationBar: const InnerPageNav(),
       body: Form(
         key: _formKey,
         child: ListView(

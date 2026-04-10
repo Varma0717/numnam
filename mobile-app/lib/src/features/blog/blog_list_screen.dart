@@ -8,6 +8,7 @@ import '../../core/constants.dart';
 import '../../models/blog.dart';
 import '../../shared/theme/colors.dart';
 import '../../shared/widgets/empty_state.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 import '../../shared/widgets/error_view.dart';
 import '../../shared/widgets/loading_indicator.dart';
 import 'blog_detail_screen.dart';
@@ -64,6 +65,7 @@ class _BlogListScreenState extends State<BlogListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Blog')),
+      bottomNavigationBar: const InnerPageNav(),
       body: _loading
           ? const LoadingIndicator(message: 'Loading articles...')
           : _error != null

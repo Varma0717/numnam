@@ -20,6 +20,11 @@ class AuthProvider extends ChangeNotifier {
 
   AuthProvider(this._api, this._storage);
 
+  void clearError() {
+    _error = null;
+    notifyListeners();
+  }
+
   Future<void> loadStoredAuth() async {
     _isLoading = true;
     notifyListeners();

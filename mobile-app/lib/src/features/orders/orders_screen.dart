@@ -7,6 +7,7 @@ import '../../models/order.dart';
 import '../../shared/theme/colors.dart';
 import '../../shared/widgets/empty_state.dart';
 import '../../shared/widgets/error_view.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 import '../../shared/widgets/loading_indicator.dart';
 import '../auth/auth_gate.dart';
 import 'order_detail_screen.dart';
@@ -71,6 +72,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('My Orders')),
+      bottomNavigationBar: const InnerPageNav(),
       body: AuthGate(child: _buildBody()),
     );
   }

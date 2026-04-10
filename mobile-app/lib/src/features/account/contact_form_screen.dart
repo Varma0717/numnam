@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../shared/theme/colors.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 
 class ContactFormScreen extends StatefulWidget {
   const ContactFormScreen({super.key});
@@ -62,6 +63,7 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Contact Us')),
+      bottomNavigationBar: const InnerPageNav(),
       body: _sent ? _successView() : _formView(),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../shared/theme/colors.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 
 class AboutScreen extends StatelessWidget {
   static const routeName = '/about';
@@ -11,6 +12,7 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('About NumNam')),
+      bottomNavigationBar: const InnerPageNav(),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

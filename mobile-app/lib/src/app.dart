@@ -60,9 +60,9 @@ class NumNamApp extends StatelessWidget {
               );
             }
             if (auth.isAuthenticated) {
-              return const _Shell();
+              return _Shell(key: _Shell.shellKey);
             }
-            return const LoginScreen();
+            return const _AuthFlow();
           },
         ),
         routes: {
@@ -202,8 +202,47 @@ class NumNamApp extends StatelessWidget {
   }
 }
 
+// ── Public helper to switch Shell tabs from inner pages ───────────────
+void switchToShellTab(BuildContext context, int index) {
+  _Shell.switchTab(context, index);
+}
+
+// ── Auth flow (login ↔ register toggle without Navigator) ─────────────
+class _AuthFlow extends StatefulWidget {
+  const _AuthFlow();
+
+  @override
+  State<_AuthFlow> createState() => _AuthFlowState();
+}
+
+class _AuthFlowState extends State<_AuthFlow> {
+  bool _showLogin = true;
+
+  void _toggle() {
+    context.read<AuthProvider>().clearError();
+    setState(() => _showLogin = !_showLogin);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _showLogin
+        ? LoginScreen(onToggle: _toggle)
+        : RegisterScreen(onToggle: _toggle);
+  }
+}
+
+// ── Main shell with persistent bottom nav ─────────────────────────────
 class _Shell extends StatefulWidget {
-  const _Shell();
+  const _Shell({super.key});
+
+  /// Global key to access Shell state for tab switching from inner pages.
+  static final GlobalKey<_ShellState> shellKey = GlobalKey<_ShellState>();
+
+  /// Pop all routes back to Shell and switch to the given tab index.
+  static void switchTab(BuildContext context, int index) {
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    shellKey.currentState?._setTab(index);
+  }
 
   @override
   State<_Shell> createState() => _ShellState();
@@ -212,12 +251,11 @@ class _Shell extends StatefulWidget {
 class _ShellState extends State<_Shell> {
   int _currentIndex = 0;
 
-  static const _titles = ['Home', 'Shop', 'Cart', 'Account'];
+  void _setTab(int index) => setState(() => _currentIndex = index);
 
   @override
   void initState() {
     super.initState();
-    // Load cart once auth has settled
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final auth = context.read<AuthProvider>();
       if (auth.isAuthenticated) {
@@ -255,31 +293,8 @@ class _ShellState extends State<_Shell> {
       appBar: AppBar(
         title: Row(
           children: [
-            Text(
-              'NumNam',
-              style: GoogleFonts.baloo2(
-                fontSize: 24,
-                fontWeight: FontWeight.w900,
-                color: kCoral,
-                letterSpacing: -0.5,
-              ),
-            ),
-            const SizedBox(width: 6),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                color: kYellow,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                _titles[_currentIndex],
-                style: GoogleFonts.poppins(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  color: kNavy,
-                ),
-              ),
-            ),
+            Image.asset('assets/images/logo.png', height: 36),
+            const SizedBox(width: 8),
           ],
         ),
         centerTitle: false,
@@ -296,58 +311,80 @@ class _ShellState extends State<_Shell> {
         ),
       ),
       body: _screenAt(_currentIndex),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: const Border(
-            top: BorderSide(color: Color(0xFFFFD6E5), width: 2),
+      bottomNavigationBar: AppBottomNav(
+        currentIndex: _currentIndex,
+        cartCount: cartCount,
+        onTap: (i) => setState(() => _currentIndex = i),
+      ),
+    );
+  }
+}
+
+/// Reusable bottom navigation bar used by Shell and inner screens.
+class AppBottomNav extends StatelessWidget {
+  const AppBottomNav({
+    super.key,
+    required this.currentIndex,
+    required this.cartCount,
+    required this.onTap,
+  });
+  final int currentIndex;
+  final int cartCount;
+  final ValueChanged<int> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: const Border(
+          top: BorderSide(color: Color(0xFFFFD6E5), width: 2),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: kCoral.withOpacity(0.12),
+            blurRadius: 24,
+            offset: const Offset(0, -6),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: kCoral.withOpacity(0.12),
-              blurRadius: 24,
-              offset: const Offset(0, -6),
+        ],
+      ),
+      child: NavigationBar(
+        selectedIndex: currentIndex,
+        onDestinationSelected: onTap,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        destinations: [
+          const NavigationDestination(
+            icon: Icon(Icons.home_rounded),
+            selectedIcon: Icon(Icons.home_rounded),
+            label: 'Home',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.storefront_outlined),
+            selectedIcon: Icon(Icons.storefront_rounded),
+            label: 'Shop',
+          ),
+          NavigationDestination(
+            icon: Badge(
+              isLabelVisible: cartCount > 0,
+              label: Text('$cartCount'),
+              backgroundColor: kCoral,
+              child: const Icon(Icons.shopping_bag_outlined),
             ),
-          ],
-        ),
-        child: NavigationBar(
-          selectedIndex: _currentIndex,
-          onDestinationSelected: (index) => setState(() => _currentIndex = index),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          destinations: [
-            const NavigationDestination(
-              icon: Icon(Icons.home_rounded),
-              selectedIcon: Icon(Icons.home_rounded),
-              label: 'Home',
+            selectedIcon: Badge(
+              isLabelVisible: cartCount > 0,
+              label: Text('$cartCount'),
+              backgroundColor: kCoral,
+              child: const Icon(Icons.shopping_bag_rounded),
             ),
-            const NavigationDestination(
-              icon: Icon(Icons.storefront_outlined),
-              selectedIcon: Icon(Icons.storefront_rounded),
-              label: 'Shop',
-            ),
-            NavigationDestination(
-              icon: Badge(
-                isLabelVisible: cartCount > 0,
-                label: Text('$cartCount'),
-                backgroundColor: kCoral,
-                child: const Icon(Icons.shopping_bag_outlined),
-              ),
-              selectedIcon: Badge(
-                isLabelVisible: cartCount > 0,
-                label: Text('$cartCount'),
-                backgroundColor: kCoral,
-                child: const Icon(Icons.shopping_bag_rounded),
-              ),
-              label: 'Cart',
-            ),
-            const NavigationDestination(
-              icon: Icon(Icons.person_outline_rounded),
-              selectedIcon: Icon(Icons.person_rounded),
-              label: 'Account',
-            ),
-          ],
-        ),
+            label: 'Cart',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.person_outline_rounded),
+            selectedIcon: Icon(Icons.person_rounded),
+            label: 'Account',
+          ),
+        ],
       ),
     );
   }

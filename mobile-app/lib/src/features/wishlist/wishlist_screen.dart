@@ -8,6 +8,7 @@ import '../../core/constants.dart';
 import '../../shared/theme/colors.dart';
 import '../../shared/widgets/empty_state.dart';
 import '../../shared/widgets/error_view.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 import '../../shared/widgets/loading_indicator.dart';
 import '../../shared/widgets/price_tag.dart';
 import '../auth/auth_gate.dart';
@@ -88,6 +89,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Wishlist')),
+      bottomNavigationBar: const InnerPageNav(),
       body: AuthGate(
         child: _loading
             ? const LoadingIndicator(message: 'Loading wishlist...')

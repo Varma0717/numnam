@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../shared/theme/colors.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 
 class StaticPageScreen extends StatelessWidget {
   static const routeName = '/static-page';
@@ -18,6 +19,7 @@ class StaticPageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
+      bottomNavigationBar: const InnerPageNav(),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: sections.length,

@@ -8,6 +8,7 @@ import '../../models/pricing_plan.dart';
 import '../../shared/theme/colors.dart';
 import '../../shared/widgets/error_view.dart';
 import '../../shared/widgets/loading_indicator.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 import '../auth/auth_gate.dart';
 
 class SubscriptionsScreen extends StatefulWidget {
@@ -94,6 +95,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Meal Plans')),
+      bottomNavigationBar: const InnerPageNav(),
       body: AuthGate(
         child: _loading
             ? const LoadingIndicator(message: 'Loading plans...')

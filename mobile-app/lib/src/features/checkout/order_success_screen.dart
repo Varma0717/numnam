@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../shared/theme/colors.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 
 class OrderSuccessScreen extends StatelessWidget {
   const OrderSuccessScreen({super.key});
@@ -11,6 +12,7 @@ class OrderSuccessScreen extends StatelessWidget {
     final orderNumber =
         ModalRoute.of(context)!.settings.arguments as String? ?? '';
     return Scaffold(
+      bottomNavigationBar: const InnerPageNav(),
       body: SafeArea(
         child: Center(
           child: Padding(

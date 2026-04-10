@@ -6,6 +6,7 @@ import '../../core/constants.dart';
 import '../../models/order.dart';
 import '../../shared/theme/colors.dart';
 import '../../shared/widgets/error_view.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 import '../../shared/widgets/loading_indicator.dart';
 
 class OrderDetailScreen extends StatefulWidget {
@@ -91,6 +92,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(_order != null ? '#${_order!.orderNumber}' : 'Order')),
+      bottomNavigationBar: const InnerPageNav(),
       body: _buildBody(),
     );
   }

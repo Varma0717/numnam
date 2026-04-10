@@ -30,6 +30,10 @@ class AppConfig {
   static String imageUrl(String? path) {
     if (path == null || path.isEmpty) return '';
     if (path.startsWith('http')) return path;
+    // Strip leading /storage/ or storage/ to avoid double-pathing
+    if (path.startsWith('/storage/')) path = path.substring(9);
+    if (path.startsWith('storage/')) path = path.substring(8);
+    if (path.startsWith('/')) path = path.substring(1);
     return '$siteBaseUrl/storage/$path';
   }
 }

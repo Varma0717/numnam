@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../shared/theme/colors.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 
 class FaqScreen extends StatelessWidget {
   static const routeName = '/faq';
@@ -54,6 +55,7 @@ class FaqScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('FAQ')),
+      bottomNavigationBar: const InnerPageNav(),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: _faqs.length,

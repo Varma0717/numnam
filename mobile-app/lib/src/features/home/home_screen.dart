@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../../app.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../models/product.dart';
 import '../../shared/theme/colors.dart';
 import '../../shared/widgets/product_card.dart';
 import '../shop/product_detail_screen.dart';
+import '../subscriptions/subscriptions_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -63,15 +65,15 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           const _HeroBanner(),
           const SizedBox(height: 24),
-          const _SectionHeader(title: 'Shop by Stage', emoji: '🎯'),
+          const _SectionHeader(title: 'Shop by Stage', icon: Icons.child_care_rounded),
           const SizedBox(height: 12),
           const _StageCards(),
           const SizedBox(height: 24),
-          const _SectionHeader(title: 'Why NumNam', emoji: '⭐'),
+          const _SectionHeader(title: 'Why NumNam', icon: Icons.verified_rounded),
           const SizedBox(height: 12),
           const _TrustCards(),
           const SizedBox(height: 24),
-          const _SectionHeader(title: 'Popular Picks', emoji: '🛒'),
+          const _SectionHeader(title: 'Popular Picks', icon: Icons.star_rounded),
           const SizedBox(height: 12),
           if (_loading)
             const Padding(
@@ -160,7 +162,7 @@ class _HeroBanner extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           Text(
-            'Yummy Nutrition\nfor Tiny Tummies 🍼',
+            'Yummy Nutrition\nfor Tiny Tummies',
             style: GoogleFonts.baloo2(
               fontSize: 26,
               fontWeight: FontWeight.w900,
@@ -183,7 +185,7 @@ class _HeroBanner extends StatelessWidget {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => switchToShellTab(context, 1),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: kCoral,
                     foregroundColor: Colors.white,
@@ -198,7 +200,7 @@ class _HeroBanner extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.of(context).pushNamed(SubscriptionsScreen.routeName),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: kNavy,
                     side: const BorderSide(color: Color(0xFFFFD6E5), width: 2),
@@ -219,9 +221,9 @@ class _HeroBanner extends StatelessWidget {
 
 // ── Section header ───────────────────────────────────────────────────────
 class _SectionHeader extends StatelessWidget {
-  const _SectionHeader({required this.title, required this.emoji});
+  const _SectionHeader({required this.title, required this.icon});
   final String title;
-  final String emoji;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +231,7 @@ class _SectionHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 20)),
+          Icon(icon, size: 22, color: kCoral),
           const SizedBox(width: 8),
           Text(
             title,
@@ -284,7 +286,7 @@ class _StageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => switchToShellTab(context, 1),
       child: Container(
         width: 120,
         padding: const EdgeInsets.all(14),
@@ -320,10 +322,10 @@ class _TrustCards extends StatelessWidget {
   const _TrustCards();
 
   static const _items = [
-    _Trust('🩺', 'Doctor-Founded',    'Backed by European Nutrition research'),
-    _Trust('🥦', 'Vegetable Forward', 'Rich in veggies, naturally sweet'),
-    _Trust('🚫', 'No Added Sugar',    'Clean ingredients only'),
-    _Trust('✅', 'No Preservatives',  'Totally clean label'),
+    _Trust(Icons.medical_services_rounded, 'Doctor-Founded',    'Backed by European Nutrition research'),
+    _Trust(Icons.eco_rounded,              'Vegetable Forward', 'Rich in veggies, naturally sweet'),
+    _Trust(Icons.block_rounded,            'No Added Sugar',    'Clean ingredients only'),
+    _Trust(Icons.check_circle_rounded,     'No Preservatives',  'Totally clean label'),
   ];
 
   @override
@@ -338,8 +340,9 @@ class _TrustCards extends StatelessWidget {
 }
 
 class _Trust {
-  const _Trust(this.emoji, this.title, this.subtitle);
-  final String emoji, title, subtitle;
+  const _Trust(this.icon, this.title, this.subtitle);
+  final IconData icon;
+  final String title, subtitle;
 }
 
 class _TrustRow extends StatelessWidget {
@@ -358,7 +361,15 @@ class _TrustRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text(trust.emoji, style: const TextStyle(fontSize: 22)),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: kCoral.withOpacity(0.10),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(trust.icon, size: 20, color: kCoral),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -393,7 +404,7 @@ class _ComingSoonBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Text('🚀', style: TextStyle(fontSize: 28)),
+          Icon(Icons.rocket_launch_rounded, size: 28, color: const Color(0xFFCC9900)),
           const SizedBox(width: 12),
           Expanded(
             child: Text(

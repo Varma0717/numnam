@@ -10,6 +10,7 @@ import '../../models/product.dart';
 import '../../shared/theme/colors.dart';
 import '../../shared/widgets/error_view.dart';
 import '../../shared/widgets/loading_indicator.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 import '../../shared/widgets/price_tag.dart';
 import '../cart/cart_provider.dart';
 import 'product_reviews_section.dart';
@@ -121,7 +122,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         ],
       ),
       body: _buildBody(),
-      bottomNavigationBar: _product != null ? _buildBottomBar() : null,
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (_product != null) _buildBottomBar(),
+          const InnerPageNav(),
+        ],
+      ),
     );
   }
 
