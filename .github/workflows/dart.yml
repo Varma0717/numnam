@@ -1,0 +1,50 @@
+name: Flutter iOS Build
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  FLUTTER_VERSION: "3.22.x"
+  APP_PATH: mobile
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+
+  ios-build:
+    name: Build iOS App
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
+      - name: Install Flutter Dependencies
+        run: |
+          cd $APP_PATH
+          flutter pub get
+
+      - name: Install CocoaPods
+        run: |
+          cd $APP_PATH/ios
+          pod install
+
+      - name: Verify Build Environment
+        run: flutter doctor
+
+      - name: Build iOS
+        run: |
+          cd $APP_PATH
+          flutter build ios --release --no-codesign
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build
+          path: mobile/build/ios
