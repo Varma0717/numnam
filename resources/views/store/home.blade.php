@@ -60,16 +60,16 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
         <h2 class="text-center font-heading text-3xl font-bold sm:text-4xl" style="color:#FF6B8A;">Why Parents Trust NumNam</h2>
         <p class="mx-auto mt-3 max-w-lg text-center text-base" style="color:#5e6478;">Clean ingredients, doctor-approved recipes, and zero compromise.</p>
         <div class="mt-10 grid grid-cols-2 gap-5 lg:grid-cols-4">
-            <div class="rounded-[2rem] border-3 p-6 text-center transition-transform duration-200 hover:-translate-y-1" style="border-color:#FF6B8A; background:#FFF0F5;">
+            <div class="rounded-[2rem] border-3 p-6 text-center transition-transform duration-200 hover:-translate-y-1" style="border-color:#FF6B8A; background:#FF6B8A;">
                 <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full" style="background:#fff; box-shadow: 0 4px 0 rgba(255,107,138,0.15);">
                     <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FF6B8A" stroke-width="2">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     </svg>
                 </div>
-                <h3 class="font-heading text-base font-bold sm:text-lg" style="color:#FF6B8A;">Doctor-Founded</h3>
-                <p class="mt-2 text-sm" style="color:#5e6478;">Backed by European Nutrition Standards</p>
+                <h3 class="font-heading text-base font-bold sm:text-lg" style="color:#fff;">Doctor-Founded</h3>
+                <p class="mt-2 text-sm" style="color:#f7f7f7;">Backed by European Nutrition Standards</p>
             </div>
-            <div class="rounded-[2rem] border-3 p-6 text-center transition-transform duration-200 hover:-translate-y-1" style="border-color:#4ECDC4; background:#ECFFF4;">
+            <div class="rounded-[2rem] border-3 p-6 text-center transition-transform duration-200 hover:-translate-y-1" style="border-color:#4ECDC4; background:#4ECDC4;">
                 <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full" style="background:#fff; box-shadow: 0 4px 0 rgba(78,205,196,0.15);">
                     <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4ECDC4" stroke-width="2">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.85 0 3.58-.5 5.07-1.38" />
@@ -77,27 +77,27 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
                         <path d="M15 2c2.5 4 3 8.5 1 13" />
                     </svg>
                 </div>
-                <h3 class="font-heading text-base font-bold sm:text-lg" style="color:#4ECDC4;">Vegetable Forward</h3>
-                <p class="mt-2 text-sm" style="color:#5e6478;">Rich in Real Veggies & Fruits</p>
+                <h3 class="font-heading text-base font-bold sm:text-lg" style="color:#fff;">Vegetable Forward</h3>
+                <p class="mt-2 text-sm" style="color:#f7f7f7;">Rich in Real Veggies & Fruits</p>
             </div>
-            <div class="rounded-[2rem] border-3 p-6 text-center transition-transform duration-200 hover:-translate-y-1" style="border-color:#FFD93D; background:#FFFBF0;">
+            <div class="rounded-[2rem] border-3 p-6 text-center transition-transform duration-200 hover:-translate-y-1" style="border-color:#FFD93D; background:#FFD93D;">
                 <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full" style="background:#fff; box-shadow: 0 4px 0 rgba(255,217,61,0.2);">
                     <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FFD93D" stroke-width="2">
                         <circle cx="12" cy="12" r="10" />
                         <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
                     </svg>
                 </div>
-                <h3 class="font-heading text-base font-bold sm:text-lg" style="color:#E5A800;">No Added Sugar</h3>
-                <p class="mt-2 text-sm" style="color:#5e6478;">Naturally Sweet, Always Clean</p>
+                <h3 class="font-heading text-base font-bold sm:text-lg" style="color:#fff;">No Added Sugar</h3>
+                <p class="mt-2 text-sm" style="color:#f7f7f7;">Naturally Sweet, Always Clean</p>
             </div>
-            <div class="rounded-[2rem] border-3 p-6 text-center transition-transform duration-200 hover:-translate-y-1" style="border-color:#9B8EC4; background:#F5F0FF;">
+            <div class="rounded-[2rem] border-3 p-6 text-center transition-transform duration-200 hover:-translate-y-1" style="border-color:#9B8EC4; background:#9B8EC4;">
                 <div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full" style="background:#fff; box-shadow: 0 4px 0 rgba(155,142,196,0.15);">
                     <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#9B8EC4" stroke-width="2">
                         <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
                     </svg>
                 </div>
-                <h3 class="font-heading text-base font-bold sm:text-lg" style="color:#9B8EC4;">No Preservatives</h3>
-                <p class="mt-2 text-sm" style="color:#5e6478;">Totally Clean, Totally Safe</p>
+                <h3 class="font-heading text-base font-bold sm:text-lg" style="color:#fff;">No Preservatives</h3>
+                <p class="mt-2 text-sm" style="color:#f7f7f7;">Totally Clean, Totally Safe</p>
             </div>
         </div>
     </div>
