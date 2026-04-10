@@ -6,8 +6,11 @@ use App\Models\User;
 use App\Support\JwtService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
@@ -140,6 +143,104 @@ class MobileAuthController extends BaseMobileController
         $user->save();
 
         return $this->success(null, 'Password changed successfully.');
+    }
+
+    public function forgotPassword(Request $request): JsonResponse
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user) {
+            // Return success even if user not found (prevent email enumeration)
+            return $this->success(null, 'If that email exists, a reset code has been sent.');
+        }
+
+        // Generate a 6-digit OTP
+        $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        // Store hashed token (email is primary key, so upsert)
+        DB::table('password_resets')->updateOrInsert(
+            ['email' => $user->email],
+            ['token' => Hash::make($code), 'created_at' => now()]
+        );
+
+        // Send email with the code
+        try {
+            Mail::raw(
+                "Your NumNam password reset code is: {$code}\n\nThis code expires in 30 minutes.\n\nIf you did not request this, please ignore this email.",
+                function ($message) use ($user) {
+                    $message->to($user->email, $user->name)
+                        ->subject('NumNam - Password Reset Code');
+                }
+            );
+        } catch (\Exception $e) {
+            // Log but don't expose mail failure to client
+            \Log::error('Password reset email failed: ' . $e->getMessage());
+        }
+
+        return $this->success(null, 'If that email exists, a reset code has been sent.');
+    }
+
+    public function resetPassword(Request $request): JsonResponse
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'code' => 'required|string|size:6',
+            'password' => ['required', 'confirmed', Password::min(8)],
+        ]);
+
+        $record = DB::table('password_resets')
+            ->where('email', $request->email)
+            ->first();
+
+        if (! $record) {
+            throw ValidationException::withMessages([
+                'code' => ['Invalid or expired reset code.'],
+            ]);
+        }
+
+        // Check if the code has expired (30 minutes)
+        if (now()->diffInMinutes($record->created_at) > 30) {
+            DB::table('password_resets')->where('email', $request->email)->delete();
+            throw ValidationException::withMessages([
+                'code' => ['Reset code has expired. Please request a new one.'],
+            ]);
+        }
+
+        // Verify the code
+        if (! Hash::check($request->code, $record->token)) {
+            throw ValidationException::withMessages([
+                'code' => ['Invalid reset code.'],
+            ]);
+        }
+
+        // Reset the password
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user) {
+            throw ValidationException::withMessages([
+                'email' => ['No account found with that email.'],
+            ]);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // Delete the used reset record
+        DB::table('password_resets')->where('email', $request->email)->delete();
+
+        // Auto-login: issue a new JWT
+        $token = $this->jwtService->issueToken($user);
+
+        return $this->success([
+            'token_type' => 'Bearer',
+            'access_token' => $token,
+            'expires_in_minutes' => (int) config('jwt.ttl_minutes', 60),
+            'user' => $this->userProfile($user),
+        ], 'Password reset successful.');
     }
 
     public function refresh(Request $request): JsonResponse

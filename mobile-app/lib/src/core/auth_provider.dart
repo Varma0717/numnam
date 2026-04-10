@@ -171,6 +171,53 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> forgotPassword(String email) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      await _api.dio.post(ApiEndpoints.forgotPassword, data: {
+        'email': email,
+      });
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } on DioException catch (e) {
+      _error = _extractError(e);
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> resetPassword(
+      String email, String code, String password, String confirm) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      final resp = await _api.dio.post(ApiEndpoints.resetPassword, data: {
+        'email': email,
+        'code': code,
+        'password': password,
+        'password_confirmation': confirm,
+      });
+      final data = resp.data['data'] as Map<String, dynamic>;
+      final token = data['access_token'] as String;
+      await _storage.saveToken(token);
+      _user = User.fromJson(data['user'] as Map<String, dynamic>);
+      await _storage.saveUser(data['user'] as Map<String, dynamic>);
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } on DioException catch (e) {
+      _error = _extractError(e);
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   String _extractError(DioException e) {
     final data = e.response?.data;
     if (data is Map<String, dynamic>) {

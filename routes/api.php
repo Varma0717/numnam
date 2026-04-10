@@ -43,6 +43,8 @@ Route::prefix('v1')->group(function () {
         Route::prefix('auth')->group(function () {
             Route::post('register', [MobileAuthController::class, 'register']);
             Route::post('login', [MobileAuthController::class, 'login']);
+            Route::post('forgot-password', [MobileAuthController::class, 'forgotPassword']);
+            Route::post('reset-password', [MobileAuthController::class, 'resetPassword']);
 
             Route::middleware('jwt.auth')->group(function () {
                 Route::get('me', [MobileAuthController::class, 'me']);

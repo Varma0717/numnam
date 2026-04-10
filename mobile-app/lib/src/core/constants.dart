@@ -4,6 +4,8 @@ class ApiEndpoints {
   // Auth
   static const login = '/mobile/auth/login';
   static const register = '/mobile/auth/register';
+  static const forgotPassword = '/mobile/auth/forgot-password';
+  static const resetPassword = '/mobile/auth/reset-password';
   static const me = '/mobile/auth/me';
   static const refreshToken = '/mobile/auth/refresh';
   static const avatar = '/mobile/auth/me/avatar';

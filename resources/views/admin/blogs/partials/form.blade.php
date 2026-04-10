@@ -119,8 +119,14 @@
 @push('scripts')
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+<script type="application/json" id="__contentData">
+    {
+        !!json_encode(old('content', $blog - > content ?? '')) !!
+    }
+</script>
 <script>
     (function() {
+        var __contentHtml = JSON.parse(document.getElementById('__contentData').textContent);
         // Quill editor for blog content
         const contentEditor = new Quill('#blog_content_editor', {
             theme: 'snow',
@@ -144,7 +150,7 @@
             },
             placeholder: 'Write your blog post...',
         });
-        contentEditor.root.innerHTML = @json(old('content', $blog - > content ?? ''));
+        contentEditor.root.innerHTML = __contentHtml;
 
         // Sync Quill → hidden input on form submit
         contentEditor.root.closest('form').addEventListener('submit', function() {

@@ -21,6 +21,7 @@ import 'features/account/edit_profile_screen.dart';
 import 'features/account/contact_form_screen.dart';
 import 'features/auth/login_screen.dart';
 import 'features/auth/register_screen.dart';
+import 'features/auth/forgot_password_screen.dart';
 import 'features/subscriptions/subscriptions_screen.dart';
 import 'features/blog/blog_list_screen.dart';
 import 'features/blog/blog_detail_screen.dart';
@@ -68,6 +69,7 @@ class NumNamApp extends StatelessWidget {
         routes: {
           LoginScreen.routeName: (_) => const LoginScreen(),
           RegisterScreen.routeName: (_) => const RegisterScreen(),
+          ForgotPasswordScreen.routeName: (_) => const ForgotPasswordScreen(),
           ProductDetailScreen.routeName: (_) => const ProductDetailScreen(),
           CheckoutScreen.routeName: (_) => const CheckoutScreen(),
           OrderSuccessScreen.routeName: (_) => const OrderSuccessScreen(),

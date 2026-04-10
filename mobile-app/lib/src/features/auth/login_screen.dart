@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../core/auth_provider.dart';
 import '../../shared/theme/colors.dart';
 import 'register_screen.dart';
+import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, this.onToggle});
@@ -148,6 +149,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (v == null || v.isEmpty) return 'Password is required';
                     return null;
                   },
+                ),
+                const SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      context.read<AuthProvider>().clearError();
+                      Navigator.of(context).pushNamed(ForgotPasswordScreen.routeName);
+                    },
+                    child: Text(
+                      'Forgot Password?',
+                      style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w600, color: kCoral),
+                    ),
+                  ),
                 ),
                 if (auth.error != null) ...[
                   const SizedBox(height: 14),

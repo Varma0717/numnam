@@ -192,8 +192,14 @@
 @push('scripts')
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+<script type="application/json" id="__descData">
+    {
+        !!json_encode(old('description', $product - > description ?? '')) !!
+    }
+</script>
 <script>
     (function() {
+        var __descHtml = JSON.parse(document.getElementById('__descData').textContent);
         // Quill editor for description
         const descEditor = new Quill('#product_description_editor', {
             theme: 'snow',
@@ -214,7 +220,7 @@
             },
             placeholder: 'Write product description...',
         });
-        descEditor.root.innerHTML = @json(old('description', $product - > description ?? ''));
+        descEditor.root.innerHTML = __descHtml;
 
         // Sync Quill → hidden input on form submit
         descEditor.root.closest('form').addEventListener('submit', function() {
