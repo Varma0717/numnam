@@ -87,8 +87,14 @@ return new class extends Migration
     public function down(): void
     {
         Product::whereIn('slug', [
-            'berry-swush', 'appi-pooch', 'brocco-pop', 'mangy-chewy',
-            'cheezy-bubbles', 'tomaty-pumpos', 'manchurian-munchos', 'tikka-puffies',
+            'berry-swush',
+            'appi-pooch',
+            'brocco-pop',
+            'mangy-chewy',
+            'cheezy-bubbles',
+            'tomaty-pumpos',
+            'manchurian-munchos',
+            'tikka-puffies',
         ])->update(['image' => null, 'gallery' => null]);
     }
 };
