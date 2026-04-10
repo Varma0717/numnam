@@ -8,6 +8,9 @@ import '../orders/orders_screen.dart';
 import '../wishlist/wishlist_screen.dart';
 import 'edit_profile_screen.dart';
 import 'contact_form_screen.dart';
+import '../static/about_screen.dart';
+import '../static/faq_screen.dart';
+import '../static/static_page_screen.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -61,6 +64,47 @@ class AccountScreen extends StatelessWidget {
               }),
               _tile(context, Icons.mail_outline_rounded, 'Contact Us', () {
                 Navigator.of(context).pushNamed(ContactFormScreen.routeName);
+              }),
+
+              const Divider(height: 32),
+
+              _tile(context, Icons.info_outline_rounded, 'About NumNam', () {
+                Navigator.of(context).pushNamed(AboutScreen.routeName);
+              }),
+              _tile(context, Icons.help_outline_rounded, 'FAQ', () {
+                Navigator.of(context).pushNamed(FaqScreen.routeName);
+              }),
+              _tile(context, Icons.description_outlined, 'Terms & Conditions', () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => StaticPageScreen(
+                    title: StaticPages.termsTitle,
+                    sections: StaticPages.termsSections,
+                  ),
+                ));
+              }),
+              _tile(context, Icons.privacy_tip_outlined, 'Privacy Policy', () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => StaticPageScreen(
+                    title: StaticPages.privacyTitle,
+                    sections: StaticPages.privacySections,
+                  ),
+                ));
+              }),
+              _tile(context, Icons.local_shipping_outlined, 'Shipping Policy', () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => StaticPageScreen(
+                    title: StaticPages.shippingTitle,
+                    sections: StaticPages.shippingSections,
+                  ),
+                ));
+              }),
+              _tile(context, Icons.assignment_return_outlined, 'Refund Policy', () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => StaticPageScreen(
+                    title: StaticPages.refundTitle,
+                    sections: StaticPages.refundSections,
+                  ),
+                ));
               }),
 
               const SizedBox(height: 32),

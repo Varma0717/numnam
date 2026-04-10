@@ -24,6 +24,8 @@ import 'features/auth/register_screen.dart';
 import 'features/subscriptions/subscriptions_screen.dart';
 import 'features/blog/blog_list_screen.dart';
 import 'features/blog/blog_detail_screen.dart';
+import 'features/static/about_screen.dart';
+import 'features/static/faq_screen.dart';
 import 'shared/theme/colors.dart';
 
 class NumNamApp extends StatelessWidget {
@@ -64,6 +66,8 @@ class NumNamApp extends StatelessWidget {
           SubscriptionsScreen.routeName: (_) => const SubscriptionsScreen(),
           BlogListScreen.routeName: (_) => const BlogListScreen(),
           BlogDetailScreen.routeName: (_) => const BlogDetailScreen(),
+          AboutScreen.routeName: (_) => const AboutScreen(),
+          FaqScreen.routeName: (_) => const FaqScreen(),
         },
       ),
     );

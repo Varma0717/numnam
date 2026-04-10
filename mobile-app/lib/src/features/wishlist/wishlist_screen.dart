@@ -215,7 +215,7 @@ class _WishTile extends StatelessWidget {
                           color: kNavy)),
                   const SizedBox(height: 4),
                   PriceTag(
-                      price: item.price, salePrice: item.salePrice, size: 13),
+                      price: item.price, salePrice: item.salePrice, fontSize: 13),
                 ],
               ),
             ),

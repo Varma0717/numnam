@@ -40,7 +40,7 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
     });
     try {
       final api = context.read<ApiClient>();
-      await api.dio.post(ApiEndpoints.contactForms, data: {
+      await api.dio.post(ApiEndpoints.contactForm, data: {
         'name': _nameCtrl.text.trim(),
         'email': _emailCtrl.text.trim(),
         'subject': _subjectCtrl.text.trim(),

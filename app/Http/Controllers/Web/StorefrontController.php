@@ -298,19 +298,24 @@ class StorefrontController extends Controller
     {
         $founders = [
             [
-                'name' => 'Dr. Srinath Reddy',
-                'role' => 'Pediatric Advisor',
-                'bio' => 'Clinical pediatric guidance shaping age-specific nutrition at NumNam.',
+                'name' => 'Dr. Donuru, Srinath Reddy',
+                'role' => 'Managing Director & Research Lead',
+                'bio' => 'Cardio-thoracic Surgeon (Germany). Clinical Research Graduate (Harvard Medical School). Bringing German medical precision to infant nutrition.',
             ],
             [
-                'name' => 'Smiti Reddy',
-                'role' => 'Co-Founder',
-                'bio' => 'Parent-first product direction with focus on practical mealtime routines.',
+                'name' => 'Dr. Kodeboina, Monika',
+                'role' => 'Co-Founder & Head of Recipes',
+                'bio' => 'Cardiologist (Germany). MBA (Frankfurt Business School). MSc: Lifestyle Medicine (Europe). The bridge between European standards and Indian palates.',
             ],
             [
-                'name' => 'Monika Reddy',
-                'role' => 'Co-Founder',
-                'bio' => 'Builds systems and operations so clean food reaches families faster.',
+                'name' => 'Kian',
+                'role' => 'CIO: Chief Inspiration Officer',
+                'bio' => 'The little one who started it all. Our first taster and the reason NumNam exists.',
+            ],
+            [
+                'name' => 'Smiti',
+                'role' => 'CHH: Chief of Happy Hearts',
+                'bio' => 'Spreading joy and keeping the NumNam spirit alive in every pouch we make.',
             ],
         ];
 
@@ -339,20 +344,44 @@ class StorefrontController extends Controller
     {
         $faqs = [
             [
-                'q' => 'What age can babies start NumNam foods?',
-                'a' => 'Most puree options are designed for 6M+ and puffs for 8M+. Always check individual product age labels.',
+                'q' => 'What is NumNam, really?',
+                'a' => 'NumNam is a doctor-founded baby food brand offering nutritious, ready-to-eat purees made with real fruits, veggies, and grains — no added nonsense.',
             ],
             [
-                'q' => 'Do you add sugar or preservatives?',
-                'a' => 'No. Products are designed around clean-label ingredients without refined sugar and unnecessary preservatives.',
+                'q' => 'What age group are NumNam products meant for?',
+                'a' => 'Perfect for babies starting from 6 months! And to be honest — even curious toddlers and older kids love it.',
             ],
             [
-                'q' => 'How does subscription work?',
-                'a' => 'Choose your plan, frequency, and quantity. You can manage active subscriptions from your account section.',
+                'q' => 'What\'s in a NumNam pouch?',
+                'a' => 'Only the good stuff — fruits, veggies, whole grains, no preservatives, and nothing artificial. All cooked and sealed under strict safety conditions.',
             ],
             [
-                'q' => 'What payment methods are supported?',
-                'a' => 'Razorpay, Stripe, UPI, card, netbanking, and COD are supported based on order eligibility.',
+                'q' => 'How do I serve it?',
+                'a' => 'Twist and squeeze! You can feed straight from the pouch or pour into a bowl. Serve at room temperature or slightly warmed (never microwave the pouch).',
+            ],
+            [
+                'q' => 'How do I store NumNam products?',
+                'a' => 'Store in a cool place before opening. Once opened, refrigerate and finish within 24 hours.',
+            ],
+            [
+                'q' => 'Are NumNam products safe?',
+                'a' => 'Yes! We\'re doctors and parents ourselves. Our pouches are retort processed, lab-tested, and made in certified kitchens.',
+            ],
+            [
+                'q' => 'Where do you deliver?',
+                'a' => 'We deliver across India using trusted courier partners. Just check your pin code at checkout.',
+            ],
+            [
+                'q' => 'Do you offer free shipping?',
+                'a' => 'Absolutely! Orders above ₹499 ship free. Otherwise, it\'s ₹85.',
+            ],
+            [
+                'q' => 'What if my pouch is damaged or missing?',
+                'a' => 'Contact us at customercare@numnam.com within 24–48 hours with photos. We\'ll sort it out quickly.',
+            ],
+            [
+                'q' => 'Still have questions?',
+                'a' => 'Email us at customercare@numnam.com or call +91-9014252278. We\'re always happy to chat!',
             ],
         ];
 
@@ -979,49 +1008,77 @@ class StorefrontController extends Controller
             'terms-conditions' => [
                 'title' => 'Terms & Conditions',
                 'sections' => [
-                    ['heading' => 'Usage', 'text' => 'By using NumNam, you agree to purchase and use products according to age guidance and label instructions.'],
-                    ['heading' => 'Orders', 'text' => 'Orders may be cancelled only before fulfillment begins. Refund and return terms apply as listed.'],
-                    ['heading' => 'Intellectual Property', 'text' => 'All text, visuals, and trademarks are owned by NumNam and may not be copied without permission.'],
+                    ['heading' => '1. Use of Website', 'text' => 'NumNam grants you a limited, non-exclusive, and revocable license to use this website for personal and non-commercial purposes, in accordance with these Terms. You must not use this site for any unlawful or fraudulent activity, to interfere with or damage the website\'s availability, functionality, or security, to upload viruses, malicious code, or spam, or to scrape or extract data without written consent. This website uses cookies. By using the website, you agree to our use of cookies as outlined in our Privacy Policy.'],
+                    ['heading' => '2. Intellectual Property', 'text' => 'Unless otherwise stated, all content on this website — including text, images, logos, and product descriptions — is owned by or licensed to NumNam (Kikudu Corp). All rights are reserved. You may not reuse, republish, or distribute content without written permission.'],
+                    ['heading' => '3. User Accounts', 'text' => 'If you create an account on this website, you are responsible for maintaining the confidentiality of your login information. You agree to notify us immediately of any unauthorized use. We reserve the right to suspend or terminate accounts at our discretion.'],
+                    ['heading' => '4. Product Orders & Payments', 'text' => 'All products listed remain the property of NumNam until full payment is received. Orders are processed via third-party payment gateways. We are not responsible for delays or issues caused by these services. Prices, availability, and specifications are subject to change without notice.'],
+                    ['heading' => '5. User Submissions', 'text' => 'Any content submitted by users (such as reviews or feedback) may be used by NumNam for promotional or informational purposes. You confirm that your submission is original and does not violate the rights of others. We reserve the right to remove user content at our discretion.'],
+                    ['heading' => '6. No Warranties', 'text' => 'This website is provided on an "as is" and "as available" basis. NumNam does not guarantee that the website will be error-free or uninterrupted, nor do we make any warranties regarding the accuracy or completeness of the content.'],
+                    ['heading' => '7. Limitation of Liability', 'text' => 'To the fullest extent permitted by law, NumNam shall not be liable for any indirect, incidental, or consequential damages arising out of your use of the website or products. Our total liability shall not exceed the amount paid for the product in question.'],
+                    ['heading' => '8. Indemnity', 'text' => 'You agree to indemnify and hold harmless NumNam, its parent company Kikudu Corp, employees, and affiliates from any claims, liabilities, or expenses arising from your breach of these Terms or misuse of the website.'],
+                    ['heading' => '9. Governing Law', 'text' => 'These Terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts located in Hyderabad, India.'],
+                    ['heading' => '10. Changes to Terms', 'text' => 'NumNam reserves the right to revise these Terms at any time. Any updates will be posted on this page. Continued use of the website following changes constitutes acceptance of those changes.'],
+                    ['heading' => '11. Contact', 'text' => 'For any questions about these Terms, please contact: NumNam (Kikudu Corp) — Email: customercare@numnam.com — Website: www.numnam.com'],
                 ],
             ],
             'privacy-policy' => [
                 'title' => 'Privacy Policy',
                 'sections' => [
-                    ['heading' => 'What We Collect', 'text' => 'We collect order, account, and delivery details required for commerce operations and support.'],
-                    ['heading' => 'How We Use Data', 'text' => 'Data is used for order fulfillment, customer support, product communication, and fraud prevention.'],
-                    ['heading' => 'Your Controls', 'text' => 'You can request updates or deletion of personal data by contacting support.'],
+                    ['heading' => 'Scope & Consent', 'text' => 'This Privacy Policy applies to all users of the NumNam website. By visiting or using our site, you expressly consent to the collection, use, and disclosure of your personal information in accordance with this policy. NumNam (a brand by Kikudu Corp) reserves the right to update this policy at any time without prior notice. Changes will be effective upon posting. Effective Date: 01.04.2025.'],
+                    ['heading' => 'Information We Collect', 'text' => 'We may collect: information you provide when creating an account or placing an order (name, email, phone number, shipping & billing addresses), order and transaction details, communications you send us via email, forms, or social media, and information about your use of our site via cookies and analytics tools. This information helps us process orders, provide support, and enhance your experience.'],
+                    ['heading' => 'How We Use Your Information', 'text' => 'Your information may be used to: process and deliver your orders, contact you with order confirmations or updates, respond to customer service requests, send promotional messages (if you opt in), improve website functionality and user experience, and prevent fraud and ensure legal compliance. Only authorized employees or service providers who agree to maintain confidentiality have access to your data.'],
+                    ['heading' => 'Data Security', 'text' => 'We take reasonable technical and organizational precautions to prevent unauthorized access, misuse, or disclosure of your personal data. Your information is stored on secure servers and is only accessible to trusted personnel. However, please note that no digital platform is completely secure. We recommend you take standard precautions when sharing sensitive information online.'],
+                    ['heading' => 'Cookies & Tracking Tools', 'text' => 'NumNam uses cookies and similar technologies to track website activity and preferences, enhance your browsing experience, and analyze user behavior for website improvement. You can manage cookie settings through your browser. Disabling cookies may affect site functionality.'],
+                    ['heading' => 'Sharing of Information', 'text' => 'We do not sell or rent your personal data. We may share information with trusted third parties to process payments and deliveries, to ensure compliance with legal requirements, and in case of mergers, business transfers, or audits. We may also disclose your data if required by law or to protect our rights.'],
+                    ['heading' => 'Communication', 'text' => 'You may receive communications from NumNam such as order-related emails, product updates or offers (if you subscribe), and important service announcements. You may opt-out of promotional communications at any time.'],
+                    ['heading' => 'Cross-Border Data Transfers', 'text' => 'Your personal data may be stored and processed in countries where we or our partners operate. By using our website, you consent to such transfers.'],
+                    ['heading' => 'Changes to This Policy', 'text' => 'We may update this policy from time to time. Material changes will be highlighted on our homepage or via email.'],
+                    ['heading' => 'Contact Us', 'text' => 'If you have any questions, concerns, or requests regarding this Privacy Policy, please contact: NumNam (Kikudu Corp) — Email: customercare@numnam.com — Website: www.numnam.com. Your trust matters to us. We are committed to protecting your data and providing a safe, joyful experience for your family.'],
                 ],
             ],
             'shipping-policy' => [
                 'title' => 'Shipping Policy',
                 'sections' => [
-                    ['heading' => 'Dispatch Window', 'text' => 'Orders are usually processed within 24-48 hours and shipped via trusted courier partners.'],
-                    ['heading' => 'Delivery Coverage', 'text' => 'Delivery timelines vary by city and pincode serviceability.'],
-                    ['heading' => 'Shipping Charges', 'text' => 'Shipping may be free above threshold order values, with standard fees applied otherwise.'],
+                    ['heading' => 'Shipping Destination', 'text' => 'We currently ship across India — from big cities to tiny towns. International shipping is not available yet, but we\'re working on it!'],
+                    ['heading' => 'Order Processing Time', 'text' => 'Orders are processed within 1–2 business days (excluding weekends and public holidays). You\'ll receive a confirmation email once your order is placed. If we experience delays, we\'ll let you know via email or phone.'],
+                    ['heading' => 'Shipping Time & Delivery Estimates', 'text' => 'Metro Cities: 3–5 business days. Tier 2 & Tier 3 Cities: 5–7 business days. Remote Locations: 7–10 business days. Delivery timelines are estimates and may vary due to weather, courier delays, or unexpected hiccups.'],
+                    ['heading' => 'Shipping Charges', 'text' => 'Orders above ₹499: Free Shipping! Orders ₹499 & below: Standard shipping fee of ₹85 applies.'],
+                    ['heading' => 'Order Tracking', 'text' => 'As soon as your order ships, you\'ll receive an email with tracking details. You can follow its journey from our nest to yours!'],
+                    ['heading' => 'Shipping Partners', 'text' => 'We team up with Shiprocket, which works with India\'s most trusted courier services. Depending on your location, your delivery might be made by one of their verified partners.'],
+                    ['heading' => 'Undelivered Packages', 'text' => 'If your parcel can\'t be delivered due to incorrect address or repeated delivery failures, we\'ll attempt re-delivery if possible, offer re-shipment after additional shipping fee, or issue a refund after deducting shipping charges.'],
+                    ['heading' => 'Damaged or Missing Items', 'text' => 'If your order arrives damaged, email us within 24 hours with photos. If anything\'s missing, report within 48 hours. We\'ll provide a solution — be it a replacement or refund.'],
+                    ['heading' => 'Change of Address Requests', 'text' => 'Entered the wrong address? Contact us ASAP at customercare@numnam.com and we\'ll do our best to update it before shipping.'],
+                    ['heading' => 'Contact Us', 'text' => 'For any shipping-related help, contact: Email: customercare@numnam.com — Phone: +91-9014252278'],
                 ],
             ],
             'refund-policy' => [
                 'title' => 'Refund Policy',
                 'sections' => [
-                    ['heading' => 'Damaged or Incorrect Item', 'text' => 'Report with photo evidence within the support window to initiate replacement/refund review.'],
-                    ['heading' => 'Eligibility', 'text' => 'Opened consumables are generally non-returnable unless quality issues are verified.'],
-                    ['heading' => 'Refund Timeline', 'text' => 'Approved refunds are processed to original payment method within standard banking timelines.'],
+                    ['heading' => '1. Order Cancellation by Customer', 'text' => 'Orders can be cancelled within 12 hours of placing the order or before the order has been shipped, whichever comes first. Once your order is dispatched, it cannot be cancelled due to food safety and logistics constraints. To request a cancellation, please email us at customercare@numnam.com with your Order ID and cancellation reason.'],
+                    ['heading' => '2. Order Cancellation by NumNam', 'text' => 'We reserve the right to cancel orders due to out-of-stock items, logistical limitations or delivery constraints, or unforeseen operational issues. In such cases, you will receive a full refund to the original payment method within 7–10 business days.'],
+                    ['heading' => '3. Non-Cancellable Orders', 'text' => 'For food safety and operational efficiency, the following orders cannot be cancelled once processed or dispatched: Ready-to-Eat or pureed food pouches, and customized or bulk orders.'],
+                    ['heading' => '4. Refund Processing', 'text' => 'If your order is cancelled before shipment, a full refund will be processed within 7–10 business days.'],
+                    ['heading' => '5. Need Help?', 'text' => 'For any order-related queries, feel free to contact us: Email: customercare@numnam.com — Phone: +91-9014252278. We appreciate your trust in NumNam and are committed to delivering a delightful and dependable shopping experience for every family.'],
                 ],
             ],
             'cookie-policy' => [
                 'title' => 'Cookie Policy',
                 'sections' => [
-                    ['heading' => 'Essential Cookies', 'text' => 'Used for login sessions, cart integrity, and checkout continuity.'],
-                    ['heading' => 'Analytics Cookies', 'text' => 'Help improve UX by measuring navigation and content engagement.'],
-                    ['heading' => 'Control', 'text' => 'You can manage cookies from browser settings at any time.'],
+                    ['heading' => 'What Are Cookies?', 'text' => 'Cookies are small text files placed on your device when you visit a website. They help us understand how users interact with our site, enhance your browsing experience, and enable basic website functionality.'],
+                    ['heading' => 'Why We Use Cookies', 'text' => 'We use cookies to remember your preferences (like language or cart items), understand user behavior and site usage, enable secure sign-ins and order functionality, improve speed and performance, and deliver relevant content and product recommendations.'],
+                    ['heading' => 'Types of Cookies We Use', 'text' => 'Essential Cookies — Necessary for core website functions like navigation and checkout. Performance Cookies — Help us analyze how visitors use the site and improve our services. Functional Cookies — Store preferences to personalize your experience. Marketing Cookies — Track activity to offer relevant ads and promotions (we keep it minimal and never creepy).'],
+                    ['heading' => 'Managing Your Cookie Preferences', 'text' => 'You can control or delete cookies through your browser settings. Most browsers allow you to block all cookies, allow only selected ones, or clear cookies when you close the browser. However, disabling cookies may affect certain features (like saving your cart or auto-login).'],
+                    ['heading' => 'Your Privacy Matters', 'text' => 'Cookies are just one part of how we ensure a smooth and delightful experience on NumNam. All cookie data is handled securely and in compliance with our Privacy Policy.'],
+                    ['heading' => 'Contact Us', 'text' => 'If you have questions about this Cookie Policy, feel free to reach out: customercare@numnam.com'],
                 ],
             ],
             'payment-methods' => [
                 'title' => 'Payment Methods',
                 'sections' => [
-                    ['heading' => 'Online Methods', 'text' => 'Razorpay and Stripe support secure cards, UPI, and wallet-friendly flows.'],
-                    ['heading' => 'Offline/Alternate', 'text' => 'COD or manual payment options may be available for selected orders.'],
-                    ['heading' => 'Security', 'text' => 'Payment credentials are handled by secure gateway providers and never stored in plain text.'],
+                    ['heading' => 'Accepted Payment Methods', 'text' => 'We accept credit/debit cards, UPI, net banking, and wallet payments through our secure payment gateway.'],
+                    ['heading' => 'Online Payments', 'text' => 'All online payments are processed securely through Razorpay. We support Visa, Mastercard, RuPay, UPI (Google Pay, PhonePe, Paytm), Net Banking, and popular digital wallets.'],
+                    ['heading' => 'Cash on Delivery', 'text' => 'Cash on Delivery (COD) is available for eligible orders based on location and order value.'],
+                    ['heading' => 'Security', 'text' => 'Payment credentials are handled by secure gateway providers and never stored in plain text. All transactions are encrypted and PCI-DSS compliant.'],
                 ],
             ],
         ]);

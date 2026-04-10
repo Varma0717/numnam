@@ -114,11 +114,11 @@ class _BlogTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (blog.image != null)
+            if (blog.featuredImage != null)
               AspectRatio(
                 aspectRatio: 16 / 9,
                 child: CachedNetworkImage(
-                  imageUrl: AppConfig.imageUrl(blog.image!),
+                  imageUrl: AppConfig.imageUrl(blog.featuredImage!),
                   fit: BoxFit.cover,
                   placeholder: (_, __) => Container(color: const Color(0xFFFFF0F5)),
                   errorWidget: (_, __, ___) =>
@@ -169,8 +169,8 @@ class _BlogTile extends StatelessWidget {
                             style: GoogleFonts.poppins(
                                 fontSize: 11, color: const Color(0xFF9E9EBE))),
                       const Spacer(),
-                      if (blog.readTime != null)
-                        Text('${blog.readTime} min read',
+                      if (blog.publishedAt != null)
+                        Text(blog.publishedAt!,
                             style: GoogleFonts.poppins(
                                 fontSize: 11, color: const Color(0xFF9E9EBE))),
                     ],

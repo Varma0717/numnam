@@ -66,11 +66,11 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
     final b = _blog!;
     return ListView(
       children: [
-        if (b.image != null)
+        if (b.featuredImage != null)
           AspectRatio(
             aspectRatio: 16 / 9,
             child: CachedNetworkImage(
-              imageUrl: AppConfig.imageUrl(b.image!),
+              imageUrl: AppConfig.imageUrl(b.featuredImage!),
               fit: BoxFit.cover,
             ),
           ),
@@ -108,18 +108,11 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                         style: GoogleFonts.poppins(
                             fontSize: 12, color: const Color(0xFF6B6B8A))),
                   const Spacer(),
-                  if (b.readTime != null)
-                    Row(
-                      children: [
-                        const Icon(Icons.schedule_rounded,
-                            size: 14, color: Color(0xFF9E9EBE)),
-                        const SizedBox(width: 4),
-                        Text('${b.readTime} min',
-                            style: GoogleFonts.poppins(
-                                fontSize: 12,
-                                color: const Color(0xFF9E9EBE))),
-                      ],
-                    ),
+                  if (b.publishedAt != null)
+                    Text(b.publishedAt!,
+                        style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: const Color(0xFF9E9EBE))),
                 ],
               ),
               const SizedBox(height: 16),

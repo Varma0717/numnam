@@ -25,33 +25,33 @@ $trustMetrics = [
 
 $brandPillars = [
 [
-'title' => 'Brand Story',
-'description' => 'NumNam started with a simple question: why should parents have to choose between convenience and trust when feeding their children?',
+'title' => '2021: The Turning Point',
+'description' => 'After years of focusing on medical residency and career progression in Germany, our son Kian was born. In Germany, the system allows for a 12-month parental leave — a precious window of time we decided to use to reconnect with our roots in India.',
 ],
 [
-'title' => 'Mission',
-'description' => 'To make stage-appropriate, clean-label baby nutrition easier to access, easier to understand, and easier to trust.',
+'title' => 'The Culture Shock',
+'description' => 'In Germany, we were used to the "privilege of convenience." We could walk into any local supermarket and find diverse, vegetable-rich, and scientifically balanced baby food. Returning to India for that extended stay was a wake-up call. We found ourselves struggling to find products that met the nutritional standards we practiced as doctors and the quality we demanded as parents.',
 ],
 [
-'title' => 'Vision',
-'description' => 'To become the most trusted nutrition partner for modern families from first tastes to confident self-feeding.',
+'title' => 'The Birth of NumNam',
+'description' => 'For months, we went back to basics — cooking every meal from scratch to ensure Kian got the nutrients he needed. But we realized that most busy Indian parents don\'t have that luxury of time. The idea hit us: Why should healthy, high-quality baby food be a privilege found only in European supermarkets? We decided to bring that same rigor, science, and convenience to fellow parents in India.',
 ],
 ];
 
 $trustHighlights = [
 [
-'title' => 'Clinical Thinking',
-'description' => 'Guided by pediatric and nutrition expertise so every product supports the needs of growing children.',
+'title' => 'European Standards',
+'description' => 'Developed in Germany by doctor-parents, our recipes meet the world\'s strictest safety and nutritional guidelines for infants.',
 'icon' => 'shield',
 ],
 [
-'title' => 'Clean Ingredient Standards',
-'description' => 'No unnecessary additives, no hidden fillers, and transparent labels that parents can read in seconds.',
+'title' => 'Palate Training',
+'description' => 'Early exposure to savory flavors is the "secret weapon" against picky eating, helping your child love veggies for life.',
 'icon' => 'leaf',
 ],
 [
-'title' => 'Built For Real Families',
-'description' => 'Designed for busy schedules, changing routines, and the realities of everyday parenting.',
+'title' => '40%+ Real Vegetables',
+'description' => 'We prioritize greens over sugar. With only 8g of natural fruit sugars per 100g, we keep sweetness gentle and nutrition high.',
 'icon' => 'heart',
 ],
 ];
@@ -82,8 +82,8 @@ $trustHighlights = [
         <div class="overflow-hidden rounded-[2rem] border-3 bg-[#FFF0F5] px-6 py-10 sm:px-10 lg:px-14 lg:py-14" style="border-color:#FFD6E5;">
             <div class="max-w-3xl">
                 <span class="inline-flex rounded-full border border-numnam-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-numnam-700">About NumNam</span>
-                <h1 class="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">From clinical insight to a trusted everyday feeding brand</h1>
-                <p class="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">NumNam was built to give modern families a more confident way to feed their little ones: clean-label products, transparent ingredients, and practical formats shaped by real parenting needs.</p>
+                <h1 class="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">From Scrubs to Saucepan: Our Journey Home</h1>
+                <p class="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">How a 12-month parental leave and a trip across continents changed the way we think about feeding our children.</p>
             </div>
 
             <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -102,8 +102,8 @@ $trustHighlights = [
     <div class="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
         <article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
             <h2 class="text-2xl font-bold tracking-tight text-slate-900">Our Brand Story</h2>
-            <p class="mt-4 text-base leading-relaxed text-slate-600">NumNam began with a problem our founders knew personally: many parents want food that is genuinely nutritious and transparent, but the market often forces a compromise between quality, convenience, and trust. We believed there had to be a better standard.</p>
-            <p class="mt-4 text-base leading-relaxed text-slate-600">So we built NumNam around three simple principles: ingredient clarity, stage-appropriate nutrition, and parent-friendly convenience. Every product is designed to reduce decision fatigue and bring more confidence to mealtime.</p>
+            <p class="mt-4 text-base leading-relaxed text-slate-600">Developed in Germany by doctor-parents, our recipes meet the world's strictest safety and nutritional guidelines for infants. We believe early exposure to savory flavors is the "secret weapon" against picky eating, helping your child love veggies for life.</p>
+            <p class="mt-4 text-base leading-relaxed text-slate-600">We prioritize greens over sugar. With only 8g of natural fruit sugars per 100g, we keep sweetness gentle and nutrition high. With 40%+ real vegetables in every product, NumNam sets a new standard for clean-label baby nutrition in India.</p>
             <p class="mt-4 text-base leading-relaxed text-slate-600">Today, NumNam continues to grow with families who want thoughtfully made products backed by real nutritional intent rather than marketing shortcuts.</p>
         </article>
 
@@ -160,7 +160,7 @@ $trustHighlights = [
         <h2 class="text-2xl font-bold tracking-tight text-slate-900">Meet The Founders</h2>
         <p class="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">NumNam is guided by people who understand both the science of nutrition and the realities of modern parenting.</p>
 
-        <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             @foreach($founders as $founder)
             <article class="rounded-2xl border border-slate-200 bg-slate-50/60 p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-md">
                 <div class="flex items-start gap-4">
@@ -173,6 +173,11 @@ $trustHighlights = [
                 </div>
             </article>
             @endforeach
+        </div>
+
+        <div class="mt-8 rounded-2xl border border-numnam-100 bg-numnam-50/50 p-6 text-center sm:p-8">
+            <p class="text-lg font-semibold italic leading-relaxed text-slate-800">"As doctors, we see the results of poor nutrition later in life. As parents, we want to prevent it from the first bite."</p>
+            <p class="mt-3 text-sm font-medium text-slate-600">— Srinath & Monika</p>
         </div>
 </section>
 

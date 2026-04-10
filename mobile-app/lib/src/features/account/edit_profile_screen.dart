@@ -25,7 +25,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     super.initState();
     final user = context.read<AuthProvider>().user;
     _nameCtrl = TextEditingController(text: user?.name ?? '');
-    _phoneCtrl = TextEditingController(text: user?.phone ?? '');
+    _phoneCtrl = TextEditingController(text: '');
   }
 
   @override
@@ -46,7 +46,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       final auth = context.read<AuthProvider>();
       await auth.updateProfile(
         name: _nameCtrl.text.trim(),
-        phone: _phoneCtrl.text.trim().isNotEmpty ? _phoneCtrl.text.trim() : null,
       );
       setState(() {
         _success = 'Profile updated!';

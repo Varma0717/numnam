@@ -1,16 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../config/app_config.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../models/product.dart';
 import '../../shared/theme/colors.dart';
 import '../../shared/widgets/product_card.dart';
 import '../shop/product_detail_screen.dart';
-import '../subscriptions/subscriptions_screen.dart';
-import '../blog/blog_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
