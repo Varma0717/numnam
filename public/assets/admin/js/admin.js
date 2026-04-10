@@ -28,7 +28,7 @@
         function updateBulkBar() {
             if (!bulkBar) return;
             const count = [...checkboxes()].filter(cb => cb.checked).length;
-            const countEl = bulkBar.querySelector('.bulk-count');
+            const countEl = bulkBar.querySelector('#bulk-count');
             if (countEl) countEl.textContent = count;
             bulkBar.style.display = count > 0 ? 'flex' : 'none';
         }

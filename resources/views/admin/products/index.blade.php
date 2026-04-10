@@ -29,50 +29,50 @@
             <button class="admin-btn" type="submit" onclick="return confirm('Apply bulk action to selected items?')">Apply</button>
             <span class="admin-muted" id="bulk-count"></span>
         </div>
-
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th class="check-column"><input type="checkbox" id="select-all"></th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($products as $product)
-                <tr>
-                    <td class="check-column"><input type="checkbox" name="ids[]" value="{{ $product->id }}"></td>
-                    <td><strong>{{ $product->name }}</strong></td>
-                    <td>{{ $product->category?->name ?: '-' }}</td>
-                    <td>Rs {{ number_format($product->sale_price ?: $product->price, 0) }}</td>
-                    <td>{{ $product->stock }}</td>
-                    <td>
-                        <span class="status-badge status-badge--{{ $product->is_active ? 'active' : 'pending' }}">
-                            {{ $product->is_active ? 'Active' : 'Draft' }}
-                        </span>
-                    </td>
-                    <td>
-                        <a href="{{ route('admin.products.edit', $product) }}" class="admin-link">Edit</a>
-                        <span style="color:var(--wp-border); margin:0 4px;">|</span>
-                        <form method="POST" action="{{ route('admin.products.destroy', $product) }}" style="display:inline;" onsubmit="return confirm('Delete this product?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="admin-btn-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="7" class="admin-empty">No products found.</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
     </form>
+
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th class="check-column"><input type="checkbox" id="select-all"></th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($products as $product)
+            <tr>
+                <td class="check-column"><input type="checkbox" class="row-check" name="ids[]" value="{{ $product->id }}" form="bulk-form"></td>
+                <td><strong>{{ $product->name }}</strong></td>
+                <td>{{ $product->category?->name ?: '-' }}</td>
+                <td>Rs {{ number_format($product->sale_price ?: $product->price, 0) }}</td>
+                <td>{{ $product->stock }}</td>
+                <td>
+                    <span class="status-badge status-badge--{{ $product->is_active ? 'active' : 'pending' }}">
+                        {{ $product->is_active ? 'Active' : 'Draft' }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{{ route('admin.products.edit', $product) }}" class="admin-link">Edit</a>
+                    <span style="color:var(--wp-border); margin:0 4px;">|</span>
+                    <form method="POST" action="{{ route('admin.products.destroy', $product) }}" style="display:inline;" onsubmit="return confirm('Delete this product?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="admin-btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="7" class="admin-empty">No products found.</td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
 
     <div style="margin-top:.75rem;">{{ $products->links() }}</div>
 </section>

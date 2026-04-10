@@ -35,40 +35,40 @@
                 <button class="admin-btn" type="submit" onclick="return confirm('Apply bulk action to selected orders?')">Apply</button>
                 <span class="admin-muted" id="bulk-count"></span>
             </div>
-
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th class="check-column"><input type="checkbox" id="select-all"></th>
-                        <th>Order #</th>
-                        <th>Customer</th>
-                        <th>Status</th>
-                        <th>Payment</th>
-                        <th>Total</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($orders as $order)
-                    <tr>
-                        <td class="check-column"><input type="checkbox" name="ids[]" value="{{ $order->id }}"></td>
-                        <td><strong>{{ $order->order_number }}</strong></td>
-                        <td>{{ $order->user?->email ?: 'Guest' }}</td>
-                        <td><span class="status-badge status-badge--{{ $order->status }}">{{ ucfirst($order->status) }}</span></td>
-                        <td><span class="status-badge status-badge--{{ $order->payment_status }}">{{ strtoupper($order->payment_status) }}</span> {{ $order->payment_gateway ? '(' . strtoupper($order->payment_gateway) . ')' : '' }}</td>
-                        <td>Rs {{ number_format($order->total, 0) }}</td>
-                        <td><a class="admin-link" href="{{ route('admin.orders.show', $order) }}">View</a></td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="7" class="admin-empty">
-                            <p>No orders found.</p>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
         </form>
+
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th class="check-column"><input type="checkbox" id="select-all"></th>
+                    <th>Order #</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($orders as $order)
+                <tr>
+                    <td class="check-column"><input type="checkbox" class="row-check" name="ids[]" value="{{ $order->id }}" form="bulk-form"></td>
+                    <td><strong>{{ $order->order_number }}</strong></td>
+                    <td>{{ $order->user?->email ?: 'Guest' }}</td>
+                    <td><span class="status-badge status-badge--{{ $order->status }}">{{ ucfirst($order->status) }}</span></td>
+                    <td><span class="status-badge status-badge--{{ $order->payment_status }}">{{ strtoupper($order->payment_status) }}</span> {{ $order->payment_gateway ? '(' . strtoupper($order->payment_gateway) . ')' : '' }}</td>
+                    <td>Rs {{ number_format($order->total, 0) }}</td>
+                    <td><a class="admin-link" href="{{ route('admin.orders.show', $order) }}">View</a></td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="7" class="admin-empty">
+                        <p>No orders found.</p>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 
     {{ $orders->links() }}
