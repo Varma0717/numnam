@@ -13,7 +13,9 @@ class Product {
   final double? salePrice;
   final int stock;
   final String? image;
+  final String? imageUrl;
   final List<String> gallery;
+  final List<String> galleryUrls;
   final bool isActive;
   final bool isFeatured;
   final List<String> badges;
@@ -36,7 +38,9 @@ class Product {
     this.salePrice,
     this.stock = 0,
     this.image,
+    this.imageUrl,
     this.gallery = const [],
+    this.galleryUrls = const [],
     this.isActive = true,
     this.isFeatured = false,
     this.badges = const [],
@@ -65,7 +69,12 @@ class Product {
       salePrice: json['sale_price'] != null ? _toDouble(json['sale_price']) : null,
       stock: json['stock'] as int? ?? 0,
       image: json['image'] as String?,
+      imageUrl: json['image_url'] as String?,
       gallery: (json['gallery'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          const [],
+      galleryUrls: (json['gallery_urls'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           const [],

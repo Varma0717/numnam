@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../config/app_config.dart';
 import '../../models/product.dart';
 import '../theme/colors.dart';
 import 'price_tag.dart';
@@ -13,7 +12,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imgUrl = AppConfig.imageUrl(product.image);
+    final imgUrl = product.imageUrl ?? '';
     return GestureDetector(
       onTap: onTap,
       child: Container(

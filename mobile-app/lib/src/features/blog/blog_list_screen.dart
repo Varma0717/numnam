@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../config/app_config.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../models/blog.dart';
@@ -120,7 +119,7 @@ class _BlogTile extends StatelessWidget {
               AspectRatio(
                 aspectRatio: 16 / 9,
                 child: CachedNetworkImage(
-                  imageUrl: AppConfig.imageUrl(blog.featuredImage!),
+                  imageUrl: blog.featuredImageUrl ?? '',
                   fit: BoxFit.cover,
                   placeholder: (_, __) => Container(color: const Color(0xFFFFF0F5)),
                   errorWidget: (_, __, ___) =>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -48,6 +49,36 @@ class Product extends Model
         'is_active'       => 'boolean',
         'is_featured'     => 'boolean',
     ];
+
+    protected $appends = ['image_url', 'gallery_urls'];
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (empty($this->image)) {
+            return null;
+        }
+
+        if (str_starts_with($this->image, 'http')) {
+            return $this->image;
+        }
+
+        return Storage::disk('public')->url($this->image);
+    }
+
+    public function getGalleryUrlsAttribute(): array
+    {
+        $gallery = $this->gallery ?? [];
+
+        return array_map(function ($path) {
+            if (empty($path)) {
+                return null;
+            }
+            if (str_starts_with($path, 'http')) {
+                return $path;
+            }
+            return Storage::disk('public')->url($path);
+        }, $gallery);
+    }
 
     public function category()
     {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../config/app_config.dart';
 import '../../core/auth_provider.dart';
 import '../../models/cart.dart';
 import '../../shared/theme/colors.dart';
@@ -76,7 +75,7 @@ class _CartItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cart = context.read<CartProvider>();
-    final imgUrl = AppConfig.imageUrl(item.image);
+    final imgUrl = item.imageUrl ?? '';
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(

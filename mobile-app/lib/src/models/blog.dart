@@ -5,6 +5,7 @@ class Blog {
   final String? excerpt;
   final String? content;
   final String? featuredImage;
+  final String? featuredImageUrl;
   final String? publishedAt;
   final BlogCategory? category;
   final BlogAuthor? author;
@@ -16,6 +17,7 @@ class Blog {
     this.excerpt,
     this.content,
     this.featuredImage,
+    this.featuredImageUrl,
     this.publishedAt,
     this.category,
     this.author,
@@ -29,6 +31,7 @@ class Blog {
       excerpt: json['excerpt'] as String?,
       content: json['content'] as String?,
       featuredImage: json['featured_image'] as String?,
+      featuredImageUrl: json['featured_image_url'] as String?,
       publishedAt: json['published_at'] as String?,
       category: json['category'] != null
           ? BlogCategory.fromJson(json['category'] as Map<String, dynamic>)

@@ -27,6 +27,7 @@ class CartItem {
   final String name;
   final String slug;
   final String? image;
+  final String? imageUrl;
   final int qty;
   final double unitPrice;
   final double lineTotal;
@@ -36,6 +37,7 @@ class CartItem {
     required this.name,
     required this.slug,
     this.image,
+    this.imageUrl,
     required this.qty,
     required this.unitPrice,
     required this.lineTotal,
@@ -47,6 +49,7 @@ class CartItem {
       name: json['name'] as String? ?? '',
       slug: json['slug'] as String? ?? '',
       image: json['image'] as String?,
+      imageUrl: json['image_url'] as String?,
       qty: json['qty'] as int? ?? 1,
       unitPrice: _d(json['unit_price']),
       lineTotal: _d(json['line_total']),

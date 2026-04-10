@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../config/app_config.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../models/blog.dart';
@@ -72,7 +71,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
           AspectRatio(
             aspectRatio: 16 / 9,
             child: CachedNetworkImage(
-              imageUrl: AppConfig.imageUrl(b.featuredImage!),
+              imageUrl: b.featuredImageUrl ?? '',
               fit: BoxFit.cover,
             ),
           ),

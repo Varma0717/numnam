@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Blog extends Model
 {
@@ -30,6 +31,21 @@ class Blog extends Model
     protected $casts = [
         'published_at' => 'datetime',
     ];
+
+    protected $appends = ['featured_image_url'];
+
+    public function getFeaturedImageUrlAttribute(): ?string
+    {
+        if (empty($this->featured_image)) {
+            return null;
+        }
+
+        if (str_starts_with($this->featured_image, 'http')) {
+            return $this->featured_image;
+        }
+
+        return Storage::disk('public')->url($this->featured_image);
+    }
 
     public function category(): BelongsTo
     {

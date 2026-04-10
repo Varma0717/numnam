@@ -100,6 +100,7 @@ class MobileCartController extends BaseMobileController
                 'name' => $product->name,
                 'slug' => $product->slug,
                 'image' => $product->image,
+                'image_url' => $product->image_url,
                 'qty' => $qty,
                 'unit_price' => $unitPrice,
                 'line_total' => $lineTotal,

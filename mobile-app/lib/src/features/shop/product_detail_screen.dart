@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../config/app_config.dart';
 import '../../core/api_client.dart';
 import '../../core/auth_provider.dart';
 import '../../core/constants.dart';
@@ -136,7 +135,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     if (_loading) return const LoadingIndicator();
     if (_error != null) return ErrorView(message: _error!);
     final p = _product!;
-    final imgUrl = AppConfig.imageUrl(p.image);
+    final imgUrl = p.imageUrl ?? '';
     return ListView(
       children: [
         // Image

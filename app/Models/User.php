@@ -30,6 +30,16 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_admin',
         'referral_code',
         'referred_by',
+        'phone',
+        'date_of_birth',
+        'gender',
+        'avatar',
+        'address_line1',
+        'address_line2',
+        'city',
+        'state',
+        'postal_code',
+        'country',
     ];
 
     /**
@@ -50,6 +60,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'is_admin' => 'boolean',
+        'date_of_birth' => 'date',
     ];
 
     public function subscriptions()

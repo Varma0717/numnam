@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../config/app_config.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../shared/theme/colors.dart';
@@ -134,6 +133,7 @@ class _WishItem {
   final String name;
   final String slug;
   final String? image;
+  final String? imageUrl;
   final double price;
   final double? salePrice;
 
@@ -143,6 +143,7 @@ class _WishItem {
     required this.name,
     required this.slug,
     this.image,
+    this.imageUrl,
     required this.price,
     this.salePrice,
   });
@@ -156,6 +157,7 @@ class _WishItem {
       name: product?['name'] ?? json['name'] ?? '',
       slug: product?['slug'] ?? '',
       image: product?['image'] ?? product?['primary_image'],
+      imageUrl: product?['image_url'] as String?,
       price: _d(product?['price'] ?? json['price']),
       salePrice: product?['sale_price'] != null
           ? _d(product!['sale_price'])
@@ -193,9 +195,9 @@ class _WishTile extends StatelessWidget {
               child: SizedBox(
                 width: 72,
                 height: 72,
-                child: item.image != null
+                child: item.imageUrl != null && item.imageUrl!.isNotEmpty
                     ? CachedNetworkImage(
-                        imageUrl: AppConfig.imageUrl(item.image!),
+                        imageUrl: item.imageUrl!,
                         fit: BoxFit.cover,
                       )
                     : Container(
