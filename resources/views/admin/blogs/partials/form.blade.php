@@ -28,8 +28,7 @@
                 <h3>Content</h3>
             </div>
             <div class="inside" style="padding:0;">
-                <input type="hidden" name="content" id="blog_content_input">
-                <div id="blog_content_editor" style="min-height:400px;"></div>
+                <textarea name="content" id="blog_content_editor" style="visibility:hidden;">{{ old('content', $blog->content ?? '') }}</textarea>
             </div>
         </section>
 
@@ -117,53 +116,32 @@
 </div>
 
 @push('scripts')
-<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-<script type="application/json" id="__contentData">
-    {
-        !!json_encode(old('content', $blog - > content ?? '')) !!
-    }
-</script>
+<script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js"></script>
 <script>
     (function() {
-        var __contentHtml = JSON.parse(document.getElementById('__contentData').textContent);
-        // Quill editor for blog content
-        const contentEditor = new Quill('#blog_content_editor', {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    [{
-                        header: [1, 2, 3, 4, false]
-                    }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }],
-                    ['blockquote', 'link', 'image', 'video'],
-                    [{
-                        align: []
-                    }],
-                    ['clean'],
-                ],
+        tinymce.init({
+            selector: '#blog_content_editor',
+            license_key: 'gpl',
+            height: 500,
+            menubar: 'file edit view insert format tools table',
+            plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
+            toolbar: 'undo redo | blocks | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | blockquote table | code fullscreen | removeformat help',
+            content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; line-height: 1.6; }',
+            branding: false,
+            promotion: false,
+            image_title: true,
+            automatic_uploads: false,
+            file_picker_types: 'image',
+            file_picker_callback: function(callback, value, meta) {
+                if (meta.filetype === 'image') {
+                    MediaPicker.open(function(media) {
+                        callback(media.url, {
+                            title: media.title || '',
+                            alt: media.title || ''
+                        });
+                    });
+                }
             },
-            placeholder: 'Write your blog post...',
-        });
-        contentEditor.root.innerHTML = __contentHtml;
-
-        // Sync Quill → hidden input on form submit
-        contentEditor.root.closest('form').addEventListener('submit', function() {
-            document.getElementById('blog_content_input').value = contentEditor.root.innerHTML;
-        });
-
-        // Image handler: open media picker
-        contentEditor.getModule('toolbar').addHandler('image', function() {
-            MediaPicker.open(function(media) {
-                const range = contentEditor.getSelection(true);
-                contentEditor.insertEmbed(range.index, 'image', media.url);
-                contentEditor.setSelection(range.index + 1);
-            });
         });
 
         // Media picker for featured image

@@ -28,8 +28,7 @@
                 <h3>Description</h3>
             </div>
             <div class="inside" style="padding:0;">
-                <input type="hidden" name="description" id="product_description_input">
-                <div id="product_description_editor" style="min-height:250px;"></div>
+                <textarea name="description" id="product_description_editor" style="visibility:hidden;">{{ old('description', $product->description ?? '') }}</textarea>
             </div>
         </section>
 
@@ -190,50 +189,32 @@
 </div>
 
 @push('scripts')
-<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-<script type="application/json" id="__descData">
-    {
-        !!json_encode(old('description', $product - > description ?? '')) !!
-    }
-</script>
+<script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js"></script>
 <script>
     (function() {
-        var __descHtml = JSON.parse(document.getElementById('__descData').textContent);
-        // Quill editor for description
-        const descEditor = new Quill('#product_description_editor', {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    [{
-                        header: [2, 3, 4, false]
-                    }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }],
-                    ['blockquote', 'link', 'image'],
-                    ['clean'],
-                ],
+        tinymce.init({
+            selector: '#product_description_editor',
+            license_key: 'gpl',
+            height: 350,
+            menubar: 'file edit view insert format tools table',
+            plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
+            toolbar: 'undo redo | blocks | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | blockquote table | code fullscreen | removeformat help',
+            content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; line-height: 1.6; }',
+            branding: false,
+            promotion: false,
+            image_title: true,
+            automatic_uploads: false,
+            file_picker_types: 'image',
+            file_picker_callback: function(callback, value, meta) {
+                if (meta.filetype === 'image') {
+                    MediaPicker.open(function(media) {
+                        callback(media.url, {
+                            title: media.title || '',
+                            alt: media.title || ''
+                        });
+                    });
+                }
             },
-            placeholder: 'Write product description...',
-        });
-        descEditor.root.innerHTML = __descHtml;
-
-        // Sync Quill → hidden input on form submit
-        descEditor.root.closest('form').addEventListener('submit', function() {
-            document.getElementById('product_description_input').value = descEditor.root.innerHTML;
-        });
-
-        // Image handler: open media picker instead of default Quill image
-        descEditor.getModule('toolbar').addHandler('image', function() {
-            MediaPicker.open(function(media) {
-                const range = descEditor.getSelection(true);
-                descEditor.insertEmbed(range.index, 'image', media.url);
-                descEditor.setSelection(range.index + 1);
-            });
         });
 
         // Media picker for product image
