@@ -26,9 +26,16 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn([
-                'phone', 'date_of_birth', 'gender', 'avatar',
-                'address_line1', 'address_line2', 'city', 'state',
-                'postal_code', 'country',
+                'phone',
+                'date_of_birth',
+                'gender',
+                'avatar',
+                'address_line1',
+                'address_line2',
+                'city',
+                'state',
+                'postal_code',
+                'country',
             ]);
         });
     }
