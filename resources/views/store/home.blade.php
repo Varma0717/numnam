@@ -5,7 +5,7 @@
 @section('content')
 @php
 $heroSlides = [
-['image' => asset('assets/images/hero.png'), 'title' => $homepageSections['hero_title'] ?? 'Clean, yummy baby food made with love.', 'subtitle' => $homepageSections['hero_subtitle'] ?? 'Stage-wise nutrition, transparent ingredients, and easy subscriptions for busy families.'],
+['image' => asset('assets/images/bg_with_child.jpeg'), 'title' => $homepageSections['hero_title'] ?? 'Clean, yummy baby food made with love.', 'subtitle' => $homepageSections['hero_subtitle'] ?? 'Stage-wise nutrition, transparent ingredients, and easy subscriptions for busy families.'],
 ['image' => asset('assets/images/hero_1.png'), 'title' => 'Inspired by European Nutrition Standards', 'subtitle' => 'Doctor-founded recipes crafted with real fruits and vegetables for your little one.'],
 ['image' => asset('assets/images/hero_2.png'), 'title' => 'Fueling Tiny Adventures', 'subtitle' => 'From smooth purees to crunchy puffs — feeding milestones made simple.'],
 ];
@@ -143,7 +143,25 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
             <button onclick="document.getElementById('productSlider').scrollBy({left:300,behavior:'smooth'})" aria-label="Next"
                 style="position:absolute; right:-12px; top:50%; transform:translateY(-50%); z-index:10; display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.15); border:none; cursor:pointer; font-size:22px; font-weight:bold; color:#DD3259;">&#8250;</button>
         </div>
-        <style>.product-slider-track::-webkit-scrollbar{display:none}@media(min-width:640px){.product-slider-track>a{flex:0 0 48%!important;max-width:48%!important}}@media(min-width:1024px){.product-slider-track>a{flex:0 0 23.5%!important;max-width:23.5%!important}}</style>
+        <style>
+            .product-slider-track::-webkit-scrollbar {
+                display: none
+            }
+
+            @media(min-width:640px) {
+                .product-slider-track>a {
+                    flex: 0 0 48% !important;
+                    max-width: 48% !important
+                }
+            }
+
+            @media(min-width:1024px) {
+                .product-slider-track>a {
+                    flex: 0 0 23.5% !important;
+                    max-width: 23.5% !important
+                }
+            }
+        </style>
         @else
         <p style="text-align:center; color:#fff;">Products coming soon!</p>
         @endif
