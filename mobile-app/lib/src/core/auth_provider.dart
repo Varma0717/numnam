@@ -103,15 +103,12 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> updateProfile({String? name, String? email}) async {
+  Future<void> updateProfile(Map<String, dynamic> fields) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
     try {
-      final body = <String, dynamic>{};
-      if (name != null) body['name'] = name;
-      if (email != null) body['email'] = email;
-      final resp = await _api.dio.patch(ApiEndpoints.me, data: body);
+      final resp = await _api.dio.patch(ApiEndpoints.me, data: fields);
       final data = resp.data['data'] as Map<String, dynamic>;
       _user = User.fromJson(data);
       await _storage.saveUser(data);
@@ -120,6 +117,51 @@ class AuthProvider extends ChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<bool> uploadAvatar(String filePath) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      final formData = FormData.fromMap({
+        'avatar': await MultipartFile.fromFile(filePath, filename: 'avatar.jpg'),
+      });
+      final resp = await _api.dio.post(ApiEndpoints.avatar, data: formData);
+      final data = resp.data['data'] as Map<String, dynamic>;
+      _user = User.fromJson(data);
+      await _storage.saveUser(data);
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } on DioException catch (e) {
+      _error = _extractError(e);
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> changePassword(
+      String currentPassword, String newPassword, String confirm) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      await _api.dio.post(ApiEndpoints.changePassword, data: {
+        'current_password': currentPassword,
+        'password': newPassword,
+        'password_confirmation': confirm,
+      });
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } on DioException catch (e) {
+      _error = _extractError(e);
+      _isLoading = false;
+      notifyListeners();
+      return false;
     }
   }
 

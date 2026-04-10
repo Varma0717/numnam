@@ -858,6 +858,42 @@ class StorefrontController extends Controller
         return view('store.account', compact('orders', 'subscriptions', 'referrals', 'rewards', 'rewardBalance'));
     }
 
+    public function updateProfile(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'date_of_birth' => 'nullable|date',
+            'gender' => 'nullable|string|in:male,female,other',
+            'address_line1' => 'nullable|string|max:255',
+            'address_line2' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:100',
+            'state' => 'nullable|string|max:100',
+            'postal_code' => 'nullable|string|max:20',
+            'country' => 'nullable|string|max:100',
+        ]);
+
+        $request->user()->fill($validated)->save();
+
+        return back()->with('success', 'Profile updated successfully.');
+    }
+
+    public function changePassword(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        if (! \Illuminate\Support\Facades\Hash::check($request->current_password, $request->user()->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect.']);
+        }
+
+        $request->user()->update(['password' => \Illuminate\Support\Facades\Hash::make($request->new_password)]);
+
+        return back()->with('success', 'Password changed successfully.');
+    }
+
     private function hydrateCart(Request $request): array
     {
         $cartLines = $this->resolvedCartLines($request);

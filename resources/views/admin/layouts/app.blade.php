@@ -288,6 +288,8 @@
         </div>
     </div>
     <script src="{{ url('assets/admin/js/admin.js') }}"></script>
+    @include('admin.partials.media-picker')
+    @stack('scripts')
 </body>
 
 </html>

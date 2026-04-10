@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../core/auth_provider.dart';
@@ -29,13 +30,18 @@ class AccountScreen extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 40,
                   backgroundColor: const Color(0xFFFFF0F5),
-                  child: Text(
-                    (user?.name ?? 'U').substring(0, 1).toUpperCase(),
-                    style: GoogleFonts.baloo2(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w900,
-                        color: kCoral),
-                  ),
+                  backgroundImage: user?.avatar != null
+                      ? CachedNetworkImageProvider(user!.avatar!)
+                      : null,
+                  child: user?.avatar == null
+                      ? Text(
+                          (user?.name ?? 'U').substring(0, 1).toUpperCase(),
+                          style: GoogleFonts.baloo2(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w900,
+                              color: kCoral),
+                        )
+                      : null,
                 ),
               ),
               const SizedBox(height: 12),
@@ -51,6 +57,32 @@ class AccountScreen extends StatelessWidget {
                     style: GoogleFonts.poppins(
                         fontSize: 13, color: const Color(0xFF6B6B8A))),
               ),
+              if (user?.phone != null && user!.phone!.isNotEmpty)
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(user.phone!,
+                        style: GoogleFonts.poppins(
+                            fontSize: 12, color: const Color(0xFF6B6B8A))),
+                  ),
+                ),
+              if (user?.referralCode != null && user!.referralCode!.isNotEmpty)
+                Center(
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: kMint.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text('Referral: ${user.referralCode}',
+                        style: GoogleFonts.poppins(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: kMint)),
+                  ),
+                ),
               const SizedBox(height: 28),
 
               _tile(context, Icons.person_outline_rounded, 'Edit Profile', () {

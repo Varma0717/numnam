@@ -28,7 +28,8 @@
                 <h3>Content</h3>
             </div>
             <div class="inside" style="padding:0;">
-                <textarea name="content" id="blog_content" class="wysiwyg-editor" style="width:100%; min-height:400px; border:none; padding:8px 12px; resize:vertical;">{{ old('content', $blog->content ?? '') }}</textarea>
+                <input type="hidden" name="content" id="blog_content_input">
+                <div id="blog_content_editor" style="min-height:400px;"></div>
             </div>
         </section>
 
@@ -95,25 +96,76 @@
                 <h3>Featured Image</h3>
             </div>
             <div class="inside">
-                <input type="text" name="featured_image" value="{{ old('featured_image', $blog->featured_image ?? '') }}" placeholder="Image URL" style="width:100%; margin-bottom:8px;">
-                @if(!empty($blog->featured_image ?? null))
-                <img src="{{ $blog->featured_image }}" alt="" style="max-width:100%; height:auto; border:1px solid var(--wp-border); border-radius:4px;">
-                @endif
+                <input type="hidden" name="featured_image" id="blogFeaturedImageInput" value="{{ old('featured_image', $blog->featured_image ?? '') }}">
+                <button type="button" class="mp-choose-btn" id="chooseBlogImage">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <circle cx="8.5" cy="8.5" r="1.5" />
+                        <polyline points="21 15 16 10 5 21" />
+                    </svg>
+                    Choose Image
+                </button>
+                <div class="mp-preview-wrap" id="blogImagePreview">
+                    @if(!empty($blog->featured_image ?? null))
+                    <img src="{{ $blog->featured_image_url ?? $blog->featured_image }}" alt="">
+                    <button type="button" class="mp-preview-remove" onclick="MediaPickerField.clearSingle(this)">&times;</button>
+                    @endif
+                </div>
             </div>
         </section>
     </div>
 </div>
 
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+@push('scripts')
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 <script>
-    tinymce.init({
-        selector: '.wysiwyg-editor',
-        height: 400,
-        menubar: false,
-        plugins: 'lists link image code table media',
-        toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright | bullist numlist | blockquote link image media | code',
-        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 15px; line-height:1.6; }',
-        branding: false,
-        promotion: false,
-    });
+    (function() {
+        // Quill editor for blog content
+        const contentEditor = new Quill('#blog_content_editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{
+                        header: [1, 2, 3, 4, false]
+                    }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{
+                        list: 'ordered'
+                    }, {
+                        list: 'bullet'
+                    }],
+                    ['blockquote', 'link', 'image', 'video'],
+                    [{
+                        align: []
+                    }],
+                    ['clean'],
+                ],
+            },
+            placeholder: 'Write your blog post...',
+        });
+        contentEditor.root.innerHTML = @json(old('content', $blog - > content ?? ''));
+
+        // Sync Quill → hidden input on form submit
+        contentEditor.root.closest('form').addEventListener('submit', function() {
+            document.getElementById('blog_content_input').value = contentEditor.root.innerHTML;
+        });
+
+        // Image handler: open media picker
+        contentEditor.getModule('toolbar').addHandler('image', function() {
+            MediaPicker.open(function(media) {
+                const range = contentEditor.getSelection(true);
+                contentEditor.insertEmbed(range.index, 'image', media.url);
+                contentEditor.setSelection(range.index + 1);
+            });
+        });
+
+        // Media picker for featured image
+        MediaPickerField.bindSingle(
+            document.getElementById('chooseBlogImage'),
+            document.getElementById('blogFeaturedImageInput'),
+            document.getElementById('blogImagePreview')
+        );
+    })();
 </script>
+@endpush

@@ -42,14 +42,116 @@
 {{-- Tabs --}}
 <section class="section pb-14 account-section">
     <div class="account-tabs flex gap-1 overflow-x-auto rounded-2xl border border-slate-200 bg-slate-100 p-1" role="tablist" aria-label="Account sections">
-        <button class="account-tab active" data-tab="orders" role="tab" aria-selected="true" aria-controls="panel-orders">Orders</button>
+        <button class="account-tab active" data-tab="profile" role="tab" aria-selected="true" aria-controls="panel-profile">Profile</button>
+        <button class="account-tab" data-tab="orders" role="tab" aria-selected="false" aria-controls="panel-orders">Orders</button>
         <button class="account-tab" data-tab="subscriptions" role="tab" aria-selected="false" aria-controls="panel-subscriptions">Subscriptions</button>
         <button class="account-tab" data-tab="referrals" role="tab" aria-selected="false" aria-controls="panel-referrals">Referrals</button>
         <button class="account-tab" data-tab="rewards" role="tab" aria-selected="false" aria-controls="panel-rewards">Rewards</button>
     </div>
 
+    {{-- Profile Panel --}}
+    <div class="account-panel active mt-4" data-panel="profile" id="panel-profile" role="tabpanel">
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+            @if(session('profile-status'))
+            <div class="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm font-medium text-emerald-700">{{ session('profile-status') }}</div>
+            @endif
+
+            <form method="POST" action="{{ route('store.account.update-profile') }}">
+                @csrf
+                @method('PATCH')
+                <h3 class="mb-4 text-lg font-bold text-slate-900">Personal Information</h3>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label class="mb-1 block text-sm font-semibold text-slate-700" for="name">Full Name</label>
+                        <input class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" type="text" name="name" id="name" value="{{ old('name', auth()->user()->name) }}" required>
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm font-semibold text-slate-700" for="email">Email</label>
+                        <input class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-500" type="email" value="{{ auth()->user()->email }}" disabled>
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm font-semibold text-slate-700" for="phone">Phone</label>
+                        <input class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" type="text" name="phone" id="phone" value="{{ old('phone', auth()->user()->phone) }}">
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm font-semibold text-slate-700" for="date_of_birth">Child's Date of Birth</label>
+                        <input class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" type="date" name="date_of_birth" id="date_of_birth" value="{{ old('date_of_birth', auth()->user()->date_of_birth?->toDateString()) }}">
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm font-semibold text-slate-700" for="gender">Gender</label>
+                        <select class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" name="gender" id="gender">
+                            <option value="">Select</option>
+                            <option value="male" @selected(old('gender', auth()->user()->gender) === 'male')>Male</option>
+                            <option value="female" @selected(old('gender', auth()->user()->gender) === 'female')>Female</option>
+                            <option value="other" @selected(old('gender', auth()->user()->gender) === 'other')>Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h3 class="mb-4 mt-8 text-lg font-bold text-slate-900">Shipping Address</h3>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="sm:col-span-2">
+                        <label class="mb-1 block text-sm font-semibold text-slate-700" for="address_line1">Address Line 1</label>
+                        <input class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" type="text" name="address_line1" id="address_line1" value="{{ old('address_line1', auth()->user()->address_line1) }}">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="mb-1 block text-sm font-semibold text-slate-700" for="address_line2">Address Line 2</label>
+                        <input class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" type="text" name="address_line2" id="address_line2" value="{{ old('address_line2', auth()->user()->address_line2) }}">
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm font-semibold text-slate-700" for="city">City</label>
+                        <input class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" type="text" name="city" id="city" value="{{ old('city', auth()->user()->city) }}">
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm font-semibold text-slate-700" for="state">State</label>
+                        <input class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" type="text" name="state" id="state" value="{{ old('state', auth()->user()->state) }}">
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm font-semibold text-slate-700" for="postal_code">PIN Code</label>
+                        <input class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" type="text" name="postal_code" id="postal_code" value="{{ old('postal_code', auth()->user()->postal_code) }}">
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm font-semibold text-slate-700" for="country">Country</label>
+                        <input class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" type="text" name="country" id="country" value="{{ old('country', auth()->user()->country) }}">
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <button class="rounded-full bg-numnam-600 px-8 py-2.5 text-sm font-semibold text-white transition hover:bg-numnam-700" type="submit">Save Changes</button>
+                </div>
+            </form>
+
+            <hr class="my-8 border-slate-200">
+
+            <form method="POST" action="{{ route('store.account.change-password') }}">
+                @csrf
+                <h3 class="mb-4 text-lg font-bold text-slate-900">Change Password</h3>
+                @if(session('password-status'))
+                <div class="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm font-medium text-emerald-700">{{ session('password-status') }}</div>
+                @endif
+                <div class="grid gap-4 sm:grid-cols-3">
+                    <div>
+                        <label class="mb-1 block text-sm font-semibold text-slate-700" for="current_password">Current Password</label>
+                        <input class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" type="password" name="current_password" id="current_password" required>
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm font-semibold text-slate-700" for="password">New Password</label>
+                        <input class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" type="password" name="password" id="password" required>
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm font-semibold text-slate-700" for="password_confirmation">Confirm New Password</label>
+                        <input class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" type="password" name="password_confirmation" id="password_confirmation" required>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button class="rounded-full border border-slate-200 bg-white px-6 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50" type="submit">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     {{-- Orders Panel --}}
-    <div class="account-panel active mt-4" data-panel="orders" id="panel-orders" role="tabpanel">
+    <div class="account-panel mt-4" data-panel="orders" id="panel-orders" role="tabpanel">
         @if($orders->isEmpty())
         <div class="rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm">
             <p class="text-slate-500">You haven't placed any orders yet.</p>

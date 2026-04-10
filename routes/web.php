@@ -85,6 +85,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [StorefrontController::class, 'placeOrder'])->name('store.checkout.place-order');
     Route::get('/order-success/{order}', [StorefrontController::class, 'orderSuccess'])->name('store.order.success');
     Route::get('/account', [StorefrontController::class, 'account'])->name('store.account');
+    Route::patch('/account/profile', [StorefrontController::class, 'updateProfile'])->name('store.account.update-profile');
+    Route::post('/account/password', [StorefrontController::class, 'changePassword'])->name('store.account.change-password');
 
     // Wishlist
     Route::get('/wishlist', [StorefrontController::class, 'wishlist'])->name('store.wishlist');

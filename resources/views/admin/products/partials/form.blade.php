@@ -28,7 +28,8 @@
                 <h3>Description</h3>
             </div>
             <div class="inside" style="padding:0;">
-                <textarea name="description" id="product_description" class="wysiwyg-editor" style="width:100%; min-height:250px; border:none; padding:8px 12px; resize:vertical;">{{ old('description', $product->description ?? '') }}</textarea>
+                <input type="hidden" name="description" id="product_description_input">
+                <div id="product_description_editor" style="min-height:250px;"></div>
             </div>
         </section>
 
@@ -138,10 +139,21 @@
                 <h3>Product Image</h3>
             </div>
             <div class="inside">
-                <input type="text" name="image" value="{{ old('image', $product->image ?? '') }}" placeholder="Image URL" style="width:100%; margin-bottom:8px;">
-                @if(!empty($product->image ?? null))
-                <img src="{{ $product->image }}" alt="" style="max-width:100%; height:auto; border:1px solid var(--wp-border); border-radius:4px;">
-                @endif
+                <input type="hidden" name="image" id="productImageInput" value="{{ old('image', $product->image ?? '') }}">
+                <button type="button" class="mp-choose-btn" id="chooseProductImage">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <circle cx="8.5" cy="8.5" r="1.5" />
+                        <polyline points="21 15 16 10 5 21" />
+                    </svg>
+                    Choose Image
+                </button>
+                <div class="mp-preview-wrap" id="productImagePreview">
+                    @if(!empty($product->image ?? null))
+                    <img src="{{ $product->image_url ?? $product->image }}" alt="">
+                    <button type="button" class="mp-preview-remove" onclick="MediaPickerField.clearSingle(this)">&times;</button>
+                    @endif
+                </div>
             </div>
         </section>
 
@@ -151,8 +163,16 @@
                 <h3>Gallery</h3>
             </div>
             <div class="inside">
-                <p class="admin-field-desc">One URL per line</p>
-                <textarea name="gallery" style="width:100%; min-height:80px; font-size:12px;" placeholder="https://...">{{ old('gallery', isset($product) ? implode(PHP_EOL, $product->gallery ?? []) : '') }}</textarea>
+                <button type="button" class="mp-choose-btn" id="chooseGalleryImages">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <circle cx="8.5" cy="8.5" r="1.5" />
+                        <polyline points="21 15 16 10 5 21" />
+                    </svg>
+                    Add Images
+                </button>
+                <textarea name="gallery" id="galleryInput" style="display:none;">{{ old('gallery', isset($product) ? implode(PHP_EOL, $product->gallery ?? []) : '') }}</textarea>
+                <div class="mp-gallery-grid" id="galleryGrid"></div>
             </div>
         </section>
 
@@ -169,16 +189,60 @@
     </div>
 </div>
 
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+@push('scripts')
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 <script>
-    tinymce.init({
-        selector: '.wysiwyg-editor',
-        height: 300,
-        menubar: false,
-        plugins: 'lists link image code table',
-        toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image | code',
-        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; }',
-        branding: false,
-        promotion: false,
-    });
+    (function() {
+        // Quill editor for description
+        const descEditor = new Quill('#product_description_editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{
+                        header: [2, 3, 4, false]
+                    }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{
+                        list: 'ordered'
+                    }, {
+                        list: 'bullet'
+                    }],
+                    ['blockquote', 'link', 'image'],
+                    ['clean'],
+                ],
+            },
+            placeholder: 'Write product description...',
+        });
+        descEditor.root.innerHTML = @json(old('description', $product - > description ?? ''));
+
+        // Sync Quill → hidden input on form submit
+        descEditor.root.closest('form').addEventListener('submit', function() {
+            document.getElementById('product_description_input').value = descEditor.root.innerHTML;
+        });
+
+        // Image handler: open media picker instead of default Quill image
+        descEditor.getModule('toolbar').addHandler('image', function() {
+            MediaPicker.open(function(media) {
+                const range = descEditor.getSelection(true);
+                descEditor.insertEmbed(range.index, 'image', media.url);
+                descEditor.setSelection(range.index + 1);
+            });
+        });
+
+        // Media picker for product image
+        MediaPickerField.bindSingle(
+            document.getElementById('chooseProductImage'),
+            document.getElementById('productImageInput'),
+            document.getElementById('productImagePreview')
+        );
+
+        // Media picker for gallery
+        MediaPickerField.bindGallery(
+            document.getElementById('chooseGalleryImages'),
+            document.getElementById('galleryInput'),
+            document.getElementById('galleryGrid')
+        );
+    })();
 </script>
+@endpush

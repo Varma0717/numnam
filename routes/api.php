@@ -47,6 +47,8 @@ Route::prefix('v1')->group(function () {
             Route::middleware('jwt.auth')->group(function () {
                 Route::get('me', [MobileAuthController::class, 'me']);
                 Route::patch('me', [MobileAuthController::class, 'updateProfile']);
+                Route::post('me/avatar', [MobileAuthController::class, 'uploadAvatar']);
+                Route::post('me/password', [MobileAuthController::class, 'changePassword']);
                 Route::post('refresh', [MobileAuthController::class, 'refresh']);
             });
         });
