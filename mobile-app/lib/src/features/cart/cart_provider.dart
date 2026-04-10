@@ -7,6 +7,7 @@ class CartProvider extends ChangeNotifier {
   final ApiClient _api;
   CartResponse _cart = CartResponse.empty;
   bool _loading = false;
+  bool _fetching = false;
 
   CartProvider(this._api);
 
@@ -16,6 +17,8 @@ class CartProvider extends ChangeNotifier {
   bool get isEmpty => _cart.items.isEmpty;
 
   Future<void> loadCart() async {
+    if (_fetching) return; // prevent concurrent loads
+    _fetching = true;
     _loading = true;
     notifyListeners();
     try {
@@ -26,6 +29,7 @@ class CartProvider extends ChangeNotifier {
       // keep current state
     }
     _loading = false;
+    _fetching = false;
     notifyListeners();
   }
 
