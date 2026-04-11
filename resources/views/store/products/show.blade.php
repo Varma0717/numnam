@@ -51,7 +51,7 @@ $mainPlaceholder = $gallery->isNotEmpty() ? $gallery->first() : $fallbackPlaceho
                 <button type="button" class="product-thumb {{ $i === 0 ? 'active' : '' }} overflow-hidden rounded-xl border-2 bg-white shadow-sm transition-all duration-200 hover:border-numnam-400 focus:outline-none"
                     data-img="{{ $photo }}"
                     aria-label="{{ $product->name }} image {{ $i + 1 }}"
-                    style="{{ $i === 0 ? 'border-color:#fe7d94;' : 'border-color:#e2e8f0;' }}">
+                    :style="{ borderColor: {{ $i === 0 ? '#fe7d94' : '#e2e8f0' }} }">
                     <img src="{{ $photo }}" alt="{{ $product->name }} view {{ $i + 1 }}" loading="{{ $i < 3 ? 'eager' : 'lazy' }}" style="width:100%;aspect-ratio:1/1;object-fit:contain;padding:4px;">
                 </button>
                 @endforeach
