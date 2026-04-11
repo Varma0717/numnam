@@ -30,7 +30,7 @@
 
 {{-- Article Content --}}
 <section class="section pb-8">
-    <div class="mx-auto max-w-3xl">
+    <div class="mx-auto w-full">
         <div class="rounded-3xl border border-slate-200 bg-white px-7 py-8 shadow-sm sm:px-10 sm:py-10 lg:px-12 lg:py-12">
             <div class="prose prose-slate max-w-none prose-headings:font-extrabold prose-headings:tracking-tight prose-a:text-numnam-700 prose-img:rounded-2xl">
                 {!! $blog->content !!}

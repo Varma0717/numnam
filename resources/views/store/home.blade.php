@@ -112,7 +112,7 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
         <div class="mb-6 flex items-end justify-between">
             <div>
                 <h2 class="font-heading text-3xl font-bold sm:text-4xl" style="color:#fff;">Best Sellers</h2>
-                <p class="mt-2 text-base" style="color:#5e6478;">The products families reorder most.</p>
+                <p class="mt-2 text-base" style="color:#fff;">The products families reorder most.</p>
             </div>
             <a href="{{ route('store.products') }}" class="hidden rounded-full border-2 px-4 py-2 font-heading text-sm font-bold transition-colors duration-200 hover:bg-[#FFF0F5] sm:inline-flex" style="color:#fff; border-color:#fff;">See all &rarr;</a>
         </div>

@@ -75,7 +75,7 @@ class BlogManagementController extends Controller
             'meta_description' => 'nullable|string|max:500',
         ]);
 
-        $data['slug'] = $data['slug'] ?: Str::slug($data['title']);
+        $data['slug'] = $data['slug'] ?: ($blog->slug ?: Str::slug($data['title']));
 
         if ($data['status'] === 'published' && !$blog->published_at) {
             $data['published_at'] = now();

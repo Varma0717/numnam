@@ -14,7 +14,7 @@ class BlogManagerController extends Controller
     public function index(Request $request): JsonResponse
     {
         $blogs = Blog::with(['category', 'author'])
-            ->when($request->filled('status'), fn ($q) => $q->where('status', $request->string('status')))
+            ->when($request->filled('status'), fn($q) => $q->where('status', $request->string('status')))
             ->orderByDesc('updated_at')
             ->paginate((int) $request->input('per_page', 20));
 
@@ -79,7 +79,7 @@ class BlogManagerController extends Controller
         ]);
 
         if (isset($validated['title']) && empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($validated['title']);
+            $validated['slug'] = $blog->slug ?: Str::slug($validated['title']);
         }
 
         $blog->update($validated);
