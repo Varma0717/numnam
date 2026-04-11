@@ -15,7 +15,7 @@
 </section>
 
 <section class="section pb-10">
-    <div class="accordion mx-auto max-w-3xl space-y-3">
+    <div class="accordion mx-auto space-y-3">
         @foreach($faqs as $i => $faq)
         <div class="accordion-item{{ $i === 0 ? ' open' : '' }} overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <button type="button" class="accordion-trigger flex w-full items-center justify-between px-5 py-4 text-left text-sm font-semibold text-slate-900 transition hover:bg-slate-50" aria-expanded="{{ $i === 0 ? 'true' : 'false' }}">
@@ -24,7 +24,7 @@
                     <polyline points="6 9 12 15 18 9" />
                 </svg>
             </button>
-            <div class="accordion-panel" @if($i===0) style="max-height:200px" @endif>
+            <div class="accordion-panel" @if($i===0) style="max-height:none" @endif>
                 <div class="accordion-panel-inner border-t border-slate-100 px-5 py-4 text-sm leading-relaxed text-slate-600">{{ $faq['a'] }}</div>
             </div>
         </div>

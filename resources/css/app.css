@@ -39,7 +39,7 @@
     }
 
     .page {
-        @apply mx-auto w-[90%] max-w-[80%] px-4 pb-16 pt-6 sm:px-6 lg:px-8;
+        @apply mx-auto w-[80%] px-4 pb-16 pt-6 sm:px-6 lg:px-8;
     }
 
     /* ── Site Header ──────────────────────────────────── */
@@ -326,6 +326,29 @@
 
     .store-home main.page {
         @apply max-w-none p-0;
+    }
+
+    /* ── Accordion ────────────────────────────────── */
+    .accordion-panel {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .accordion-item.open .accordion-panel {
+        max-height: 500px;
+    }
+
+    .accordion-trigger svg {
+        transition: transform 0.25s ease;
+    }
+
+    .accordion-item.open .accordion-trigger svg {
+        transform: rotate(180deg);
+    }
+
+    .accordion-item.open .accordion-trigger {
+        @apply bg-slate-50 text-numnam-700;
     }
 
     /* ── Card ─────────────────────────────────────── */
