@@ -40,7 +40,7 @@ asset('assets/images/Purees/berry%20swush%201.png'),
             @foreach($items as $item)
             @php
             $placeholderImage = $productPlaceholders[$item['product']->id % count($productPlaceholders)];
-            $lineImage = $item['product']->image ?: $placeholderImage;
+            $lineImage = $item['product']->image_url ?: $placeholderImage;
             @endphp
             <article class="flex flex-col gap-4 border-b border-slate-200 px-2 py-4 last:border-b-0 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex items-start gap-4">

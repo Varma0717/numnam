@@ -63,7 +63,7 @@ $categoryImage = $category->image ?: $productPlaceholders[$category->id % count(
 
         <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             @forelse($products as $product)
-            @php($placeholderImage = $product->image ?: $productPlaceholders[$loop->index % count($productPlaceholders)])
+            @php($placeholderImage = $product->image_url ?: $productPlaceholders[$loop->index % count($productPlaceholders)])
             <article class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
                 <div class="aspect-[4/3] bg-slate-100" style="background-image:url('{{ $placeholderImage }}'); background-size:cover; background-position:center;"></div>
                 <div class="p-5">

@@ -121,7 +121,7 @@ asset('assets/images/Purees/mangy%20chewy%201.png'),
         <div style="position:relative;">
             <div class="product-slider-track" id="productSlider" style="display:flex; gap:16px; overflow-x:auto; scroll-behavior:smooth; padding-bottom:16px; scrollbar-width:none; -ms-overflow-style:none; scroll-snap-type:x mandatory;">
                 @foreach($bestSellerProducts as $product)
-                @php($prodImage = $product->image ? asset($product->image) : $productPlaceholders[$loop->index % count($productPlaceholders)])
+                @php($prodImage = $product->image_url ?: $productPlaceholders[$loop->index % count($productPlaceholders)])
                 @php($prodColors = [['bg' => '#FFF0F5', 'border' => '#FF6B8A'], ['bg' => '#ECFFF4', 'border' => '#4ECDC4'], ['bg' => '#FFFBF0', 'border' => '#FFD93D'], ['bg' => '#F5F0FF', 'border' => '#9B8EC4']])
                 @php($pc = $prodColors[$loop->index % 4])
                 <a href="{{ route('store.product.show', $product->slug) }}"

@@ -28,7 +28,7 @@ class FrontendController extends Controller
             ->orderBy('title')
             ->paginate((int) $request->input('per_page', 20));
 
-        $payload = $pages->through(fn (Page $page) => $this->transformPageSummary($page));
+        $payload = $pages->through(fn(Page $page) => $this->transformPageSummary($page));
 
         return response()->json([
             'success' => true,
@@ -45,7 +45,7 @@ class FrontendController extends Controller
         $page = Page::query()
             ->where('slug', $slug)
             ->where('status', 'published')
-            ->with(['sections' => fn ($query) => $query->where('is_active', true)->orderBy('position')])
+            ->with(['sections' => fn($query) => $query->where('is_active', true)->orderBy('position')])
             ->firstOrFail();
 
         return response()->json([
@@ -66,7 +66,7 @@ class FrontendController extends Controller
                     ->orWhere('slug', 'home');
             })
             ->where('status', 'published')
-            ->with(['sections' => fn ($query) => $query->where('is_active', true)->orderBy('position')])
+            ->with(['sections' => fn($query) => $query->where('is_active', true)->orderBy('position')])
             ->first();
 
         if (!$homepage) {
@@ -90,11 +90,11 @@ class FrontendController extends Controller
 
         $menus = Menu::query()
             ->where('is_active', true)
-            ->when($request->filled('location'), fn (Builder $query) => $query->where('location', $request->string('location')))
+            ->when($request->filled('location'), fn(Builder $query) => $query->where('location', $request->string('location')))
             ->with([
-                'items' => fn ($query) => $query->where('is_active', true)->with([
+                'items' => fn($query) => $query->where('is_active', true)->with([
                     'page:id,slug,title',
-                    'children' => fn ($children) => $children->where('is_active', true)->with('page:id,slug,title')->orderBy('position'),
+                    'children' => fn($children) => $children->where('is_active', true)->with('page:id,slug,title')->orderBy('position'),
                 ])->orderBy('position'),
             ])
             ->orderBy('name')
@@ -102,11 +102,11 @@ class FrontendController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $menus->map(fn (Menu $menu) => [
+            'data' => $menus->map(fn(Menu $menu) => [
                 'id' => $menu->id,
                 'name' => $menu->name,
                 'location' => $menu->location,
-                'items' => $menu->items->map(fn ($item) => $this->transformMenuItem($item))->values(),
+                'items' => $menu->items->map(fn($item) => $this->transformMenuItem($item))->values(),
             ])->values(),
         ]);
     }
@@ -140,8 +140,8 @@ class FrontendController extends Controller
                 'description' => $product->description,
                 'ingredients' => $product->ingredients,
                 'images' => [
-                    'featured' => $product->image,
-                    'gallery' => $product->gallery ?? [],
+                    'featured' => $product->image_url,
+                    'gallery' => $product->gallery_urls,
                 ],
                 'nutrition_info' => $product->nutrition_info ?? $product->nutrition_facts,
                 'pricing' => [
@@ -171,7 +171,7 @@ class FrontendController extends Controller
         $page = Page::query()
             ->where('slug', $slug)
             ->where('status', 'published')
-            ->with(['sections' => fn ($query) => $query->where('is_active', true)->orderBy('position')])
+            ->with(['sections' => fn($query) => $query->where('is_active', true)->orderBy('position')])
             ->first();
 
         if (!$page && $slug === 'home') {
@@ -181,14 +181,14 @@ class FrontendController extends Controller
                         ->orWhere('slug', 'home');
                 })
                 ->where('status', 'published')
-                ->with(['sections' => fn ($query) => $query->where('is_active', true)->orderBy('position')])
+                ->with(['sections' => fn($query) => $query->where('is_active', true)->orderBy('position')])
                 ->first();
         }
 
         $menus = Menu::query()
             ->where('is_active', true)
             ->with([
-                'items' => fn ($query) => $query->where('is_active', true)->with('children')->orderBy('position'),
+                'items' => fn($query) => $query->where('is_active', true)->with('children')->orderBy('position'),
             ])
             ->orderBy('name')
             ->get();
@@ -203,11 +203,11 @@ class FrontendController extends Controller
             'success' => true,
             'data' => [
                 'page' => $page ? $this->assemblePagePayload($page) : null,
-                'menus' => $menus->map(fn (Menu $menu) => [
+                'menus' => $menus->map(fn(Menu $menu) => [
                     'id' => $menu->id,
                     'name' => $menu->name,
                     'location' => $menu->location,
-                    'items' => $menu->items->map(fn ($item) => $this->transformMenuItem($item))->values(),
+                    'items' => $menu->items->map(fn($item) => $this->transformMenuItem($item))->values(),
                 ])->values(),
                 'products' => $products,
             ],
@@ -279,7 +279,7 @@ class FrontendController extends Controller
             'url' => $itemUrl,
             'target' => $item->target,
             'css_class' => $item->css_class,
-            'children' => $item->children->map(fn ($child) => $this->transformMenuItem($child))->values(),
+            'children' => $item->children->map(fn($child) => $this->transformMenuItem($child))->values(),
         ];
     }
 

@@ -180,7 +180,7 @@ class StorefrontController extends Controller
             ->take(4)
             ->get();
 
-        $gallery = collect($product->gallery ?: [])->filter()->values();
+        $gallery = collect($product->gallery_urls ?: [])->filter()->values();
 
         // If no gallery in DB, scan the product image directory on disk
         if ($gallery->isEmpty()) {

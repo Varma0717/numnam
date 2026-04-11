@@ -97,10 +97,10 @@ asset('assets/images/Purees/berry%20swush%202.png'),
 
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         @forelse($products as $product)
-        @php($placeholderImage = $productPlaceholders[$loop->index % count($productPlaceholders)])
+        @php($productImage = $product->image_url ?: $productPlaceholders[$loop->index % count($productPlaceholders)])
         <article class="group overflow-hidden rounded-[2rem] border-3 bg-white transition-transform duration-200 hover:-translate-y-1" style="border-color:#FFD6E5;">
             <a href="{{ route('store.product.show', $product) }}" class="block">
-                <div class="relative aspect-[4/3] overflow-hidden bg-slate-100" style="background-image:url('{{ $placeholderImage }}'); background-size:cover; background-position:center;">
+                <div class="relative aspect-[4/3] overflow-hidden bg-slate-100" style="background-image:url('{{ $productImage }}'); background-size:cover; background-position:center;">
                     @if($product->sale_price)
                     <span class="absolute left-3 top-3 inline-flex rounded-full bg-rose-500 px-2.5 py-1 text-xs font-semibold text-white">-{{ round((1 - $product->sale_price / $product->price) * 100) }}%</span>
                     @endif
