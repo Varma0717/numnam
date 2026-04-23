@@ -143,33 +143,204 @@ $mainPlaceholder = $gallery->isNotEmpty() ? $gallery->first() : $fallbackPlaceho
     <img src="" alt="Product zoom">
 </div>
 
-{{-- Tabbed Content: Ingredients / Nutrition / Story --}}
+{{-- ═══════════════════════════════════════════════
+    PRODUCT DETAIL TABS
+    Tabs: Ingredients · Nutrition Facts · Benefits · Storage & Shelf Life · Safety Notes
+═══════════════════════════════════════════════ --}}
 <section class="section fade-in-up">
-    <nav class="product-tab-nav flex flex-wrap gap-2" role="tablist">
-        <button class="product-tab active inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700" role="tab" aria-selected="true" aria-controls="tab-ingredients" data-tab="tab-ingredients">Ingredients</button>
-        <button class="product-tab inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700" role="tab" aria-selected="false" aria-controls="tab-nutrition" data-tab="tab-nutrition">Nutrition Facts</button>
-        <button class="product-tab inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700" role="tab" aria-selected="false" aria-controls="tab-story" data-tab="tab-story">Product Story</button>
+
+    {{-- Tab nav --}}
+    <nav class="product-tab-nav nn-tab-nav flex flex-wrap gap-2" role="tablist">
+        @php
+        $tabs = [
+        ['id'=>'tab-ingredients', 'label'=>'Ingredients'],
+        ['id'=>'tab-nutrition', 'label'=>'Nutrition Facts'],
+        ['id'=>'tab-benefits', 'label'=>'Benefits'],
+        ['id'=>'tab-storage', 'label'=>'Storage &amp; Shelf Life'],
+        ['id'=>'tab-safety', 'label'=>'Safety Notes'],
+        ];
+        @endphp
+        @foreach($tabs as $t)
+        <button class="product-tab nn-tab {{ $loop->first ? 'active' : '' }} inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200"
+            role="tab"
+            aria-selected="{{ $loop->first ? 'true' : 'false' }}"
+            aria-controls="{{ $t['id'] }}"
+            data-tab="{{ $t['id'] }}">
+            {{ $t['label'] }}
+        </button>
+        @endforeach
     </nav>
-    <div class="product-tab-panels mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div class="product-tab-panel active text-sm leading-relaxed text-slate-600" id="tab-ingredients" role="tabpanel">
-            <p>{{ $product->ingredients ?: 'Ingredient details will be updated soon.' }}</p>
-        </div>
-        <div class="product-tab-panel text-sm leading-relaxed text-slate-600" id="tab-nutrition" role="tabpanel">
-            @php($nutrition = $product->nutrition_facts ?: $product->nutrition_info)
-            @if(is_array($nutrition) && !empty($nutrition))
-            <ul class="nutrition-list">
-                @foreach($nutrition as $key => $value)
-                <li><span class="nutrition-key">{{ is_string($key) ? ucfirst(str_replace('_', ' ', $key)) : 'Nutrient' }}</span> <span class="nutrition-val">{{ is_scalar($value) ? $value : json_encode($value) }}</span></li>
+
+    {{-- Tab panels --}}
+    <div class="nn-tab-panels mt-5 rounded-2xl border bg-white p-6 sm:p-8" style="border-color:#e8e9f0; box-shadow:0 2px 16px rgba(0,0,0,0.04);">
+
+        {{-- 1. Ingredients --}}
+        <div class="product-tab-panel active" id="tab-ingredients" role="tabpanel">
+            <h3 class="font-heading font-extrabold" style="font-size:1rem; color:#2D2D3F;">Ingredients</h3>
+            <p class="mt-3 text-sm leading-relaxed" style="color:#5e6478;">
+                {{ $product->ingredients ?: 'Ingredient details will be updated soon.' }}
+            </p>
+            @if($product->type === 'puree')
+            <div class="mt-5 flex flex-wrap gap-2">
+                @foreach(['No Preservatives','No Added Sugar','No Added Salt','Vegetable-Forward'] as $badge)
+                <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold"
+                    style="border-color:#4ECDC430; background:#F0FFF9; color:#2D2D3F;">✓ {{ $badge }}</span>
                 @endforeach
-            </ul>
-            @else
-            <p class="text-sm text-slate-600">Detailed nutrition values are coming soon.</p>
+            </div>
+            @elseif($product->type === 'puffs')
+            <div class="mt-5 flex flex-wrap gap-2">
+                @foreach(['No Preservatives','No Additives','No MSG','Pea Protein','Super Grain Blend'] as $badge)
+                <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold"
+                    style="border-color:#FFB34730; background:#FFF8F0; color:#2D2D3F;">✓ {{ $badge }}</span>
+                @endforeach
+            </div>
             @endif
         </div>
-        <div class="product-tab-panel text-sm leading-relaxed text-slate-600" id="tab-story" role="tabpanel">
-            <p>{{ $product->description }}</p>
+
+        {{-- 2. Nutrition Facts --}}
+        <div class="product-tab-panel" id="tab-nutrition" role="tabpanel">
+            <h3 class="font-heading font-extrabold" style="font-size:1rem; color:#2D2D3F;">Nutrition Facts</h3>
+            @php($nutrition = $product->nutrition_facts ?: $product->nutrition_info)
+            @if(is_array($nutrition) && !empty($nutrition))
+            <div class="mt-4 overflow-hidden rounded-xl border" style="border-color:#e8e9f0;">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr style="background:#F8F8FB;">
+                            <th class="px-4 py-3 text-left font-heading font-bold" style="color:#2D2D3F; width:55%;">Nutrient</th>
+                            <th class="px-4 py-3 text-right font-heading font-bold" style="color:#2D2D3F;">Per 100g</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($nutrition as $key => $value)
+                        <tr class="border-t" style="border-color:#f0f0f4;">
+                            <td class="px-4 py-2.5 text-sm font-semibold" style="color:#2D2D3F;">
+                                {{ is_string($key) ? ucfirst(str_replace('_',' ',$key)) : 'Nutrient' }}
+                            </td>
+                            <td class="px-4 py-2.5 text-right text-sm" style="color:#5e6478;">
+                                {{ is_scalar($value) ? $value : json_encode($value) }}
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            @else
+            <p class="mt-3 text-sm" style="color:#5e6478;">Detailed nutrition values are coming soon.</p>
+            @endif
         </div>
-    </div>
+
+        {{-- 3. Benefits --}}
+        <div class="product-tab-panel" id="tab-benefits" role="tabpanel">
+            <h3 class="font-heading font-extrabold" style="font-size:1rem; color:#2D2D3F;">Why it's good for your child</h3>
+            @if($product->type === 'puree')
+            <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                @foreach([
+                ['🥦','Vegetable-Forward','30–40% vegetable content in selected variants introduces kids to healthy flavours early'],
+                ['🍼','Easy Early Feeding','Smooth texture designed for babies from 6 months beginning their food journey'],
+                ['✈️','Home or Travel','Convenient pouch format makes feeding easy at home, on outings or while travelling'],
+                ['🚫','No Preservatives','No artificial additives — just real fruit and vegetable blends'],
+                ['🍬','No Added Sugar','Naturally occurring sugars only — supports healthy sugar tolerance'],
+                ['🧂','No Added Salt','Protects developing kidneys and builds healthy taste preferences'],
+                ] as [$emoji,$title,$desc])
+                <div class="flex items-start gap-3 rounded-xl border p-4" style="border-color:#4ECDC420; background:#F0FFF9;">
+                    <span class="mt-0.5 text-xl">{{ $emoji }}</span>
+                    <div>
+                        <p class="font-heading font-bold text-sm" style="color:#2D2D3F;">{{ $title }}</p>
+                        <p class="mt-0.5 text-xs leading-relaxed" style="color:#5e6478;">{{ $desc }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            @elseif($product->type === 'puffs')
+            <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                @foreach([
+                ['🤏','Self-Feeding Skills','Easy-to-hold shape supports pincer grip development and independent eating'],
+                ['🌾','Super Grain Blend','Sprouted Ragi, Jowar, Rice and Corn provide carbohydrates and natural fibre'],
+                ['🫘','Pea Protein','Plant-based protein to support growing muscles'],
+                ['🥕','Real Veggie Powders','Carrot, sweet potato, spinach, pumpkin and more — real vegetables in every bite'],
+                ['🚫','No Preservatives','No artificial additives, no MSG, no flavour enhancers'],
+                ['🎯','Balanced Macros','Designed with carbohydrates, proteins, fats and vegetables for balanced snacking'],
+                ] as [$emoji,$title,$desc])
+                <div class="flex items-start gap-3 rounded-xl border p-4" style="border-color:#FFB34730; background:#FFF8F0;">
+                    <span class="mt-0.5 text-xl">{{ $emoji }}</span>
+                    <div>
+                        <p class="font-heading font-bold text-sm" style="color:#2D2D3F;">{{ $title }}</p>
+                        <p class="mt-0.5 text-xs leading-relaxed" style="color:#5e6478;">{{ $desc }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            @else
+            <p class="mt-3 text-sm" style="color:#5e6478;">{{ $product->description ?: 'Benefits information coming soon.' }}</p>
+            @endif
+        </div>
+
+        {{-- 4. Storage & Shelf Life --}}
+        <div class="product-tab-panel" id="tab-storage" role="tabpanel">
+            <h3 class="font-heading font-extrabold" style="font-size:1rem; color:#2D2D3F;">Storage &amp; Shelf Life</h3>
+            @if($product->type === 'puree')
+            <div class="mt-4 space-y-3">
+                @foreach([
+                ['📦','Unopened','Store in a cool, dry place away from direct sunlight. Do not refrigerate before opening.'],
+                ['🥶','After Opening','Once opened, consume immediately or refrigerate and use within 24 hours.'],
+                ['🌡️','Temperature','Avoid storing above 30°C. Do not freeze.'],
+                ['📅','Shelf Life','Check the best-before date printed on the pouch.'],
+                ] as [$emoji,$label,$info])
+                <div class="flex items-start gap-3 rounded-xl border bg-white p-4" style="border-color:#e8e9f0;">
+                    <span class="text-lg">{{ $emoji }}</span>
+                    <div>
+                        <p class="font-heading font-bold text-sm" style="color:#2D2D3F;">{{ $label }}</p>
+                        <p class="mt-0.5 text-xs leading-relaxed" style="color:#5e6478;">{{ $info }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            @elseif($product->type === 'puffs')
+            <div class="mt-4 space-y-3">
+                @foreach([
+                ['📦','Unopened','Store in a cool, dry place. Keep away from moisture and direct sunlight.'],
+                ['🔒','After Opening','Reseal the bag tightly after each use. Best consumed within 2–3 days of opening.'],
+                ['🌡️','Temperature','Do not store in humid environments. Avoid temperatures above 30°C.'],
+                ['📅','Shelf Life','Check the best-before date printed on the pack.'],
+                ] as [$emoji,$label,$info])
+                <div class="flex items-start gap-3 rounded-xl border bg-white p-4" style="border-color:#e8e9f0;">
+                    <span class="text-lg">{{ $emoji }}</span>
+                    <div>
+                        <p class="font-heading font-bold text-sm" style="color:#2D2D3F;">{{ $label }}</p>
+                        <p class="mt-0.5 text-xs leading-relaxed" style="color:#5e6478;">{{ $info }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            @else
+            <p class="mt-3 text-sm" style="color:#5e6478;">Storage information coming soon.</p>
+            @endif
+        </div>
+
+        {{-- 5. Safety Notes --}}
+        <div class="product-tab-panel" id="tab-safety" role="tabpanel">
+            <h3 class="font-heading font-extrabold" style="font-size:1rem; color:#2D2D3F;">Safety Notes for Parents</h3>
+            <div class="mt-4 space-y-3">
+                @foreach([
+                ['👶','Age Suitability', $product->age_group ? 'This product is suitable for ' . $product->age_group . '.' : 'Please refer to the packaging for age suitability information.'],
+                ['👀','Supervision Required','Always supervise your child while eating, especially for babies who are new to solids or self-feeding.'],
+                ['🌡️','Serve at Right Temperature','For purees, warm gently and always check temperature before serving. Never microwave in the pouch.'],
+                ['⚠️','Allergen Awareness','Please check the full ingredient list on the pack for allergen information before serving.'],
+                ['🩺','Consult Your Paediatrician','If your child has any known allergies, medical conditions, or specific dietary needs, consult your doctor before introducing new foods.'],
+                ['🧹','Hygiene','Always wash hands before preparing or serving food to your child.'],
+                ] as [$emoji,$label,$info])
+                <div class="flex items-start gap-3 rounded-xl border bg-white p-4" style="border-color:#e8e9f0;">
+                    <span class="text-lg">{{ $emoji }}</span>
+                    <div>
+                        <p class="font-heading font-bold text-sm" style="color:#2D2D3F;">{{ $label }}</p>
+                        <p class="mt-0.5 text-xs leading-relaxed" style="color:#5e6478;">{{ $info }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+
+    </div><!-- /nn-tab-panels -->
 </section>
 
 {{-- Customer Reviews Section --}}

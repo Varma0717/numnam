@@ -6,7 +6,7 @@
 
     html,
     body {
-        font-family: 'Nunito', 'Comic Neue', sans-serif;
+        font-family: 'Inter', sans-serif;
     }
 
     h1,
@@ -15,7 +15,7 @@
     h4,
     h5,
     h6 {
-        font-family: 'Comic Neue', cursive, sans-serif;
+        font-family: 'Poppins', sans-serif;
     }
 }
 
@@ -325,7 +325,7 @@
     }
 
     .store-home main.page {
-        @apply max-w-none p-0;
+        @apply max-w-none w-full p-0;
     }
 
     /* ── Accordion ────────────────────────────────── */
@@ -370,8 +370,8 @@
     .btn-ghost,
     .btn-soft {
         @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm transition-all duration-200;
-        font-family: 'Comic Neue', cursive, sans-serif;
-        font-weight: 700;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
     }
 
     .cta-btn,
@@ -525,7 +525,7 @@
         font-size: 1.5rem;
         font-weight: 700;
         color: #ffffff;
-        font-family: 'Comic Neue', cursive, sans-serif;
+        font-family: 'Poppins', sans-serif;
     }
 
     .newsletter-copy p {
@@ -596,7 +596,7 @@
 
     .footer-col strong {
         @apply mb-1 text-sm font-bold uppercase tracking-wide text-white;
-        font-family: 'Comic Neue', cursive, sans-serif;
+        font-family: 'Inter', sans-serif;
     }
 
     .footer-col a {
@@ -772,7 +772,7 @@
         @apply inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-numnam-300;
         background: #FF6B8A;
         box-shadow: 0 4px 0 #dd3259;
-        font-family: 'Comic Neue', cursive, sans-serif;
+        font-family: 'Inter', sans-serif;
     }
 
     .hero-cta:hover {
@@ -874,7 +874,7 @@
     .inner-banner-title {
         @apply text-2xl font-extrabold tracking-tight sm:text-3xl;
         color: #2D2D3F;
-        font-family: 'Comic Neue', cursive, sans-serif;
+        font-family: 'Poppins', sans-serif;
     }
 
     /* ── Social Proof ─────────────────────────────── */
@@ -1010,10 +1010,54 @@
     }
 
     .product-tab.active {
-        background: #FF6B8A !important;
+        background: #DD3259 !important;
         color: #ffffff !important;
-        border-color: #FF6B8A !important;
-        box-shadow: 0 3px 0 #dd3259;
+        border-color: #DD3259 !important;
+        box-shadow: 0 3px 0 #9e1e38;
+    }
+
+    /* ── Premium product tab button ────────────────── */
+    .nn-tab {
+        background: #fff;
+        border-color: #e8e9f0;
+        color: #5e6478;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        transition: all 0.18s ease;
+    }
+
+    .nn-tab:hover:not(.active) {
+        border-color: #DD3259;
+        color: #DD3259;
+        background: #FFF0F5;
+    }
+
+    /* ── Fade-in animation (homepage) ──────────────── */
+    .nn-fade-in {
+        animation: nnFadeUp 0.65s ease both;
+    }
+
+    @keyframes nnFadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(18px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ── Trust strip scrolling ──────────────────────── */
+    .nn-trust-strip {
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .nn-trust-strip::-webkit-scrollbar {
+        display: none;
     }
 
     /* ── Bird Mascot (mouse-tracking — desktop only) ── */
@@ -1115,10 +1159,10 @@
     }
 
     .hero-slide-copy h1 {
-        font-family: 'Comic Neue', cursive;
+        font-family: 'Poppins', sans-serif;
         font-weight: 700;
         font-size: 1.75rem;
-        line-height: 1.2;
+        line-height: 1.1;
         color: #fff;
     }
 
@@ -1159,8 +1203,8 @@
         border: 2px solid rgba(255, 255, 255, 0.6);
         background: transparent;
         color: #fff;
-        font-family: 'Comic Neue', cursive;
-        font-weight: 700;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
         font-size: 0.875rem;
         transition: all 0.2s;
     }

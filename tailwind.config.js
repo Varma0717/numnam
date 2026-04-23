@@ -7,9 +7,9 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['"Comic Neue"', 'cursive', 'sans-serif'],
-                heading: ['"Comic Neue"', 'cursive', 'sans-serif'],
-                body: ['Nunito', 'sans-serif'],
+                sans: ['Inter', 'sans-serif'],
+                heading: ['Poppins', 'sans-serif'],
+                body: ['Inter', 'sans-serif'],
             },
             colors: {
                 numnam: {

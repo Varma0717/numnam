@@ -15,10 +15,10 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-
+/new_req
 # Logs
 /storage/logs/*.log
-
+/.htaccess
 # Cache (auto-regenerated)
 /bootstrap/cache/packages.php
 /bootstrap/cache/services.php

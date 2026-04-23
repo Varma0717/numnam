@@ -6,12 +6,16 @@
 (function () {
     'use strict';
 
+    var _base = (function () {
+        var m = document.querySelector('meta[name="asset-base"]');
+        return m ? m.getAttribute('content') : '';
+    }());
     var VIEW_SRC = {
-        sideLeft: '/assets/images/mascot-bird/side_left_view.svg',
-        sideRight: '/assets/images/mascot-bird/side_right_view.svg',
-        front: '/assets/images/mascot-bird/front_view.svg',
-        back: '/assets/images/mascot-bird/back_view.svg',
-        threeQuarter: '/assets/images/mascot-bird/3by4th_view.svg'
+        sideLeft: _base + '/assets/images/mascot-bird/side_left_view.svg',
+        sideRight: _base + '/assets/images/mascot-bird/side_right_view.svg',
+        front: _base + '/assets/images/mascot-bird/front_view.svg',
+        back: _base + '/assets/images/mascot-bird/back_view.svg',
+        threeQuarter: _base + '/assets/images/mascot-bird/3by4th_view.svg'
     };
 
     function preloadViews() {

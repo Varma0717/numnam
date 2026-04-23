@@ -2,18 +2,18 @@
     "name": "NumNam",
     "short_name": "NumNam",
     "description": "Doctor-founded baby nutrition and clean-label foods for growing families.",
-    "start_url": "/",
+    "start_url": "./",
     "display": "standalone",
     "background_color": "#fffdfa",
     "theme_color": "#195b48",
     "icons": [
         {
-            "src": "/assets/images/favicon.png",
+            "src": "assets/images/favicon.png",
             "sizes": "32x32",
             "type": "image/png"
         },
         {
-            "src": "/assets/images/Logo/TM.png",
+            "src": "assets/images/Logo/TM.png",
             "sizes": "192x192",
             "type": "image/png"
         }
