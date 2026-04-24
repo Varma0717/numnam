@@ -409,50 +409,7 @@ $mainPlaceholder = $gallery->isNotEmpty() ? $gallery->first() : $fallbackPlaceho
     <h2 class="text-2xl font-semibold tracking-tight text-slate-900">You May Also Like</h2>
     <div class="mt-5 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         @foreach($related as $item)
-        @php($relatedPlaceholder = $fallbackPlaceholders[$loop->index % count($fallbackPlaceholders)])
-
-        @section('scripts')
-        <script>
-            (function() {
-                var mainImg = document.getElementById('mainProductImage');
-                if (!mainImg) return;
-                var thumbs = document.querySelectorAll('.product-thumb[data-img]');
-                thumbs.forEach(function(btn) {
-                    btn.addEventListener('click', function() {
-                        thumbs.forEach(function(b) {
-                            b.style.borderColor = '#e2e8f0';
-                            b.classList.remove('active');
-                        });
-                        btn.style.borderColor = '#fe7d94';
-                        btn.classList.add('active');
-                        mainImg.style.opacity = '0';
-                        setTimeout(function() {
-                            mainImg.src = btn.dataset.img;
-                            mainImg.style.opacity = '1';
-                        }, 120);
-                    });
-                });
-
-                // Click main image to open lightbox
-                var lightbox = document.getElementById('productLightbox');
-                var lightboxImg = lightbox ? lightbox.querySelector('img') : null;
-                if (lightbox && lightboxImg) {
-                    mainImg.style.cursor = 'zoom-in';
-                    mainImg.addEventListener('click', function() {
-                        lightboxImg.src = mainImg.src;
-                        lightbox.hidden = false;
-                    });
-                    var closeBtn = lightbox.querySelector('.lightbox-close');
-                    if (closeBtn) closeBtn.addEventListener('click', function() {
-                        lightbox.hidden = true;
-                    });
-                    lightbox.addEventListener('click', function(e) {
-                        if (e.target === lightbox) lightbox.hidden = true;
-                    });
-                }
-            })();
-        </script>
-        @endsection
+        @php($relatedPlaceholder = $item->image_url ?: $fallbackPlaceholders[$loop->index % count($fallbackPlaceholders)])
         <article class="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
             <div class="aspect-[4/3] bg-slate-100" style="background-image:url('{{ $relatedPlaceholder }}'); background-size:cover; background-position:center;"></div>
             <div class="p-5 sm:p-6">
@@ -482,4 +439,53 @@ $mainPlaceholder = $gallery->isNotEmpty() ? $gallery->first() : $fallbackPlaceho
     :products="$recentlyViewedProducts"
     empty-text="Your recently viewed products will appear here." />
 @endif
+@endsection
+
+@section('scripts')
+<script>
+    (function() {
+        var mainImg = document.getElementById('mainProductImage');
+        if (!mainImg) return;
+
+        var thumbs = document.querySelectorAll('.product-thumb[data-img]');
+        thumbs.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                thumbs.forEach(function(b) {
+                    b.style.borderColor = '#e2e8f0';
+                    b.classList.remove('active');
+                });
+                btn.style.borderColor = '#fe7d94';
+                btn.classList.add('active');
+                mainImg.style.opacity = '0';
+                setTimeout(function() {
+                    mainImg.src = btn.dataset.img;
+                    mainImg.style.opacity = '1';
+                }, 120);
+            });
+        });
+
+        var lightbox = document.getElementById('productLightbox');
+        var lightboxImg = lightbox ? lightbox.querySelector('img') : null;
+        if (lightbox && lightboxImg) {
+            mainImg.style.cursor = 'zoom-in';
+            mainImg.addEventListener('click', function() {
+                lightboxImg.src = mainImg.src;
+                lightbox.hidden = false;
+            });
+
+            var closeBtn = lightbox.querySelector('.lightbox-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    lightbox.hidden = true;
+                });
+            }
+
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) {
+                    lightbox.hidden = true;
+                }
+            });
+        }
+    }());
+</script>
 @endsection

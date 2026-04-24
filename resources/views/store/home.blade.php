@@ -21,7 +21,7 @@ $favItems = array_merge(array_slice($pureeItems, 0, 1), array_slice($puffItems, 
 @endphp
 
 {{-- SECTION 1 — HERO --}}
-<section style="position:relative;width:100%;min-height:420px;overflow:hidden;display:flex;align-items:center;">
+<section class="nn-home-section nn-home-hero" style="position:relative;width:100%;min-height:420px;overflow:hidden;display:flex;align-items:center;">
     <div style="position:absolute;inset:0;background-image:url('{{ asset('assets/images/bg_with_child.jpeg') }}');background-size:cover;background-position:center top;"></div>
     <div style="position:absolute;inset:0;background:linear-gradient(110deg, rgba(10,30,12,0.86) 0%, rgba(10,30,12,0.60) 50%, rgba(10,30,12,0.18) 100%);"></div>
     <div style="position:relative;z-index:10;width:100%;max-width:1400px;margin:0 auto;padding:clamp(40px,7vw,70px) clamp(1.5rem,5vw,3rem);">
@@ -41,7 +41,7 @@ $favItems = array_merge(array_slice($pureeItems, 0, 1), array_slice($puffItems, 
                 style="display:inline-flex;align-items:center;gap:8px;background:#2D5A27;color:#fff;font-family:'Poppins',sans-serif;font-weight:700;font-size:0.9rem;padding:14px 36px;border-radius:4px;text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;box-shadow:0 6px 28px rgba(0,0,0,0.30);">
                 Shop Now
             </a>
-            <a href="{{ route('store.about') }}"
+            <a href="{{ route('store.about') }}" class="nn-hero-story-link"
                 style="display:inline-flex;align-items:center;gap:8px;color:#fff;font-family:'Poppins',sans-serif;font-weight:600;font-size:0.85rem;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;border-bottom:1.5px solid rgba(255,255,255,0.50);padding-bottom:2px;">
                 Our Story &rarr;
             </a>
@@ -104,12 +104,12 @@ $favItems = array_merge(array_slice($pureeItems, 0, 1), array_slice($puffItems, 
 </section>
 
 {{-- SECTION 3 — NUMNAM PUREES --}}
-<section style="background:#F8F5F0;width:100%;padding:80px 0;position:relative;">
+<section class="nn-home-section nn-home-carousel-section" style="background:#F8F5F0;width:100%;padding:80px 0;position:relative;">
     <div style="position:absolute;inset:0;background-image:url('{{ asset('assets/images/bg_content.png') }}');background-size:cover;background-position:center;opacity:0.88;pointer-events:none;"></div>
     <div style="position:relative;z-index:1;width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
         <p style="font-family:'Poppins',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#2D7C3A;margin-bottom:0.75rem;">Stage 1 &middot; 6+ Months</p>
         <h2 style="font-family:'Poppins',sans-serif;font-size:clamp(1.8rem,3.5vw,3rem);font-weight:800;color:#1A1A2E;text-transform:uppercase;letter-spacing:-0.01em;line-height:1.05;margin-bottom:2.5rem;">Num Nam Purees</h2>
-        <div class="relative" style="padding:0 56px;">
+        <div class="relative nn-carousel-shell" style="padding:0 56px;">
             <button class="nn-arrow-btn" onclick="nnCarousel('puree',-1)" aria-label="Previous puree"
                 style="position:absolute;left:0;top:50%;transform:translateY(-50%);">&#8249;</button>
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
@@ -168,12 +168,12 @@ $favItems = array_merge(array_slice($pureeItems, 0, 1), array_slice($puffItems, 
 </section>
 
 {{-- SECTION 4 — NUMNAM PUFFS --}}
-<section style="background:#ffffff;width:100%;padding:80px 0;position:relative;">
+<section class="nn-home-section nn-home-carousel-section" style="background:#ffffff;width:100%;padding:80px 0;position:relative;">
     <div style="position:absolute;inset:0;background-image:url('{{ asset('assets/images/bg_content.png') }}');background-size:cover;background-position:center;opacity:0.84;pointer-events:none;"></div>
     <div style="position:relative;z-index:1;width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
         <p style="font-family:'Poppins',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#2D7C3A;margin-bottom:0.75rem;">Stage 2 &middot; 8+ Months</p>
         <h2 style="font-family:'Poppins',sans-serif;font-size:clamp(1.8rem,3.5vw,3rem);font-weight:800;color:#1A1A2E;text-transform:uppercase;letter-spacing:-0.01em;line-height:1.05;margin-bottom:2.5rem;">Num Nam Puffs</h2>
-        <div class="relative" style="padding:0 56px;">
+        <div class="relative nn-carousel-shell" style="padding:0 56px;">
             <button class="nn-arrow-btn" onclick="nnCarousel('puff',-1)" aria-label="Previous puff"
                 style="position:absolute;left:0;top:50%;transform:translateY(-50%);">&#8249;</button>
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
@@ -235,7 +235,7 @@ $favItems = array_merge(array_slice($pureeItems, 0, 1), array_slice($puffItems, 
 </section>
 
 {{-- SECTION 5 — 2x2 GRID --}}
-<section style="background:#F8F5F0;width:100%;padding:80px 0;">
+<section class="nn-home-section nn-home-grid-section" style="background:#F8F5F0;width:100%;padding:80px 0;">
     <div style="width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
 
@@ -313,9 +313,9 @@ $favItems = array_merge(array_slice($pureeItems, 0, 1), array_slice($puffItems, 
 </section>
 
 {{-- SECTION 6 — PRODUCT TABS --}}
-<section style="position:relative;width:100%;padding:100px 0;overflow:hidden;">
+<section class="nn-home-section nn-home-range" style="position:relative;width:100%;padding:100px 0;overflow:hidden;">
     <div style="position:absolute;inset:0;background-image:url('{{ asset('assets/images/bg_products.png') }}');background-size:cover;background-position:center;"></div>
-    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,25,12,0.75) 0%,rgba(10,25,12,0.68) 100%);"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,25,12,0.48) 0%,rgba(10,25,12,0.40) 100%);"></div>
     <div style="position:relative;z-index:10;width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
 
         {{-- Header --}}
@@ -341,7 +341,7 @@ $favItems = array_merge(array_slice($pureeItems, 0, 1), array_slice($puffItems, 
         </div>
 
         {{-- Purees Tab --}}
-        <div id="tabpanel-purees" class="grid grid-cols-2 gap-5 md:grid-cols-4" style="display:none;">
+        <div id="tabpanel-purees" class="grid grid-cols-2 gap-5 md:grid-cols-4 nn-tab-panel-grid" style="display:none;">
             @foreach($pureeItems as $item)
             <a href="{{ route('store.product.show', $item['slug']) }}" style="display:block;text-decoration:none;">
                 <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy"
@@ -351,7 +351,7 @@ $favItems = array_merge(array_slice($pureeItems, 0, 1), array_slice($puffItems, 
         </div>
 
         {{-- Puffs Tab --}}
-        <div id="tabpanel-puffs" class="grid grid-cols-2 gap-5 md:grid-cols-4" style="display:none;">
+        <div id="tabpanel-puffs" class="grid grid-cols-2 gap-5 md:grid-cols-4 nn-tab-panel-grid" style="display:none;">
             @foreach($puffItems as $item)
             <a href="{{ route('store.product.show', $item['slug']) }}" style="display:block;text-decoration:none;">
                 <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy"
@@ -361,7 +361,7 @@ $favItems = array_merge(array_slice($pureeItems, 0, 1), array_slice($puffItems, 
         </div>
 
         {{-- All Tab (shown by default) --}}
-        <div id="tabpanel-all" class="grid grid-cols-2 gap-5 md:grid-cols-4">
+        <div id="tabpanel-all" class="grid grid-cols-2 gap-5 md:grid-cols-4 nn-tab-panel-grid">
             @foreach(array_merge($pureeItems, $puffItems) as $item)
             <a href="{{ route('store.product.show', $item['slug']) }}" style="display:block;text-decoration:none;">
                 <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy"
@@ -406,6 +406,84 @@ $favItems = array_merge(array_slice($pureeItems, 0, 1), array_slice($puffItems, 
 
     .nn-arrow-btn:hover {
         background: #d95e8c;
+    }
+
+    @media (max-width: 767px) {
+        .nn-home-section {
+            padding-top: 56px !important;
+            padding-bottom: 56px !important;
+        }
+
+        .nn-home-hero {
+            min-height: 520px !important;
+            align-items: flex-end !important;
+        }
+
+        .nn-home-hero h1 {
+            max-width: 100%;
+            font-size: clamp(2rem, 10vw, 3rem) !important;
+        }
+
+        .nn-home-hero p[style*="max-width:440px"] {
+            max-width: 100% !important;
+            line-height: 1.7 !important;
+        }
+
+        .nn-home-hero div[style*="margin-top:2.5rem"] {
+            flex-direction: column;
+            align-items: stretch !important;
+        }
+
+        .nn-home-hero .nn-hero-btn,
+        .nn-home-hero .nn-hero-story-link {
+            justify-content: center;
+            width: 100%;
+        }
+
+        .nn-carousel-shell {
+            padding: 0 0 70px !important;
+        }
+
+        .nn-carousel-shell .nn-arrow-btn {
+            top: auto !important;
+            bottom: 0;
+            transform: none !important;
+        }
+
+        .nn-carousel-shell .nn-arrow-btn:first-of-type {
+            left: calc(50% - 54px) !important;
+        }
+
+        .nn-carousel-shell .nn-arrow-btn:last-of-type {
+            right: calc(50% - 54px) !important;
+        }
+
+        .nn-home-grid-section .grid.grid-cols-3 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .nn-home-grid-section .grid.grid-cols-3 > :last-child {
+            grid-column: 1 / -1;
+            max-width: 180px;
+            margin: 0 auto;
+        }
+
+        .nn-home-range .flex.justify-center {
+            justify-content: stretch;
+        }
+
+        .nn-home-range .flex.justify-center > * {
+            flex: 1 1 calc(50% - 0.5rem);
+            text-align: center;
+        }
+
+        .nn-tab-panel-grid {
+            gap: 1rem !important;
+        }
+
+        .nn-tab-panel-grid a img {
+            height: 140px !important;
+        }
     }
 </style>
 <script>

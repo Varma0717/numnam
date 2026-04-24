@@ -36,6 +36,15 @@ class Product extends Model
         'badges',
         'nutrition_facts',
         'nutrition_info',
+        'label_copy',
+        'specifications',
+        'storage_instructions',
+        'safety_advice',
+        'allergen_note',
+        'customer_care',
+        'regulatory_info',
+        'barcode_url',
+        'qr_code_url',
     ];
 
     protected $casts = [
@@ -45,6 +54,9 @@ class Product extends Model
         'badges'          => 'array',
         'nutrition_facts' => 'array',
         'nutrition_info'  => 'array',
+        'specifications'  => 'array',
+        'customer_care'   => 'array',
+        'regulatory_info' => 'array',
         'published_at'    => 'datetime',
         'is_active'       => 'boolean',
         'is_featured'     => 'boolean',
@@ -58,11 +70,7 @@ class Product extends Model
             return null;
         }
 
-        if (str_starts_with($this->image, 'http')) {
-            return $this->image;
-        }
-
-        return Storage::disk('public')->url($this->image);
+        return $this->resolveAssetUrl($this->image);
     }
 
     public function getGalleryUrlsAttribute(): array
@@ -70,14 +78,13 @@ class Product extends Model
         $gallery = $this->gallery ?? [];
 
         return array_map(function ($path) {
-            if (empty($path)) {
-                return null;
-            }
-            if (str_starts_with($path, 'http')) {
-                return $path;
-            }
-            return Storage::disk('public')->url($path);
+            return $this->resolveAssetUrl($path);
         }, $gallery);
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
     }
 
     public function category()
@@ -126,5 +133,30 @@ class Product extends Model
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
+    }
+
+    private function resolveAssetUrl(?string $path): ?string
+    {
+        if (empty($path)) {
+            return null;
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        if (str_starts_with($path, '/assets/')) {
+            return asset(ltrim($path, '/'));
+        }
+
+        if (str_starts_with($path, 'assets/')) {
+            return asset($path);
+        }
+
+        if (str_starts_with($path, '/storage/')) {
+            return asset(ltrim($path, '/'));
+        }
+
+        return Storage::disk('public')->url($path);
     }
 }
