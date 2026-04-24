@@ -51,7 +51,7 @@ $mainPlaceholder = $gallery->isNotEmpty() ? $gallery->first() : $fallbackPlaceho
                 <button type="button" class="product-thumb {{ $i === 0 ? 'active' : '' }} overflow-hidden rounded-xl border-2 bg-white shadow-sm transition-all duration-200 hover:border-numnam-400 focus:outline-none"
                     data-img="{{ $photo }}"
                     aria-label="{{ $product->name }} image {{ $i + 1 }}"
-                    :style="{ borderColor: {{ $i === 0 ? '#fe7d94' : '#e2e8f0' }} }">
+                    style="border-color: {{ $i === 0 ? '#fe7d94' : '#e2e8f0' }};">
                     <img src="{{ $photo }}" alt="{{ $product->name }} view {{ $i + 1 }}" loading="{{ $i < 3 ? 'eager' : 'lazy' }}" style="width:100%;aspect-ratio:1/1;object-fit:contain;padding:4px;">
                 </button>
                 @endforeach
@@ -357,10 +357,12 @@ $mainPlaceholder = $gallery->isNotEmpty() ? $gallery->first() : $fallbackPlaceho
             <div>
                 <div class="rating" aria-label="{{ $review->rating }} out of 5 stars">
                     @for($i = 1; $i <= 5; $i++)
-                        <span class="star {{ $i <= $review->rating ? 'filled' : 'empty' }}">&#9733;</span>
-                        @endfor
+                    <span class="star {{ $i <= $review->rating ? 'filled' : 'empty' }}">&#9733;</span>
+                    @endfor
                 </div>
-                @if($review->title)<h4 class="review-title">{{ $review->title }}</h4>@endif
+                @if($review->title)
+                <h4 class="review-title">{{ $review->title }}</h4>
+                @endif
                 <p>{{ $review->body }}</p>
                 <p class="mt-3 text-sm text-slate-600"><strong>{{ $review->user->name }}</strong> &middot; {{ $review->created_at->diffForHumans() }}</p>
             </div>

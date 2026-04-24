@@ -55,7 +55,9 @@ asset('assets/images/Purees/berry%20swush%202.png'),
                 <input id="catalog-q" class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400" type="text" name="q" value="{{ request('q') }}" placeholder="Search products...">
             </div>
 
-            @if(request('age'))<input type="hidden" name="age" value="{{ request('age') }}">@endif
+            @if(request('age'))
+            <input type="hidden" name="age" value="{{ request('age') }}">
+            @endif
 
             <div class="lg:col-span-3">
                 <label for="catalog-category" class="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Category</label>
