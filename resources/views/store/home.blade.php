@@ -99,35 +99,37 @@ $blockCards = [
                 <div class="nn-home-trust__badge" aria-hidden="true">
                     @if($item['icon'] === 'doctor')
                     <svg viewBox="0 0 64 64" fill="none">
-                        <path d="M16 16c8-6 18-6 26 0" stroke="#79A8C8" stroke-width="3.5" stroke-linecap="round" />
-                        <path d="M16 16c-2 7-2 18 7 28" stroke="#79A8C8" stroke-width="3.5" stroke-linecap="round" />
-                        <path d="M42 16c2 7 2 18-7 28" stroke="#79A8C8" stroke-width="3.5" stroke-linecap="round" />
-                        <circle cx="16" cy="15" r="6" fill="#DFF0FB" stroke="#79A8C8" stroke-width="2.5" />
-                        <circle cx="45" cy="15" r="6" fill="#DFF0FB" stroke="#79A8C8" stroke-width="2.5" />
-                        <path d="M24 41h13" stroke="#436B88" stroke-width="3.5" stroke-linecap="round" />
-                        <path d="M31 34v14" stroke="#436B88" stroke-width="3.5" stroke-linecap="round" />
+                        <rect x="16" y="10" width="32" height="44" rx="12" fill="#E7F1FB" stroke="#4E88B7" stroke-width="2.5" />
+                        <path d="M25 23h14" stroke="#4E88B7" stroke-width="3.5" stroke-linecap="round" />
+                        <path d="M32 16v14" stroke="#4E88B7" stroke-width="3.5" stroke-linecap="round" />
+                        <path d="M21 39c2.6-4.2 6.6-6.3 11-6.3S40.4 34.8 43 39" stroke="#1F5F8B" stroke-width="2.8" stroke-linecap="round" />
+                        <circle cx="32" cy="29" r="5.5" fill="#FFFFFF" stroke="#1F5F8B" stroke-width="2.5" />
+                        <path d="M24 48h16" stroke="#7FB4D6" stroke-width="2.5" stroke-linecap="round" />
                     </svg>
                     @elseif($item['icon'] === 'veg')
                     <svg viewBox="0 0 64 64" fill="none">
-                        <circle cx="32" cy="26" r="13" fill="#6BB850" />
-                        <path d="M20 23c4-10 10-14 12-14 0 0 2 5 12 14" stroke="#2F6E2D" stroke-width="3.5" stroke-linecap="round" />
-                        <path d="M18 25l-6-5M46 20l6-5" stroke="#1D1D1D" stroke-width="3.5" stroke-linecap="round" />
-                        <path d="M12 20l4-6M52 15l-4-6" stroke="#1D1D1D" stroke-width="3.5" stroke-linecap="round" />
-                        <rect x="24" y="40" width="16" height="8" rx="4" fill="#D85B4F" />
-                        <path d="M24 47c0 6 4 9 8 9s8-3 8-9" fill="#F4E0A4" />
+                        <path d="M32 15c10.8 0 18 6.2 18 16.4 0 10.9-8.6 18.6-18 18.6s-18-7.7-18-18.6C14 21.2 21.2 15 32 15Z" fill="#E8F6E4" stroke="#4E9B4E" stroke-width="2.5" />
+                        <path d="M32 18v28" stroke="#2F7C3A" stroke-width="2.8" stroke-linecap="round" />
+                        <path d="M32 32c0-6.8 5-12.2 12.5-13.8" stroke="#2F7C3A" stroke-width="2.6" stroke-linecap="round" />
+                        <path d="M32 36c0-6.2-4.7-11.1-11.6-12.9" stroke="#2F7C3A" stroke-width="2.6" stroke-linecap="round" />
+                        <path d="M21 46c2.8-1.6 6.5-2.6 11-2.6 4.6 0 8.3 1 11 2.6" stroke="#7CC46B" stroke-width="2.4" stroke-linecap="round" />
                     </svg>
                     @elseif($item['icon'] === 'sugar')
                     <svg viewBox="0 0 64 64" fill="none">
-                        <path d="M22 20l10-6 10 6v12l-10 6-10-6V20z" stroke="#1A1A1A" stroke-width="3.5" stroke-linejoin="round" />
-                        <path d="M30 26l10-6M22 20l8 6v12" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" />
-                        <path d="M46 18l10 10m0-10L46 28" stroke="#1A1A1A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <rect x="19" y="14" width="26" height="36" rx="10" fill="#FFF4D9" stroke="#D3A640" stroke-width="2.5" />
+                        <path d="M25 24h14" stroke="#D3A640" stroke-width="2.8" stroke-linecap="round" />
+                        <path d="M25 31h9" stroke="#D3A640" stroke-width="2.8" stroke-linecap="round" />
+                        <path d="M25 38h7" stroke="#D3A640" stroke-width="2.8" stroke-linecap="round" />
+                        <path d="M47 18l-8 8" stroke="#E56A86" stroke-width="3.4" stroke-linecap="round" />
+                        <path d="M39 18l8 8" stroke="#E56A86" stroke-width="3.4" stroke-linecap="round" />
+                        <circle cx="32" cy="46" r="2.4" fill="#E56A86" />
                     </svg>
                     @else
                     <svg viewBox="0 0 64 64" fill="none">
-                        <path d="M24 14h16l7 11-15 25L17 25l7-11z" fill="#FFE8A6" stroke="#1A1A1A" stroke-width="3" />
-                        <path d="M32 24v14" stroke="#FF8D3A" stroke-width="3.5" stroke-linecap="round" />
-                        <circle cx="32" cy="43" r="2.5" fill="#FF8D3A" />
-                        <path d="M20 11c3-4 8-6 12-6s9 2 12 6" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" />
+                        <path d="M32 11 46 16.6v11.7c0 11-5.9 17.8-14 22.7-8.1-4.9-14-11.7-14-22.7V16.6L32 11Z" fill="#FFE8EE" stroke="#E56A86" stroke-width="2.6" stroke-linejoin="round" />
+                        <path d="M32 22v15" stroke="#C84D6C" stroke-width="3" stroke-linecap="round" />
+                        <path d="M24.5 29.5H39.5" stroke="#C84D6C" stroke-width="3" stroke-linecap="round" />
+                        <path d="M24.5 42c2.6-1.8 5.1-2.7 7.5-2.7s4.9.9 7.5 2.7" stroke="#F39AB3" stroke-width="2.4" stroke-linecap="round" />
                     </svg>
                     @endif
                 </div>
