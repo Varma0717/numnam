@@ -3,8 +3,8 @@ $wishlistCount = auth()->check() ? auth()->user()->wishlists()->count() : 0;
 @endphp
 
 <div class="mobile-app-navbar fixed inset-x-3 bottom-3 z-40 lg:hidden">
-    <div class="mx-auto w-full max-w-xl rounded-[1.25rem] border border-slate-200/80 bg-white/95 p-1.5 shadow-[0_14px_34px_rgba(15,23,42,0.16)] backdrop-blur">
-        <div class="grid grid-cols-4 gap-1">
+    <div class="mx-auto w-full max-w-sm rounded-[1.35rem] border border-slate-200/80 bg-white/95 p-2 shadow-[0_14px_34px_rgba(15,23,42,0.16)] backdrop-blur">
+        <div class="grid grid-cols-4 gap-2">
             <a href="{{ route('store.products') }}" class="mobile-app-item {{ request()->routeIs('store.products*') || request()->routeIs('store.category*') ? 'is-active' : '' }}" aria-label="Shop">
                 <span class="mobile-app-icon" aria-hidden="true">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -13,7 +13,6 @@ $wishlistCount = auth()->check() ? auth()->user()->wishlists()->count() : 0;
                         <rect x="4" y="9.5" width="16" height="10" rx="2"></rect>
                     </svg>
                 </span>
-                <span class="mobile-app-label">Shop</span>
             </a>
 
             <a href="{{ auth()->check() ? route('store.wishlist') : route('store.login') }}" class="mobile-app-item {{ request()->routeIs('store.wishlist*') ? 'is-active' : '' }}" aria-label="Wishlist">
@@ -25,7 +24,6 @@ $wishlistCount = auth()->check() ? auth()->user()->wishlists()->count() : 0;
                     <span class="mobile-app-count">{{ $wishlistCount }}</span>
                     @endif
                 </span>
-                <span class="mobile-app-label">Wishlist</span>
             </a>
 
             <a href="{{ route('store.cart') }}" class="mobile-app-item {{ request()->routeIs('store.cart*') ? 'is-active' : '' }}" aria-label="Cart">
@@ -39,7 +37,6 @@ $wishlistCount = auth()->check() ? auth()->user()->wishlists()->count() : 0;
                     <span class="mobile-app-count">{{ $cartItemCount }}</span>
                     @endif
                 </span>
-                <span class="mobile-app-label">Cart</span>
             </a>
 
             <a href="{{ auth()->check() ? route('store.account') : route('store.login') }}" class="mobile-app-item {{ request()->routeIs('store.account') || request()->routeIs('store.login*') || request()->routeIs('store.register*') ? 'is-active' : '' }}" aria-label="Account">
@@ -49,7 +46,6 @@ $wishlistCount = auth()->check() ? auth()->user()->wishlists()->count() : 0;
                         <path d="M5 20a7 7 0 0 1 14 0"></path>
                     </svg>
                 </span>
-                <span class="mobile-app-label">Account</span>
             </a>
         </div>
     </div>

@@ -6,59 +6,53 @@
 @section('content')
 @php
 $pureeItems = [
-    ['img' => asset('assets/images/Purees/brocco%20pop%201.png'), 'name' => 'Brocco Pop', 'slug' => 'brocco-pop'],
-    ['img' => asset('assets/images/Purees/berry%20swush%201.png'), 'name' => 'Berry Swush', 'slug' => 'berry-swush'],
-    ['img' => asset('assets/images/Purees/mangy%20chewy%201.png'), 'name' => 'Mangy Chewy', 'slug' => 'mangy-chewy'],
-    ['img' => asset('assets/images/Purees/appi%20pooch%201.png'), 'name' => 'Appi Pooch', 'slug' => 'appi-pooch'],
+['img' => asset('assets/images/Purees/brocco%20pop%201.png'), 'name' => 'Brocco Pop', 'slug' => 'brocco-pop'],
+['img' => asset('assets/images/Purees/berry%20swush%201.png'), 'name' => 'Berry Swush', 'slug' => 'berry-swush'],
+['img' => asset('assets/images/Purees/mangy%20chewy%201.png'), 'name' => 'Mangy Chewy', 'slug' => 'mangy-chewy'],
+['img' => asset('assets/images/Purees/appi%20pooch%201.png'), 'name' => 'Appi Pooch', 'slug' => 'appi-pooch'],
 ];
 
 $puffItems = [
-    ['img' => asset('assets/images/Puffs/Manchurian%20Munchos/front.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
-    ['img' => asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
-    ['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/front.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
-    ['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
-];
-
-$heroFeatured = [
-    ['img' => asset('assets/images/Purees/berry%20swush%201.png'), 'name' => 'Berry Swush'],
-    ['img' => asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'), 'name' => 'Tikka Puffies'],
-    ['img' => asset('assets/images/Puffs/Manchurian%20Munchos/front.jpg'), 'name' => 'Manchurian Munchos'],
+['img' => asset('assets/images/Puffs/Manchurian%20Munchos/front.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
+['img' => asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
+['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/front.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
+['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
 ];
 
 $favItems = [
-    $pureeItems[1],
-    $puffItems[0],
-    $puffItems[3],
+$pureeItems[1],
+$puffItems[0],
+$puffItems[3],
 ];
 
 $trustItems = [
-    ['title' => 'Doctor-Founded', 'caption' => 'Built by doctor-parents for real family feeding journeys.', 'icon' => 'doctor'],
-    ['title' => 'Vegetable Forward', 'caption' => 'Early flavor learning with practical vegetable-rich recipes.', 'icon' => 'veg'],
-    ['title' => 'No added sugar', 'caption' => 'Balanced taste without unnecessary sweetness.', 'icon' => 'sugar'],
-    ['title' => 'No preservatives', 'caption' => 'Clean-label food made to stay parent-friendly and simple.', 'icon' => 'preservatives'],
+['title' => 'Doctor-Founded', 'caption' => 'Built by doctor-parents for real family feeding journeys.', 'icon' => 'doctor'],
+['title' => 'Vegetable Forward', 'caption' => 'Early flavor learning with practical vegetable-rich recipes.', 'icon' => 'veg'],
+['title' => 'No added sugar', 'caption' => 'Balanced taste without unnecessary sweetness.', 'icon' => 'sugar'],
+['title' => 'No preservatives', 'caption' => 'Clean-label food made to stay parent-friendly and simple.', 'icon' => 'preservatives'],
 ];
 
 $blockCards = [
-    [
-        'eyebrow' => 'Parent favourites',
-        'title' => 'Most-loved picks that parents keep coming back to',
-        'copy' => 'A quick view of the products families reach for most often when they want easy, dependable feeding wins.',
-    ],
-    [
-        'eyebrow' => 'Make feeding easier',
-        'title' => 'With NumNam',
-        'copy' => 'Doctor-parent thinking, practical nutrition, and formats that work both at home and on the go.',
-    ],
-    [
-        'eyebrow' => 'How NumNam began',
-        'title' => 'European-inspired standards, built for Indian families',
-        'copy' => 'The idea started with doctor-parents who wanted cleaner baby food choices that still felt realistic and family-friendly.',
-    ],
-    [
-        'eyebrow' => 'Guidance for every feeding stage',
-        'title' => 'Learn while you shop',
-        'copy' => 'Explore practical feeding support, ingredient transparency, and stage-wise guidance that helps parents feel more confident.',
-    ],
+[
+'eyebrow' => 'Parent favourites',
+'title' => 'Most-loved picks that parents keep coming back to',
+'copy' => 'A quick view of the products families reach for most often when they want easy, dependable feeding wins.',
+],
+[
+'eyebrow' => 'Make feeding easier',
+'title' => 'With NumNam',
+'copy' => 'Doctor-parent thinking, practical nutrition, and formats that work both at home and on the go.',
+],
+[
+'eyebrow' => 'How NumNam began',
+'title' => 'European-inspired standards, built for Indian families',
+'copy' => 'The idea started with doctor-parents who wanted cleaner baby food choices that still felt realistic and family-friendly.',
+],
+[
+'eyebrow' => 'Guidance for every feeding stage',
+'title' => 'Learn while you shop',
+'copy' => 'Explore practical feeding support, ingredient transparency, and stage-wise guidance that helps parents feel more confident.',
+],
 ];
 @endphp
 
@@ -89,16 +83,6 @@ $blockCards = [
             </div>
         </div>
 
-        <div class="nn-home-hero-v2__visual" aria-hidden="true">
-            <div class="nn-home-hero-v2__featured-strip">
-                @foreach($heroFeatured as $item)
-                <div class="nn-home-hero-v2__featured-card">
-                    <img src="{{ $item['img'] }}" alt="">
-                    <span>{{ $item['name'] }}</span>
-                </div>
-                @endforeach
-            </div>
-        </div>
     </div>
 </section>
 
@@ -115,35 +99,35 @@ $blockCards = [
                 <div class="nn-home-trust__badge" aria-hidden="true">
                     @if($item['icon'] === 'doctor')
                     <svg viewBox="0 0 64 64" fill="none">
-                        <path d="M16 16c8-6 18-6 26 0" stroke="#79A8C8" stroke-width="3.5" stroke-linecap="round"/>
-                        <path d="M16 16c-2 7-2 18 7 28" stroke="#79A8C8" stroke-width="3.5" stroke-linecap="round"/>
-                        <path d="M42 16c2 7 2 18-7 28" stroke="#79A8C8" stroke-width="3.5" stroke-linecap="round"/>
-                        <circle cx="16" cy="15" r="6" fill="#DFF0FB" stroke="#79A8C8" stroke-width="2.5"/>
-                        <circle cx="45" cy="15" r="6" fill="#DFF0FB" stroke="#79A8C8" stroke-width="2.5"/>
-                        <path d="M24 41h13" stroke="#436B88" stroke-width="3.5" stroke-linecap="round"/>
-                        <path d="M31 34v14" stroke="#436B88" stroke-width="3.5" stroke-linecap="round"/>
+                        <path d="M16 16c8-6 18-6 26 0" stroke="#79A8C8" stroke-width="3.5" stroke-linecap="round" />
+                        <path d="M16 16c-2 7-2 18 7 28" stroke="#79A8C8" stroke-width="3.5" stroke-linecap="round" />
+                        <path d="M42 16c2 7 2 18-7 28" stroke="#79A8C8" stroke-width="3.5" stroke-linecap="round" />
+                        <circle cx="16" cy="15" r="6" fill="#DFF0FB" stroke="#79A8C8" stroke-width="2.5" />
+                        <circle cx="45" cy="15" r="6" fill="#DFF0FB" stroke="#79A8C8" stroke-width="2.5" />
+                        <path d="M24 41h13" stroke="#436B88" stroke-width="3.5" stroke-linecap="round" />
+                        <path d="M31 34v14" stroke="#436B88" stroke-width="3.5" stroke-linecap="round" />
                     </svg>
                     @elseif($item['icon'] === 'veg')
                     <svg viewBox="0 0 64 64" fill="none">
-                        <circle cx="32" cy="26" r="13" fill="#6BB850"/>
-                        <path d="M20 23c4-10 10-14 12-14 0 0 2 5 12 14" stroke="#2F6E2D" stroke-width="3.5" stroke-linecap="round"/>
-                        <path d="M18 25l-6-5M46 20l6-5" stroke="#1D1D1D" stroke-width="3.5" stroke-linecap="round"/>
-                        <path d="M12 20l4-6M52 15l-4-6" stroke="#1D1D1D" stroke-width="3.5" stroke-linecap="round"/>
-                        <rect x="24" y="40" width="16" height="8" rx="4" fill="#D85B4F"/>
-                        <path d="M24 47c0 6 4 9 8 9s8-3 8-9" fill="#F4E0A4"/>
+                        <circle cx="32" cy="26" r="13" fill="#6BB850" />
+                        <path d="M20 23c4-10 10-14 12-14 0 0 2 5 12 14" stroke="#2F6E2D" stroke-width="3.5" stroke-linecap="round" />
+                        <path d="M18 25l-6-5M46 20l6-5" stroke="#1D1D1D" stroke-width="3.5" stroke-linecap="round" />
+                        <path d="M12 20l4-6M52 15l-4-6" stroke="#1D1D1D" stroke-width="3.5" stroke-linecap="round" />
+                        <rect x="24" y="40" width="16" height="8" rx="4" fill="#D85B4F" />
+                        <path d="M24 47c0 6 4 9 8 9s8-3 8-9" fill="#F4E0A4" />
                     </svg>
                     @elseif($item['icon'] === 'sugar')
                     <svg viewBox="0 0 64 64" fill="none">
-                        <path d="M22 20l10-6 10 6v12l-10 6-10-6V20z" stroke="#1A1A1A" stroke-width="3.5" stroke-linejoin="round"/>
-                        <path d="M30 26l10-6M22 20l8 6v12" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round"/>
-                        <path d="M46 18l10 10m0-10L46 28" stroke="#1A1A1A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M22 20l10-6 10 6v12l-10 6-10-6V20z" stroke="#1A1A1A" stroke-width="3.5" stroke-linejoin="round" />
+                        <path d="M30 26l10-6M22 20l8 6v12" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" />
+                        <path d="M46 18l10 10m0-10L46 28" stroke="#1A1A1A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                     @else
                     <svg viewBox="0 0 64 64" fill="none">
-                        <path d="M24 14h16l7 11-15 25L17 25l7-11z" fill="#FFE8A6" stroke="#1A1A1A" stroke-width="3"/>
-                        <path d="M32 24v14" stroke="#FF8D3A" stroke-width="3.5" stroke-linecap="round"/>
-                        <circle cx="32" cy="43" r="2.5" fill="#FF8D3A"/>
-                        <path d="M20 11c3-4 8-6 12-6s9 2 12 6" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M24 14h16l7 11-15 25L17 25l7-11z" fill="#FFE8A6" stroke="#1A1A1A" stroke-width="3" />
+                        <path d="M32 24v14" stroke="#FF8D3A" stroke-width="3.5" stroke-linecap="round" />
+                        <circle cx="32" cy="43" r="2.5" fill="#FF8D3A" />
+                        <path d="M20 11c3-4 8-6 12-6s9 2 12 6" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" />
                     </svg>
                     @endif
                 </div>
@@ -249,8 +233,7 @@ $blockCards = [
 <section class="nn-home-block5">
     <div class="nn-home-shell">
         <div class="nn-home-block5__head">
-            <p class="nn-home-kicker">Block 5</p>
-            <h2>Educational "why it matters" cards</h2>
+            <h2>Why NumNam Matters</h2>
         </div>
 
         <div class="nn-home-block5__grid">
@@ -273,9 +256,6 @@ $blockCards = [
                 <p class="nn-home-block5__eyebrow">{{ $blockCards[1]['eyebrow'] }}</p>
                 <h3>{{ $blockCards[1]['title'] }}</h3>
                 <p>{{ $blockCards[1]['copy'] }}</p>
-                <div class="nn-home-figure-wrap">
-                    <img src="{{ asset('assets/images/baby-choosing-what-eat-alone.jpg') }}" alt="Baby feeding visual" loading="lazy">
-                </div>
                 <a href="{{ route('store.about') }}" class="nn-home-btn nn-home-btn--small">Visit the Learn Section</a>
             </article>
 
@@ -283,7 +263,6 @@ $blockCards = [
                 <p class="nn-home-block5__eyebrow">{{ $blockCards[2]['eyebrow'] }}</p>
                 <h3>{{ $blockCards[2]['title'] }}</h3>
                 <p>{{ $blockCards[2]['copy'] }}</p>
-                <div class="nn-home-story-wave"></div>
                 <a href="{{ route('store.about') }}" class="nn-home-btn nn-home-btn--small nn-home-btn--ghost-soft">Read Our Story</a>
             </article>
 
@@ -291,10 +270,6 @@ $blockCards = [
                 <p class="nn-home-block5__eyebrow">{{ $blockCards[3]['eyebrow'] }}</p>
                 <h3>{{ $blockCards[3]['title'] }}</h3>
                 <p>{{ $blockCards[3]['copy'] }}</p>
-                <div class="nn-home-guidance-visual" aria-hidden="true">
-                    <div class="nn-home-guidance-clipboard"></div>
-                    <div class="nn-home-guidance-avatar"></div>
-                </div>
                 <div class="nn-home-block5__actions">
                     <a href="{{ route('store.products') }}" class="nn-home-btn nn-home-btn--small">View Store</a>
                     <a href="{{ route('store.blog.index') }}" class="nn-home-btn nn-home-btn--small nn-home-btn--ghost-soft">Learn More</a>
@@ -394,7 +369,7 @@ $blockCards = [
     .nn-home-hero-v2__veil {
         position: absolute;
         inset: 0;
-        background: linear-gradient(90deg, rgba(255,250,242,0.97) 0%, rgba(255,250,242,0.88) 38%, rgba(255,250,242,0.56) 58%, rgba(255,250,242,0.14) 100%);
+        background: linear-gradient(90deg, rgba(255, 250, 242, 0.72) 0%, rgba(255, 250, 242, 0.58) 38%, rgba(255, 250, 242, 0.26) 58%, rgba(255, 250, 242, 0.04) 100%);
     }
 
     .nn-home-hero-v2__glow {
@@ -425,11 +400,15 @@ $blockCards = [
         z-index: 2;
         min-height: 680px;
         display: grid;
-        grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+        grid-template-columns: minmax(0, 1fr);
         align-items: flex-start;
         gap: 2rem;
         padding-top: 4.5rem;
         padding-bottom: 4rem;
+    }
+
+    .nn-home-hero-v2__copy {
+        max-width: 760px;
     }
 
     .nn-home-hero-v2__copy h1 {
@@ -539,10 +518,7 @@ $blockCards = [
     }
 
     .nn-home-hero-v2__visual {
-        display: flex;
-        justify-content: center;
-        align-items: flex-end;
-        min-height: 520px;
+        display: none;
     }
 
     .nn-home-hero-v2__featured-strip {
@@ -605,7 +581,7 @@ $blockCards = [
         position: absolute;
         inset: auto 0 0;
         height: 120px;
-        background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(232,246,224,0.58) 100%);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(232, 246, 224, 0.58) 100%);
         pointer-events: none;
     }
 
@@ -676,7 +652,8 @@ $blockCards = [
     .nn-home-soft-bg,
     .nn-home-white-bg,
     .nn-home-block5 {
-        background-image: linear-gradient(180deg, rgba(255, 248, 235, 0.95) 0%, rgba(255, 253, 248, 0.97) 100%), url('{{ asset('assets/images/home/wave-bg.png') }}');
+        background-image: linear-gradient(180deg, rgba(255, 248, 235, 0.95) 0%, rgba(255, 253, 248, 0.97) 100%),
+        url('{{ asset('assets/images/home/wave-bg.png') }}');
         background-size: cover;
         background-position: center;
     }
@@ -686,300 +663,214 @@ $blockCards = [
         padding: 88px 0;
     }
 
-    .nn-home-editorial-card,
-    .nn-home-product-stage {
-        background: rgba(255, 255, 255, 0.94);
-        border-radius: 30px;
-        padding: 2rem 1.7rem;
-        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
-        border: 1px solid rgba(238, 227, 203, 0.9);
-    }
+        .nn-home-editorial-card,
+        .nn-home-product-stage {
+            background: rgba(255, 255, 255, 0.94);
+            border-radius: 30px;
+            padding: 2rem 1.7rem;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+            border: 1px solid rgba(238, 227, 203, 0.9);
+        }
 
-    .nn-home-editorial-card h3,
-    .nn-home-product-stage h3 {
-        margin: 0;
-        font-family: 'Poppins', sans-serif;
-        font-size: 1.32rem;
-        line-height: 1.2;
-        font-weight: 800;
-        color: #1A1A2E;
-    }
+        .nn-home-editorial-card h3,
+        .nn-home-product-stage h3 {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.32rem;
+            line-height: 1.2;
+            font-weight: 800;
+            color: #1A1A2E;
+        }
 
-    .nn-home-editorial-card p {
-        margin: 1rem 0 0;
-        font-size: 0.96rem;
-        line-height: 1.7;
-        color: #595D63;
-    }
+        .nn-home-editorial-card p {
+            margin: 1rem 0 0;
+            font-size: 0.96rem;
+            line-height: 1.7;
+            color: #595D63;
+        }
 
-    .nn-home-editorial-card ul {
-        list-style: none;
-        margin: 1.15rem 0 0;
-        padding: 0;
-        display: grid;
-        gap: 0.8rem;
-    }
+        .nn-home-editorial-card ul {
+            list-style: none;
+            margin: 1.15rem 0 0;
+            padding: 0;
+            display: grid;
+            gap: 0.8rem;
+        }
 
-    .nn-home-editorial-card li {
-        position: relative;
-        padding-left: 1.35rem;
-        font-size: 0.95rem;
-        line-height: 1.55;
-        color: #2F3542;
-    }
+        .nn-home-editorial-card li {
+            position: relative;
+            padding-left: 1.35rem;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: #2F3542;
+        }
 
-    .nn-home-editorial-card li::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0.45rem;
-        width: 8px;
-        height: 8px;
-        border-radius: 999px;
-        background: #F07AA2;
-        box-shadow: 0 0 0 4px rgba(240, 122, 162, 0.14);
-    }
+        .nn-home-editorial-card li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.45rem;
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #F07AA2;
+            box-shadow: 0 0 0 4px rgba(240, 122, 162, 0.14);
+        }
 
-    .nn-home-product-stage {
-        text-align: center;
-        background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,249,239,0.95) 100%);
-    }
+        .nn-home-product-stage {
+            text-align: center;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 249, 239, 0.95) 100%);
+        }
 
-    .nn-home-product-stage p {
-        margin: 0.9rem 0 0;
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.98rem;
-        font-weight: 700;
-        color: #2D5A27;
-    }
+        .nn-home-product-stage p {
+            margin: 0.9rem 0 0;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: #2D5A27;
+        }
 
-    .nn-home-inline-link {
-        display: inline-block;
-        margin-top: 1rem;
-        color: #2D7C3A;
-        font-size: 0.8rem;
-        font-weight: 700;
-        text-decoration: underline;
-        text-underline-offset: 3px;
-    }
+        .nn-home-block5 {
+            padding: 92px 0;
+        }
 
-    .nn-home-block5 {
-        padding: 92px 0;
-    }
+        .nn-home-block5__head {
+            text-align: center;
+            margin-bottom: 2.8rem;
+        }
 
-    .nn-home-block5__head {
-        text-align: center;
-        margin-bottom: 2.2rem;
-    }
+        .nn-home-block5__head h2 {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2rem, 3.7vw, 3.4rem);
+            line-height: 1.06;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: #13151D;
+        }
 
-    .nn-home-block5__head h2 {
-        margin: 0;
-        font-family: 'Poppins', sans-serif;
-        font-size: clamp(2rem, 3.7vw, 3.4rem);
-        line-height: 1.06;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        color: #13151D;
-    }
+        .nn-home-block5__grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.35rem;
+        }
 
-    .nn-home-block5__grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1.35rem;
-    }
+        .nn-home-block5__card {
+            position: relative;
+            min-height: 290px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 30px;
+            padding: 1.8rem;
+            box-shadow: 0 14px 32px rgba(18, 24, 32, 0.06);
+            border: 1px solid rgba(214, 214, 214, 0.8);
+            background: rgba(255, 255, 255, 0.98);
+        }
 
-    .nn-home-block5__card {
-        position: relative;
-        min-height: 290px;
-        border-radius: 30px;
-        padding: 1.8rem;
-        box-shadow: 0 14px 32px rgba(18, 24, 32, 0.06);
-        border: 1px solid rgba(214, 214, 214, 0.8);
-        background: rgba(255, 255, 255, 0.98);
-    }
+        .nn-home-block5__card--cream {
+            background: linear-gradient(180deg, rgba(255, 250, 238, 0.98) 0%, rgba(255, 255, 255, 0.98) 100%);
+        }
 
-    .nn-home-block5__eyebrow {
-        margin: 0 0 0.8rem;
-        font-size: 0.82rem;
-        font-weight: 700;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: #4C8F55;
-    }
+        .nn-home-block5__card--mint {
+            background: linear-gradient(180deg, rgba(238, 247, 236, 0.98) 0%, rgba(255, 255, 255, 0.98) 100%);
+        }
 
-    .nn-home-block5__card h3 {
-        margin: 0;
-        max-width: 430px;
-        font-family: 'Poppins', sans-serif;
-        font-size: 1.75rem;
-        line-height: 1.14;
-        font-weight: 800;
-        color: #151922;
-    }
+        .nn-home-block5__card--blush {
+            background: linear-gradient(180deg, rgba(252, 242, 244, 0.98) 0%, rgba(255, 255, 255, 0.98) 100%);
+        }
 
-    .nn-home-block5__card p {
-        margin: 0.95rem 0 0;
-        max-width: 520px;
-        font-size: 0.98rem;
-        line-height: 1.7;
-        color: #5B5F67;
-    }
+        .nn-home-block5__card--sky {
+            background: linear-gradient(180deg, rgba(239, 247, 252, 0.98) 0%, rgba(255, 255, 255, 0.98) 100%);
+        }
 
-    .nn-home-block5__products {
-        margin-top: 1.35rem;
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 0.8rem;
-    }
+        .nn-home-block5__eyebrow {
+            margin: 0 0 0.8rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #4C8F55;
+        }
 
-    .nn-home-mini-product {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 0.95rem 0.75rem;
-        border-radius: 22px;
-        background: rgba(255, 255, 255, 0.95);
-        border: 1px solid rgba(232, 222, 202, 0.95);
-        text-align: center;
-    }
+        .nn-home-block5__card h3 {
+            margin: 0;
+            max-width: 430px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.75rem;
+            line-height: 1.14;
+            font-weight: 800;
+            color: #151922;
+        }
 
-    .nn-home-mini-product img {
-        width: 100%;
-        height: 78px;
-        object-fit: contain;
-        display: block;
-        margin-bottom: 0.55rem;
-    }
+        .nn-home-block5__card p {
+            margin: 0.95rem 0 0;
+            max-width: 520px;
+            font-size: 0.98rem;
+            line-height: 1.7;
+            color: #5B5F67;
+        }
 
-    .nn-home-mini-product span {
-        font-size: 0.76rem;
-        line-height: 1.3;
-        font-weight: 700;
-        color: #1D2430;
-    }
+        .nn-home-block5__card > .nn-home-btn {
+            margin-top: auto;
+            align-self: flex-start;
+        }
 
-    .nn-home-mini-product a {
-        margin-top: 0.55rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 34px;
-        padding: 0 0.85rem;
-        border-radius: 999px;
-        background: #2D5A27;
-        color: #FFFFFF;
-        text-decoration: none;
-        font-size: 0.72rem;
-        font-weight: 700;
-    }
+        .nn-home-block5__products {
+            margin-top: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.8rem;
+        }
 
-    .nn-home-figure-wrap {
-        margin-top: 1.2rem;
-        overflow: hidden;
-        border-radius: 24px;
-        min-height: 150px;
-        background: linear-gradient(135deg, rgba(239, 242, 239, 0.95) 0%, rgba(228, 235, 229, 0.92) 100%);
-    }
+        .nn-home-mini-product {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0.95rem 0.75rem;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(232, 222, 202, 0.95);
+            text-align: center;
+            min-height: 100%;
+        }
 
-    .nn-home-figure-wrap img {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-        display: block;
-        filter: grayscale(1) saturate(0.2) contrast(1.02);
-        opacity: 0.78;
-    }
+        .nn-home-mini-product img {
+            width: 100%;
+            height: 78px;
+            object-fit: contain;
+            display: block;
+            margin-bottom: 0.55rem;
+        }
 
-    .nn-home-story-wave {
-        margin-top: 1.35rem;
-        height: 84px;
-        border-radius: 0 0 22px 22px;
-        background: linear-gradient(180deg, rgba(246, 246, 246, 0.32) 0%, rgba(214, 214, 214, 0.65) 100%);
-        clip-path: ellipse(80% 100% at 50% 100%);
-    }
+        .nn-home-mini-product span {
+            font-size: 0.76rem;
+            line-height: 1.3;
+            font-weight: 700;
+            color: #1D2430;
+        }
 
-    .nn-home-guidance-visual {
-        position: absolute;
-        right: 1.4rem;
-        bottom: 1.2rem;
-        display: flex;
-        align-items: flex-end;
-        gap: 0.55rem;
-        opacity: 0.84;
-        pointer-events: none;
-    }
+        .nn-home-mini-product a {
+            margin-top: auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 34px;
+            padding: 0 0.85rem;
+            border-radius: 999px;
+            background: #2D5A27;
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
 
-    .nn-home-guidance-clipboard {
-        width: 54px;
-        height: 72px;
-        border-radius: 10px;
-        background: linear-gradient(180deg, #F8F9FA 0%, #DDE5EA 100%);
-        border: 2px solid #B9C6CF;
-        position: relative;
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.7);
-    }
-
-    .nn-home-guidance-clipboard::before {
-        content: '';
-        position: absolute;
-        top: 8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 22px;
-        height: 8px;
-        border-radius: 999px;
-        background: #CFD8DE;
-    }
-
-    .nn-home-guidance-clipboard::after {
-        content: '';
-        position: absolute;
-        left: 12px;
-        top: 24px;
-        width: 28px;
-        height: 28px;
-        border-radius: 6px;
-        background:
-            linear-gradient(#C5D0D8 0 0) left 0 top 0 / 100% 3px no-repeat,
-            linear-gradient(#C5D0D8 0 0) left 0 top 9px / 90% 3px no-repeat,
-            linear-gradient(#C5D0D8 0 0) left 0 top 18px / 80% 3px no-repeat;
-    }
-
-    .nn-home-guidance-avatar {
-        width: 84px;
-        height: 108px;
-        position: relative;
-    }
-
-    .nn-home-guidance-avatar::before {
-        content: '';
-        position: absolute;
-        inset: auto 12px 0;
-        height: 74px;
-        border-radius: 34px 34px 18px 18px;
-        background: linear-gradient(180deg, #EDF2F5 0%, #D9E4EA 100%);
-    }
-
-    .nn-home-guidance-avatar::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 22px;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background:
-            radial-gradient(circle at 50% 42%, #F7EFE7 0 56%, transparent 57%),
-            radial-gradient(circle at 50% 45%, #4F5561 0 65%, transparent 66%);
-        box-shadow: inset 0 -8px 0 rgba(247, 239, 231, 0.85);
-    }
-
-    .nn-home-block5__actions {
-        margin-top: 1.3rem;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.8rem;
-    }
+        .nn-home-block5__actions {
+            margin-top: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
 
     .nn-arrow-btn {
         background: #F07AA2;
@@ -1027,7 +918,7 @@ $blockCards = [
         }
 
         .nn-home-hero-v2__veil {
-            background: linear-gradient(180deg, rgba(255,250,242,0.96) 0%, rgba(255,250,242,0.93) 48%, rgba(255,250,242,0.82) 100%);
+            background: linear-gradient(180deg, rgba(255, 250, 242, 0.64) 0%, rgba(255, 250, 242, 0.56) 48%, rgba(255, 250, 242, 0.44) 100%);
         }
 
         .nn-home-hero-v2__inner {
@@ -1122,17 +1013,11 @@ $blockCards = [
             margin: 0 auto;
         }
 
-        .nn-home-guidance-visual {
-            position: static;
-            margin-top: 1rem;
-            justify-content: flex-end;
-        }
-
         .nn-home-range .flex.justify-center {
             justify-content: stretch;
         }
 
-        .nn-home-range .flex.justify-center > * {
+        .nn-home-range .flex.justify-center>* {
             flex: 1 1 calc(50% - 0.5rem);
             text-align: center;
         }
