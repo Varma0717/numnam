@@ -24,6 +24,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class StorefrontController extends Controller
 {
@@ -38,98 +39,132 @@ class StorefrontController extends Controller
 
     public function home()
     {
-        $productCardQuery = fn() => Product::query()
-            ->with('category')
-            ->withCount('approvedReviews')
-            ->withAvg('approvedReviews', 'rating')
-            ->where('is_active', true);
+        try {
+            $productCardQuery = fn() => Product::query()
+                ->with('category')
+                ->withCount('approvedReviews')
+                ->withAvg('approvedReviews', 'rating')
+                ->where('is_active', true);
 
-        $recentlyViewedProducts = $this->loadRecentlyViewedProducts(request());
+            $recentlyViewedProducts = $this->loadRecentlyViewedProducts(request());
 
-        $featuredProducts = Product::query()
-            ->with('category')
-            ->withCount('approvedReviews')
-            ->withAvg('approvedReviews', 'rating')
-            ->where('is_active', true)
-            ->where('is_featured', true)
-            ->latest('id')
-            ->take(4)
-            ->get();
+            $featuredProducts = Product::query()
+                ->with('category')
+                ->withCount('approvedReviews')
+                ->withAvg('approvedReviews', 'rating')
+                ->where('is_active', true)
+                ->where('is_featured', true)
+                ->latest('id')
+                ->take(4)
+                ->get();
 
-        $bestSellerProducts = $productCardQuery()
-            ->inRandomOrder()
-            ->take(8)
-            ->get();
+            $bestSellerProducts = $productCardQuery()
+                ->inRandomOrder()
+                ->take(8)
+                ->get();
 
-        $plans = PricingPlan::query()
-            ->where('is_active', true)
-            ->orderBy('sort_order')
-            ->take(3)
-            ->get();
+            $plans = PricingPlan::query()
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->take(3)
+                ->get();
 
-        $latestBlogs = Blog::query()
-            ->where('status', 'published')
-            ->latest('published_at')
-            ->take(3)
-            ->get();
+            $latestBlogs = Blog::query()
+                ->where('status', 'published')
+                ->latest('published_at')
+                ->take(3)
+                ->get();
 
-        $topCategories = Category::query()
-            ->where('is_active', true)
-            ->where('slug', '!=', 'all-products')
-            ->withCount(['products' => fn($query) => $query->where('is_active', true)])
-            ->having('products_count', '>', 0)
-            ->orderByDesc('products_count')
-            ->take(4)
-            ->get();
+            $topCategories = Category::query()
+                ->where('is_active', true)
+                ->where('slug', '!=', 'all-products')
+                ->withCount(['products' => fn($query) => $query->where('is_active', true)])
+                ->having('products_count', '>', 0)
+                ->orderByDesc('products_count')
+                ->take(4)
+                ->get();
 
-        $homepageSections = SiteSetting::query()
-            ->where('group', 'homepage')
-            ->where('is_public', true)
-            ->pluck('value', 'key');
+            $homepageSections = SiteSetting::query()
+                ->where('group', 'homepage')
+                ->where('is_public', true)
+                ->pluck('value', 'key');
 
-        $trustHighlights = [
-            ['title' => 'Doctor-backed recipes', 'text' => 'Developed with pediatric nutrition intent.'],
-            ['title' => 'No refined sugar', 'text' => 'Balanced taste without unnecessary sweeteners.'],
-            ['title' => 'Stage-wise textures', 'text' => 'Feeding progression tuned for each age group.'],
-            ['title' => 'Subscription friendly', 'text' => 'Predictable recurring delivery for parents.'],
-        ];
+            $trustHighlights = [
+                ['title' => 'Doctor-backed recipes', 'text' => 'Developed with pediatric nutrition intent.'],
+                ['title' => 'No refined sugar', 'text' => 'Balanced taste without unnecessary sweeteners.'],
+                ['title' => 'Stage-wise textures', 'text' => 'Feeding progression tuned for each age group.'],
+                ['title' => 'Subscription friendly', 'text' => 'Predictable recurring delivery for parents.'],
+            ];
 
-        $testimonials = [
-            ['name' => 'Aarohi S.', 'quote' => 'Our baby transitioned beautifully from purees to puffs.'],
-            ['name' => 'Raghav P.', 'quote' => 'Subscription and reorder flow saved us so much time.'],
-            ['name' => 'Meera K.', 'quote' => 'Ingredients and nutrition information are very transparent.'],
-        ];
+            $testimonials = [
+                ['name' => 'Aarohi S.', 'quote' => 'Our baby transitioned beautifully from purees to puffs.'],
+                ['name' => 'Raghav P.', 'quote' => 'Subscription and reorder flow saved us so much time.'],
+                ['name' => 'Meera K.', 'quote' => 'Ingredients and nutrition information are very transparent.'],
+            ];
 
-        return view('store.home', compact('featuredProducts', 'bestSellerProducts', 'recentlyViewedProducts', 'plans', 'latestBlogs', 'topCategories', 'homepageSections', 'trustHighlights', 'testimonials'));
+            return view('store.home', compact('featuredProducts', 'bestSellerProducts', 'recentlyViewedProducts', 'plans', 'latestBlogs', 'topCategories', 'homepageSections', 'trustHighlights', 'testimonials'));
+        } catch (\Exception $e) {
+            Log::error('Home page error: ' . $e->getMessage());
+            // Return view with minimal data on error
+            return view('store.home', [
+                'featuredProducts' => collect([]),
+                'bestSellerProducts' => collect([]),
+                'recentlyViewedProducts' => collect([]),
+                'plans' => collect([]),
+                'latestBlogs' => collect([]),
+                'topCategories' => collect([]),
+                'homepageSections' => collect([]),
+                'trustHighlights' => [
+                    ['title' => 'Doctor-backed recipes', 'text' => 'Developed with pediatric nutrition intent.'],
+                    ['title' => 'No refined sugar', 'text' => 'Balanced taste without unnecessary sweeteners.'],
+                    ['title' => 'Stage-wise textures', 'text' => 'Feeding progression tuned for each age group.'],
+                    ['title' => 'Subscription friendly', 'text' => 'Predictable recurring delivery for parents.'],
+                ],
+                'testimonials' => [
+                    ['name' => 'Aarohi S.', 'quote' => 'Our baby transitioned beautifully from purees to puffs.'],
+                    ['name' => 'Raghav P.', 'quote' => 'Subscription and reorder flow saved us so much time.'],
+                    ['name' => 'Meera K.', 'quote' => 'Ingredients and nutrition information are very transparent.'],
+                ],
+            ]);
+        }
     }
 
     public function products(Request $request)
     {
-        $categories = Category::query()->where('is_active', true)->orderBy('name')->get();
+        try {
+            $categories = Category::query()->where('is_active', true)->orderBy('name')->get();
 
-        $products = Product::query()
-            ->with('category')
-            ->where('is_active', true)
-            ->when($request->filled('category'), function ($query) use ($request) {
-                $query->whereHas('category', function ($categoryQuery) use ($request) {
-                    $categoryQuery->where('slug', $request->string('category'));
-                });
-            })
-            ->when($request->filled('type'), fn($query) => $query->where('type', $request->string('type')))
-            ->when($request->filled('q'), fn($query) => $query->where('name', 'like', '%' . $request->string('q') . '%'))
-            ->when($request->filled('age'), fn($query) => $query->where('age_group', 'like', '%' . $request->string('age') . '%'))
-            ->when($request->filled('sort'), function ($query) use ($request) {
-                return match ($request->string('sort')->toString()) {
-                    'price_low'  => $query->orderBy('price'),
-                    'price_high' => $query->orderByDesc('price'),
-                    'name_az'    => $query->orderBy('name'),
-                    default      => $query->latest('id'),
-                };
-            }, fn($query) => $query->latest('id'))
-            ->paginate(12)
-            ->appends($request->query());
+            $products = Product::query()
+                ->with('category')
+                ->where('is_active', true)
+                ->when($request->filled('category'), function ($query) use ($request) {
+                    $query->whereHas('category', function ($categoryQuery) use ($request) {
+                        $categoryQuery->where('slug', $request->string('category'));
+                    });
+                })
+                ->when($request->filled('type'), fn($query) => $query->where('type', $request->string('type')))
+                ->when($request->filled('q'), fn($query) => $query->where('name', 'like', '%' . $request->string('q') . '%'))
+                ->when($request->filled('age'), fn($query) => $query->where('age_group', 'like', '%' . $request->string('age') . '%'))
+                ->when($request->filled('sort'), function ($query) use ($request) {
+                    return match ($request->string('sort')->toString()) {
+                        'price_low'  => $query->orderBy('price'),
+                        'price_high' => $query->orderByDesc('price'),
+                        'name_az'    => $query->orderBy('name'),
+                        default      => $query->latest('id'),
+                    };
+                }, fn($query) => $query->latest('id'))
+                ->paginate(12)
+                ->appends($request->query());
 
-        return view('store.products.index', compact('products', 'categories'));
+            return view('store.products.index', compact('products', 'categories'));
+        } catch (\Exception $e) {
+            Log::error('Products page error: ' . $e->getMessage());
+            // Return view with empty data on error
+            return view('store.products.index', [
+                'products' => collect([]),
+                'categories' => collect([]),
+            ]);
+        }
     }
 
     public function searchSuggestions(Request $request): JsonResponse
@@ -169,6 +204,21 @@ class StorefrontController extends Controller
         abort_unless($product->is_active, 404);
 
         $this->storeRecentlyViewedProduct($request, $product->id);
+
+        $reviewStats = Product::query()
+            ->whereKey($product->id)
+            ->withCount('approvedReviews')
+            ->withAvg('approvedReviews', 'rating')
+            ->first(['id']);
+
+        $product->setAttribute('approved_reviews_count', (int) ($reviewStats?->approved_reviews_count ?? 0));
+        $product->setAttribute('approved_reviews_avg_rating', $reviewStats?->approved_reviews_avg_rating);
+
+        $reviews = $product->approvedReviews()
+            ->with('user')
+            ->latest()
+            ->take(6)
+            ->get();
 
         $related = Product::query()
             ->withCount('approvedReviews')
@@ -217,7 +267,7 @@ class StorefrontController extends Controller
 
         $recentlyViewedProducts = $this->loadRecentlyViewedProducts($request, $product->id, 4);
 
-        return view('store.products.show', compact('product', 'related', 'gallery', 'recentlyViewedProducts'));
+        return view('store.products.show', compact('product', 'related', 'gallery', 'recentlyViewedProducts', 'reviews'));
     }
 
     public function category(Category $category)

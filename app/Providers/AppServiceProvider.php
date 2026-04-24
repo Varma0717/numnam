@@ -2,9 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\Category;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,25 +25,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('store.*', function ($view) {
-            $megaCategories = Category::query()
-                ->where('is_active', true)
-                ->where('slug', '!=', 'all-products')
-                ->with(['products' => function ($query) {
-                    $query->where('is_active', true)
-                        ->select('id', 'category_id', 'name', 'slug', 'sale_price', 'price')
-                        ->latest('id')
-                        ->take(4);
-                }])
-                ->orderBy('name')
-                ->take(8)
-                ->get(['id', 'name', 'slug']);
-
             $cartItemCount = collect(session('cart', []))
                 ->sum(function ($line) {
                     return (int) ($line['qty'] ?? 0);
                 });
 
-            $view->with('megaCategories', $megaCategories);
             $view->with('cartItemCount', $cartItemCount);
         });
     }
