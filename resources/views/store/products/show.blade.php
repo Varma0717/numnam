@@ -8,6 +8,7 @@ asset('assets/images/Purees/brocco%20pop%203.png'),
 asset('assets/images/Purees/mangy%20chewy%203.png'),
 ];
 $mainPlaceholder = $gallery->isNotEmpty() ? $gallery->first() : $fallbackPlaceholders[$product->id % count($fallbackPlaceholders)];
+$recentlyViewed = $recentlyViewedProducts ?? collect();
 @endphp
 
 @section('title', 'NumNam - ' . $product->name)
@@ -434,11 +435,11 @@ $mainPlaceholder = $gallery->isNotEmpty() ? $gallery->first() : $fallbackPlaceho
 </section>
 @endif
 
-@if(($recentlyViewedProducts ?? collect())->isNotEmpty())
+@if($recentlyViewed->isNotEmpty())
 <x-store.product-showcase
     title="Recently Viewed"
     subtitle="A quick way to revisit products you looked at recently."
-    :products="$recentlyViewedProducts"
+    :products="$recentlyViewed"
     empty-text="Your recently viewed products will appear here." />
 @endif
 @endsection

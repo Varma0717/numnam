@@ -1,389 +1,984 @@
 @extends('store.layouts.app')
 
-@section('title', 'NumNam — Vegetable Rich Baby Food | Doctor-Founded')
-@section('meta_description', 'Doctor-founded baby food inspired by European nutrition standards. Vegetable-rich, no added sugars, no preservatives. Real fruits & vegetables for your little one.')
+@section('title', 'NumNam - Vegetable Rich Baby Food | Doctor-Founded')
+@section('meta_description', 'Doctor-founded baby food inspired by European nutrition standards. Vegetable-rich, no added sugars, no preservatives. Real fruits and vegetables for your little one.')
 
 @section('content')
 @php
 $pureeItems = [
-['img' => asset('assets/images/Purees/brocco%20pop%201.png'), 'name' => 'Brocco Pop', 'slug' => 'brocco-pop'],
-['img' => asset('assets/images/Purees/berry%20swush%201.png'), 'name' => 'Berry Swush', 'slug' => 'berry-swush'],
-['img' => asset('assets/images/Purees/mangy%20chewy%201.png'), 'name' => 'Mangy Chewy', 'slug' => 'mangy-chewy'],
-['img' => asset('assets/images/Purees/appi%20pooch%201.png'), 'name' => 'Appi Pooch', 'slug' => 'appi-pooch'],
+    ['img' => asset('assets/images/Purees/brocco%20pop%201.png'), 'name' => 'Brocco Pop', 'slug' => 'brocco-pop'],
+    ['img' => asset('assets/images/Purees/berry%20swush%201.png'), 'name' => 'Berry Swush', 'slug' => 'berry-swush'],
+    ['img' => asset('assets/images/Purees/mangy%20chewy%201.png'), 'name' => 'Mangy Chewy', 'slug' => 'mangy-chewy'],
+    ['img' => asset('assets/images/Purees/appi%20pooch%201.png'), 'name' => 'Appi Pooch', 'slug' => 'appi-pooch'],
 ];
+
 $puffItems = [
-['img' => asset('assets/images/Puffs/Manchurian%20Munchos/front.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
-['img' => asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
-['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/front.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
-['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
+    ['img' => asset('assets/images/Puffs/Manchurian%20Munchos/front.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
+    ['img' => asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
+    ['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/front.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
+    ['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
 ];
-$favItems = array_merge(array_slice($pureeItems, 0, 1), array_slice($puffItems, 0, 2));
+
+$heroFeatured = [
+    ['img' => asset('assets/images/Purees/berry%20swush%201.png'), 'name' => 'Berry Swush'],
+    ['img' => asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'), 'name' => 'Tikka Puffies'],
+    ['img' => asset('assets/images/Puffs/Manchurian%20Munchos/front.jpg'), 'name' => 'Manchurian Munchos'],
+];
+
+$favItems = [
+    $pureeItems[1],
+    $puffItems[0],
+    $puffItems[3],
+];
+
+$trustItems = [
+    ['title' => 'Doctor-Founded', 'caption' => 'Built by doctor-parents for real family feeding journeys.', 'icon' => 'doctor'],
+    ['title' => 'Vegetable Forward', 'caption' => 'Early flavor learning with practical vegetable-rich recipes.', 'icon' => 'veg'],
+    ['title' => 'No added sugar', 'caption' => 'Balanced taste without unnecessary sweetness.', 'icon' => 'sugar'],
+    ['title' => 'No preservatives', 'caption' => 'Clean-label food made to stay parent-friendly and simple.', 'icon' => 'preservatives'],
+];
+
+$blockCards = [
+    [
+        'eyebrow' => 'Parent favourites',
+        'title' => 'Most-loved picks that parents keep coming back to',
+        'copy' => 'A quick view of the products families reach for most often when they want easy, dependable feeding wins.',
+    ],
+    [
+        'eyebrow' => 'Make feeding easier',
+        'title' => 'With NumNam',
+        'copy' => 'Doctor-parent thinking, practical nutrition, and formats that work both at home and on the go.',
+    ],
+    [
+        'eyebrow' => 'How NumNam began',
+        'title' => 'European-inspired standards, built for Indian families',
+        'copy' => 'The idea started with doctor-parents who wanted cleaner baby food choices that still felt realistic and family-friendly.',
+    ],
+    [
+        'eyebrow' => 'Guidance for every feeding stage',
+        'title' => 'Learn while you shop',
+        'copy' => 'Explore practical feeding support, ingredient transparency, and stage-wise guidance that helps parents feel more confident.',
+    ],
+];
 @endphp
 
-{{-- SECTION 1 — HERO --}}
-<section class="nn-home-section nn-home-hero" style="position:relative;width:100%;min-height:420px;overflow:hidden;display:flex;align-items:center;">
-    <div style="position:absolute;inset:0;background-image:url('{{ asset('assets/images/bg_with_child.jpeg') }}');background-size:cover;background-position:center top;"></div>
-    <div style="position:absolute;inset:0;background:linear-gradient(110deg, rgba(10,30,12,0.86) 0%, rgba(10,30,12,0.60) 50%, rgba(10,30,12,0.18) 100%);"></div>
-    <div style="position:relative;z-index:10;width:100%;max-width:1400px;margin:0 auto;padding:clamp(40px,7vw,70px) clamp(1.5rem,5vw,3rem);">
-        <p style="font-family:'Poppins',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:rgba(180,240,180,0.90);margin-bottom:1rem;">Doctor-Founded &middot; Clean Label &middot; European Standards</p>
-        <h1 style="font-family:'Poppins',sans-serif;font-size:clamp(1.8rem,3.5vw,4.8rem);color:#FFFFFF;line-height:1.08;letter-spacing:-0.01em;font-weight:800;max-width:480px;text-transform:uppercase;">
-            Vegetable Rich<br>Baby Food
-        </h1>
-        <p style="margin-top:1.25rem;font-size:clamp(1rem,1.8vw,1.18rem);color:rgba(200,255,200,0.90);font-style:italic;font-weight:500;">
-            Inspired by European Nutrition Standards
-        </p>
-        <p style="margin-top:1.1rem;font-size:0.98rem;color:rgba(255,255,255,0.82);max-width:440px;line-height:1.8;">
-            Made by <strong style="color:#ffffff;">Doctor Parents.</strong> No added sugars. No preservatives.
-            <br><em style="color:rgba(200,255,200,0.85);">Real Fruits &amp; Vegetables</em> for your little one.
-        </p>
-        <div style="margin-top:2.5rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;">
-            <a href="{{ route('store.products') }}" class="nn-hero-btn"
-                style="display:inline-flex;align-items:center;gap:8px;background:#2D5A27;color:#fff;font-family:'Poppins',sans-serif;font-weight:700;font-size:0.9rem;padding:14px 36px;border-radius:4px;text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;box-shadow:0 6px 28px rgba(0,0,0,0.30);">
-                Shop Now
-            </a>
-            <a href="{{ route('store.about') }}" class="nn-hero-story-link"
-                style="display:inline-flex;align-items:center;gap:8px;color:#fff;font-family:'Poppins',sans-serif;font-weight:600;font-size:0.85rem;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;border-bottom:1.5px solid rgba(255,255,255,0.50);padding-bottom:2px;">
-                Our Story &rarr;
-            </a>
-        </div>
-    </div>
-</section>
+<section class="nn-home-hero-v2">
+    <div class="nn-home-hero-v2__bg"></div>
+    <div class="nn-home-hero-v2__veil"></div>
+    <div class="nn-home-hero-v2__glow nn-home-hero-v2__glow--left"></div>
+    <div class="nn-home-hero-v2__glow nn-home-hero-v2__glow--right"></div>
 
-{{-- SECTION 2 — FIRST FOODS MATTER --}}
-<section style="background:#F8F5F0;width:100%;padding:80px 0;">
-    <div style="width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
-        <p style="font-family:'Poppins',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#2D7C3A;margin-bottom:1rem;">Why parents trust us</p>
-        <h2 style="font-family:'Poppins',sans-serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:800;color:#1A1A2E;text-transform:uppercase;letter-spacing:-0.01em;line-height:1.05;max-width:560px;margin-bottom:3.5rem;">
-            First Foods<br>Matter
-        </h2>
-        <div class="grid grid-cols-2 gap-y-10 gap-x-6 sm:grid-cols-4 sm:gap-10">
-            <div class="flex flex-col items-center text-center gap-3">
-                <div style="width:72px;height:72px;border-radius:50%;background:rgba(45,90,39,0.08);border:1.5px solid rgba(45,90,39,0.18);display:flex;align-items:center;justify-content:center;margin:0 auto;">
-                    <svg width="34" height="34" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                        <path d="M11 8v5a5 5 0 0 0 10 0V8" stroke="#2D5A27" stroke-width="2" stroke-linecap="round" fill="none" />
-                        <path d="M11 8h10" stroke="#2D5A27" stroke-width="2" stroke-linecap="round" />
-                        <path d="M16 18v5" stroke="#2D5A27" stroke-width="2" stroke-linecap="round" />
-                        <circle cx="24" cy="23" r="4" fill="#2D5A27" />
-                        <path d="M22.5 23h3M24 21.5v3" stroke="#F8F5F0" stroke-width="1.5" stroke-linecap="round" />
-                    </svg>
-                </div>
-                <p style="font-family:'Poppins',sans-serif;font-weight:700;font-size:0.85rem;color:#1A1A2E;letter-spacing:0.06em;text-transform:uppercase;">Doctor-Founded</p>
+    <div class="nn-home-shell nn-home-hero-v2__inner">
+        <div class="nn-home-hero-v2__copy">
+            <p class="nn-home-kicker">Doctor-Founded &middot; Clean Label &middot; European Standards</p>
+            <h1>Vegetable Rich Baby Food</h1>
+            <p class="nn-home-hero-v2__subtitle">Inspired-By European Nutrition Standards</p>
+            <p class="nn-home-hero-v2__meta">
+                Made by <strong>Doctor Parents</strong>
+                <span>&middot;</span>
+                No added sugars
+                <span>&middot;</span>
+                No preservatives
+            </p>
+            <p class="nn-home-hero-v2__description">
+                <em>Real Fruits &amp; Vegetables</em> for your little one, in practical formats that make feeding feel simpler, cleaner, and more joyful.
+            </p>
+            <div class="nn-home-hero-v2__actions">
+                <a href="{{ route('store.products') }}" class="nn-home-btn nn-home-btn--primary">Shop Now</a>
+                <a href="{{ route('store.about') }}" class="nn-home-btn nn-home-btn--ghost">Our Story</a>
             </div>
-            <div class="flex flex-col items-center text-center gap-3">
-                <div style="width:72px;height:72px;border-radius:50%;background:rgba(45,90,39,0.08);border:1.5px solid rgba(45,90,39,0.18);display:flex;align-items:center;justify-content:center;margin:0 auto;">
-                    <svg width="34" height="34" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                        <path d="M16 28C16 28 8 20 8 12a8 8 0 0 1 16 0c0 8-8 16-8 16z" fill="rgba(45,90,39,0.10)" stroke="#2D5A27" stroke-width="2" />
-                        <path d="M16 28V16" stroke="#2D5A27" stroke-width="1.8" stroke-linecap="round" />
-                        <path d="M16 22c-3-3-4-6-4-10" stroke="#2D5A27" stroke-width="1.4" stroke-linecap="round" opacity="0.6" />
-                        <path d="M16 22c3-3 4-6 4-10" stroke="#2D5A27" stroke-width="1.4" stroke-linecap="round" opacity="0.6" />
-                    </svg>
+        </div>
+
+        <div class="nn-home-hero-v2__visual" aria-hidden="true">
+            <div class="nn-home-hero-v2__featured-strip">
+                @foreach($heroFeatured as $item)
+                <div class="nn-home-hero-v2__featured-card">
+                    <img src="{{ $item['img'] }}" alt="">
+                    <span>{{ $item['name'] }}</span>
                 </div>
-                <p style="font-family:'Poppins',sans-serif;font-weight:700;font-size:0.85rem;color:#1A1A2E;letter-spacing:0.06em;text-transform:uppercase;">Vegetable Forward</p>
-            </div>
-            <div class="flex flex-col items-center text-center gap-3">
-                <div style="width:72px;height:72px;border-radius:50%;background:rgba(180,40,40,0.07);border:1.5px solid rgba(180,40,40,0.18);display:flex;align-items:center;justify-content:center;margin:0 auto;">
-                    <svg width="34" height="34" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                        <path d="M11 11h10l-2.5 11h-5L11 11z" stroke="#b91c1c" stroke-width="1.8" fill="none" stroke-linejoin="round" />
-                        <path d="M13.5 11V9h5v2" stroke="#b91c1c" stroke-width="1.8" stroke-linecap="round" />
-                        <path d="M8 8l16 16" stroke="#b91c1c" stroke-width="2.2" stroke-linecap="round" />
-                    </svg>
-                </div>
-                <p style="font-family:'Poppins',sans-serif;font-weight:700;font-size:0.85rem;color:#1A1A2E;letter-spacing:0.06em;text-transform:uppercase;">No Added Sugar</p>
-            </div>
-            <div class="flex flex-col items-center text-center gap-3">
-                <div style="width:72px;height:72px;border-radius:50%;background:rgba(45,90,39,0.08);border:1.5px solid rgba(45,90,39,0.18);display:flex;align-items:center;justify-content:center;margin:0 auto;">
-                    <svg width="34" height="34" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                        <path d="M16 6l9 3.5v9c0 5.5-4 10-9 11-5-1-9-5.5-9-11V9.5L16 6z" fill="rgba(45,90,39,0.08)" stroke="#2D5A27" stroke-width="2" />
-                        <path d="M11.5 16l3 3 6-6" stroke="#2D5A27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </div>
-                <p style="font-family:'Poppins',sans-serif;font-weight:700;font-size:0.85rem;color:#1A1A2E;letter-spacing:0.06em;text-transform:uppercase;">No Preservatives</p>
+                @endforeach
             </div>
         </div>
     </div>
 </section>
 
-{{-- SECTION 3 — NUMNAM PUREES --}}
-<section class="nn-home-section nn-home-carousel-section" style="background:#F8F5F0;width:100%;padding:80px 0;position:relative;">
-    <div style="position:absolute;inset:0;background-image:url('{{ asset('assets/images/bg_content.png') }}');background-size:cover;background-position:center;opacity:0.88;pointer-events:none;"></div>
-    <div style="position:relative;z-index:1;width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
-        <p style="font-family:'Poppins',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#2D7C3A;margin-bottom:0.75rem;">Stage 1 &middot; 6+ Months</p>
-        <h2 style="font-family:'Poppins',sans-serif;font-size:clamp(1.8rem,3.5vw,3rem);font-weight:800;color:#1A1A2E;text-transform:uppercase;letter-spacing:-0.01em;line-height:1.05;margin-bottom:2.5rem;">Num Nam Purees</h2>
+<section class="nn-home-trust">
+    <div class="nn-home-shell">
+        <div class="nn-home-trust__head">
+            <p class="nn-home-kicker">Why parents choose us</p>
+            <h2>Why Parents Trust <span>Num Nam</span></h2>
+        </div>
+
+        <div class="nn-home-trust__grid">
+            @foreach($trustItems as $item)
+            <article class="nn-home-trust__item">
+                <div class="nn-home-trust__badge" aria-hidden="true">
+                    @if($item['icon'] === 'doctor')
+                    <svg viewBox="0 0 64 64" fill="none">
+                        <path d="M16 16c8-6 18-6 26 0" stroke="#79A8C8" stroke-width="3.5" stroke-linecap="round"/>
+                        <path d="M16 16c-2 7-2 18 7 28" stroke="#79A8C8" stroke-width="3.5" stroke-linecap="round"/>
+                        <path d="M42 16c2 7 2 18-7 28" stroke="#79A8C8" stroke-width="3.5" stroke-linecap="round"/>
+                        <circle cx="16" cy="15" r="6" fill="#DFF0FB" stroke="#79A8C8" stroke-width="2.5"/>
+                        <circle cx="45" cy="15" r="6" fill="#DFF0FB" stroke="#79A8C8" stroke-width="2.5"/>
+                        <path d="M24 41h13" stroke="#436B88" stroke-width="3.5" stroke-linecap="round"/>
+                        <path d="M31 34v14" stroke="#436B88" stroke-width="3.5" stroke-linecap="round"/>
+                    </svg>
+                    @elseif($item['icon'] === 'veg')
+                    <svg viewBox="0 0 64 64" fill="none">
+                        <circle cx="32" cy="26" r="13" fill="#6BB850"/>
+                        <path d="M20 23c4-10 10-14 12-14 0 0 2 5 12 14" stroke="#2F6E2D" stroke-width="3.5" stroke-linecap="round"/>
+                        <path d="M18 25l-6-5M46 20l6-5" stroke="#1D1D1D" stroke-width="3.5" stroke-linecap="round"/>
+                        <path d="M12 20l4-6M52 15l-4-6" stroke="#1D1D1D" stroke-width="3.5" stroke-linecap="round"/>
+                        <rect x="24" y="40" width="16" height="8" rx="4" fill="#D85B4F"/>
+                        <path d="M24 47c0 6 4 9 8 9s8-3 8-9" fill="#F4E0A4"/>
+                    </svg>
+                    @elseif($item['icon'] === 'sugar')
+                    <svg viewBox="0 0 64 64" fill="none">
+                        <path d="M22 20l10-6 10 6v12l-10 6-10-6V20z" stroke="#1A1A1A" stroke-width="3.5" stroke-linejoin="round"/>
+                        <path d="M30 26l10-6M22 20l8 6v12" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M46 18l10 10m0-10L46 28" stroke="#1A1A1A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    @else
+                    <svg viewBox="0 0 64 64" fill="none">
+                        <path d="M24 14h16l7 11-15 25L17 25l7-11z" fill="#FFE8A6" stroke="#1A1A1A" stroke-width="3"/>
+                        <path d="M32 24v14" stroke="#FF8D3A" stroke-width="3.5" stroke-linecap="round"/>
+                        <circle cx="32" cy="43" r="2.5" fill="#FF8D3A"/>
+                        <path d="M20 11c3-4 8-6 12-6s9 2 12 6" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                    @endif
+                </div>
+                <h3>{{ $item['title'] }}</h3>
+                <p>{{ $item['caption'] }}</p>
+            </article>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+<section class="nn-home-section nn-home-carousel-section nn-home-soft-bg">
+    <div class="nn-home-shell">
+        <p class="nn-home-kicker">Stage 1 &middot; 6+ Months</p>
+        <h2 class="nn-home-section-title">Num Nam Purees</h2>
+
         <div class="relative nn-carousel-shell" style="padding:0 56px;">
-            <button class="nn-arrow-btn" onclick="nnCarousel('puree',-1)" aria-label="Previous puree"
-                style="position:absolute;left:0;top:50%;transform:translateY(-50%);">&#8249;</button>
+            <button class="nn-arrow-btn" onclick="nnCarousel('puree',-1)" aria-label="Previous puree" style="position:absolute;left:0;top:50%;transform:translateY(-50%);">&#8249;</button>
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
-                <div style="background:#fff;border-radius:24px;padding:36px 28px;box-shadow:0 4px 24px rgba(0,0,0,0.07);">
-                    <h3 class="font-heading font-black" style="font-size:1.12rem;color:#1A1A2E;line-height:1.3;">
-                        Why Parents love<br>Num Nam Purees
-                    </h3>
-                    <ul class="mt-5 space-y-3">
+                <div class="nn-home-editorial-card">
+                    <h3>Why Parents love<br>Num Nam Purees</h3>
+                    <ul>
                         @foreach(['Helps introduce vegetables early','Smooth and easy to serve','Great for home or travel','No preservatives','No added sugar','No added salt'] as $pt)
-                        <li class="flex items-start gap-2.5 text-sm leading-snug" style="color:#333;">
-                            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:4px;" aria-hidden="true">
-                                <circle cx="6.5" cy="6.5" r="5.5" fill="#2D7C3A" opacity="0.12" />
-                                <path d="M4 6.5l2 2 3.5-3" stroke="#2D7C3A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>{{ $pt }}
-                        </li>
+                        <li>{{ $pt }}</li>
                         @endforeach
                     </ul>
                 </div>
-                <div style="background:#fff;border-radius:24px;padding:28px 20px;box-shadow:0 4px 24px rgba(0,0,0,0.07);text-align:center;">
-                    <h3 class="font-heading font-black mb-4" style="font-size:1.1rem;color:#1A1A2E;">Purees</h3>
+
+                <div class="nn-home-product-stage">
+                    <h3>Purees</h3>
                     @foreach($pureeItems as $i => $item)
                     <div class="nn-puree-slide" data-idx="{{ $i }}" style="{{ $i !== 0 ? 'display:none;' : '' }}">
                         <a href="{{ route('store.product.show', $item['slug']) }}">
-                            <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy"
-                                style="height:200px;width:100%;object-fit:contain;display:block;">
+                            <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:220px;width:100%;object-fit:contain;display:block;">
                         </a>
-                        <p class="font-heading font-bold mt-3" style="font-size:0.92rem;color:#2D5A27;">{{ $item['name'] }}</p>
+                        <p>{{ $item['name'] }}</p>
                     </div>
                     @endforeach
-                    <a href="{{ route('store.products') }}" class="inline-block mt-5 font-heading font-bold text-xs"
-                        style="color:#2D7C3A;text-decoration:underline;text-underline-offset:3px;">Explore All Purees &rarr;</a>
+                    <a href="{{ route('store.products') }}" class="nn-home-inline-link">Explore All Purees &rarr;</a>
                 </div>
-                <div style="background:#fff;border-radius:24px;padding:36px 28px;box-shadow:0 4px 24px rgba(0,0,0,0.07);">
-                    <h3 class="font-heading font-black" style="font-size:1.12rem;color:#1A1A2E;line-height:1.3;">
-                        What NumNam<br>Purees Are
-                    </h3>
-                    <p class="mt-3 text-sm leading-relaxed" style="color:#555;">
-                        NumNam Purees are smooth, easy-to-serve fruit and vegetable pouches made for babies beginning their food journey from 6+ months onward.
-                    </p>
-                    <ul class="mt-5 space-y-3">
+
+                <div class="nn-home-editorial-card nn-home-editorial-card--right">
+                    <h3>What NumNam<br>Purees Are</h3>
+                    <p>NumNam Purees are smooth, easy-to-serve fruit and vegetable pouches made for babies beginning their food journey and exploring new tastes from 6+ months onward.</p>
+                    <ul>
                         @foreach(['Smooth texture for early feeding','Easy pouch format','Vegetable-forward combinations','Made for tiny taste explorers'] as $pt)
-                        <li class="flex items-start gap-2.5 text-sm leading-snug" style="color:#333;">
-                            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:4px;" aria-hidden="true">
-                                <circle cx="6.5" cy="6.5" r="5.5" fill="#2D7C3A" opacity="0.12" />
-                                <path d="M4 6.5l2 2 3.5-3" stroke="#2D7C3A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>{{ $pt }}
-                        </li>
+                        <li>{{ $pt }}</li>
                         @endforeach
                     </ul>
                 </div>
             </div>
-            <button class="nn-arrow-btn" onclick="nnCarousel('puree',1)" aria-label="Next puree"
-                style="position:absolute;right:0;top:50%;transform:translateY(-50%);">&#8250;</button>
+            <button class="nn-arrow-btn" onclick="nnCarousel('puree',1)" aria-label="Next puree" style="position:absolute;right:0;top:50%;transform:translateY(-50%);">&#8250;</button>
         </div>
     </div>
 </section>
 
-{{-- SECTION 4 — NUMNAM PUFFS --}}
-<section class="nn-home-section nn-home-carousel-section" style="background:#ffffff;width:100%;padding:80px 0;position:relative;">
-    <div style="position:absolute;inset:0;background-image:url('{{ asset('assets/images/bg_content.png') }}');background-size:cover;background-position:center;opacity:0.84;pointer-events:none;"></div>
-    <div style="position:relative;z-index:1;width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
-        <p style="font-family:'Poppins',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#2D7C3A;margin-bottom:0.75rem;">Stage 2 &middot; 8+ Months</p>
-        <h2 style="font-family:'Poppins',sans-serif;font-size:clamp(1.8rem,3.5vw,3rem);font-weight:800;color:#1A1A2E;text-transform:uppercase;letter-spacing:-0.01em;line-height:1.05;margin-bottom:2.5rem;">Num Nam Puffs</h2>
+<section class="nn-home-section nn-home-carousel-section nn-home-white-bg">
+    <div class="nn-home-shell">
+        <p class="nn-home-kicker">Stage 2 &middot; 8+ Months</p>
+        <h2 class="nn-home-section-title">Num Nam Puffs</h2>
+
         <div class="relative nn-carousel-shell" style="padding:0 56px;">
-            <button class="nn-arrow-btn" onclick="nnCarousel('puff',-1)" aria-label="Previous puff"
-                style="position:absolute;left:0;top:50%;transform:translateY(-50%);">&#8249;</button>
+            <button class="nn-arrow-btn" onclick="nnCarousel('puff',-1)" aria-label="Previous puff" style="position:absolute;left:0;top:50%;transform:translateY(-50%);">&#8249;</button>
             <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
-                <div style="background:#fff;border-radius:24px;padding:36px 28px;box-shadow:0 4px 24px rgba(0,0,0,0.07);">
-                    <h3 class="font-heading font-black" style="font-size:1.12rem;color:#1A1A2E;line-height:1.3;">
-                        Why parents choose<br>NumNam Puffs
-                    </h3>
-                    <p class="mt-3 text-sm leading-relaxed" style="color:#555;">
-                        Our puffs are designed to be a more thoughtful snacking option —
-                    </p>
-                    <ul class="mt-3 space-y-3">
-                        @foreach(['combining convenience,','playful texture, and','carefully chosen ingredients in a format children enjoy.'] as $pt)
-                        <li class="flex items-start gap-2.5 text-sm leading-snug" style="color:#333;">
-                            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:4px;" aria-hidden="true">
-                                <circle cx="6.5" cy="6.5" r="5.5" fill="#2D7C3A" opacity="0.12" />
-                                <path d="M4 6.5l2 2 3.5-3" stroke="#2D7C3A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>{{ $pt }}
-                        </li>
+                <div class="nn-home-editorial-card">
+                    <h3>Why parents choose<br>NumNam Puffs</h3>
+                    <p>Our puffs are designed to be a more thoughtful snacking option.</p>
+                    <ul>
+                        @foreach(['Combining convenience','Playful texture','Carefully chosen ingredients','A format children enjoy'] as $pt)
+                        <li>{{ $pt }}</li>
                         @endforeach
                     </ul>
                 </div>
-                <div style="background:#fff;border-radius:24px;padding:28px 20px;box-shadow:0 4px 24px rgba(0,0,0,0.07);text-align:center;">
-                    <h3 class="font-heading font-black mb-4" style="font-size:1.1rem;color:#1A1A2E;">Puffs</h3>
+
+                <div class="nn-home-product-stage">
+                    <h3>Puffs</h3>
                     @foreach($puffItems as $i => $item)
                     <div class="nn-puff-slide" data-idx="{{ $i }}" style="{{ $i !== 0 ? 'display:none;' : '' }}">
                         <a href="{{ route('store.product.show', $item['slug']) }}">
-                            <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy"
-                                style="height:200px;width:100%;object-fit:contain;display:block;">
+                            <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:220px;width:100%;object-fit:contain;display:block;">
                         </a>
-                        <p class="font-heading font-bold mt-3" style="font-size:0.92rem;color:#2D5A27;">{{ $item['name'] }}</p>
+                        <p>{{ $item['name'] }}</p>
                     </div>
                     @endforeach
-                    <a href="{{ route('store.products') }}" class="inline-block mt-5 font-heading font-bold text-xs"
-                        style="color:#2D7C3A;text-decoration:underline;text-underline-offset:3px;">Explore All Puffs &rarr;</a>
+                    <a href="{{ route('store.products') }}" class="nn-home-inline-link">Explore All Puffs &rarr;</a>
                 </div>
-                <div style="background:#fff;border-radius:24px;padding:36px 28px;box-shadow:0 4px 24px rgba(0,0,0,0.07);">
-                    <h3 class="font-heading font-black" style="font-size:1.12rem;color:#1A1A2E;line-height:1.3;">
-                        What they Are
-                    </h3>
-                    <p class="mt-3 text-sm leading-relaxed" style="color:#555;">
-                        NumNam Puffs are light, easy-to-hold finger snacks created for babies and young children as they begin self-feeding and texture exploration.
-                    </p>
-                    <ul class="mt-5 space-y-3">
+
+                <div class="nn-home-editorial-card nn-home-editorial-card--right">
+                    <h3>What they Are</h3>
+                    <p>NumNam Puffs are light, easy-to-hold finger snacks created for babies and young children as they begin self-feeding, texture exploration, and independent snacking.</p>
+                    <ul>
                         @foreach(['Easy for little hands to hold','Gentle crunchy texture','Made for snack time and on-the-go','Designed for growing kids'] as $pt)
-                        <li class="flex items-start gap-2.5 text-sm leading-snug" style="color:#333;">
-                            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:4px;" aria-hidden="true">
-                                <circle cx="6.5" cy="6.5" r="5.5" fill="#2D7C3A" opacity="0.12" />
-                                <path d="M4 6.5l2 2 3.5-3" stroke="#2D7C3A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>{{ $pt }}
-                        </li>
+                        <li>{{ $pt }}</li>
                         @endforeach
                     </ul>
                 </div>
             </div>
-            <button class="nn-arrow-btn" onclick="nnCarousel('puff',1)" aria-label="Next puff"
-                style="position:absolute;right:0;top:50%;transform:translateY(-50%);">&#8250;</button>
+            <button class="nn-arrow-btn" onclick="nnCarousel('puff',1)" aria-label="Next puff" style="position:absolute;right:0;top:50%;transform:translateY(-50%);">&#8250;</button>
         </div>
     </div>
 </section>
 
-{{-- SECTION 5 — 2x2 GRID --}}
-<section class="nn-home-section nn-home-grid-section" style="background:#F8F5F0;width:100%;padding:80px 0;">
-    <div style="width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+<section class="nn-home-block5">
+    <div class="nn-home-shell">
+        <div class="nn-home-block5__head">
+            <p class="nn-home-kicker">Block 5</p>
+            <h2>Educational "why it matters" cards</h2>
+        </div>
 
-            {{-- Parent Favourites --}}
-            <div style="background:#F9F5EE;border-radius:20px;padding:32px;">
-                <h3 class="font-heading font-black mb-6" style="font-size:1.2rem;color:#1A1A2E;">Parent favourites</h3>
-                <div class="grid grid-cols-3 gap-3">
+        <div class="nn-home-block5__grid">
+            <article class="nn-home-block5__card nn-home-block5__card--cream">
+                <p class="nn-home-block5__eyebrow">{{ $blockCards[0]['eyebrow'] }}</p>
+                <h3>{{ $blockCards[0]['title'] }}</h3>
+                <p>{{ $blockCards[0]['copy'] }}</p>
+                <div class="nn-home-block5__products">
                     @foreach($favItems as $fav)
-                    <div style="background:#fff;border-radius:14px;padding:14px 10px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.06);">
-                        <img src="{{ $fav['img'] }}" alt="{{ $fav['name'] }}" loading="lazy"
-                            style="height:72px;width:100%;object-fit:contain;margin-bottom:8px;">
-                        <p class="font-heading font-bold" style="font-size:0.72rem;color:#1A1A2E;line-height:1.3;">{{ $fav['name'] }}</p>
-                        <a href="{{ route('store.product.show', $fav['slug']) }}"
-                            class="inline-block mt-2 font-heading font-bold text-white rounded-full"
-                            style="background:#2D5A27;font-size:0.65rem;padding:5px 10px;">
-                            Add to Cart &rsaquo;
-                        </a>
+                    <div class="nn-home-mini-product">
+                        <img src="{{ $fav['img'] }}" alt="{{ $fav['name'] }}" loading="lazy">
+                        <span>{{ $fav['name'] }}</span>
+                        <a href="{{ route('store.product.show', $fav['slug']) }}">Add to Cart</a>
                     </div>
                     @endforeach
                 </div>
-            </div>
+            </article>
 
-            {{-- Make feeding easier --}}
-            <div style="background:#EEF4EC;border-radius:20px;padding:32px;position:relative;overflow:hidden;">
-                <div style="position:relative;z-index:1;">
-                    <h3 class="font-heading font-black mb-3" style="font-size:1.2rem;color:#1A1A2E;line-height:1.3;">
-                        Make feeding easier <span style="color:#2D7C3A;">With NumNam</span>
-                    </h3>
-                    <p class="text-sm leading-relaxed mb-6" style="color:#555;max-width:320px;">
-                        NumNam was created by doctor-parents who wanted kids' food that draws from the best of European nutrition — practical, vegetable-rich, and designed for real families.
-                    </p>
-                    <a href="{{ route('store.about') }}"
-                        style="display:inline-flex;align-items:center;background:#2D5A27;color:#fff;font-family:inherit;font-size:0.85rem;font-weight:700;padding:11px 22px;border-radius:8px;text-decoration:none;">
-                        Visit the Learn Section
-                    </a>
+            <article class="nn-home-block5__card nn-home-block5__card--mint">
+                <p class="nn-home-block5__eyebrow">{{ $blockCards[1]['eyebrow'] }}</p>
+                <h3>{{ $blockCards[1]['title'] }}</h3>
+                <p>{{ $blockCards[1]['copy'] }}</p>
+                <div class="nn-home-figure-wrap">
+                    <img src="{{ asset('assets/images/baby-choosing-what-eat-alone.jpg') }}" alt="Baby feeding visual" loading="lazy">
                 </div>
-            </div>
+                <a href="{{ route('store.about') }}" class="nn-home-btn nn-home-btn--small">Visit the Learn Section</a>
+            </article>
 
-            {{-- How NumNam began --}}
-            <div style="background:#F9F5EE;border-radius:20px;padding:32px;">
-                <h3 class="font-heading font-black mb-3" style="font-size:1.2rem;color:#1A1A2E;">How NumNam began</h3>
-                <p class="text-sm leading-relaxed mb-6" style="color:#555;max-width:340px;">
-                    NumNam was created by doctor-parents who wanted the best of choices in baby food inspired from Germany, but viable and friendly for every family.
-                </p>
-                <a href="{{ route('store.about') }}"
-                    style="display:inline-flex;align-items:center;background:#fff;color:#1A1A2E;font-family:inherit;font-size:0.85rem;font-weight:700;padding:11px 22px;border-radius:8px;text-decoration:none;border:1.5px solid #1A1A2E;">
-                    Read Our Story
-                </a>
-            </div>
+            <article class="nn-home-block5__card nn-home-block5__card--blush">
+                <p class="nn-home-block5__eyebrow">{{ $blockCards[2]['eyebrow'] }}</p>
+                <h3>{{ $blockCards[2]['title'] }}</h3>
+                <p>{{ $blockCards[2]['copy'] }}</p>
+                <div class="nn-home-story-wave"></div>
+                <a href="{{ route('store.about') }}" class="nn-home-btn nn-home-btn--small nn-home-btn--ghost-soft">Read Our Story</a>
+            </article>
 
-            {{-- Guidance for every feeding stage --}}
-            <div style="background:#EEF4EC;border-radius:20px;padding:32px;position:relative;overflow:hidden;">
-                <div style="position:relative;z-index:1;">
-                    <h3 class="font-heading font-black mb-3" style="font-size:1.2rem;color:#1A1A2E;line-height:1.3;">
-                        Guidance for every<br>feeding stage
-                    </h3>
-                    <p class="text-sm leading-relaxed mb-6" style="color:#555;max-width:320px;">
-                        Explore feeding guidance: stage-by-stage topics, the foods that help most, and how NumNam fits into healthy eating habits for your little one.
-                    </p>
-                    <div class="flex flex-wrap gap-3">
-                        <a href="{{ route('store.products') }}"
-                            style="display:inline-flex;align-items:center;background:#2D5A27;color:#fff;font-family:inherit;font-size:0.85rem;font-weight:700;padding:10px 20px;border-radius:8px;text-decoration:none;">
-                            View Store
-                        </a>
-                        <a href="{{ route('store.blog.index') }}"
-                            style="display:inline-flex;align-items:center;background:#fff;color:#1A1A2E;font-family:inherit;font-size:0.85rem;font-weight:700;padding:10px 20px;border-radius:8px;text-decoration:none;border:1.5px solid #1A1A2E;">
-                            Learn More &rsaquo;
-                        </a>
-                    </div>
+            <article class="nn-home-block5__card nn-home-block5__card--sky">
+                <p class="nn-home-block5__eyebrow">{{ $blockCards[3]['eyebrow'] }}</p>
+                <h3>{{ $blockCards[3]['title'] }}</h3>
+                <p>{{ $blockCards[3]['copy'] }}</p>
+                <div class="nn-home-guidance-visual" aria-hidden="true">
+                    <div class="nn-home-guidance-clipboard"></div>
+                    <div class="nn-home-guidance-avatar"></div>
                 </div>
-            </div>
-
+                <div class="nn-home-block5__actions">
+                    <a href="{{ route('store.products') }}" class="nn-home-btn nn-home-btn--small">View Store</a>
+                    <a href="{{ route('store.blog.index') }}" class="nn-home-btn nn-home-btn--small nn-home-btn--ghost-soft">Learn More</a>
+                </div>
+            </article>
         </div>
     </div>
 </section>
 
-{{-- SECTION 6 — PRODUCT TABS --}}
 <section class="nn-home-section nn-home-range" style="position:relative;width:100%;padding:100px 0;overflow:hidden;">
     <div style="position:absolute;inset:0;background-image:url('{{ asset('assets/images/bg_products.png') }}');background-size:cover;background-position:center;"></div>
     <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,25,12,0.48) 0%,rgba(10,25,12,0.40) 100%);"></div>
     <div style="position:relative;z-index:10;width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
-
-        {{-- Header --}}
         <div class="text-center mb-12">
             <p style="font-family:'Poppins',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.24em;text-transform:uppercase;color:rgba(180,240,180,0.80);margin-bottom:0.9rem;">Explore Our Range</p>
             <h2 style="font-family:'Poppins',sans-serif;font-size:clamp(1.8rem,3.5vw,3rem);font-weight:800;color:#ffffff;text-transform:uppercase;letter-spacing:-0.01em;line-height:1.05;">All Products</h2>
         </div>
 
-        {{-- Tabs --}}
         <div class="flex justify-center mb-10" style="gap:0.5rem;flex-wrap:wrap;">
-            <button onclick="nnTab('purees')" id="tab-purees"
-                style="font-family:'Poppins',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;padding:10px 28px;border-radius:100px;cursor:pointer;transition:all 0.2s;background:transparent;color:rgba(255,255,255,0.70);border:2px solid rgba(255,255,255,0.35);">
-                Purees
-            </button>
-            <button onclick="nnTab('puffs')" id="tab-puffs"
-                style="font-family:'Poppins',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;padding:10px 28px;border-radius:100px;cursor:pointer;transition:all 0.2s;background:transparent;color:rgba(255,255,255,0.70);border:2px solid rgba(255,255,255,0.35);">
-                Puffs
-            </button>
-            <a href="{{ route('store.products') }}"
-                style="font-family:'Poppins',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;padding:10px 28px;border-radius:100px;transition:all 0.2s;background:#ffffff;color:#1A1A2E;border:2px solid #ffffff;text-decoration:none;display:inline-block;">
-                All
-            </a>
+            <button onclick="nnTab('purees')" id="tab-purees" style="font-family:'Poppins',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;padding:10px 28px;border-radius:100px;cursor:pointer;transition:all 0.2s;background:transparent;color:rgba(255,255,255,0.70);border:2px solid rgba(255,255,255,0.35);">Purees</button>
+            <button onclick="nnTab('puffs')" id="tab-puffs" style="font-family:'Poppins',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;padding:10px 28px;border-radius:100px;cursor:pointer;transition:all 0.2s;background:transparent;color:rgba(255,255,255,0.70);border:2px solid rgba(255,255,255,0.35);">Puffs</button>
+            <a href="{{ route('store.products') }}" style="font-family:'Poppins',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;padding:10px 28px;border-radius:100px;transition:all 0.2s;background:#ffffff;color:#1A1A2E;border:2px solid #ffffff;text-decoration:none;display:inline-block;">All</a>
         </div>
 
-        {{-- Purees Tab --}}
         <div id="tabpanel-purees" class="grid grid-cols-2 gap-5 md:grid-cols-4 nn-tab-panel-grid" style="display:none;">
             @foreach($pureeItems as $item)
             <a href="{{ route('store.product.show', $item['slug']) }}" style="display:block;text-decoration:none;">
-                <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy"
-                    style="height:180px;width:100%;object-fit:contain;display:block;">
+                <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:180px;width:100%;object-fit:contain;display:block;">
             </a>
             @endforeach
         </div>
 
-        {{-- Puffs Tab --}}
         <div id="tabpanel-puffs" class="grid grid-cols-2 gap-5 md:grid-cols-4 nn-tab-panel-grid" style="display:none;">
             @foreach($puffItems as $item)
             <a href="{{ route('store.product.show', $item['slug']) }}" style="display:block;text-decoration:none;">
-                <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy"
-                    style="height:180px;width:100%;object-fit:contain;display:block;">
+                <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:180px;width:100%;object-fit:contain;display:block;">
             </a>
             @endforeach
         </div>
 
-        {{-- All Tab (shown by default) --}}
         <div id="tabpanel-all" class="grid grid-cols-2 gap-5 md:grid-cols-4 nn-tab-panel-grid">
             @foreach(array_merge($pureeItems, $puffItems) as $item)
             <a href="{{ route('store.product.show', $item['slug']) }}" style="display:block;text-decoration:none;">
-                <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy"
-                    style="height:180px;width:100%;object-fit:contain;display:block;">
+                <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:180px;width:100%;object-fit:contain;display:block;">
             </a>
             @endforeach
         </div>
-
     </div>
 </section>
-
 @endsection
 
 @section('scripts')
 <style>
-    .nn-hero-btn {
-        transition: transform 0.18s, box-shadow 0.18s;
+    .nn-home-shell {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 clamp(1.5rem, 5vw, 3rem);
     }
 
-    .nn-hero-btn:hover {
+    .nn-home-kicker {
+        margin: 0 0 0.9rem;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #2D7C3A;
+    }
+
+    .nn-home-section-title {
+        margin: 0 0 2.5rem;
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(1.9rem, 3.6vw, 3.2rem);
+        font-weight: 800;
+        line-height: 1.04;
+        letter-spacing: -0.02em;
+        color: #171B24;
+        text-transform: uppercase;
+    }
+
+    .nn-home-hero-v2 {
+        position: relative;
+        overflow: hidden;
+        min-height: 680px;
+        background: linear-gradient(180deg, #FBFAF5 0%, #FFFDF8 100%);
+    }
+
+    .nn-home-hero-v2__bg {
+        position: absolute;
+        inset: 0;
+        background-image: url('{{ asset('assets/images/bg_with_child.jpeg') }}');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .nn-home-hero-v2__veil {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(255,250,242,0.97) 0%, rgba(255,250,242,0.88) 38%, rgba(255,250,242,0.56) 58%, rgba(255,250,242,0.14) 100%);
+    }
+
+    .nn-home-hero-v2__glow {
+        position: absolute;
+        border-radius: 999px;
+        filter: blur(40px);
+        opacity: 0.55;
+    }
+
+    .nn-home-hero-v2__glow--left {
+        left: -80px;
+        top: 90px;
+        width: 280px;
+        height: 280px;
+        background: rgba(255, 227, 154, 0.62);
+    }
+
+    .nn-home-hero-v2__glow--right {
+        right: 10%;
+        bottom: 80px;
+        width: 260px;
+        height: 260px;
+        background: rgba(185, 228, 177, 0.42);
+    }
+
+    .nn-home-hero-v2__inner {
+        position: relative;
+        z-index: 2;
+        min-height: 680px;
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+        align-items: flex-start;
+        gap: 2rem;
+        padding-top: 4.5rem;
+        padding-bottom: 4rem;
+    }
+
+    .nn-home-hero-v2__copy h1 {
+        margin: 0;
+        max-width: 760px;
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(2.7rem, 5.2vw, 5.25rem);
+        font-weight: 800;
+        line-height: 0.98;
+        letter-spacing: -0.04em;
+        color: #111111;
+        text-transform: uppercase;
+    }
+
+    .nn-home-hero-v2__subtitle {
+        margin: 1rem 0 0;
+        display: inline-block;
+        padding-bottom: 0.55rem;
+        border-bottom: 3px solid rgba(151, 140, 255, 0.45);
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(1.15rem, 2vw, 1.75rem);
+        font-weight: 500;
+        color: #4D9954;
+    }
+
+    .nn-home-hero-v2__meta {
+        margin: 1.8rem 0 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        align-items: center;
+        font-size: 1rem;
+        color: #262626;
+    }
+
+    .nn-home-hero-v2__meta strong {
+        color: #0E0E0E;
+    }
+
+    .nn-home-hero-v2__meta span {
+        color: #8AAA71;
+    }
+
+    .nn-home-hero-v2__description {
+        margin: 1.2rem 0 0;
+        max-width: 540px;
+        font-size: 1.08rem;
+        line-height: 1.8;
+        color: #2F2F2F;
+    }
+
+    .nn-home-hero-v2__description em {
+        font-style: italic;
+        font-weight: 700;
+        color: #3F9D55;
+    }
+
+    .nn-home-hero-v2__actions {
+        margin-top: 2.3rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.9rem;
+    }
+
+    .nn-home-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        border-radius: 999px;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .nn-home-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 28px rgba(45, 90, 39, 0.38) !important;
+    }
+
+    .nn-home-btn--primary {
+        min-height: 58px;
+        padding: 0 2rem;
+        background: #3E9A50;
+        color: #FFFFFF;
+        box-shadow: 0 12px 24px rgba(62, 154, 80, 0.2);
+    }
+
+    .nn-home-btn--ghost {
+        min-height: 58px;
+        padding: 0 1.5rem;
+        border: 1.5px solid rgba(28, 28, 28, 0.14);
+        background: rgba(255, 255, 255, 0.82);
+        color: #18202A;
+    }
+
+    .nn-home-btn--small {
+        min-height: 46px;
+        padding: 0 1.1rem;
+        background: #2D5A27;
+        color: #FFFFFF;
+    }
+
+    .nn-home-btn--ghost-soft {
+        background: #FFFFFF;
+        color: #1A1A2E;
+        border: 1.5px solid rgba(26, 26, 46, 0.16);
+    }
+
+    .nn-home-hero-v2__visual {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        min-height: 520px;
+    }
+
+    .nn-home-hero-v2__featured-strip {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.9rem;
+        width: min(100%, 540px);
+        margin-top: auto;
+        align-items: end;
+        padding: 1.15rem;
+        border-radius: 32px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(255, 255, 255, 0.74);
+        box-shadow: 0 18px 44px rgba(44, 51, 61, 0.08);
+        backdrop-filter: blur(8px);
+    }
+
+    .nn-home-hero-v2__featured-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 1rem 0.7rem 0.85rem;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(232, 224, 206, 0.95);
+        box-shadow: 0 8px 18px rgba(18, 24, 32, 0.05);
+    }
+
+    .nn-home-hero-v2__featured-card:nth-child(1),
+    .nn-home-hero-v2__featured-card:nth-child(3) {
+        transform: translateY(34px);
+    }
+
+    .nn-home-hero-v2__featured-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: contain;
+        display: block;
+    }
+
+    .nn-home-hero-v2__featured-card span {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: #20582B;
+        text-align: center;
+    }
+
+    .nn-home-trust {
+        position: relative;
+        background: linear-gradient(180deg, #FBFAF5 0%, #F6F1E5 100%);
+        padding: 72px 0 82px;
+        overflow: hidden;
+    }
+
+    .nn-home-trust::before {
+        content: '';
+        position: absolute;
+        inset: auto 0 0;
+        height: 120px;
+        background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(232,246,224,0.58) 100%);
+        pointer-events: none;
+    }
+
+    .nn-home-trust__head {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .nn-home-trust__head h2 {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(2.2rem, 4vw, 4.4rem);
+        line-height: 1.03;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: #111111;
+    }
+
+    .nn-home-trust__head span {
+        color: #56A35E;
+    }
+
+    .nn-home-trust__grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1.5rem;
+    }
+
+    .nn-home-trust__item {
+        text-align: center;
+        padding: 1rem 1rem 0;
+    }
+
+    .nn-home-trust__badge {
+        width: 88px;
+        height: 88px;
+        margin: 0 auto 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #FFFFFF 0%, #F4F8EB 48%, #EDF5DF 100%);
+        border: 1px solid rgba(92, 135, 92, 0.15);
+        box-shadow: 0 12px 22px rgba(126, 159, 103, 0.14);
+    }
+
+    .nn-home-trust__badge svg {
+        width: 58px;
+        height: 58px;
+    }
+
+    .nn-home-trust__item h3 {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #111111;
+    }
+
+    .nn-home-trust__item p {
+        margin: 0.65rem auto 0;
+        max-width: 240px;
+        font-size: 0.95rem;
+        line-height: 1.65;
+        color: #5B5F67;
+    }
+
+    .nn-home-soft-bg,
+    .nn-home-white-bg,
+    .nn-home-block5 {
+        background-image: linear-gradient(180deg, rgba(255, 248, 235, 0.95) 0%, rgba(255, 253, 248, 0.97) 100%), url('{{ asset('assets/images/home/wave-bg.png') }}');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .nn-home-soft-bg,
+    .nn-home-white-bg {
+        padding: 88px 0;
+    }
+
+    .nn-home-editorial-card,
+    .nn-home-product-stage {
+        background: rgba(255, 255, 255, 0.94);
+        border-radius: 30px;
+        padding: 2rem 1.7rem;
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+        border: 1px solid rgba(238, 227, 203, 0.9);
+    }
+
+    .nn-home-editorial-card h3,
+    .nn-home-product-stage h3 {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.32rem;
+        line-height: 1.2;
+        font-weight: 800;
+        color: #1A1A2E;
+    }
+
+    .nn-home-editorial-card p {
+        margin: 1rem 0 0;
+        font-size: 0.96rem;
+        line-height: 1.7;
+        color: #595D63;
+    }
+
+    .nn-home-editorial-card ul {
+        list-style: none;
+        margin: 1.15rem 0 0;
+        padding: 0;
+        display: grid;
+        gap: 0.8rem;
+    }
+
+    .nn-home-editorial-card li {
+        position: relative;
+        padding-left: 1.35rem;
+        font-size: 0.95rem;
+        line-height: 1.55;
+        color: #2F3542;
+    }
+
+    .nn-home-editorial-card li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.45rem;
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #F07AA2;
+        box-shadow: 0 0 0 4px rgba(240, 122, 162, 0.14);
+    }
+
+    .nn-home-product-stage {
+        text-align: center;
+        background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,249,239,0.95) 100%);
+    }
+
+    .nn-home-product-stage p {
+        margin: 0.9rem 0 0;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.98rem;
+        font-weight: 700;
+        color: #2D5A27;
+    }
+
+    .nn-home-inline-link {
+        display: inline-block;
+        margin-top: 1rem;
+        color: #2D7C3A;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    .nn-home-block5 {
+        padding: 92px 0;
+    }
+
+    .nn-home-block5__head {
+        text-align: center;
+        margin-bottom: 2.2rem;
+    }
+
+    .nn-home-block5__head h2 {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(2rem, 3.7vw, 3.4rem);
+        line-height: 1.06;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: #13151D;
+    }
+
+    .nn-home-block5__grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.35rem;
+    }
+
+    .nn-home-block5__card {
+        position: relative;
+        min-height: 290px;
+        border-radius: 30px;
+        padding: 1.8rem;
+        box-shadow: 0 14px 32px rgba(18, 24, 32, 0.06);
+        border: 1px solid rgba(214, 214, 214, 0.8);
+        background: rgba(255, 255, 255, 0.98);
+    }
+
+    .nn-home-block5__eyebrow {
+        margin: 0 0 0.8rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #4C8F55;
+    }
+
+    .nn-home-block5__card h3 {
+        margin: 0;
+        max-width: 430px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.75rem;
+        line-height: 1.14;
+        font-weight: 800;
+        color: #151922;
+    }
+
+    .nn-home-block5__card p {
+        margin: 0.95rem 0 0;
+        max-width: 520px;
+        font-size: 0.98rem;
+        line-height: 1.7;
+        color: #5B5F67;
+    }
+
+    .nn-home-block5__products {
+        margin-top: 1.35rem;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.8rem;
+    }
+
+    .nn-home-mini-product {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.95rem 0.75rem;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(232, 222, 202, 0.95);
+        text-align: center;
+    }
+
+    .nn-home-mini-product img {
+        width: 100%;
+        height: 78px;
+        object-fit: contain;
+        display: block;
+        margin-bottom: 0.55rem;
+    }
+
+    .nn-home-mini-product span {
+        font-size: 0.76rem;
+        line-height: 1.3;
+        font-weight: 700;
+        color: #1D2430;
+    }
+
+    .nn-home-mini-product a {
+        margin-top: 0.55rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        padding: 0 0.85rem;
+        border-radius: 999px;
+        background: #2D5A27;
+        color: #FFFFFF;
+        text-decoration: none;
+        font-size: 0.72rem;
+        font-weight: 700;
+    }
+
+    .nn-home-figure-wrap {
+        margin-top: 1.2rem;
+        overflow: hidden;
+        border-radius: 24px;
+        min-height: 150px;
+        background: linear-gradient(135deg, rgba(239, 242, 239, 0.95) 0%, rgba(228, 235, 229, 0.92) 100%);
+    }
+
+    .nn-home-figure-wrap img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(1) saturate(0.2) contrast(1.02);
+        opacity: 0.78;
+    }
+
+    .nn-home-story-wave {
+        margin-top: 1.35rem;
+        height: 84px;
+        border-radius: 0 0 22px 22px;
+        background: linear-gradient(180deg, rgba(246, 246, 246, 0.32) 0%, rgba(214, 214, 214, 0.65) 100%);
+        clip-path: ellipse(80% 100% at 50% 100%);
+    }
+
+    .nn-home-guidance-visual {
+        position: absolute;
+        right: 1.4rem;
+        bottom: 1.2rem;
+        display: flex;
+        align-items: flex-end;
+        gap: 0.55rem;
+        opacity: 0.84;
+        pointer-events: none;
+    }
+
+    .nn-home-guidance-clipboard {
+        width: 54px;
+        height: 72px;
+        border-radius: 10px;
+        background: linear-gradient(180deg, #F8F9FA 0%, #DDE5EA 100%);
+        border: 2px solid #B9C6CF;
+        position: relative;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.7);
+    }
+
+    .nn-home-guidance-clipboard::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 22px;
+        height: 8px;
+        border-radius: 999px;
+        background: #CFD8DE;
+    }
+
+    .nn-home-guidance-clipboard::after {
+        content: '';
+        position: absolute;
+        left: 12px;
+        top: 24px;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        background:
+            linear-gradient(#C5D0D8 0 0) left 0 top 0 / 100% 3px no-repeat,
+            linear-gradient(#C5D0D8 0 0) left 0 top 9px / 90% 3px no-repeat,
+            linear-gradient(#C5D0D8 0 0) left 0 top 18px / 80% 3px no-repeat;
+    }
+
+    .nn-home-guidance-avatar {
+        width: 84px;
+        height: 108px;
+        position: relative;
+    }
+
+    .nn-home-guidance-avatar::before {
+        content: '';
+        position: absolute;
+        inset: auto 12px 0;
+        height: 74px;
+        border-radius: 34px 34px 18px 18px;
+        background: linear-gradient(180deg, #EDF2F5 0%, #D9E4EA 100%);
+    }
+
+    .nn-home-guidance-avatar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 22px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background:
+            radial-gradient(circle at 50% 42%, #F7EFE7 0 56%, transparent 57%),
+            radial-gradient(circle at 50% 45%, #4F5561 0 65%, transparent 66%);
+        box-shadow: inset 0 -8px 0 rgba(247, 239, 231, 0.85);
+    }
+
+    .nn-home-block5__actions {
+        margin-top: 1.3rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
     }
 
     .nn-arrow-btn {
@@ -394,53 +989,112 @@ $favItems = array_merge(array_slice($pureeItems, 0, 1), array_slice($puffItems, 
         border-radius: 50%;
         cursor: pointer;
         font-size: 1.6rem;
-        color: #fff;
+        color: #FFFFFF;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 14px rgba(240, 122, 162, 0.40);
+        box-shadow: 0 4px 14px rgba(240, 122, 162, 0.4);
         z-index: 5;
         transition: background 0.2s;
         line-height: 1;
     }
 
     .nn-arrow-btn:hover {
-        background: #d95e8c;
+        background: #D95E8C;
+    }
+
+    @media (max-width: 1023px) {
+        .nn-home-hero-v2__inner {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+
+        .nn-home-hero-v2__visual {
+            min-height: auto;
+        }
+
+        .nn-home-trust__grid,
+        .nn-home-block5__grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
     }
 
     @media (max-width: 767px) {
-        .nn-home-section {
-            padding-top: 56px !important;
-            padding-bottom: 56px !important;
+        .nn-home-hero-v2 {
+            min-height: auto;
         }
 
-        .nn-home-hero {
-            min-height: 520px !important;
-            align-items: flex-end !important;
+        .nn-home-hero-v2__veil {
+            background: linear-gradient(180deg, rgba(255,250,242,0.96) 0%, rgba(255,250,242,0.93) 48%, rgba(255,250,242,0.82) 100%);
         }
 
-        .nn-home-hero h1 {
-            max-width: 100%;
-            font-size: clamp(2rem, 10vw, 3rem) !important;
+        .nn-home-hero-v2__inner {
+            padding-top: 3.5rem;
+            padding-bottom: 3.5rem;
+            min-height: auto;
         }
 
-        .nn-home-hero p[style*="max-width:440px"] {
-            max-width: 100% !important;
-            line-height: 1.7 !important;
+        .nn-home-hero-v2__copy h1 {
+            font-size: clamp(2.3rem, 12vw, 3.55rem);
         }
 
-        .nn-home-hero div[style*="margin-top:2.5rem"] {
+        .nn-home-hero-v2__subtitle {
+            font-size: 1.05rem;
+        }
+
+        .nn-home-hero-v2__meta {
+            font-size: 0.94rem;
+        }
+
+        .nn-home-hero-v2__description {
+            font-size: 0.98rem;
+        }
+
+        .nn-home-hero-v2__actions {
             flex-direction: column;
-            align-items: stretch !important;
         }
 
-        .nn-home-hero .nn-hero-btn,
-        .nn-home-hero .nn-hero-story-link {
-            justify-content: center;
+        .nn-home-btn--primary,
+        .nn-home-btn--ghost {
             width: 100%;
         }
 
-        .nn-carousel-shell {
+        .nn-home-hero-v2__featured-strip {
+            grid-template-columns: repeat(3, minmax(88px, 1fr));
+            gap: 0.65rem;
+            padding: 0.85rem;
+        }
+
+        .nn-home-hero-v2__featured-card {
+            padding: 0.8rem 0.55rem;
+            border-radius: 22px;
+        }
+
+        .nn-home-hero-v2__featured-card img {
+            height: 132px;
+        }
+
+        .nn-home-hero-v2__featured-card span {
+            font-size: 0.72rem;
+        }
+
+        .nn-home-trust,
+        .nn-home-soft-bg,
+        .nn-home-white-bg,
+        .nn-home-block5,
+        .nn-home-range {
+            padding-top: 58px !important;
+            padding-bottom: 58px !important;
+        }
+
+        .nn-home-trust__grid,
+        .nn-home-block5__grid {
+            grid-template-columns: 1fr;
+        }
+
+        .nn-home-carousel-section .nn-carousel-shell {
             padding: 0 0 70px !important;
         }
 
@@ -458,14 +1112,20 @@ $favItems = array_merge(array_slice($pureeItems, 0, 1), array_slice($puffItems, 
             right: calc(50% - 54px) !important;
         }
 
-        .nn-home-grid-section .grid.grid-cols-3 {
+        .nn-home-block5__products {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-        .nn-home-grid-section .grid.grid-cols-3 > :last-child {
+        .nn-home-block5__products .nn-home-mini-product:last-child {
             grid-column: 1 / -1;
             max-width: 180px;
             margin: 0 auto;
+        }
+
+        .nn-home-guidance-visual {
+            position: static;
+            margin-top: 1rem;
+            justify-content: flex-end;
         }
 
         .nn-home-range .flex.justify-center {
@@ -504,19 +1164,21 @@ $favItems = array_merge(array_slice($pureeItems, 0, 1), array_slice($puffItems, 
         window.nnCarousel = nnCarousel;
     }());
 
-    // Product Tabs
     (function() {
         var tabs = ['purees', 'puffs'];
         var activeStyle = 'background:#ffffff;color:#1A1A2E;border:2px solid #ffffff;';
         var inactiveStyle = 'background:transparent;color:rgba(255,255,255,0.70);border:2px solid rgba(255,255,255,0.35);';
         window.nnTab = function(active) {
-            // Hide all-panel when a specific tab is selected
             var allPanel = document.getElementById('tabpanel-all');
-            if (allPanel) allPanel.style.display = 'none';
+            if (allPanel) {
+                allPanel.style.display = 'none';
+            }
             tabs.forEach(function(t) {
                 var btn = document.getElementById('tab-' + t);
                 var panel = document.getElementById('tabpanel-' + t);
-                if (!btn || !panel) return;
+                if (!btn || !panel) {
+                    return;
+                }
                 if (t === active) {
                     btn.style.cssText = 'font-family:\'Poppins\',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;padding:10px 28px;border-radius:100px;cursor:pointer;transition:all 0.2s;' + activeStyle;
                     panel.style.display = 'grid';
