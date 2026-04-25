@@ -72,6 +72,7 @@
 
     <meta name="asset-base" content="{{ rtrim(url(''), '/') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ url('assets/store/css/components/header.css') }}">
     @yield('head')
 </head>
 
