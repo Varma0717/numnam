@@ -1,20 +1,5 @@
 <IfModule mod_rewrite.c>
-    Options -Indexes
     RewriteEngine On
-    RewriteBase /numnam-api
-
-    # Public assets without exposing /public in URL
-    RewriteRule ^build/(.*)$ public/build/$1 [L]
-    RewriteRule ^assets/(.*)$ public/assets/$1 [L]
-    RewriteCond %{REQUEST_URI} !^/storage/app/
-    RewriteRule ^storage/(.*)$ storage/app/public/$1 [L]
-    RewriteRule ^(favicon\.ico|robots\.txt)$ public/$1 [L]
-
-    # Route existing files/directories directly
-    RewriteCond %{REQUEST_FILENAME} -f [OR]
-    RewriteCond %{REQUEST_FILENAME} -d
-    RewriteRule ^ - [L]
-
-    # Laravel front controller at project root
-    RewriteRule ^ index.php [L]
+    RewriteRule ^$ public/ [L]
+    RewriteRule ((?s).*) public/$1 [L]
 </IfModule>
