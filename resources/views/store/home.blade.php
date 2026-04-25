@@ -56,7 +56,7 @@ $blockCards = [
 ];
 @endphp
 
-<section class="nn-home-hero-v2">
+<section class="nn-home-hero-v2 nn-fp-section">
     <div class="nn-home-hero-v2__bg"></div>
     <div class="nn-home-hero-v2__veil"></div>
     <div class="nn-home-hero-v2__glow nn-home-hero-v2__glow--left"></div>
@@ -86,7 +86,7 @@ $blockCards = [
     </div>
 </section>
 
-<section class="nn-home-trust">
+<section class="nn-home-trust nn-fp-section">
     <div class="nn-home-shell">
         <div class="nn-home-trust__head">
             <p class="nn-home-kicker">Why parents choose us</p>
@@ -141,7 +141,7 @@ $blockCards = [
     </div>
 </section>
 
-<section class="nn-home-section nn-home-carousel-section nn-home-soft-bg">
+<section class="nn-home-section nn-home-carousel-section nn-home-soft-bg nn-fp-section">
     <div class="nn-home-shell">
         <p class="nn-home-kicker">Stage 1 &middot; 6+ Months</p>
         <h2 class="nn-home-section-title">Num Nam Purees</h2>
@@ -186,7 +186,7 @@ $blockCards = [
     </div>
 </section>
 
-<section class="nn-home-section nn-home-carousel-section nn-home-white-bg">
+<section class="nn-home-section nn-home-carousel-section nn-home-white-bg nn-fp-section">
     <div class="nn-home-shell">
         <p class="nn-home-kicker">Stage 2 &middot; 8+ Months</p>
         <h2 class="nn-home-section-title">Num Nam Puffs</h2>
@@ -232,7 +232,7 @@ $blockCards = [
     </div>
 </section>
 
-<section class="nn-home-block5">
+<section class="nn-home-block5 nn-fp-section">
     <div class="nn-home-shell">
         <div class="nn-home-block5__head">
             <h2>Why NumNam Matters</h2>
@@ -281,7 +281,7 @@ $blockCards = [
     </div>
 </section>
 
-<section class="nn-home-section nn-home-range" style="position:relative;width:100%;padding:100px 0;overflow:hidden;">
+<section class="nn-home-section nn-home-range nn-fp-section" style="position:relative;width:100%;overflow:hidden;">
     <div style="position:absolute;inset:0;background-image:url('{{ asset('assets/images/bg_products.png') }}');background-size:cover;background-position:center;"></div>
     <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,25,12,0.48) 0%,rgba(10,25,12,0.40) 100%);"></div>
     <div style="position:relative;z-index:10;width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
@@ -1032,6 +1032,64 @@ $blockCards = [
             height: 140px !important;
         }
     }
+
+    /* ===== Full-page scroll snap (homepage only) ===== */
+    html.nn-fullpage {
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
+        scroll-padding-top: var(--nn-header-h, 70px);
+    }
+
+    .nn-fp-section {
+        height: calc(100vh - var(--nn-header-h, 70px));
+        scroll-snap-align: start;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        /* remove fixed padding from sections */
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    /* Hero: inner content already has padding, just center vertically */
+    .nn-fp-section.nn-home-hero-v2 .nn-home-hero-v2__inner {
+        min-height: unset;
+        padding-top: 2.5rem;
+        padding-bottom: 2.5rem;
+    }
+
+    /* Trust section: allow inner scroll if content overflows */
+    .nn-fp-section.nn-home-trust,
+    .nn-fp-section.nn-home-block5 {
+        overflow-y: auto;
+        overflow-x: hidden;
+        justify-content: flex-start;
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    /* Carousel sections: flex-column center */
+    .nn-fp-section .nn-home-shell {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 clamp(1.5rem, 5vw, 3rem);
+    }
+
+    /* Range/All Products section: allow inner scroll */
+    .nn-fp-section.nn-home-range {
+        overflow-y: auto;
+        justify-content: flex-start;
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    @media (max-width: 767px) {
+        .nn-fp-section {
+            height: calc(100vh - var(--nn-header-h, 70px));
+        }
+    }
 </style>
 <script>
     (function() {
@@ -1050,6 +1108,9 @@ $blockCards = [
         }
         window.nnCarousel = nnCarousel;
     }());
+
+    // Activate fullpage scroll on homepage
+    document.documentElement.classList.add('nn-fullpage');
 
     (function() {
         var tabs = ['purees', 'puffs'];

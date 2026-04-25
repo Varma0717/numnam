@@ -1,50 +1,60 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const button = document.querySelector('[data-nav-toggle]');
-  const mobileNav = document.querySelector('[data-mobile-nav]');
-  if (!button || !mobileNav) return;
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const fullscreenMenu = document.getElementById('nnFullscreenMenu');
 
-  const closeNav = () => {
-    mobileNav.classList.remove('open');
-    button.setAttribute('aria-expanded', 'false');
+  if (!hamburgerBtn || !fullscreenMenu) return;
+
+  const openMenu = () => {
+    fullscreenMenu.classList.add('open');
+    hamburgerBtn.classList.add('active');
+    hamburgerBtn.setAttribute('aria-expanded', 'true');
+    fullscreenMenu.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('nn-menu-open');
   };
 
-  const openNav = () => {
-    mobileNav.classList.add('open');
-    button.setAttribute('aria-expanded', 'true');
+  const closeMenu = () => {
+    fullscreenMenu.classList.remove('open');
+    hamburgerBtn.classList.remove('active');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    fullscreenMenu.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('nn-menu-open');
   };
 
-  button.setAttribute('aria-expanded', 'false');
-
-  button.addEventListener('click', () => {
-    if (mobileNav.classList.contains('open')) {
-      closeNav();
-      return;
-    }
-
-    openNav();
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      closeNav();
+  hamburgerBtn.addEventListener('click', () => {
+    if (fullscreenMenu.classList.contains('open')) {
+      closeMenu();
+    } else {
+      openMenu();
     }
   });
 
-  document.addEventListener('click', (event) => {
-    if (!mobileNav.classList.contains('open')) {
-      return;
-    }
-
-    if (mobileNav.contains(event.target) || button.contains(event.target)) {
-      return;
-    }
-
-    closeNav();
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
   });
 
-  window.addEventListener('resize', () => {
-    if (window.innerWidth >= 980) {
-      closeNav();
-    }
+  // Close when clicking the overlay backdrop (not the inner content)
+  fullscreenMenu.addEventListener('click', (e) => {
+    if (e.target === fullscreenMenu) closeMenu();
   });
+
+  // Close menu on nav link click (SPA navigation)
+  fullscreenMenu.querySelectorAll('.nn-menu-link').forEach((link) => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  // Scroll-based header style
+  const header = document.getElementById('siteHeader');
+  if (header) {
+    const onScroll = () => {
+      if (window.scrollY > 20) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
 });
+

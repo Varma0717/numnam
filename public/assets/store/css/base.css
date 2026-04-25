@@ -34,6 +34,9 @@
   /* flat candy shadow */
   --shadow-lg: 0 6px 0 rgba(221, 50, 89, 0.18);
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ── Layout ──────────────────────────────────────────────── */
+  --nn-header-h: 70px;
 }
 
 * {
