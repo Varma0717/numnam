@@ -29,6 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Dedicated close button inside the menu
+  const menuCloseBtn = document.getElementById('nnMenuCloseBtn');
+  if (menuCloseBtn) {
+    menuCloseBtn.addEventListener('click', closeMenu);
+  }
+
   // Close on Escape key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeMenu();

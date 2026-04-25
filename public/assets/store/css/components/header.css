@@ -446,6 +446,47 @@ body.nn-menu-open {
   overflow: hidden;
 }
 
+/* Dedicated close button inside fullscreen menu */
+.nn-menu-close-btn {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.4rem;
+  width: 48px;
+  height: 48px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  border-radius: 50%;
+  transition: background 0.2s;
+  z-index: 10;
+}
+
+.nn-menu-close-btn:hover {
+  background: rgba(255, 107, 138, 0.1);
+}
+
+.nn-menu-close-btn span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text, #2D2D3F);
+  border-radius: 2px;
+  position: absolute;
+}
+
+.nn-menu-close-btn span:first-child {
+  transform: rotate(45deg);
+}
+
+.nn-menu-close-btn span:last-child {
+  transform: rotate(-45deg);
+}
+
 /* Page main padding-top to clear the fixed header */
 .page {
   padding-top: var(--nn-header-h, 70px);

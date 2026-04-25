@@ -51,6 +51,9 @@
 
 {{-- Fullscreen overlay menu --}}
 <div class="nn-fullscreen-menu" id="nnFullscreenMenu" aria-hidden="true">
+    <button type="button" class="nn-menu-close-btn" id="nnMenuCloseBtn" aria-label="Close menu">
+        <span></span><span></span>
+    </button>
     <div class="nn-fullscreen-menu__inner">
 
         {{-- Left: utility / footer links --}}
