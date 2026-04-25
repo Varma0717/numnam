@@ -57,7 +57,7 @@ $blockCards = [
 @endphp
 
 <section class="nn-home-hero-v2 nn-fp-section">
-    <div class="nn-home-hero-v2__bg"></div>
+    <img src="{{ asset('assets/images/bg_with_child.jpeg') }}" alt="" aria-hidden="true" class="nn-home-hero-v2__bg">
     <div class="nn-home-hero-v2__veil"></div>
     <div class="nn-home-hero-v2__glow nn-home-hero-v2__glow--left"></div>
     <div class="nn-home-hero-v2__glow nn-home-hero-v2__glow--right"></div>
@@ -161,7 +161,7 @@ $blockCards = [
                 <div class="nn-home-product-stage">
                     <h3>Purees</h3>
                     @foreach($pureeItems as $i => $item)
-                    <div class="nn-puree-slide" data-idx="{{ $i }}" style="{{ $i !== 0 ? 'display:none;' : '' }}">
+                    <div class="nn-puree-slide" data-idx="{{ $i }}" @if($i !==0) style="display:none;" @endif>
                         <a href="{{ route('store.product.show', $item['slug']) }}">
                             <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:220px;width:100%;object-fit:contain;display:block;">
                         </a>
@@ -207,7 +207,7 @@ $blockCards = [
                 <div class="nn-home-product-stage">
                     <h3>Puffs</h3>
                     @foreach($puffItems as $i => $item)
-                    <div class="nn-puff-slide" data-idx="{{ $i }}" style="{{ $i !== 0 ? 'display:none;' : '' }}">
+                    <div class="nn-puff-slide" data-idx="{{ $i }}" @if($i !==0) style="display:none;" @endif>
                         <a href="{{ route('store.product.show', $item['slug']) }}">
                             <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:220px;width:100%;object-fit:contain;display:block;">
                         </a>
@@ -282,7 +282,7 @@ $blockCards = [
 </section>
 
 <section class="nn-home-section nn-home-range nn-fp-section" style="position:relative;width:100%;overflow:hidden;">
-    <div style="position:absolute;inset:0;background-image:url('{{ asset('assets/images/bg_products.png') }}');background-size:cover;background-position:center;"></div>
+    <img src="{{ asset('assets/images/bg_products.png') }}" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
     <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,25,12,0.48) 0%,rgba(10,25,12,0.40) 100%);"></div>
     <div style="position:relative;z-index:10;width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
         <div class="text-center mb-12">
@@ -363,9 +363,9 @@ $blockCards = [
     .nn-home-hero-v2__bg {
         position: absolute;
         inset: 0;
-        background-image: url('{{ asset(' assets/images/bg_with_child.jpeg') }}');
-        background-size: cover;
-        background-position: center;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .nn-home-hero-v2__veil {
@@ -654,8 +654,7 @@ $blockCards = [
     .nn-home-soft-bg,
     .nn-home-white-bg,
     .nn-home-block5 {
-        background-image: linear-gradient(180deg, rgba(255, 248, 235, 0.95) 0%, rgba(255, 253, 248, 0.97) 100%),
-        url('{{ asset(' assets/images/home/wave-bg.png') }}');
+        background-image: linear-gradient(180deg, rgba(255, 248, 235, 0.95) 0%, rgba(255, 253, 248, 0.97) 100%);
         background-size: cover;
         background-position: center;
     }

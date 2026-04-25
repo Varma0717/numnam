@@ -1053,7 +1053,6 @@
     /* ── Trust strip scrolling ──────────────────────── */
     .nn-trust-strip {
         overflow-x: auto;
-        scrollbar-width: none;
         -ms-overflow-style: none;
     }
 
