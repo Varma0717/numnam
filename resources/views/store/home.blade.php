@@ -1047,15 +1047,16 @@ $blockCards = [
         scroll-padding-top: var(--nn-header-h, 70px);
     }
 
-    /* Each section = exactly one viewport height — one scroll jumps one section */
+    /* Each section fills the viewport, but can grow naturally for long content */
     .nn-fp-section {
-        height: calc(100vh - var(--nn-header-h, 70px));
+        min-height: calc(100vh - var(--nn-header-h, 70px));
+        height: auto;
         scroll-snap-align: start;
         scroll-snap-stop: always;
-        overflow: hidden;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
     }
 
     /* Hero — background extends behind fixed header */
@@ -1075,7 +1076,8 @@ $blockCards = [
 
     @media (max-width: 767px) {
         .nn-fp-section {
-            height: calc(100svh - var(--nn-header-h, 70px));
+            min-height: calc(100svh - var(--nn-header-h, 70px));
+            height: auto;
         }
     }
 </style>
