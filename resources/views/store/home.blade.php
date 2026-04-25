@@ -1034,39 +1034,49 @@ $blockCards = [
     }
 
     /* ===== Smooth full-page scroll (homepage) ===== */
+
+    /* Make the page container full-width so sections span the full viewport */
+    body.store-home .page {
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+    }
+
     html.nn-fullpage {
         scroll-snap-type: y mandatory;
         scroll-behavior: smooth;
         scroll-padding-top: var(--nn-header-h, 70px);
     }
 
+    /* Each section = exactly one viewport height — one scroll jumps one section */
     .nn-fp-section {
-        min-height: calc(100vh - var(--nn-header-h, 70px));
+        height: calc(100vh - var(--nn-header-h, 70px));
         scroll-snap-align: start;
         scroll-snap-stop: always;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
         justify-content: center;
     }
 
-    /* Hero */
+    /* Hero — background extends behind fixed header */
     .nn-fp-section.nn-home-hero-v2 .nn-home-hero-v2__inner {
         padding-top: 2.5rem;
         padding-bottom: 2.5rem;
     }
 
-    /* Sections with lots of content: allow natural height */
+    /* Content-heavy sections: align to top so nothing is cut off */
     .nn-fp-section.nn-home-trust,
     .nn-fp-section.nn-home-block5,
     .nn-fp-section.nn-home-range {
         justify-content: flex-start;
-        padding-top: 3rem;
-        padding-bottom: 3rem;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
     }
 
     @media (max-width: 767px) {
         .nn-fp-section {
-            min-height: 100svh;
+            height: calc(100svh - var(--nn-header-h, 70px));
         }
     }
 </style>

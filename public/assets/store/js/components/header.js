@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const fullscreenMenu = document.getElementById('nnFullscreenMenu');
+  const header = document.getElementById('siteHeader');
 
   if (!hamburgerBtn || !fullscreenMenu) return;
 
@@ -51,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Scroll-based header style
-  const header = document.getElementById('siteHeader');
   if (header) {
     const onScroll = () => {
       if (window.scrollY > 20) {
