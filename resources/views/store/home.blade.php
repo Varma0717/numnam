@@ -363,7 +363,7 @@ $blockCards = [
     .nn-home-hero-v2__bg {
         position: absolute;
         inset: 0;
-        background-image: url('{{ asset('assets/images/bg_with_child.jpeg') }}');
+        background-image: url('{{ asset(' assets/images/bg_with_child.jpeg') }}');
         background-size: cover;
         background-position: center;
     }
@@ -655,7 +655,7 @@ $blockCards = [
     .nn-home-white-bg,
     .nn-home-block5 {
         background-image: linear-gradient(180deg, rgba(255, 248, 235, 0.95) 0%, rgba(255, 253, 248, 0.97) 100%),
-        url('{{ asset('assets/images/home/wave-bg.png') }}');
+        url('{{ asset(' assets/images/home/wave-bg.png') }}');
         background-size: cover;
         background-position: center;
     }
@@ -665,214 +665,214 @@ $blockCards = [
         padding: 88px 0;
     }
 
-        .nn-home-editorial-card,
-        .nn-home-product-stage {
-            background: rgba(255, 255, 255, 0.94);
-            border-radius: 30px;
-            padding: 2rem 1.7rem;
-            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
-            border: 1px solid rgba(238, 227, 203, 0.9);
-        }
+    .nn-home-editorial-card,
+    .nn-home-product-stage {
+        background: rgba(255, 255, 255, 0.94);
+        border-radius: 30px;
+        padding: 2rem 1.7rem;
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+        border: 1px solid rgba(238, 227, 203, 0.9);
+    }
 
-        .nn-home-editorial-card h3,
-        .nn-home-product-stage h3 {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.32rem;
-            line-height: 1.2;
-            font-weight: 800;
-            color: #1A1A2E;
-        }
+    .nn-home-editorial-card h3,
+    .nn-home-product-stage h3 {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.32rem;
+        line-height: 1.2;
+        font-weight: 800;
+        color: #1A1A2E;
+    }
 
-        .nn-home-editorial-card p {
-            margin: 1rem 0 0;
-            font-size: 0.96rem;
-            line-height: 1.7;
-            color: #595D63;
-        }
+    .nn-home-editorial-card p {
+        margin: 1rem 0 0;
+        font-size: 0.96rem;
+        line-height: 1.7;
+        color: #595D63;
+    }
 
-        .nn-home-editorial-card ul {
-            list-style: none;
-            margin: 1.15rem 0 0;
-            padding: 0;
-            display: grid;
-            gap: 0.8rem;
-        }
+    .nn-home-editorial-card ul {
+        list-style: none;
+        margin: 1.15rem 0 0;
+        padding: 0;
+        display: grid;
+        gap: 0.8rem;
+    }
 
-        .nn-home-editorial-card li {
-            position: relative;
-            padding-left: 1.35rem;
-            font-size: 0.95rem;
-            line-height: 1.55;
-            color: #2F3542;
-        }
+    .nn-home-editorial-card li {
+        position: relative;
+        padding-left: 1.35rem;
+        font-size: 0.95rem;
+        line-height: 1.55;
+        color: #2F3542;
+    }
 
-        .nn-home-editorial-card li::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0.45rem;
-            width: 8px;
-            height: 8px;
-            border-radius: 999px;
-            background: #F07AA2;
-            box-shadow: 0 0 0 4px rgba(240, 122, 162, 0.14);
-        }
+    .nn-home-editorial-card li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.45rem;
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #F07AA2;
+        box-shadow: 0 0 0 4px rgba(240, 122, 162, 0.14);
+    }
 
-        .nn-home-product-stage {
-            text-align: center;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 249, 239, 0.95) 100%);
-        }
+    .nn-home-product-stage {
+        text-align: center;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 249, 239, 0.95) 100%);
+    }
 
-        .nn-home-product-stage p {
-            margin: 0.9rem 0 0;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.98rem;
-            font-weight: 700;
-            color: #2D5A27;
-        }
+    .nn-home-product-stage p {
+        margin: 0.9rem 0 0;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.98rem;
+        font-weight: 700;
+        color: #2D5A27;
+    }
 
-        .nn-home-block5 {
-            padding: 92px 0;
-        }
+    .nn-home-block5 {
+        padding: 92px 0;
+    }
 
-        .nn-home-block5__head {
-            text-align: center;
-            margin-bottom: 2.8rem;
-        }
+    .nn-home-block5__head {
+        text-align: center;
+        margin-bottom: 2.8rem;
+    }
 
-        .nn-home-block5__head h2 {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(2rem, 3.7vw, 3.4rem);
-            line-height: 1.06;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            color: #13151D;
-        }
+    .nn-home-block5__head h2 {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(2rem, 3.7vw, 3.4rem);
+        line-height: 1.06;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: #13151D;
+    }
 
-        .nn-home-block5__grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1.35rem;
-        }
+    .nn-home-block5__grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.35rem;
+    }
 
-        .nn-home-block5__card {
-            position: relative;
-            min-height: 290px;
-            display: flex;
-            flex-direction: column;
-            border-radius: 30px;
-            padding: 1.8rem;
-            box-shadow: 0 14px 32px rgba(18, 24, 32, 0.06);
-            border: 1px solid rgba(214, 214, 214, 0.8);
-            background: rgba(255, 255, 255, 0.98);
-        }
+    .nn-home-block5__card {
+        position: relative;
+        min-height: 290px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 30px;
+        padding: 1.8rem;
+        box-shadow: 0 14px 32px rgba(18, 24, 32, 0.06);
+        border: 1px solid rgba(214, 214, 214, 0.8);
+        background: rgba(255, 255, 255, 0.98);
+    }
 
-        .nn-home-block5__card--cream {
-            background: linear-gradient(180deg, rgba(255, 250, 238, 0.98) 0%, rgba(255, 255, 255, 0.98) 100%);
-        }
+    .nn-home-block5__card--cream {
+        background: linear-gradient(180deg, rgba(255, 250, 238, 0.98) 0%, rgba(255, 255, 255, 0.98) 100%);
+    }
 
-        .nn-home-block5__card--mint {
-            background: linear-gradient(180deg, rgba(238, 247, 236, 0.98) 0%, rgba(255, 255, 255, 0.98) 100%);
-        }
+    .nn-home-block5__card--mint {
+        background: linear-gradient(180deg, rgba(238, 247, 236, 0.98) 0%, rgba(255, 255, 255, 0.98) 100%);
+    }
 
-        .nn-home-block5__card--blush {
-            background: linear-gradient(180deg, rgba(252, 242, 244, 0.98) 0%, rgba(255, 255, 255, 0.98) 100%);
-        }
+    .nn-home-block5__card--blush {
+        background: linear-gradient(180deg, rgba(252, 242, 244, 0.98) 0%, rgba(255, 255, 255, 0.98) 100%);
+    }
 
-        .nn-home-block5__card--sky {
-            background: linear-gradient(180deg, rgba(239, 247, 252, 0.98) 0%, rgba(255, 255, 255, 0.98) 100%);
-        }
+    .nn-home-block5__card--sky {
+        background: linear-gradient(180deg, rgba(239, 247, 252, 0.98) 0%, rgba(255, 255, 255, 0.98) 100%);
+    }
 
-        .nn-home-block5__eyebrow {
-            margin: 0 0 0.8rem;
-            font-size: 0.82rem;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: #4C8F55;
-        }
+    .nn-home-block5__eyebrow {
+        margin: 0 0 0.8rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #4C8F55;
+    }
 
-        .nn-home-block5__card h3 {
-            margin: 0;
-            max-width: 430px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.75rem;
-            line-height: 1.14;
-            font-weight: 800;
-            color: #151922;
-        }
+    .nn-home-block5__card h3 {
+        margin: 0;
+        max-width: 430px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.75rem;
+        line-height: 1.14;
+        font-weight: 800;
+        color: #151922;
+    }
 
-        .nn-home-block5__card p {
-            margin: 0.95rem 0 0;
-            max-width: 520px;
-            font-size: 0.98rem;
-            line-height: 1.7;
-            color: #5B5F67;
-        }
+    .nn-home-block5__card p {
+        margin: 0.95rem 0 0;
+        max-width: 520px;
+        font-size: 0.98rem;
+        line-height: 1.7;
+        color: #5B5F67;
+    }
 
-        .nn-home-block5__card > .nn-home-btn {
-            margin-top: auto;
-            align-self: flex-start;
-        }
+    .nn-home-block5__card>.nn-home-btn {
+        margin-top: auto;
+        align-self: flex-start;
+    }
 
-        .nn-home-block5__products {
-            margin-top: 1.5rem;
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 0.8rem;
-        }
+    .nn-home-block5__products {
+        margin-top: 1.5rem;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.8rem;
+    }
 
-        .nn-home-mini-product {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 0.95rem 0.75rem;
-            border-radius: 22px;
-            background: rgba(255, 255, 255, 0.95);
-            border: 1px solid rgba(232, 222, 202, 0.95);
-            text-align: center;
-            min-height: 100%;
-        }
+    .nn-home-mini-product {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0.95rem 0.75rem;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(232, 222, 202, 0.95);
+        text-align: center;
+        min-height: 100%;
+    }
 
-        .nn-home-mini-product img {
-            width: 100%;
-            height: 78px;
-            object-fit: contain;
-            display: block;
-            margin-bottom: 0.55rem;
-        }
+    .nn-home-mini-product img {
+        width: 100%;
+        height: 78px;
+        object-fit: contain;
+        display: block;
+        margin-bottom: 0.55rem;
+    }
 
-        .nn-home-mini-product span {
-            font-size: 0.76rem;
-            line-height: 1.3;
-            font-weight: 700;
-            color: #1D2430;
-        }
+    .nn-home-mini-product span {
+        font-size: 0.76rem;
+        line-height: 1.3;
+        font-weight: 700;
+        color: #1D2430;
+    }
 
-        .nn-home-mini-product a {
-            margin-top: auto;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 34px;
-            padding: 0 0.85rem;
-            border-radius: 999px;
-            background: #2D5A27;
-            color: #FFFFFF;
-            text-decoration: none;
-            font-size: 0.72rem;
-            font-weight: 700;
-        }
+    .nn-home-mini-product a {
+        margin-top: auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        padding: 0 0.85rem;
+        border-radius: 999px;
+        background: #2D5A27;
+        color: #FFFFFF;
+        text-decoration: none;
+        font-size: 0.72rem;
+        font-weight: 700;
+    }
 
-        .nn-home-block5__actions {
-            margin-top: auto;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-        }
+    .nn-home-block5__actions {
+        margin-top: auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+    }
 
     .nn-arrow-btn {
         background: #F07AA2;

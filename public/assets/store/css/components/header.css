@@ -120,9 +120,19 @@
 }
 
 @keyframes badge-bounce {
-  0%, 100% { transform: scale(1); }
-  40% { transform: scale(1.35); }
-  70% { transform: scale(0.9); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(1.35);
+  }
+
+  70% {
+    transform: scale(0.9);
+  }
 }
 
 /* ── Hamburger button ── */
@@ -155,18 +165,20 @@
   border-radius: 2px;
   transform-origin: center;
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-              opacity 0.25s ease,
-              width 0.25s ease;
+    opacity 0.25s ease,
+    width 0.25s ease;
 }
 
 /* Burger → X when active */
 .hamburger-btn.active .burger-line:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
 }
+
 .hamburger-btn.active .burger-line:nth-child(2) {
   opacity: 0;
   width: 0;
 }
+
 .hamburger-btn.active .burger-line:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
 }
@@ -249,7 +261,7 @@
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-              visibility 0.4s;
+    visibility 0.4s;
 }
 
 .nn-fullscreen-menu.open {
@@ -270,7 +282,7 @@
   transform: translateY(24px);
   opacity: 0;
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.05s,
-              opacity 0.4s ease 0.05s;
+    opacity 0.4s ease 0.05s;
 }
 
 .nn-fullscreen-menu.open .nn-fullscreen-menu__inner {
@@ -340,7 +352,7 @@
   height: 3px;
   background: var(--brand-1, #FF6B8A);
   transition: left 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-              right 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    right 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   border-radius: 2px;
 }
 
