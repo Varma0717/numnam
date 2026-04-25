@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hamburgerBtn.setAttribute('aria-expanded', 'true');
     fullscreenMenu.setAttribute('aria-hidden', 'false');
     document.body.classList.add('nn-menu-open');
+    if (header) header.classList.remove('header-hidden');
   };
 
   const closeMenu = () => {

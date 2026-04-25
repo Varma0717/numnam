@@ -1033,63 +1033,7 @@ $blockCards = [
         }
     }
 
-    /* ===== Full-page scroll snap (homepage only) ===== */
-    html.nn-fullpage {
-        scroll-snap-type: y mandatory;
-        scroll-behavior: smooth;
-        scroll-padding-top: var(--nn-header-h, 70px);
-    }
-
-    .nn-fp-section {
-        height: calc(100vh - var(--nn-header-h, 70px));
-        scroll-snap-align: start;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        /* remove fixed padding from sections */
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-    }
-
-    /* Hero: inner content already has padding, just center vertically */
-    .nn-fp-section.nn-home-hero-v2 .nn-home-hero-v2__inner {
-        min-height: unset;
-        padding-top: 2.5rem;
-        padding-bottom: 2.5rem;
-    }
-
-    /* Trust section: allow inner scroll if content overflows */
-    .nn-fp-section.nn-home-trust,
-    .nn-fp-section.nn-home-block5 {
-        overflow-y: auto;
-        overflow-x: hidden;
-        justify-content: flex-start;
-        padding-top: 2rem !important;
-        padding-bottom: 2rem !important;
-    }
-
-    /* Carousel sections: flex-column center */
-    .nn-fp-section .nn-home-shell {
-        width: 100%;
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0 clamp(1.5rem, 5vw, 3rem);
-    }
-
-    /* Range/All Products section: allow inner scroll */
-    .nn-fp-section.nn-home-range {
-        overflow-y: auto;
-        justify-content: flex-start;
-        padding-top: 2rem !important;
-        padding-bottom: 2rem !important;
-    }
-
-    @media (max-width: 767px) {
-        .nn-fp-section {
-            height: calc(100vh - var(--nn-header-h, 70px));
-        }
-    }
+    /* Sections scroll naturally — no snap */
 </style>
 <script>
     (function() {
@@ -1109,9 +1053,7 @@ $blockCards = [
         window.nnCarousel = nnCarousel;
     }());
 
-    // Activate fullpage scroll on homepage
-    document.documentElement.classList.add('nn-fullpage');
-
+    // Carousel and tab helpers only — no fullpage snap
     (function() {
         var tabs = ['purees', 'puffs'];
         var activeStyle = 'background:#ffffff;color:#1A1A2E;border:2px solid #ffffff;';

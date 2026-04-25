@@ -135,7 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const y = window.scrollY;
       siteHeader.classList.toggle('scrolled', y > 60);
 
-      if (y > 140 && y > lastScroll) {
+      const menuOpen = document.body.classList.contains('nn-menu-open');
+      if (y > 140 && y > lastScroll && !menuOpen) {
         siteHeader.classList.add('header-hidden');
       } else {
         siteHeader.classList.remove('header-hidden');
