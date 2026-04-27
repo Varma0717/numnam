@@ -56,6 +56,7 @@ $blockCards = [
 ];
 @endphp
 
+<div id="nn-fp-wrapper">
 <section class="nn-home-hero-v2 nn-fp-section">
     <img src="{{ asset('assets/images/bg_with_child.jpeg') }}" alt="" aria-hidden="true" class="nn-home-hero-v2__bg">
     <div class="nn-home-hero-v2__veil"></div>
@@ -321,6 +322,18 @@ $blockCards = [
         </div>
     </div>
 </section>
+</div><!-- /#nn-fp-wrapper -->
+
+<nav id="nn-fp-nav" aria-label="Page sections">
+    <ul>
+        <li><a href="#0" data-index="0" class="nn-fp-active"><span></span></a><span class="nn-fp-tip">Home</span></li>
+        <li><a href="#1" data-index="1"><span></span></a><span class="nn-fp-tip">Why NumNam</span></li>
+        <li><a href="#2" data-index="2"><span></span></a><span class="nn-fp-tip">Purees</span></li>
+        <li><a href="#3" data-index="3"><span></span></a><span class="nn-fp-tip">Puffs</span></li>
+        <li><a href="#4" data-index="4"><span></span></a><span class="nn-fp-tip">Why It Matters</span></li>
+        <li><a href="#5" data-index="5"><span></span></a><span class="nn-fp-tip">Our Range</span></li>
+    </ul>
+</nav>
 @endsection
 
 @section('scripts')
@@ -1032,53 +1045,140 @@ $blockCards = [
         }
     }
 
-    /* ===== Smooth full-page scroll (homepage) ===== */
+    /* ===== Transform-based full-page scroll (homepage) ===== */
 
-    /* Make the page container full-width so sections span the full viewport */
+    /* Full-width page container */
     body.store-home .page {
         width: 100%;
         max-width: 100%;
         padding: 0;
     }
 
-    html.nn-fullpage {
-        scroll-snap-type: y mandatory;
-        scroll-behavior: smooth;
-        scroll-padding-top: var(--nn-header-h, 70px);
+    /* Lock scroll when fullpage is active */
+    html.nn-fullpage,
+    html.nn-fullpage body {
+        overflow: hidden;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
-    /* Each section fills the viewport, but can grow naturally for long content */
+    /* Sliding wrapper */
+    #nn-fp-wrapper {
+        will-change: transform;
+        -webkit-transition: transform 0.75s cubic-bezier(0.77, 0, 0.175, 1);
+        transition: transform 0.75s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+    #nn-fp-wrapper.nn-fp-no-transition {
+        -webkit-transition: none !important;
+        transition: none !important;
+    }
+
+    /* Each section: exact height = viewport minus sticky header */
     .nn-fp-section {
-        min-height: calc(100vh - var(--nn-header-h, 70px));
-        height: auto;
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
+        box-sizing: border-box;
+        height: calc(100vh - var(--nn-header-h, 70px));
+        height: calc(100dvh - var(--nn-header-h, 70px));
+        width: 100%;
+        overflow-y: auto;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
 
-    /* Hero — background extends behind fixed header */
-    .nn-fp-section.nn-home-hero-v2 .nn-home-hero-v2__inner {
-        padding-top: 2.5rem;
-        padding-bottom: 2.5rem;
-    }
-
-    /* Content-heavy sections: align to top so nothing is cut off */
+    /* Content-heavy sections: top-align so nothing is cut off */
     .nn-fp-section.nn-home-trust,
     .nn-fp-section.nn-home-block5,
-    .nn-fp-section.nn-home-range {
+    .nn-fp-section.nn-home-range,
+    .nn-fp-section.nn-home-carousel-section {
         justify-content: flex-start;
-        padding-top: 2rem;
-        padding-bottom: 2rem;
+        align-items: stretch;
+    }
+
+    /* ── Side nav dots ─────────────────────────────── */
+    #nn-fp-nav {
+        position: fixed;
+        z-index: 200;
+        top: 50%;
+        right: 17px;
+        transform: translateY(-50%);
+        -webkit-transform: translate3d(0,-50%,0);
+        pointer-events: none;
+    }
+    #nn-fp-nav ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    #nn-fp-nav ul li {
+        display: block;
+        width: 14px;
+        height: 13px;
+        margin: 7px;
+        position: relative;
+    }
+    #nn-fp-nav ul li a {
+        display: block;
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        text-decoration: none;
+        pointer-events: all;
+    }
+    #nn-fp-nav ul li a span {
+        border-radius: 50%;
+        position: absolute;
+        height: 4px;
+        width: 4px;
+        background: #333;
+        left: 50%;
+        top: 50%;
+        margin: -2px 0 0 -2px;
+        -webkit-transition: all 0.1s ease-in-out;
+        transition: all 0.1s ease-in-out;
+    }
+    #nn-fp-nav ul li:hover a span {
+        width: 10px;
+        height: 10px;
+        margin: -5px 0 0 -5px;
+    }
+    #nn-fp-nav ul li a.nn-fp-active span,
+    #nn-fp-nav ul li:hover a.nn-fp-active span {
+        height: 12px;
+        width: 12px;
+        margin: -6px 0 0 -6px;
+        border-radius: 100%;
+        background: #F07AA2;
+    }
+    #nn-fp-nav ul li .nn-fp-tip {
+        position: absolute;
+        top: -2px;
+        right: 20px;
+        color: #fff;
+        font-size: 12px;
+        font-family: 'Poppins', sans-serif;
+        white-space: nowrap;
+        background: rgba(0,0,0,0.55);
+        border-radius: 4px;
+        padding: 2px 8px;
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+        pointer-events: none;
+        -webkit-transition: opacity 0.2s ease-in;
+        transition: opacity 0.2s ease-in;
+    }
+    #nn-fp-nav ul li:hover .nn-fp-tip {
+        width: auto;
+        opacity: 1;
     }
 
     @media (max-width: 767px) {
         .nn-fp-section {
-            min-height: calc(100svh - var(--nn-header-h, 70px));
-            height: auto;
+            height: calc(100svh - var(--nn-header-h, 70px));
         }
+        #nn-fp-nav { display: none; }
     }
 </style>
 <script>
@@ -1099,8 +1199,92 @@ $blockCards = [
         window.nnCarousel = nnCarousel;
     }());
 
-    // Activate smooth fullpage scroll on homepage
-    document.documentElement.classList.add('nn-fullpage');
+    // ── Transform-based full-page scroll controller ──────────────────
+    (function () {
+        var SECTIONS  = 6;
+        var DURATION  = 750; // must match CSS transition ms
+        var current   = 0;
+        var animating = false;
+        var wrapper   = document.getElementById('nn-fp-wrapper');
+        var navLinks  = document.querySelectorAll('#nn-fp-nav a[data-index]');
+
+        function sectionH() {
+            var header = document.querySelector('.site-header');
+            var hh = header ? header.offsetHeight : 70;
+            document.documentElement.style.setProperty('--nn-header-h', hh + 'px');
+            return window.innerHeight - hh;
+        }
+
+        function goTo(index, instant) {
+            if (index < 0 || index >= SECTIONS || index === current) return;
+            if (animating && !instant) return;
+            animating = true;
+            current   = index;
+
+            if (instant) {
+                wrapper.classList.add('nn-fp-no-transition');
+            } else {
+                wrapper.classList.remove('nn-fp-no-transition');
+            }
+
+            wrapper.style.transform = 'translate3d(0,' + (-current * sectionH()) + 'px,0)';
+
+            navLinks.forEach(function (a) {
+                a.classList.toggle('nn-fp-active', parseInt(a.dataset.index) === current);
+            });
+
+            setTimeout(function () {
+                wrapper.classList.remove('nn-fp-no-transition');
+                animating = false;
+            }, instant ? 0 : DURATION);
+        }
+
+        // Activate
+        document.documentElement.classList.add('nn-fullpage');
+        goTo(0, true);
+
+        // Recalculate on resize
+        window.addEventListener('resize', function () { goTo(current, true); });
+
+        // Mouse wheel
+        var lastWheel = 0;
+        window.addEventListener('wheel', function (e) {
+            e.preventDefault();
+            var now = Date.now();
+            if (now - lastWheel < 900) return;
+            lastWheel = now;
+            if (e.deltaY > 0) goTo(current + 1);
+            else              goTo(current - 1);
+        }, { passive: false });
+
+        // Touch
+        var touchStartY = 0;
+        window.addEventListener('touchstart', function (e) {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        window.addEventListener('touchend', function (e) {
+            var diff = touchStartY - e.changedTouches[0].clientY;
+            if (Math.abs(diff) < 50) return;
+            if (diff > 0) goTo(current + 1);
+            else          goTo(current - 1);
+        }, { passive: true });
+
+        // Keyboard
+        window.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); goTo(current + 1); }
+            if (e.key === 'ArrowUp'   || e.key === 'PageUp')   { e.preventDefault(); goTo(current - 1); }
+            if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+            if (e.key === 'End')  { e.preventDefault(); goTo(SECTIONS - 1); }
+        });
+
+        // Nav dot clicks
+        navLinks.forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                goTo(parseInt(a.dataset.index));
+            });
+        });
+    }());
 
     (function() {
         var tabs = ['purees', 'puffs'];
