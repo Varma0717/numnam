@@ -28,6 +28,7 @@ class FrontendController extends Controller
             ->orderBy('title')
             ->paginate((int) $request->input('per_page', 20));
 
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $pages */
         $payload = $pages->through(fn(Page $page) => $this->transformPageSummary($page));
 
         return response()->json([
@@ -132,6 +133,7 @@ class FrontendController extends Controller
             ->orderBy('name')
             ->paginate((int) $request->input('per_page', 12));
 
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $products */
         $payload = $products->through(function (Product $product) {
             return [
                 'id' => $product->id,

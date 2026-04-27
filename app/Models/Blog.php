@@ -8,6 +8,25 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @property int $id
+ * @property int|null $blog_category_id
+ * @property int|null $author_id
+ * @property string $title
+ * @property string $slug
+ * @property string|null $excerpt
+ * @property string|null $content
+ * @property string|null $featured_image
+ * @property string $status
+ * @property \Carbon\Carbon|null $published_at
+ * @property string|null $meta_title
+ * @property string|null $meta_description
+ * @property int $view_count
+ * @property-read string|null $featured_image_url
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ */
 class Blog extends Model
 {
     use HasFactory;
@@ -44,7 +63,9 @@ class Blog extends Model
             return $this->featured_image;
         }
 
-        return Storage::disk('public')->url($this->featured_image);
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
+        $disk = Storage::disk('public');
+        return $disk->url($this->featured_image);
     }
 
     public function category(): BelongsTo

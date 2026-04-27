@@ -6,6 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $page_id
+ * @property string|null $section_key
+ * @property string|null $section_type
+ * @property string|null $title
+ * @property string|null $content
+ * @property array|null $settings
+ * @property array|null $data
+ * @property int $position
+ * @property bool $is_active
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ */
 class PageSection extends Model
 {
     use HasFactory;

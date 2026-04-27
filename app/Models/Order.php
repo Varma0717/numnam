@@ -6,6 +6,34 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\PaymentEvent;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $order_number
+ * @property string $status
+ * @property string $subtotal
+ * @property string $discount
+ * @property string $shipping_fee
+ * @property int|null $shipping_method_id
+ * @property string $tax_amount
+ * @property string $total
+ * @property string|null $coupon_code
+ * @property string|null $payment_method
+ * @property string|null $payment_status
+ * @property string|null $payment_gateway
+ * @property string|null $payment_reference
+ * @property array|null $payment_meta
+ * @property string|null $ship_name
+ * @property string|null $ship_phone
+ * @property string|null $ship_address
+ * @property string|null $ship_city
+ * @property string|null $ship_state
+ * @property string|null $ship_pincode
+ * @property string|null $tracking_number
+ * @property string|null $notes
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ */
 class Order extends Model
 {
     use HasFactory;

@@ -6,6 +6,47 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @property int $id
+ * @property int|null $category_id
+ * @property int|null $product_category_id
+ * @property string $name
+ * @property string $slug
+ * @property string|null $sku
+ * @property string|null $description
+ * @property string|null $short_description
+ * @property string|null $content
+ * @property string|null $ingredients
+ * @property string|null $age_group
+ * @property string|null $type
+ * @property string|null $price
+ * @property string|null $sale_price
+ * @property int|null $stock
+ * @property string|null $image
+ * @property array|null $gallery
+ * @property bool $is_active
+ * @property bool $is_featured
+ * @property string|null $status
+ * @property \Carbon\Carbon|null $published_at
+ * @property string|null $meta_title
+ * @property string|null $meta_description
+ * @property array|null $badges
+ * @property array|null $nutrition_facts
+ * @property array|null $nutrition_info
+ * @property string|null $label_copy
+ * @property array|null $specifications
+ * @property string|null $storage_instructions
+ * @property string|null $safety_advice
+ * @property string|null $allergen_note
+ * @property array|null $customer_care
+ * @property array|null $regulatory_info
+ * @property string|null $barcode_url
+ * @property string|null $qr_code_url
+ * @property-read string|null $image_url
+ * @property-read array $gallery_urls
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ */
 class Product extends Model
 {
     use HasFactory;
@@ -157,6 +198,8 @@ class Product extends Model
             return asset(ltrim($path, '/'));
         }
 
-        return Storage::disk('public')->url($path);
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
+        $disk = Storage::disk('public');
+        return $disk->url($path);
     }
 }

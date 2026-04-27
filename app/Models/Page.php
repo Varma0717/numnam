@@ -7,6 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string|null $template
+ * @property string|null $meta_title
+ * @property string|null $meta_description
+ * @property string $status
+ * @property \Carbon\Carbon|null $published_at
+ * @property int $sort_order
+ * @property bool $is_homepage
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ */
 class Page extends Model
 {
     use HasFactory;
