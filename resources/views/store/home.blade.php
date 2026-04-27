@@ -1098,23 +1098,15 @@ $blockCards = [
         padding-bottom: clamp(1.5rem, 4vh, 3rem);
     }
 
-    /* Section 6: true 100vh minimum, own internal scroll */
+    /* Section 7 (footer): auto height — content only, no viewport lock */
     .nn-fp-section.nn-fp-last {
         box-sizing: border-box;
         height: auto;
-        min-height: 100vh;
-        min-height: 100dvh;
-        max-height: 100vh;
-        max-height: 100dvh;
-        overflow-y: auto;
-        overflow-x: hidden;
+        min-height: auto;
+        max-height: none;
+        overflow: visible;
         width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: stretch;
-        padding-top: calc(var(--nn-header-h, 100px) + clamp(1.5rem, 3vh, 2.5rem));
-        padding-bottom: 0;
+        display: block;
     }
 
     /* Section 7: footer slide */
@@ -1132,11 +1124,6 @@ $blockCards = [
     @media (max-width: 767px) {
         .nn-fp-section:not(.nn-fp-last) {
             height: 100svh;
-            min-height: 100svh;
-            max-height: 100svh;
-        }
-
-        .nn-fp-section.nn-fp-last {
             min-height: 100svh;
             max-height: 100svh;
         }
