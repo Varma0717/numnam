@@ -1041,11 +1041,11 @@ $blockCards = [
 
     /* ===== Transform-based full-page scroll (homepage) ===== */
 
-    /* Full-width page container */
+    /* Full-width page container — remove header offset so sections are true 100vh */
     body.store-home .page {
         width: 100%;
         max-width: 100%;
-        padding: 0;
+        padding: 0 !important;
     }
 
     /* Lock native scroll entirely — transform handles all movement */
@@ -1068,15 +1068,15 @@ $blockCards = [
         transition: none !important;
     }
 
-    /* Sections 1-5: strict viewport slides */
+    /* Sections 1-5: true 100vh slides — header floats on top */
     .nn-fp-section:not(.nn-fp-last) {
         box-sizing: border-box;
-        height: calc(100vh - var(--nn-header-h, 100px));
-        height: calc(100dvh - var(--nn-header-h, 100px));
-        min-height: calc(100vh - var(--nn-header-h, 100px));
-        min-height: calc(100dvh - var(--nn-header-h, 100px));
-        max-height: calc(100vh - var(--nn-header-h, 100px));
-        max-height: calc(100dvh - var(--nn-header-h, 100px));
+        height: 100vh;
+        height: 100dvh;
+        min-height: 100vh;
+        min-height: 100dvh;
+        max-height: 100vh;
+        max-height: 100dvh;
         width: 100%;
         overflow-y: auto;
         overflow-x: hidden;
@@ -1086,23 +1086,24 @@ $blockCards = [
         align-items: center;
     }
 
-    /* Content-heavy sections: centered with vertical padding so content never touches edges */
+    /* Non-hero sections: push content below the fixed header */
     .nn-fp-section.nn-home-trust,
     .nn-fp-section.nn-home-block5,
     .nn-fp-section.nn-home-carousel-section {
         justify-content: center;
         align-items: stretch;
-        padding-block: clamp(1.5rem, 4vh, 3rem);
+        padding-top: var(--nn-header-h, 100px);
+        padding-bottom: clamp(1.5rem, 4vh, 3rem);
     }
 
-    /* Section 6: natural content height, but own scroll context when content is long */
+    /* Section 6: true 100vh minimum, own internal scroll */
     .nn-fp-section.nn-fp-last {
         box-sizing: border-box;
         height: auto;
-        min-height: calc(100vh - var(--nn-header-h, 100px));
-        min-height: calc(100dvh - var(--nn-header-h, 100px));
-        max-height: calc(100vh - var(--nn-header-h, 100px));
-        max-height: calc(100dvh - var(--nn-header-h, 100px));
+        min-height: 100vh;
+        min-height: 100dvh;
+        max-height: 100vh;
+        max-height: 100dvh;
         overflow-y: auto;
         overflow-x: hidden;
         width: 100%;
@@ -1110,7 +1111,7 @@ $blockCards = [
         flex-direction: column;
         justify-content: flex-start;
         align-items: stretch;
-        padding-top: clamp(2rem, 5vh, 4rem);
+        padding-top: calc(var(--nn-header-h, 100px) + clamp(1.5rem, 3vh, 2.5rem));
         padding-bottom: 0;
     }
 
@@ -1127,13 +1128,14 @@ $blockCards = [
 
     @media (max-width: 767px) {
         .nn-fp-section:not(.nn-fp-last) {
-            height: calc(100svh - var(--nn-header-h, 100px));
-            min-height: calc(100svh - var(--nn-header-h, 100px));
-            max-height: calc(100svh - var(--nn-header-h, 100px));
+            height: 100svh;
+            min-height: 100svh;
+            max-height: 100svh;
         }
 
         .nn-fp-section.nn-fp-last {
-            max-height: calc(100svh - var(--nn-header-h, 100px));
+            min-height: 100svh;
+            max-height: 100svh;
         }
     }
 </style>
