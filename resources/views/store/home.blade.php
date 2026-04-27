@@ -321,7 +321,9 @@ $blockCards = [
                 @endforeach
             </div>
 
-            @include('store.partials.footer')
+            <div class="nn-home-last-footer">
+                @include('store.partials.footer')
+            </div>
         </div>
     </section>
 </div><!-- /#nn-fp-wrapper -->
@@ -1097,7 +1099,8 @@ $blockCards = [
     .nn-fp-section.nn-fp-last {
         box-sizing: border-box;
         height: auto;
-        min-height: auto;
+        min-height: calc(100vh - var(--nn-header-h, 100px));
+        min-height: calc(100dvh - var(--nn-header-h, 100px));
         max-height: calc(100vh - var(--nn-header-h, 100px));
         max-height: calc(100dvh - var(--nn-header-h, 100px));
         overflow-y: auto;
@@ -1107,7 +1110,19 @@ $blockCards = [
         flex-direction: column;
         justify-content: flex-start;
         align-items: stretch;
-        padding-block: clamp(3rem, 6vh, 5rem);
+        padding-top: clamp(2rem, 5vh, 4rem);
+        padding-bottom: 0;
+    }
+
+    .nn-home-last-footer {
+        margin-top: clamp(2rem, 5vh, 3rem);
+        border-top: 1px solid rgba(255, 255, 255, 0.28);
+        padding-top: clamp(1.25rem, 3vh, 2rem);
+    }
+
+    .nn-home-last-footer .footer-newsletter,
+    .nn-home-last-footer .site-footer {
+        margin-bottom: 0;
     }
 
     @media (max-width: 767px) {
