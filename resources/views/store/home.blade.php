@@ -1054,10 +1054,10 @@ $blockCards = [
         padding: 0;
     }
 
-    /* Lock scroll when fullpage is active */
+    /* Keep horizontal overflow clipped without trapping vertical page flow */
     html.nn-fullpage,
     html.nn-fullpage body {
-        overflow: hidden;
+        overflow-x: hidden;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
 
@@ -1186,7 +1186,7 @@ $blockCards = [
 
     @media (max-width: 767px) {
         .nn-fp-section {
-            height: calc(100svh - var(--nn-header-h, 70px));
+            min-height: calc(100svh - var(--nn-header-h, 100px));
         }
 
         #nn-fp-nav {
@@ -1212,112 +1212,113 @@ $blockCards = [
         window.nnCarousel = nnCarousel;
     }());
 
-    // ── Transform-based full-page scroll controller ──────────────────
+    // Transform-based full-page scroll controller
     (function() {
-        var SECTIONS = 6;
-        var DURATION = 750; // must match CSS transition ms
+        var SECTIONS = document.querySelectorAll('.nn-fp-section');
         var current = 0;
-        var animating = false;
+        var isAnimating = false;
         var wrapper = document.getElementById('nn-fp-wrapper');
         var navLinks = document.querySelectorAll('#nn-fp-nav a[data-index]');
 
-        function sectionH() {
+        if (!wrapper || !SECTIONS.length) return;
+
+        function sectionHeight() {
             var header = document.querySelector('.site-header');
             var hh = header ? header.offsetHeight : 100;
             document.documentElement.style.setProperty('--nn-header-h', hh + 'px');
             return window.innerHeight - hh;
         }
 
-        function goTo(index, instant) {
-            if (index < 0 || index >= SECTIONS || index === current) return;
-            if (animating && !instant) return;
-            animating = true;
+        function goTo(index) {
+            if (index < 0 || index >= SECTIONS.length) return;
+            if (isAnimating || index === current) return;
+
+            isAnimating = true;
             current = index;
 
-            if (instant) {
-                wrapper.classList.add('nn-fp-no-transition');
-            } else {
-                wrapper.classList.remove('nn-fp-no-transition');
-            }
-
-            wrapper.style.transform = 'translate3d(0,' + (-current * sectionH()) + 'px,0)';
+            wrapper.style.transform = 'translate3d(0, ' + (-current * sectionHeight()) + 'px, 0)';
 
             navLinks.forEach(function(a) {
-                a.classList.toggle('nn-fp-active', parseInt(a.dataset.index) === current);
+                a.classList.toggle('nn-fp-active', parseInt(a.dataset.index, 10) === current);
             });
 
             setTimeout(function() {
-                wrapper.classList.remove('nn-fp-no-transition');
-                animating = false;
-            }, instant ? 0 : DURATION);
+                isAnimating = false;
+            }, 700);
         }
 
-        // Activate
-        document.documentElement.classList.add('nn-fullpage');
-        goTo(0, true);
-
-        // Recalculate on resize
-        window.addEventListener('resize', function() {
-            goTo(current, true);
-        });
-
-        // Mouse wheel
-        var lastWheel = 0;
         window.addEventListener('wheel', function(e) {
-            e.preventDefault();
-            var now = Date.now();
-            if (now - lastWheel < 900) return;
-            lastWheel = now;
-            if (e.deltaY > 0) goTo(current + 1);
-            else goTo(current - 1);
+            var activeSection = SECTIONS[current];
+            if (!activeSection) return;
+
+            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight;
+            var canScrollUp = activeSection.scrollTop > 0;
+            var isLastSection = current === SECTIONS.length - 1;
+            var isFirstSection = current === 0;
+
+            if (e.deltaY > 0) {
+                if (canScrollDown) return;
+                if (isLastSection) return;
+                e.preventDefault();
+                goTo(current + 1);
+            } else {
+                if (canScrollUp) return;
+                if (isFirstSection) return;
+                e.preventDefault();
+                goTo(current - 1);
+            }
         }, {
             passive: false
         });
 
-        // Touch
-        var touchStartY = 0;
+        var startY = 0;
+
         window.addEventListener('touchstart', function(e) {
-            touchStartY = e.touches[0].clientY;
+            startY = e.touches[0].clientY;
         }, {
             passive: true
         });
+
         window.addEventListener('touchend', function(e) {
-            var diff = touchStartY - e.changedTouches[0].clientY;
+            var endY = e.changedTouches[0].clientY;
+            var diff = startY - endY;
+
+            var activeSection = SECTIONS[current];
+            if (!activeSection) return;
+
+            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight;
+            var canScrollUp = activeSection.scrollTop > 0;
+            var isLastSection = current === SECTIONS.length - 1;
+            var isFirstSection = current === 0;
+
             if (Math.abs(diff) < 50) return;
-            if (diff > 0) goTo(current + 1);
-            else goTo(current - 1);
+
+            if (diff > 0) {
+                if (!canScrollDown && !isLastSection) goTo(current + 1);
+            } else {
+                if (!canScrollUp && !isFirstSection) goTo(current - 1);
+            }
         }, {
             passive: true
         });
 
-        // Keyboard
-        window.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-                e.preventDefault();
-                goTo(current + 1);
-            }
-            if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-                e.preventDefault();
-                goTo(current - 1);
-            }
-            if (e.key === 'Home') {
-                e.preventDefault();
-                goTo(0);
-            }
-            if (e.key === 'End') {
-                e.preventDefault();
-                goTo(SECTIONS - 1);
-            }
-        });
-
-        // Nav dot clicks
         navLinks.forEach(function(a) {
             a.addEventListener('click', function(e) {
                 e.preventDefault();
-                goTo(parseInt(a.dataset.index));
+                goTo(parseInt(a.dataset.index, 10));
             });
         });
-    }());
+
+        document.documentElement.classList.add('nn-fullpage');
+        sectionHeight();
+        wrapper.style.transform = 'translate3d(0, 0px, 0)';
+
+        window.addEventListener('resize', function() {
+            sectionHeight();
+            wrapper.style.transform = 'translate3d(0, ' + (-current * sectionHeight()) + 'px, 0)';
+        });
+
+    })();
 
     (function() {
         var tabs = ['purees', 'puffs'];
