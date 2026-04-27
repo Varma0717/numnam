@@ -1195,95 +1195,154 @@ $blockCards = [
     }
 </style>
 <script>
-(function () {
-    var SECTIONS = document.querySelectorAll('.nn-fp-section');
-    var current = 0;
-    var isAnimating = false;
-    var wrapper = document.getElementById('nn-fp-wrapper');
-    var navLinks = document.querySelectorAll('#nn-fp-nav a[data-index]');
+    (function() {
+        function nnCarousel(type, dir) {
+            var slides = document.querySelectorAll('.nn-' + type + '-slide');
+            var current = 0;
+            for (var i = 0; i < slides.length; i++) {
+                if (slides[i].style.display !== 'none') {
+                    current = i;
+                    break;
+                }
+            }
+            slides[current].style.display = 'none';
+            var next = (current + dir + slides.length) % slides.length;
+            slides[next].style.display = 'block';
+        }
+        window.nnCarousel = nnCarousel;
+    }());
 
-    function sectionHeight() {
-        var header = document.querySelector('.site-header');
-        var hh = header ? header.offsetHeight : 100;
-        document.documentElement.style.setProperty('--nn-header-h', hh + 'px');
-        return window.innerHeight - hh;
-    }
+    // ── Transform-based full-page scroll controller ──────────────────
+    (function() {
+        var SECTIONS = 6;
+        var DURATION = 750; // must match CSS transition ms
+        var current = 0;
+        var animating = false;
+        var wrapper = document.getElementById('nn-fp-wrapper');
+        var navLinks = document.querySelectorAll('#nn-fp-nav a[data-index]');
 
-    function goTo(index) {
-        if (index < 0 || index >= SECTIONS.length) return;
-        if (isAnimating) return;
+        function sectionH() {
+            var header = document.querySelector('.site-header');
+            var hh = header ? header.offsetHeight : 100;
+            document.documentElement.style.setProperty('--nn-header-h', hh + 'px');
+            return window.innerHeight - hh;
+        }
 
-        isAnimating = true;
-        current = index;
+        function goTo(index, instant) {
+            if (index < 0 || index >= SECTIONS || index === current) return;
+            if (animating && !instant) return;
+            animating = true;
+            current = index;
 
-        wrapper.style.transform = `translate3d(0, ${-current * sectionHeight()}px, 0)`;
+            if (instant) {
+                wrapper.classList.add('nn-fp-no-transition');
+            } else {
+                wrapper.classList.remove('nn-fp-no-transition');
+            }
 
-        navLinks.forEach(a => {
-            a.classList.toggle('nn-fp-active', parseInt(a.dataset.index) === current);
+            wrapper.style.transform = 'translate3d(0,' + (-current * sectionH()) + 'px,0)';
+
+            navLinks.forEach(function(a) {
+                a.classList.toggle('nn-fp-active', parseInt(a.dataset.index) === current);
+            });
+
+            setTimeout(function() {
+                wrapper.classList.remove('nn-fp-no-transition');
+                animating = false;
+            }, instant ? 0 : DURATION);
+        }
+
+        // Activate
+        document.documentElement.classList.add('nn-fullpage');
+        goTo(0, true);
+
+        // Recalculate on resize
+        window.addEventListener('resize', function() {
+            goTo(current, true);
         });
 
-        setTimeout(() => isAnimating = false, 700);
-    }
-
-    // 👉 SMART SCROLL (MAIN FIX)
-    window.addEventListener('wheel', function (e) {
-        var activeSection = SECTIONS[current];
-
-        // Check if section can scroll
-        var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight;
-        var canScrollUp = activeSection.scrollTop > 0;
-
-        if (e.deltaY > 0) {
-            // scrolling DOWN
-            if (canScrollDown) return; // allow inner scroll
+        // Mouse wheel
+        var lastWheel = 0;
+        window.addEventListener('wheel', function(e) {
             e.preventDefault();
-            goTo(current + 1);
-        } else {
-            // scrolling UP
-            if (canScrollUp) return; // allow inner scroll
-            e.preventDefault();
-            goTo(current - 1);
-        }
-    }, { passive: false });
-
-    // TOUCH SUPPORT
-    var startY = 0;
-
-    window.addEventListener('touchstart', e => {
-        startY = e.touches[0].clientY;
-    }, { passive: true });
-
-    window.addEventListener('touchend', e => {
-        var endY = e.changedTouches[0].clientY;
-        var diff = startY - endY;
-
-        var activeSection = SECTIONS[current];
-        var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight;
-        var canScrollUp = activeSection.scrollTop > 0;
-
-        if (Math.abs(diff) < 50) return;
-
-        if (diff > 0) {
-            if (!canScrollDown) goTo(current + 1);
-        } else {
-            if (!canScrollUp) goTo(current - 1);
-        }
-    }, { passive: true });
-
-    // NAV DOTS
-    navLinks.forEach(a => {
-        a.addEventListener('click', function (e) {
-            e.preventDefault();
-            goTo(parseInt(a.dataset.index));
+            var now = Date.now();
+            if (now - lastWheel < 900) return;
+            lastWheel = now;
+            if (e.deltaY > 0) goTo(current + 1);
+            else goTo(current - 1);
+        }, {
+            passive: false
         });
-    });
 
-    // INIT
-    document.documentElement.classList.add('nn-fullpage');
-    goTo(0);
+        // Touch
+        var touchStartY = 0;
+        window.addEventListener('touchstart', function(e) {
+            touchStartY = e.touches[0].clientY;
+        }, {
+            passive: true
+        });
+        window.addEventListener('touchend', function(e) {
+            var diff = touchStartY - e.changedTouches[0].clientY;
+            if (Math.abs(diff) < 50) return;
+            if (diff > 0) goTo(current + 1);
+            else goTo(current - 1);
+        }, {
+            passive: true
+        });
 
-    window.addEventListener('resize', () => goTo(current));
+        // Keyboard
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                e.preventDefault();
+                goTo(current + 1);
+            }
+            if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                goTo(current - 1);
+            }
+            if (e.key === 'Home') {
+                e.preventDefault();
+                goTo(0);
+            }
+            if (e.key === 'End') {
+                e.preventDefault();
+                goTo(SECTIONS - 1);
+            }
+        });
 
-})();
+        // Nav dot clicks
+        navLinks.forEach(function(a) {
+            a.addEventListener('click', function(e) {
+                e.preventDefault();
+                goTo(parseInt(a.dataset.index));
+            });
+        });
+    }());
+
+    (function() {
+        var tabs = ['purees', 'puffs'];
+        var activeStyle = 'background:#ffffff;color:#1A1A2E;border:2px solid #ffffff;';
+        var inactiveStyle = 'background:transparent;color:rgba(255,255,255,0.70);border:2px solid rgba(255,255,255,0.35);';
+        window.nnTab = function(active) {
+            var allPanel = document.getElementById('tabpanel-all');
+            if (allPanel) {
+                allPanel.style.display = 'none';
+            }
+            tabs.forEach(function(t) {
+                var btn = document.getElementById('tab-' + t);
+                var panel = document.getElementById('tabpanel-' + t);
+                if (!btn || !panel) {
+                    return;
+                }
+                if (t === active) {
+                    btn.style.cssText = 'font-family:\'Poppins\',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;padding:10px 28px;border-radius:100px;cursor:pointer;transition:all 0.2s;' + activeStyle;
+                    panel.style.display = 'grid';
+                } else {
+                    btn.style.cssText = 'font-family:\'Poppins\',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;padding:10px 28px;border-radius:100px;cursor:pointer;transition:all 0.2s;' + inactiveStyle;
+                    panel.style.display = 'none';
+                }
+            });
+        };
+    }());
 </script>
 @endsection
