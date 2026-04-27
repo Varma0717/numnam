@@ -282,7 +282,7 @@ $blockCards = [
         </div>
     </section>
 
-    <section class="nn-home-section nn-home-range nn-fp-section nn-fp-last" style="position:relative;width:100%;">
+    <section class="nn-home-section nn-home-range nn-fp-section" style="position:relative;width:100%;">
         <img src="{{ asset('assets/images/bg_products.png') }}" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,25,12,0.48) 0%,rgba(10,25,12,0.40) 100%);"></div>
         <div style="position:relative;z-index:10;width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
@@ -321,10 +321,11 @@ $blockCards = [
                 @endforeach
             </div>
 
-            <div class="nn-home-last-footer">
-                @include('store.partials.footer')
-            </div>
         </div>
+    </section>
+
+    <section class="nn-fp-section nn-fp-last nn-home-footer-section">
+        @include('store.partials.footer')
     </section>
 </div><!-- /#nn-fp-wrapper -->
 @endsection
@@ -1089,7 +1090,8 @@ $blockCards = [
     /* Non-hero sections: push content below the fixed header */
     .nn-fp-section.nn-home-trust,
     .nn-fp-section.nn-home-block5,
-    .nn-fp-section.nn-home-carousel-section {
+    .nn-fp-section.nn-home-carousel-section,
+    .nn-fp-section.nn-home-range {
         justify-content: center;
         align-items: stretch;
         padding-top: var(--nn-header-h, 100px);
@@ -1115,14 +1117,15 @@ $blockCards = [
         padding-bottom: 0;
     }
 
-    .nn-home-last-footer {
-        margin-top: clamp(2rem, 5vh, 3rem);
-        border-top: 1px solid rgba(255, 255, 255, 0.28);
-        padding-top: clamp(1.25rem, 3vh, 2rem);
+    /* Section 7: footer slide */
+    .nn-home-footer-section {
+        background: #e6e6e6;
+        justify-content: flex-start !important;
+        padding-top: var(--nn-header-h, 100px);
     }
 
-    .nn-home-last-footer .footer-newsletter,
-    .nn-home-last-footer .site-footer {
+    .nn-home-footer-section .footer-newsletter,
+    .nn-home-footer-section .site-footer {
         margin-bottom: 0;
     }
 
