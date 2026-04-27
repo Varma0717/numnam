@@ -323,17 +323,6 @@ $blockCards = [
         </div>
     </section>
 </div><!-- /#nn-fp-wrapper -->
-
-<nav id="nn-fp-nav" aria-label="Page sections">
-    <ul>
-        <li><a href="#0" data-index="0" class="nn-fp-active"><span></span></a><span class="nn-fp-tip">Home</span></li>
-        <li><a href="#1" data-index="1"><span></span></a><span class="nn-fp-tip">Why NumNam</span></li>
-        <li><a href="#2" data-index="2"><span></span></a><span class="nn-fp-tip">Purees</span></li>
-        <li><a href="#3" data-index="3"><span></span></a><span class="nn-fp-tip">Puffs</span></li>
-        <li><a href="#4" data-index="4"><span></span></a><span class="nn-fp-tip">Why It Matters</span></li>
-        <li><a href="#5" data-index="5"><span></span></a><span class="nn-fp-tip">Our Range</span></li>
-    </ul>
-</nav>
 @endsection
 
 @section('scripts')
@@ -1096,101 +1085,9 @@ $blockCards = [
         align-items: stretch;
     }
 
-    /* ── Side nav dots ─────────────────────────────── */
-    #nn-fp-nav {
-        position: fixed;
-        z-index: 200;
-        top: 50%;
-        right: 17px;
-        transform: translateY(-50%);
-        -webkit-transform: translate3d(0, -50%, 0);
-        pointer-events: none;
-    }
-
-    #nn-fp-nav ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-    #nn-fp-nav ul li {
-        display: block;
-        width: 14px;
-        height: 13px;
-        margin: 7px;
-        position: relative;
-    }
-
-    #nn-fp-nav ul li a {
-        display: block;
-        position: relative;
-        z-index: 1;
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
-        text-decoration: none;
-        pointer-events: all;
-    }
-
-    #nn-fp-nav ul li a span {
-        border-radius: 50%;
-        position: absolute;
-        height: 4px;
-        width: 4px;
-        background: #333;
-        left: 50%;
-        top: 50%;
-        margin: -2px 0 0 -2px;
-        -webkit-transition: all 0.1s ease-in-out;
-        transition: all 0.1s ease-in-out;
-    }
-
-    #nn-fp-nav ul li:hover a span {
-        width: 10px;
-        height: 10px;
-        margin: -5px 0 0 -5px;
-    }
-
-    #nn-fp-nav ul li a.nn-fp-active span,
-    #nn-fp-nav ul li:hover a.nn-fp-active span {
-        height: 12px;
-        width: 12px;
-        margin: -6px 0 0 -6px;
-        border-radius: 100%;
-        background: #F07AA2;
-    }
-
-    #nn-fp-nav ul li .nn-fp-tip {
-        position: absolute;
-        top: -2px;
-        right: 20px;
-        color: #fff;
-        font-size: 12px;
-        font-family: 'Poppins', sans-serif;
-        white-space: nowrap;
-        background: rgba(0, 0, 0, 0.55);
-        border-radius: 4px;
-        padding: 2px 8px;
-        opacity: 0;
-        width: 0;
-        overflow: hidden;
-        pointer-events: none;
-        -webkit-transition: opacity 0.2s ease-in;
-        transition: opacity 0.2s ease-in;
-    }
-
-    #nn-fp-nav ul li:hover .nn-fp-tip {
-        width: auto;
-        opacity: 1;
-    }
-
     @media (max-width: 767px) {
         .nn-fp-section {
             min-height: calc(100svh - var(--nn-header-h, 100px));
-        }
-
-        #nn-fp-nav {
-            display: none;
         }
     }
 </style>
@@ -1218,7 +1115,6 @@ $blockCards = [
         var current = 0;
         var isAnimating = false;
         var wrapper = document.getElementById('nn-fp-wrapper');
-        var navLinks = document.querySelectorAll('#nn-fp-nav a[data-index]');
 
         if (!wrapper || !SECTIONS.length) return;
 
@@ -1237,10 +1133,6 @@ $blockCards = [
             current = index;
 
             wrapper.style.transform = 'translate3d(0, ' + (-current * sectionHeight()) + 'px, 0)';
-
-            navLinks.forEach(function(a) {
-                a.classList.toggle('nn-fp-active', parseInt(a.dataset.index, 10) === current);
-            });
 
             setTimeout(function() {
                 isAnimating = false;
@@ -1300,13 +1192,6 @@ $blockCards = [
             }
         }, {
             passive: true
-        });
-
-        navLinks.forEach(function(a) {
-            a.addEventListener('click', function(e) {
-                e.preventDefault();
-                goTo(parseInt(a.dataset.index, 10));
-            });
         });
 
         document.documentElement.classList.add('nn-fullpage');
