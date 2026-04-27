@@ -1,5 +1,10 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteRule ^$ public/ [L]
-    RewriteRule ((?s).*) public/$1 [L]
+
+    # Allow certificate challenge files to pass through untouched.
+    RewriteCond %{REQUEST_URI} !^/\.well-known/
+
+    # Forward all requests to the public directory.
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
