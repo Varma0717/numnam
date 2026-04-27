@@ -2,7 +2,7 @@
     <div class="site-header-inner">
         {{-- Logo --}}
         <a href="{{ route('store.home') }}" class="brand" aria-label="NumNam Home">
-            <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="80" height="80" loading="lazy" class="brand-logo-img">
+            <img src="{{ asset('assets/images/Logo/TM.png') }}" alt="NumNam logo" width="90" height="90" loading="lazy" class="brand-logo-img">
         </a>
 
         {{-- Right actions: search + cart + hamburger --}}
