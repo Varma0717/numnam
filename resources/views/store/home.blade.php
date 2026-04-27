@@ -282,7 +282,7 @@ $blockCards = [
         </div>
     </section>
 
-    <section class="nn-home-section nn-home-range nn-fp-section" style="position:relative;width:100%;overflow:hidden;">
+    <section class="nn-home-section nn-home-range nn-fp-section nn-fp-last" style="position:relative;width:100%;overflow:hidden;">
         <img src="{{ asset('assets/images/bg_products.png') }}" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,25,12,0.48) 0%,rgba(10,25,12,0.40) 100%);"></div>
         <div style="position:relative;z-index:10;width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
@@ -368,6 +368,7 @@ $blockCards = [
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center right;
     }
 
     .nn-home-hero-v2__veil {
@@ -1080,11 +1081,26 @@ $blockCards = [
     /* Content-heavy sections: centered with vertical padding so content never touches edges */
     .nn-fp-section.nn-home-trust,
     .nn-fp-section.nn-home-block5,
-    .nn-fp-section.nn-home-range,
     .nn-fp-section.nn-home-carousel-section {
         justify-content: center;
         align-items: stretch;
         padding-block: clamp(1.5rem, 4vh, 3rem);
+    }
+
+    /* All Products — last section: auto height, no snap height constraint */
+    .nn-fp-section.nn-fp-last {
+        min-height: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding-block: clamp(3rem, 6vh, 5rem);
+    }
+
+    /* When on last section, unlock body so footer scrolls into view */
+    html.nn-fp-last-active,
+    html.nn-fp-last-active body {
+        overflow: auto !important;
     }
 
     @media (max-width: 767px) {
@@ -1148,6 +1164,15 @@ $blockCards = [
             current = index;
             applyTransform();
 
+            // Last section: unlock body scroll so footer is reachable
+            var isLast = current === SECTIONS.length - 1;
+            document.documentElement.classList.toggle('nn-fp-last-active', isLast);
+            if (!isLast) {
+                // Re-lock body position when leaving last section
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+            }
+
             setTimeout(function() {
                 isAnimating = false;
             }, 700);
@@ -1157,17 +1182,25 @@ $blockCards = [
             var activeSection = SECTIONS[current];
             if (!activeSection) return;
 
-            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight - 1;
-            var canScrollUp = activeSection.scrollTop > 0;
             var isLastSection = current === SECTIONS.length - 1;
             var isFirstSection = current === 0;
 
+            // When on last section, let native scroll handle it
+            // Only intercept upward scroll at the very top to go back
+            if (isLastSection) {
+                var atTop = window.scrollY <= 0 && document.documentElement.scrollTop <= 0;
+                if (e.deltaY < 0 && atTop) {
+                    e.preventDefault();
+                    goTo(current - 1);
+                }
+                return;
+            }
+
+            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight - 1;
+            var canScrollUp = activeSection.scrollTop > 0;
+
             if (e.deltaY > 0) {
                 if (canScrollDown) return;
-                if (isLastSection) {
-                    e.preventDefault();
-                    return;
-                }
                 e.preventDefault();
                 goTo(current + 1);
             } else {
@@ -1198,15 +1231,22 @@ $blockCards = [
             var activeSection = SECTIONS[current];
             if (!activeSection) return;
 
-            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight - 1;
-            var canScrollUp = activeSection.scrollTop > 0;
             var isLastSection = current === SECTIONS.length - 1;
             var isFirstSection = current === 0;
 
             if (Math.abs(diff) < 50) return;
 
+            if (isLastSection) {
+                var atTop = window.scrollY <= 0 && document.documentElement.scrollTop <= 0;
+                if (diff < 0 && atTop) goTo(current - 1);
+                return;
+            }
+
+            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight - 1;
+            var canScrollUp = activeSection.scrollTop > 0;
+
             if (diff > 0) {
-                if (!canScrollDown && !isLastSection) goTo(current + 1);
+                if (!canScrollDown) goTo(current + 1);
             } else {
                 if (!canScrollUp && !isFirstSection) goTo(current - 1);
             }
