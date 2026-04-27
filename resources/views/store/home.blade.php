@@ -1087,25 +1087,27 @@ $blockCards = [
         padding-block: clamp(1.5rem, 4vh, 3rem);
     }
 
-    /* All Products — last section: auto height, no snap height constraint */
+    /* All Products — last section: keep fullpage snap, scroll inside this section only */
     .nn-fp-section.nn-fp-last {
-        min-height: auto !important;
-        height: auto !important;
-        overflow: visible !important;
+        min-height: calc(100vh - var(--nn-header-h, 100px));
+        min-height: calc(100dvh - var(--nn-header-h, 100px));
+        max-height: calc(100vh - var(--nn-header-h, 100px));
+        max-height: calc(100dvh - var(--nn-header-h, 100px));
+        overflow-y: auto;
+        overflow-x: hidden;
         justify-content: flex-start;
         align-items: stretch;
         padding-block: clamp(3rem, 6vh, 5rem);
     }
 
-    /* When on last section, unlock body so footer scrolls into view */
-    html.nn-fp-last-active,
-    html.nn-fp-last-active body {
-        overflow: auto !important;
-    }
-
     @media (max-width: 767px) {
         .nn-fp-section {
             min-height: calc(100svh - var(--nn-header-h, 100px));
+        }
+
+        .nn-fp-section.nn-fp-last {
+            min-height: calc(100svh - var(--nn-header-h, 100px));
+            max-height: calc(100svh - var(--nn-header-h, 100px));
         }
     }
 </style>
@@ -1164,15 +1166,6 @@ $blockCards = [
             current = index;
             applyTransform();
 
-            // Last section: unlock body scroll so footer is reachable
-            var isLast = current === SECTIONS.length - 1;
-            document.documentElement.classList.toggle('nn-fp-last-active', isLast);
-            if (!isLast) {
-                // Re-lock body position when leaving last section
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
-            }
-
             setTimeout(function() {
                 isAnimating = false;
             }, 700);
@@ -1182,25 +1175,17 @@ $blockCards = [
             var activeSection = SECTIONS[current];
             if (!activeSection) return;
 
+            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight - 1;
+            var canScrollUp = activeSection.scrollTop > 0;
             var isLastSection = current === SECTIONS.length - 1;
             var isFirstSection = current === 0;
 
-            // When on last section, let native scroll handle it
-            // Only intercept upward scroll at the very top to go back
-            if (isLastSection) {
-                var atTop = window.scrollY <= 0 && document.documentElement.scrollTop <= 0;
-                if (e.deltaY < 0 && atTop) {
-                    e.preventDefault();
-                    goTo(current - 1);
-                }
-                return;
-            }
-
-            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight - 1;
-            var canScrollUp = activeSection.scrollTop > 0;
-
             if (e.deltaY > 0) {
                 if (canScrollDown) return;
+                if (isLastSection) {
+                    e.preventDefault();
+                    return;
+                }
                 e.preventDefault();
                 goTo(current + 1);
             } else {
@@ -1231,22 +1216,15 @@ $blockCards = [
             var activeSection = SECTIONS[current];
             if (!activeSection) return;
 
+            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight - 1;
+            var canScrollUp = activeSection.scrollTop > 0;
             var isLastSection = current === SECTIONS.length - 1;
             var isFirstSection = current === 0;
 
             if (Math.abs(diff) < 50) return;
 
-            if (isLastSection) {
-                var atTop = window.scrollY <= 0 && document.documentElement.scrollTop <= 0;
-                if (diff < 0 && atTop) goTo(current - 1);
-                return;
-            }
-
-            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight - 1;
-            var canScrollUp = activeSection.scrollTop > 0;
-
             if (diff > 0) {
-                if (!canScrollDown) goTo(current + 1);
+                if (!canScrollDown && !isLastSection) goTo(current + 1);
             } else {
                 if (!canScrollUp && !isFirstSection) goTo(current - 1);
             }
