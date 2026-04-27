@@ -1076,13 +1076,14 @@ $blockCards = [
         align-items: center;
     }
 
-    /* Content-heavy sections: top-align so nothing is cut off */
+    /* Content-heavy sections: centered with vertical padding so content never touches edges */
     .nn-fp-section.nn-home-trust,
     .nn-fp-section.nn-home-block5,
     .nn-fp-section.nn-home-range,
     .nn-fp-section.nn-home-carousel-section {
-        justify-content: flex-start;
+        justify-content: center;
         align-items: stretch;
+        padding-block: clamp(1.5rem, 4vh, 3rem);
     }
 
     @media (max-width: 767px) {
