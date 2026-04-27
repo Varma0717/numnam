@@ -1115,6 +1115,7 @@ $blockCards = [
         var current = 0;
         var isAnimating = false;
         var wrapper = document.getElementById('nn-fp-wrapper');
+        var sectionOffsets = [];
 
         if (!wrapper || !SECTIONS.length) return;
 
@@ -1125,14 +1126,25 @@ $blockCards = [
             return window.innerHeight - hh;
         }
 
+        function recalcLayout() {
+            sectionHeight();
+            sectionOffsets = Array.prototype.map.call(SECTIONS, function(section) {
+                return section.offsetTop;
+            });
+        }
+
+        function applyTransform() {
+            var targetY = sectionOffsets[current] || 0;
+            wrapper.style.transform = 'translate3d(0, ' + (-targetY) + 'px, 0)';
+        }
+
         function goTo(index) {
             if (index < 0 || index >= SECTIONS.length) return;
             if (isAnimating || index === current) return;
 
             isAnimating = true;
             current = index;
-
-            wrapper.style.transform = 'translate3d(0, ' + (-current * sectionHeight()) + 'px, 0)';
+            applyTransform();
 
             setTimeout(function() {
                 isAnimating = false;
@@ -1143,7 +1155,7 @@ $blockCards = [
             var activeSection = SECTIONS[current];
             if (!activeSection) return;
 
-            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight;
+            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight - 1;
             var canScrollUp = activeSection.scrollTop > 0;
             var isLastSection = current === SECTIONS.length - 1;
             var isFirstSection = current === 0;
@@ -1184,7 +1196,7 @@ $blockCards = [
             var activeSection = SECTIONS[current];
             if (!activeSection) return;
 
-            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight;
+            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight - 1;
             var canScrollUp = activeSection.scrollTop > 0;
             var isLastSection = current === SECTIONS.length - 1;
             var isFirstSection = current === 0;
@@ -1201,12 +1213,12 @@ $blockCards = [
         });
 
         document.documentElement.classList.add('nn-fullpage');
-        sectionHeight();
-        wrapper.style.transform = 'translate3d(0, 0px, 0)';
+        recalcLayout();
+        applyTransform();
 
         window.addEventListener('resize', function() {
-            sectionHeight();
-            wrapper.style.transform = 'translate3d(0, ' + (-current * sectionHeight()) + 'px, 0)';
+            recalcLayout();
+            applyTransform();
         });
 
     })();
