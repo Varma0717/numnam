@@ -282,7 +282,7 @@ $blockCards = [
         </div>
     </section>
 
-    <section class="nn-home-section nn-home-range nn-fp-section nn-fp-last" style="position:relative;width:100%;overflow:hidden;">
+    <section class="nn-home-section nn-home-range nn-fp-section nn-fp-last" style="position:relative;width:100%;">
         <img src="{{ asset('assets/images/bg_products.png') }}" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,25,12,0.48) 0%,rgba(10,25,12,0.40) 100%);"></div>
         <div style="position:relative;z-index:10;width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
