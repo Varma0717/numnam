@@ -72,7 +72,7 @@
 
     <meta name="asset-base" content="{{ rtrim(url(''), '/') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link rel="stylesheet" href="{{ asset('assets/store/css/components/header.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/store/css/components/header.css') }}?v={{ filemtime(public_path('assets/store/css/components/header.css')) }}">
     @yield('head')
 </head>
 
@@ -159,8 +159,8 @@
     {{-- Toast notifications container --}}
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
-    <script src="{{ asset('assets/store/js/components/header.js') }}" defer></script>
-    <script src="{{ asset('assets/store/js/store.js') }}" defer></script>
+    <script src="{{ asset('assets/store/js/components/header.js') }}?v={{ filemtime(public_path('assets/store/js/components/header.js')) }}" defer></script>
+    <script src="{{ asset('assets/store/js/store.js') }}?v={{ filemtime(public_path('assets/store/js/store.js')) }}" defer></script>
     @yield('scripts')
 </body>
 
