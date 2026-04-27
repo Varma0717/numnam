@@ -282,7 +282,7 @@ $blockCards = [
         </div>
     </section>
 
-    <section class="nn-home-section nn-home-range nn-fp-section" style="position:relative;width:100%;">
+    <section class="nn-home-section nn-home-range nn-fp-section nn-fp-last" style="position:relative;width:100%;overflow-y:auto;">
         <img src="{{ asset('assets/images/bg_products.png') }}" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,25,12,0.48) 0%,rgba(10,25,12,0.40) 100%);"></div>
         <div style="position:relative;z-index:10;width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
@@ -321,11 +321,8 @@ $blockCards = [
                 @endforeach
             </div>
 
+            @include('store.partials.footer')
         </div>
-    </section>
-
-    <section class="nn-fp-section nn-fp-last nn-home-footer-section">
-        @include('store.partials.footer')
     </section>
 </div><!-- /#nn-fp-wrapper -->
 @endsection
@@ -1098,27 +1095,22 @@ $blockCards = [
         padding-bottom: clamp(1.5rem, 4vh, 3rem);
     }
 
-    /* Section 7 (footer): auto height — content only, no viewport lock */
+    /* Section 6 (last): 100vh internal scroll — products + footer, no empty gap */
     .nn-fp-section.nn-fp-last {
         box-sizing: border-box;
-        height: auto;
-        min-height: auto;
-        max-height: none;
-        overflow: visible;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 100vh;
+        min-height: 100dvh;
+        max-height: 100vh;
+        max-height: 100dvh;
+        overflow-y: auto;
+        overflow-x: hidden;
         width: 100%;
-        display: block;
     }
 
-    /* Section 7: footer slide */
     .nn-home-footer-section {
-        background: #e6e6e6;
-        justify-content: flex-start !important;
-        padding-top: var(--nn-header-h, 100px);
-    }
-
-    .nn-home-footer-section .footer-newsletter,
-    .nn-home-footer-section .site-footer {
-        margin-bottom: 0;
+        display: none; /* removed — footer lives inside section 6 */
     }
 
     @media (max-width: 767px) {
