@@ -1150,12 +1150,18 @@ $blockCards = [
 
             if (e.deltaY > 0) {
                 if (canScrollDown) return;
-                if (isLastSection) return;
+                if (isLastSection) {
+                    e.preventDefault();
+                    return;
+                }
                 e.preventDefault();
                 goTo(current + 1);
             } else {
                 if (canScrollUp) return;
-                if (isFirstSection) return;
+                if (isFirstSection) {
+                    e.preventDefault();
+                    return;
+                }
                 e.preventDefault();
                 goTo(current - 1);
             }

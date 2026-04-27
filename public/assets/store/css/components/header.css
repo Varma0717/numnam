@@ -58,6 +58,16 @@
   display: block;
 }
 
+@media (min-width: 1024px) {
+  .site-header {
+    height: 100px;
+  }
+
+  .brand-logo-img {
+    height: 90px;
+  }
+}
+
 /* Header right actions group */
 .header-actions {
   display: flex;
