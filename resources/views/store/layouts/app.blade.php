@@ -94,7 +94,9 @@
             @yield('content')
         </main>
 
+        @unless(request()->routeIs('store.home'))
         @include('store.partials.footer')
+        @endunless
     </div>
 
     <nav class="mobile-app-nav" aria-label="Mobile quick navigation">

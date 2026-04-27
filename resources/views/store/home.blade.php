@@ -320,6 +320,8 @@ $blockCards = [
                 </a>
                 @endforeach
             </div>
+
+            @include('store.partials.footer')
         </div>
     </section>
 </div><!-- /#nn-fp-wrapper -->
@@ -1064,11 +1066,15 @@ $blockCards = [
         transition: none !important;
     }
 
-    /* Each section: minimum height = viewport minus sticky header, allows overflow */
-    .nn-fp-section {
+    /* Sections 1-5: strict viewport slides */
+    .nn-fp-section:not(.nn-fp-last) {
         box-sizing: border-box;
+        height: calc(100vh - var(--nn-header-h, 100px));
+        height: calc(100dvh - var(--nn-header-h, 100px));
         min-height: calc(100vh - var(--nn-header-h, 100px));
         min-height: calc(100dvh - var(--nn-header-h, 100px));
+        max-height: calc(100vh - var(--nn-header-h, 100px));
+        max-height: calc(100dvh - var(--nn-header-h, 100px));
         width: 100%;
         overflow-y: auto;
         overflow-x: hidden;
@@ -1087,26 +1093,31 @@ $blockCards = [
         padding-block: clamp(1.5rem, 4vh, 3rem);
     }
 
-    /* All Products — last section: keep fullpage snap, scroll inside this section only */
+    /* Section 6: natural content height, but own scroll context when content is long */
     .nn-fp-section.nn-fp-last {
-        min-height: calc(100vh - var(--nn-header-h, 100px));
-        min-height: calc(100dvh - var(--nn-header-h, 100px));
+        box-sizing: border-box;
+        height: auto;
+        min-height: auto;
         max-height: calc(100vh - var(--nn-header-h, 100px));
         max-height: calc(100dvh - var(--nn-header-h, 100px));
         overflow-y: auto;
         overflow-x: hidden;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
         justify-content: flex-start;
         align-items: stretch;
         padding-block: clamp(3rem, 6vh, 5rem);
     }
 
     @media (max-width: 767px) {
-        .nn-fp-section {
+        .nn-fp-section:not(.nn-fp-last) {
+            height: calc(100svh - var(--nn-header-h, 100px));
             min-height: calc(100svh - var(--nn-header-h, 100px));
+            max-height: calc(100svh - var(--nn-header-h, 100px));
         }
 
         .nn-fp-section.nn-fp-last {
-            min-height: calc(100svh - var(--nn-header-h, 100px));
             max-height: calc(100svh - var(--nn-header-h, 100px));
         }
     }
