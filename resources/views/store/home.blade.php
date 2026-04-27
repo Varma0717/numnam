@@ -56,233 +56,238 @@ $blockCards = [
 ];
 @endphp
 
-<div id="nn-fp-wrapper">
-    <section class="nn-home-hero-v2 nn-fp-section">
-        <img src="{{ asset('assets/images/bg_with_child.jpeg') }}" alt="" aria-hidden="true" class="nn-home-hero-v2__bg">
-        <div class="nn-home-hero-v2__veil"></div>
-        <div class="nn-home-hero-v2__glow nn-home-hero-v2__glow--left"></div>
-        <div class="nn-home-hero-v2__glow nn-home-hero-v2__glow--right"></div>
+<div id="nn-fp-fixed">
+    <div id="nn-fp-wrapper">
+        <section class="nn-home-hero-v2 nn-fp-section">
+            <img src="{{ asset('assets/images/bg_with_child.jpeg') }}" alt="" aria-hidden="true" class="nn-home-hero-v2__bg">
+            <div class="nn-home-hero-v2__veil"></div>
+            <div class="nn-home-hero-v2__glow nn-home-hero-v2__glow--left"></div>
+            <div class="nn-home-hero-v2__glow nn-home-hero-v2__glow--right"></div>
 
-        <div class="nn-home-shell nn-home-hero-v2__inner">
-            <div class="nn-home-hero-v2__copy">
-                <p class="nn-home-kicker">Doctor-Founded &middot; Clean Label &middot; European Standards</p>
-                <h1>Vegetable Rich Baby Food</h1>
-                <p class="nn-home-hero-v2__subtitle">Inspired-By European Nutrition Standards</p>
-                <p class="nn-home-hero-v2__meta">
-                    Made by <strong>Doctor Parents</strong>
-                    <span>&middot;</span>
-                    No added sugars
-                    <span>&middot;</span>
-                    No preservatives
-                </p>
-                <p class="nn-home-hero-v2__description">
-                    <em>Real Fruits &amp; Vegetables</em> for your little one, in practical formats that make feeding feel simpler, cleaner, and more joyful.
-                </p>
-                <div class="nn-home-hero-v2__actions">
-                    <a href="{{ route('store.products') }}" class="nn-home-btn nn-home-btn--primary">Shop Now</a>
-                    <a href="{{ route('store.about') }}" class="nn-home-btn nn-home-btn--ghost">Our Story</a>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <section class="nn-home-trust nn-fp-section">
-        <div class="nn-home-shell">
-            <div class="nn-home-trust__head">
-                <p class="nn-home-kicker">Why parents choose us</p>
-                <h2>Why Parents Trust <span>Num Nam</span></h2>
-            </div>
-
-            <div class="nn-home-trust__grid">
-                @foreach($trustItems as $item)
-                <article class="nn-home-trust__item">
-                    <div class="nn-home-trust__badge" aria-hidden="true">
-                        @if($item['icon'] === 'doctor')
-                        <svg viewBox="0 0 64 64" fill="none">
-                            <rect x="16" y="10" width="32" height="44" rx="12" fill="#E7F1FB" stroke="#4E88B7" stroke-width="2.5" />
-                            <path d="M25 23h14" stroke="#4E88B7" stroke-width="3.5" stroke-linecap="round" />
-                            <path d="M32 16v14" stroke="#4E88B7" stroke-width="3.5" stroke-linecap="round" />
-                            <path d="M21 39c2.6-4.2 6.6-6.3 11-6.3S40.4 34.8 43 39" stroke="#1F5F8B" stroke-width="2.8" stroke-linecap="round" />
-                            <circle cx="32" cy="29" r="5.5" fill="#FFFFFF" stroke="#1F5F8B" stroke-width="2.5" />
-                            <path d="M24 48h16" stroke="#7FB4D6" stroke-width="2.5" stroke-linecap="round" />
-                        </svg>
-                        @elseif($item['icon'] === 'veg')
-                        <svg viewBox="0 0 64 64" fill="none">
-                            <path d="M32 15c10.8 0 18 6.2 18 16.4 0 10.9-8.6 18.6-18 18.6s-18-7.7-18-18.6C14 21.2 21.2 15 32 15Z" fill="#E8F6E4" stroke="#4E9B4E" stroke-width="2.5" />
-                            <path d="M32 18v28" stroke="#2F7C3A" stroke-width="2.8" stroke-linecap="round" />
-                            <path d="M32 32c0-6.8 5-12.2 12.5-13.8" stroke="#2F7C3A" stroke-width="2.6" stroke-linecap="round" />
-                            <path d="M32 36c0-6.2-4.7-11.1-11.6-12.9" stroke="#2F7C3A" stroke-width="2.6" stroke-linecap="round" />
-                            <path d="M21 46c2.8-1.6 6.5-2.6 11-2.6 4.6 0 8.3 1 11 2.6" stroke="#7CC46B" stroke-width="2.4" stroke-linecap="round" />
-                        </svg>
-                        @elseif($item['icon'] === 'sugar')
-                        <svg viewBox="0 0 64 64" fill="none">
-                            <rect x="19" y="14" width="26" height="36" rx="10" fill="#FFF4D9" stroke="#D3A640" stroke-width="2.5" />
-                            <path d="M25 24h14" stroke="#D3A640" stroke-width="2.8" stroke-linecap="round" />
-                            <path d="M25 31h9" stroke="#D3A640" stroke-width="2.8" stroke-linecap="round" />
-                            <path d="M25 38h7" stroke="#D3A640" stroke-width="2.8" stroke-linecap="round" />
-                            <path d="M47 18l-8 8" stroke="#E56A86" stroke-width="3.4" stroke-linecap="round" />
-                            <path d="M39 18l8 8" stroke="#E56A86" stroke-width="3.4" stroke-linecap="round" />
-                            <circle cx="32" cy="46" r="2.4" fill="#E56A86" />
-                        </svg>
-                        @else
-                        <svg viewBox="0 0 64 64" fill="none">
-                            <path d="M32 11 46 16.6v11.7c0 11-5.9 17.8-14 22.7-8.1-4.9-14-11.7-14-22.7V16.6L32 11Z" fill="#FFE8EE" stroke="#E56A86" stroke-width="2.6" stroke-linejoin="round" />
-                            <path d="M32 22v15" stroke="#C84D6C" stroke-width="3" stroke-linecap="round" />
-                            <path d="M24.5 29.5H39.5" stroke="#C84D6C" stroke-width="3" stroke-linecap="round" />
-                            <path d="M24.5 42c2.6-1.8 5.1-2.7 7.5-2.7s4.9.9 7.5 2.7" stroke="#F39AB3" stroke-width="2.4" stroke-linecap="round" />
-                        </svg>
-                        @endif
-                    </div>
-                    <h3>{{ $item['title'] }}</h3>
-                    <p>{{ $item['caption'] }}</p>
-                </article>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    <section class="nn-home-section nn-home-carousel-section nn-home-soft-bg nn-fp-section">
-        <div class="nn-home-shell">
-            <p class="nn-home-kicker">Stage 1 &middot; 6+ Months</p>
-            <h2 class="nn-home-section-title">Num Nam Purees</h2>
-
-            <div class="relative nn-carousel-shell" style="padding:0 56px;">
-                <button class="nn-arrow-btn" onclick="nnCarousel('puree',-1)" aria-label="Previous puree" style="position:absolute;left:0;top:50%;transform:translateY(-50%);">&#8249;</button>
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
-                    <div class="nn-home-editorial-card">
-                        <h3>Why Parents love<br>Num Nam Purees</h3>
-                        <ul>
-                            @foreach(['Helps introduce vegetables early','Smooth and easy to serve','Great for home or travel','No preservatives','No added sugar','No added salt'] as $pt)
-                            <li>{{ $pt }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-
-                    <div class="nn-home-product-stage">
-                        <h3>Purees</h3>
-                        @foreach($pureeItems as $i => $item)
-                        <div class="nn-puree-slide" data-idx="{{ $i }}" @if($i !==0) style="display:none;" @endif>
-                            <a href="{{ route('store.product.show', $item['slug']) }}">
-                                <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:220px;width:100%;object-fit:contain;display:block;">
-                            </a>
-                            <p>{{ $item['name'] }}</p>
-                        </div>
-                        @endforeach
-                        <a href="{{ route('store.products') }}" class="nn-home-inline-link">Explore All Purees &rarr;</a>
-                    </div>
-
-                    <div class="nn-home-editorial-card nn-home-editorial-card--right">
-                        <h3>What NumNam<br>Purees Are</h3>
-                        <p>NumNam Purees are smooth, easy-to-serve fruit and vegetable pouches made for babies beginning their food journey and exploring new tastes from 6+ months onward.</p>
-                        <ul>
-                            @foreach(['Smooth texture for early feeding','Easy pouch format','Vegetable-forward combinations','Made for tiny taste explorers'] as $pt)
-                            <li>{{ $pt }}</li>
-                            @endforeach
-                        </ul>
+            <div class="nn-home-shell nn-home-hero-v2__inner">
+                <div class="nn-home-hero-v2__copy">
+                    <p class="nn-home-kicker">Doctor-Founded &middot; Clean Label &middot; European Standards</p>
+                    <h1>Vegetable Rich Baby Food</h1>
+                    <p class="nn-home-hero-v2__subtitle">Inspired-By European Nutrition Standards</p>
+                    <p class="nn-home-hero-v2__meta">
+                        Made by <strong>Doctor Parents</strong>
+                        <span>&middot;</span>
+                        No added sugars
+                        <span>&middot;</span>
+                        No preservatives
+                    </p>
+                    <p class="nn-home-hero-v2__description">
+                        <em>Real Fruits &amp; Vegetables</em> for your little one, in practical formats that make feeding feel simpler, cleaner, and more joyful.
+                    </p>
+                    <div class="nn-home-hero-v2__actions">
+                        <a href="{{ route('store.products') }}" class="nn-home-btn nn-home-btn--primary">Shop Now</a>
+                        <a href="{{ route('store.about') }}" class="nn-home-btn nn-home-btn--ghost">Our Story</a>
                     </div>
                 </div>
-                <button class="nn-arrow-btn" onclick="nnCarousel('puree',1)" aria-label="Next puree" style="position:absolute;right:0;top:50%;transform:translateY(-50%);">&#8250;</button>
+
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="nn-home-section nn-home-carousel-section nn-home-white-bg nn-fp-section">
-        <div class="nn-home-shell">
-            <p class="nn-home-kicker">Stage 2 &middot; 8+ Months</p>
-            <h2 class="nn-home-section-title">Num Nam Puffs</h2>
-
-            <div class="relative nn-carousel-shell" style="padding:0 56px;">
-                <button class="nn-arrow-btn" onclick="nnCarousel('puff',-1)" aria-label="Previous puff" style="position:absolute;left:0;top:50%;transform:translateY(-50%);">&#8249;</button>
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
-                    <div class="nn-home-editorial-card">
-                        <h3>Why parents choose<br>NumNam Puffs</h3>
-                        <p>Our puffs are designed to be a more thoughtful snacking option.</p>
-                        <ul>
-                            @foreach(['Combining convenience','Playful texture','Carefully chosen ingredients','A format children enjoy'] as $pt)
-                            <li>{{ $pt }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-
-                    <div class="nn-home-product-stage">
-                        <h3>Puffs</h3>
-                        @foreach($puffItems as $i => $item)
-                        <div class="nn-puff-slide" data-idx="{{ $i }}" @if($i !==0) style="display:none;" @endif>
-                            <a href="{{ route('store.product.show', $item['slug']) }}">
-                                <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:220px;width:100%;object-fit:contain;display:block;">
-                            </a>
-                            <p>{{ $item['name'] }}</p>
-                        </div>
-                        @endforeach
-                        <a href="{{ route('store.products') }}" class="nn-home-inline-link">Explore All Puffs &rarr;</a>
-                    </div>
-
-                    <div class="nn-home-editorial-card nn-home-editorial-card--right">
-                        <h3>What they Are</h3>
-                        <p>NumNam Puffs are light, easy-to-hold finger snacks created for babies and young children as they begin self-feeding, texture exploration, and independent snacking.</p>
-                        <ul>
-                            @foreach(['Easy for little hands to hold','Gentle crunchy texture','Made for snack time and on-the-go','Designed for growing kids'] as $pt)
-                            <li>{{ $pt }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+        <section class="nn-home-trust nn-fp-section">
+            <div class="nn-home-shell">
+                <div class="nn-home-trust__head">
+                    <p class="nn-home-kicker">Why parents choose us</p>
+                    <h2>Why Parents Trust <span>Num Nam</span></h2>
                 </div>
-                <button class="nn-arrow-btn" onclick="nnCarousel('puff',1)" aria-label="Next puff" style="position:absolute;right:0;top:50%;transform:translateY(-50%);">&#8250;</button>
-            </div>
-        </div>
-    </section>
 
-    <section class="nn-home-block5 nn-fp-section">
-        <div class="nn-home-shell">
-            <div class="nn-home-block5__head">
-                <h2>Why NumNam Matters</h2>
-            </div>
-
-            <div class="nn-home-block5__grid">
-                <article class="nn-home-block5__card nn-home-block5__card--cream">
-                    <p class="nn-home-block5__eyebrow">{{ $blockCards[0]['eyebrow'] }}</p>
-                    <h3>{{ $blockCards[0]['title'] }}</h3>
-                    <p>{{ $blockCards[0]['copy'] }}</p>
-                    <div class="nn-home-block5__products">
-                        @foreach($favItems as $fav)
-                        <div class="nn-home-mini-product">
-                            <img src="{{ $fav['img'] }}" alt="{{ $fav['name'] }}" loading="lazy">
-                            <span>{{ $fav['name'] }}</span>
-                            <a href="{{ route('store.product.show', $fav['slug']) }}">Add to Cart</a>
+                <div class="nn-home-trust__grid">
+                    @foreach($trustItems as $item)
+                    <article class="nn-home-trust__item">
+                        <div class="nn-home-trust__badge" aria-hidden="true">
+                            @if($item['icon'] === 'doctor')
+                            <svg viewBox="0 0 64 64" fill="none">
+                                <rect x="16" y="10" width="32" height="44" rx="12" fill="#E7F1FB" stroke="#4E88B7" stroke-width="2.5" />
+                                <path d="M25 23h14" stroke="#4E88B7" stroke-width="3.5" stroke-linecap="round" />
+                                <path d="M32 16v14" stroke="#4E88B7" stroke-width="3.5" stroke-linecap="round" />
+                                <path d="M21 39c2.6-4.2 6.6-6.3 11-6.3S40.4 34.8 43 39" stroke="#1F5F8B" stroke-width="2.8" stroke-linecap="round" />
+                                <circle cx="32" cy="29" r="5.5" fill="#FFFFFF" stroke="#1F5F8B" stroke-width="2.5" />
+                                <path d="M24 48h16" stroke="#7FB4D6" stroke-width="2.5" stroke-linecap="round" />
+                            </svg>
+                            @elseif($item['icon'] === 'veg')
+                            <svg viewBox="0 0 64 64" fill="none">
+                                <path d="M32 15c10.8 0 18 6.2 18 16.4 0 10.9-8.6 18.6-18 18.6s-18-7.7-18-18.6C14 21.2 21.2 15 32 15Z" fill="#E8F6E4" stroke="#4E9B4E" stroke-width="2.5" />
+                                <path d="M32 18v28" stroke="#2F7C3A" stroke-width="2.8" stroke-linecap="round" />
+                                <path d="M32 32c0-6.8 5-12.2 12.5-13.8" stroke="#2F7C3A" stroke-width="2.6" stroke-linecap="round" />
+                                <path d="M32 36c0-6.2-4.7-11.1-11.6-12.9" stroke="#2F7C3A" stroke-width="2.6" stroke-linecap="round" />
+                                <path d="M21 46c2.8-1.6 6.5-2.6 11-2.6 4.6 0 8.3 1 11 2.6" stroke="#7CC46B" stroke-width="2.4" stroke-linecap="round" />
+                            </svg>
+                            @elseif($item['icon'] === 'sugar')
+                            <svg viewBox="0 0 64 64" fill="none">
+                                <rect x="19" y="14" width="26" height="36" rx="10" fill="#FFF4D9" stroke="#D3A640" stroke-width="2.5" />
+                                <path d="M25 24h14" stroke="#D3A640" stroke-width="2.8" stroke-linecap="round" />
+                                <path d="M25 31h9" stroke="#D3A640" stroke-width="2.8" stroke-linecap="round" />
+                                <path d="M25 38h7" stroke="#D3A640" stroke-width="2.8" stroke-linecap="round" />
+                                <path d="M47 18l-8 8" stroke="#E56A86" stroke-width="3.4" stroke-linecap="round" />
+                                <path d="M39 18l8 8" stroke="#E56A86" stroke-width="3.4" stroke-linecap="round" />
+                                <circle cx="32" cy="46" r="2.4" fill="#E56A86" />
+                            </svg>
+                            @else
+                            <svg viewBox="0 0 64 64" fill="none">
+                                <path d="M32 11 46 16.6v11.7c0 11-5.9 17.8-14 22.7-8.1-4.9-14-11.7-14-22.7V16.6L32 11Z" fill="#FFE8EE" stroke="#E56A86" stroke-width="2.6" stroke-linejoin="round" />
+                                <path d="M32 22v15" stroke="#C84D6C" stroke-width="3" stroke-linecap="round" />
+                                <path d="M24.5 29.5H39.5" stroke="#C84D6C" stroke-width="3" stroke-linecap="round" />
+                                <path d="M24.5 42c2.6-1.8 5.1-2.7 7.5-2.7s4.9.9 7.5 2.7" stroke="#F39AB3" stroke-width="2.4" stroke-linecap="round" />
+                            </svg>
+                            @endif
                         </div>
-                        @endforeach
-                    </div>
-                </article>
-
-                <article class="nn-home-block5__card nn-home-block5__card--mint">
-                    <p class="nn-home-block5__eyebrow">{{ $blockCards[1]['eyebrow'] }}</p>
-                    <h3>{{ $blockCards[1]['title'] }}</h3>
-                    <p>{{ $blockCards[1]['copy'] }}</p>
-                    <a href="{{ route('store.about') }}" class="nn-home-btn nn-home-btn--small">Visit the Learn Section</a>
-                </article>
-
-                <article class="nn-home-block5__card nn-home-block5__card--blush">
-                    <p class="nn-home-block5__eyebrow">{{ $blockCards[2]['eyebrow'] }}</p>
-                    <h3>{{ $blockCards[2]['title'] }}</h3>
-                    <p>{{ $blockCards[2]['copy'] }}</p>
-                    <a href="{{ route('store.about') }}" class="nn-home-btn nn-home-btn--small nn-home-btn--ghost-soft">Read Our Story</a>
-                </article>
-
-                <article class="nn-home-block5__card nn-home-block5__card--sky">
-                    <p class="nn-home-block5__eyebrow">{{ $blockCards[3]['eyebrow'] }}</p>
-                    <h3>{{ $blockCards[3]['title'] }}</h3>
-                    <p>{{ $blockCards[3]['copy'] }}</p>
-                    <div class="nn-home-block5__actions">
-                        <a href="{{ route('store.products') }}" class="nn-home-btn nn-home-btn--small">View Store</a>
-                        <a href="{{ route('store.blog.index') }}" class="nn-home-btn nn-home-btn--small nn-home-btn--ghost-soft">Learn More</a>
-                    </div>
-                </article>
+                        <h3>{{ $item['title'] }}</h3>
+                        <p>{{ $item['caption'] }}</p>
+                    </article>
+                    @endforeach
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="nn-home-section nn-home-range nn-fp-section nn-fp-last" style="position:relative;width:100%;overflow-y:auto;">
+        <section class="nn-home-section nn-home-carousel-section nn-home-soft-bg nn-fp-section">
+            <div class="nn-home-shell">
+                <p class="nn-home-kicker">Stage 1 &middot; 6+ Months</p>
+                <h2 class="nn-home-section-title">Num Nam Purees</h2>
+
+                <div class="relative nn-carousel-shell" style="padding:0 56px;">
+                    <button class="nn-arrow-btn" onclick="nnCarousel('puree',-1)" aria-label="Previous puree" style="position:absolute;left:0;top:50%;transform:translateY(-50%);">&#8249;</button>
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
+                        <div class="nn-home-editorial-card">
+                            <h3>Why Parents love<br>Num Nam Purees</h3>
+                            <ul>
+                                @foreach(['Helps introduce vegetables early','Smooth and easy to serve','Great for home or travel','No preservatives','No added sugar','No added salt'] as $pt)
+                                <li>{{ $pt }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+
+                        <div class="nn-home-product-stage">
+                            <h3>Purees</h3>
+                            @foreach($pureeItems as $i => $item)
+                            <div class="nn-puree-slide" data-idx="{{ $i }}" @if($i !==0) style="display:none;" @endif>
+                                <a href="{{ route('store.product.show', $item['slug']) }}">
+                                    <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:220px;width:100%;object-fit:contain;display:block;">
+                                </a>
+                                <p>{{ $item['name'] }}</p>
+                            </div>
+                            @endforeach
+                            <a href="{{ route('store.products') }}" class="nn-home-inline-link">Explore All Purees &rarr;</a>
+                        </div>
+
+                        <div class="nn-home-editorial-card nn-home-editorial-card--right">
+                            <h3>What NumNam<br>Purees Are</h3>
+                            <p>NumNam Purees are smooth, easy-to-serve fruit and vegetable pouches made for babies beginning their food journey and exploring new tastes from 6+ months onward.</p>
+                            <ul>
+                                @foreach(['Smooth texture for early feeding','Easy pouch format','Vegetable-forward combinations','Made for tiny taste explorers'] as $pt)
+                                <li>{{ $pt }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="nn-arrow-btn" onclick="nnCarousel('puree',1)" aria-label="Next puree" style="position:absolute;right:0;top:50%;transform:translateY(-50%);">&#8250;</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="nn-home-section nn-home-carousel-section nn-home-white-bg nn-fp-section">
+            <div class="nn-home-shell">
+                <p class="nn-home-kicker">Stage 2 &middot; 8+ Months</p>
+                <h2 class="nn-home-section-title">Num Nam Puffs</h2>
+
+                <div class="relative nn-carousel-shell" style="padding:0 56px;">
+                    <button class="nn-arrow-btn" onclick="nnCarousel('puff',-1)" aria-label="Previous puff" style="position:absolute;left:0;top:50%;transform:translateY(-50%);">&#8249;</button>
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
+                        <div class="nn-home-editorial-card">
+                            <h3>Why parents choose<br>NumNam Puffs</h3>
+                            <p>Our puffs are designed to be a more thoughtful snacking option.</p>
+                            <ul>
+                                @foreach(['Combining convenience','Playful texture','Carefully chosen ingredients','A format children enjoy'] as $pt)
+                                <li>{{ $pt }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+
+                        <div class="nn-home-product-stage">
+                            <h3>Puffs</h3>
+                            @foreach($puffItems as $i => $item)
+                            <div class="nn-puff-slide" data-idx="{{ $i }}" @if($i !==0) style="display:none;" @endif>
+                                <a href="{{ route('store.product.show', $item['slug']) }}">
+                                    <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:220px;width:100%;object-fit:contain;display:block;">
+                                </a>
+                                <p>{{ $item['name'] }}</p>
+                            </div>
+                            @endforeach
+                            <a href="{{ route('store.products') }}" class="nn-home-inline-link">Explore All Puffs &rarr;</a>
+                        </div>
+
+                        <div class="nn-home-editorial-card nn-home-editorial-card--right">
+                            <h3>What they Are</h3>
+                            <p>NumNam Puffs are light, easy-to-hold finger snacks created for babies and young children as they begin self-feeding, texture exploration, and independent snacking.</p>
+                            <ul>
+                                @foreach(['Easy for little hands to hold','Gentle crunchy texture','Made for snack time and on-the-go','Designed for growing kids'] as $pt)
+                                <li>{{ $pt }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="nn-arrow-btn" onclick="nnCarousel('puff',1)" aria-label="Next puff" style="position:absolute;right:0;top:50%;transform:translateY(-50%);">&#8250;</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="nn-home-block5 nn-fp-section">
+            <div class="nn-home-shell">
+                <div class="nn-home-block5__head">
+                    <h2>Why NumNam Matters</h2>
+                </div>
+
+                <div class="nn-home-block5__grid">
+                    <article class="nn-home-block5__card nn-home-block5__card--cream">
+                        <p class="nn-home-block5__eyebrow">{{ $blockCards[0]['eyebrow'] }}</p>
+                        <h3>{{ $blockCards[0]['title'] }}</h3>
+                        <p>{{ $blockCards[0]['copy'] }}</p>
+                        <div class="nn-home-block5__products">
+                            @foreach($favItems as $fav)
+                            <div class="nn-home-mini-product">
+                                <img src="{{ $fav['img'] }}" alt="{{ $fav['name'] }}" loading="lazy">
+                                <span>{{ $fav['name'] }}</span>
+                                <a href="{{ route('store.product.show', $fav['slug']) }}">Add to Cart</a>
+                            </div>
+                            @endforeach
+                        </div>
+                    </article>
+
+                    <article class="nn-home-block5__card nn-home-block5__card--mint">
+                        <p class="nn-home-block5__eyebrow">{{ $blockCards[1]['eyebrow'] }}</p>
+                        <h3>{{ $blockCards[1]['title'] }}</h3>
+                        <p>{{ $blockCards[1]['copy'] }}</p>
+                        <a href="{{ route('store.about') }}" class="nn-home-btn nn-home-btn--small">Visit the Learn Section</a>
+                    </article>
+
+                    <article class="nn-home-block5__card nn-home-block5__card--blush">
+                        <p class="nn-home-block5__eyebrow">{{ $blockCards[2]['eyebrow'] }}</p>
+                        <h3>{{ $blockCards[2]['title'] }}</h3>
+                        <p>{{ $blockCards[2]['copy'] }}</p>
+                        <a href="{{ route('store.about') }}" class="nn-home-btn nn-home-btn--small nn-home-btn--ghost-soft">Read Our Story</a>
+                    </article>
+
+                    <article class="nn-home-block5__card nn-home-block5__card--sky">
+                        <p class="nn-home-block5__eyebrow">{{ $blockCards[3]['eyebrow'] }}</p>
+                        <h3>{{ $blockCards[3]['title'] }}</h3>
+                        <p>{{ $blockCards[3]['copy'] }}</p>
+                        <div class="nn-home-block5__actions">
+                            <a href="{{ route('store.products') }}" class="nn-home-btn nn-home-btn--small">View Store</a>
+                            <a href="{{ route('store.blog.index') }}" class="nn-home-btn nn-home-btn--small nn-home-btn--ghost-soft">Learn More</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+    </div><!-- /#nn-fp-wrapper -->
+</div><!-- /#nn-fp-fixed -->
+<div id="nn-fp-spacer" aria-hidden="true"></div>
+<div id="nn-fp-normal">
+    <section class="nn-home-section nn-home-range" style="position:relative;width:100%;">
         <img src="{{ asset('assets/images/bg_products.png') }}" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,25,12,0.48) 0%,rgba(10,25,12,0.40) 100%);"></div>
         <div style="position:relative;z-index:10;width:100%;max-width:1400px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem);">
@@ -320,11 +325,10 @@ $blockCards = [
                 </a>
                 @endforeach
             </div>
-
-            @include('store.partials.footer')
         </div>
     </section>
-</div><!-- /#nn-fp-wrapper -->
+    @include('store.partials.footer')
+</div><!-- /#nn-fp-normal -->
 @endsection
 
 @section('scripts')
@@ -659,7 +663,7 @@ $blockCards = [
     .nn-home-soft-bg,
     .nn-home-white-bg,
     .nn-home-block5 {
-        background-image: linear-gradient(180deg, rgba(255, 248, 235, 0.95) 0%, rgba(255, 253, 248, 0.97) 100%);
+        background-image: url(assets);
         background-size: cover;
         background-position: center;
     }
@@ -1039,22 +1043,26 @@ $blockCards = [
 
     /* ===== Transform-based full-page scroll (homepage) ===== */
 
-    /* Full-width page container — remove header offset so sections are true 100vh */
+    /* Remove default page padding — handled per-section */
     body.store-home .page {
         width: 100%;
         max-width: 100%;
         padding: 0 !important;
     }
 
-    /* Lock native scroll entirely — transform handles all movement */
-    html.nn-fullpage,
-    html.nn-fullpage body {
+    /* Fixed viewport container: holds slides 1-5, always at top of screen */
+    #nn-fp-fixed {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
         overflow: hidden;
-        height: 100%;
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        z-index: 1;
     }
 
-    /* Sliding wrapper */
+    /* Inner sliding wrapper — translates to show each slide */
     #nn-fp-wrapper {
         will-change: transform;
         -webkit-transition: transform 0.75s cubic-bezier(0.77, 0, 0.175, 1);
@@ -1066,8 +1074,22 @@ $blockCards = [
         transition: none !important;
     }
 
-    /* Sections 1-5: true 100vh slides — header floats on top */
-    .nn-fp-section:not(.nn-fp-last) {
+    /* Spacer: one viewport height of empty space in document flow,
+       pushes #nn-fp-normal below the fixed slide panel */
+    #nn-fp-spacer {
+        height: 100vh;
+        height: 100dvh;
+        pointer-events: none;
+    }
+
+    /* Normal content: z-index covers the fixed panel when scrolled into view */
+    #nn-fp-normal {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Slides 1-5: each fills the full viewport */
+    .nn-fp-section {
         box-sizing: border-box;
         height: 100vh;
         height: 100dvh;
@@ -1084,37 +1106,34 @@ $blockCards = [
         align-items: center;
     }
 
-    /* Non-hero sections: push content below the fixed header */
+    /* Non-hero slides: push content below the fixed header */
     .nn-fp-section.nn-home-trust,
     .nn-fp-section.nn-home-block5,
-    .nn-fp-section.nn-home-carousel-section,
-    .nn-fp-section.nn-home-range {
+    .nn-fp-section.nn-home-carousel-section {
         justify-content: center;
         align-items: stretch;
         padding-top: var(--nn-header-h, 100px);
         padding-bottom: clamp(1.5rem, 4vh, 3rem);
     }
 
-    /* Section 6 (last): 100vh internal scroll — products + footer, no empty gap */
-    .nn-fp-section.nn-fp-last {
-        box-sizing: border-box;
-        height: 100vh;
-        height: 100dvh;
+    /* Section 6: normal page flow, fills at least one viewport, clears header */
+    #nn-fp-normal .nn-home-range {
         min-height: 100vh;
         min-height: 100dvh;
-        max-height: 100vh;
-        max-height: 100dvh;
-        overflow-y: auto;
-        overflow-x: hidden;
-        width: 100%;
-    }
-
-    .nn-home-footer-section {
-        display: none; /* removed — footer lives inside section 6 */
+        padding-top: var(--nn-header-h, 100px);
+        padding-bottom: clamp(2rem, 5vh, 4rem);
     }
 
     @media (max-width: 767px) {
-        .nn-fp-section:not(.nn-fp-last) {
+        #nn-fp-fixed {
+            height: 100svh;
+        }
+
+        #nn-fp-spacer {
+            height: 100svh;
+        }
+
+        .nn-fp-section {
             height: 100svh;
             min-height: 100svh;
             max-height: 100svh;
@@ -1182,6 +1201,9 @@ $blockCards = [
         }
 
         window.addEventListener('wheel', function(e) {
+            // Only intercept scroll when in the slide zone (page hasn't scrolled yet)
+            if (window.scrollY > 20) return;
+
             var activeSection = SECTIONS[current];
             if (!activeSection) return;
 
@@ -1193,7 +1215,12 @@ $blockCards = [
             if (e.deltaY > 0) {
                 if (canScrollDown) return;
                 if (isLastSection) {
+                    // Exit slide zone — scroll into normal page content
                     e.preventDefault();
+                    window.scrollTo({
+                        top: window.innerHeight,
+                        behavior: 'smooth'
+                    });
                     return;
                 }
                 e.preventDefault();
@@ -1220,6 +1247,8 @@ $blockCards = [
         });
 
         window.addEventListener('touchend', function(e) {
+            if (window.scrollY > 20) return;
+
             var endY = e.changedTouches[0].clientY;
             var diff = startY - endY;
 
@@ -1234,7 +1263,16 @@ $blockCards = [
             if (Math.abs(diff) < 50) return;
 
             if (diff > 0) {
-                if (!canScrollDown && !isLastSection) goTo(current + 1);
+                if (!canScrollDown) {
+                    if (isLastSection) {
+                        window.scrollTo({
+                            top: window.innerHeight,
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        goTo(current + 1);
+                    }
+                }
             } else {
                 if (!canScrollUp && !isFirstSection) goTo(current - 1);
             }
@@ -1242,7 +1280,6 @@ $blockCards = [
             passive: true
         });
 
-        document.documentElement.classList.add('nn-fullpage');
         recalcLayout();
         applyTransform();
 
