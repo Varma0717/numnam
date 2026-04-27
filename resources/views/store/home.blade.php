@@ -1043,10 +1043,11 @@ $blockCards = [
         padding: 0;
     }
 
-    /* Keep horizontal overflow clipped without trapping vertical page flow */
+    /* Lock native scroll entirely — transform handles all movement */
     html.nn-fullpage,
     html.nn-fullpage body {
-        overflow-x: hidden;
+        overflow: hidden;
+        height: 100%;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
 
