@@ -832,8 +832,8 @@
         .nn-home-white-bg,
         .nn-home-block5,
         .nn-home-range {
-            padding-top: calc(var(--nn-header-h, 78px) + 16px) !important;
-            padding-bottom: 20px !important;
+            padding-top: calc(var(--nn-header-h, 78px) + 10px) !important;
+            padding-bottom: 12px !important;
         }
 
         .nn-home-trust__grid {
@@ -842,8 +842,8 @@
         }
 
         .nn-home-block5__grid {
-            grid-template-columns: 1fr;
-            gap: 0.8rem;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.6rem;
         }
 
         .nn-home-trust__head {
@@ -937,48 +937,55 @@
         }
 
         .nn-home-block5__head {
-            margin-bottom: 1rem;
+            margin-bottom: 0.6rem;
         }
 
         .nn-home-block5__head h2 {
-            font-size: clamp(1.45rem, 6.8vw, 1.95rem);
+            font-size: clamp(1.2rem, 5.5vw, 1.6rem);
         }
 
         .nn-home-block5__card {
             min-height: 0;
-            border-radius: 20px;
-            padding: 0.95rem;
+            border-radius: 16px;
+            padding: 0.75rem;
         }
 
         .nn-home-block5__eyebrow {
-            margin-bottom: 0.45rem;
-            font-size: 0.66rem;
+            margin-bottom: 0.3rem;
+            font-size: 0.6rem;
         }
 
         .nn-home-block5__card h3 {
-            font-size: 1rem;
+            font-size: 0.88rem;
         }
 
         .nn-home-block5__card p {
-            font-size: 0.8rem;
-            line-height: 1.4;
+            font-size: 0.74rem;
+            line-height: 1.35;
+            margin-top: 0.4rem;
+        }
+
+        .nn-home-block5__products {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.35rem;
+            margin-top: 0.5rem;
         }
 
         .nn-home-mini-product {
-            padding: 0.55rem 0.4rem;
+            padding: 0.4rem 0.3rem;
         }
 
         .nn-home-mini-product img {
-            height: 48px;
+            height: 36px;
         }
 
         .nn-home-mini-product span {
-            font-size: 0.62rem;
+            font-size: 0.58rem;
         }
 
         .nn-home-mini-product a {
-            min-height: 28px;
-            font-size: 0.6rem;
+            min-height: 24px;
+            font-size: 0.56rem;
         }
 
         .nn-home-block5__products .nn-home-mini-product:last-child {
