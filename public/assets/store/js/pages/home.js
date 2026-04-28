@@ -27,6 +27,7 @@
     ========================================================= */
     var WRAPPER = document.getElementById('nn-fp-wrapper');
     var FIXED = document.getElementById('nn-fp-fixed');
+    var NORMAL = document.getElementById('nn-fp-normal');
 
     // Only count sections that are currently visible (allows mobile-only slides)
     function getSections() {
@@ -41,6 +42,7 @@
     var isAnimating = false;
     var slidesActive = true;
     var fixedHideTimer = null;
+    var transitionToNormal = false;
 
     if (WRAPPER && SECTIONS.length) {
 
@@ -57,21 +59,29 @@
             setTimeout(function () { isAnimating = false; }, 650);
         }
 
+        function getNormalTop() {
+            return NORMAL ? NORMAL.offsetTop : window.innerHeight;
+        }
+
         function exitSlides() {
+            if (transitionToNormal) return;
+
+            transitionToNormal = true;
             slidesActive = false;
             document.documentElement.classList.remove('nn-slides-active');
-            window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+            window.scrollTo({ top: getNormalTop(), behavior: 'smooth' });
 
-            // Keep slide 5 visible while the browser starts the smooth scroll.
-            // Hiding the fixed panel too early causes a brief white flash.
+            // Keep slide 5 visible until section 6 has fully snapped in.
             if (fixedHideTimer) window.clearTimeout(fixedHideTimer);
             fixedHideTimer = window.setTimeout(function () {
+                window.scrollTo({ top: getNormalTop(), behavior: 'instant' });
                 if (FIXED && !slidesActive) FIXED.style.visibility = 'hidden';
-            }, 380);
+                transitionToNormal = false;
+            }, 720);
         }
 
         function reEnterSlides() {
-            if (isAnimating) return;
+            if (isAnimating || transitionToNormal) return;
             // Show fixed panel, re-enable slide lock, go to last slide
             if (fixedHideTimer) {
                 window.clearTimeout(fixedHideTimer);
@@ -87,9 +97,14 @@
         /* ===== WHEEL ===== */
         window.addEventListener('wheel', function (e) {
 
+            if (transitionToNormal) {
+                e.preventDefault();
+                return;
+            }
+
             // Not in slides — check if user wants to scroll back up into slides
             if (!slidesActive) {
-                if (e.deltaY < 0 && window.scrollY <= window.innerHeight) {
+                if (e.deltaY < 0 && window.scrollY <= getNormalTop() + 4) {
                     e.preventDefault();
                     reEnterSlides();
                 }
@@ -129,9 +144,11 @@
 
             if (Math.abs(diff) < 50) return;
 
+            if (transitionToNormal) return;
+
             // Not in slides — check if swiping down (scroll up) to re-enter
             if (!slidesActive) {
-                if (diff < 0 && window.scrollY <= window.innerHeight) {
+                if (diff < 0 && window.scrollY <= getNormalTop() + 4) {
                     reEnterSlides();
                 }
                 return;
