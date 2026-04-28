@@ -1372,6 +1372,12 @@
     }
 
     @media (max-width: 767px) {
+        .page {
+            width: calc(100% - 16px);
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
         .store-home main.page {
             padding-bottom: 2.5rem;
         }
