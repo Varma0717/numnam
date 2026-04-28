@@ -58,6 +58,26 @@
   display: block;
 }
 
+@media (max-width: 767px) {
+  .site-header {
+    height: 78px;
+  }
+
+  .site-header-inner {
+    padding: 0 0.9rem;
+  }
+
+  .brand-logo-img {
+    height: 42px;
+  }
+
+  .header-icon-btn,
+  .hamburger-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
 @media (min-width: 1024px) {
   .site-header {
     height: 120px;

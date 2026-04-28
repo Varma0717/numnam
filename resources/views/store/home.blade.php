@@ -19,65 +19,9 @@ $puffItems = [
 ['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
 ];
 
-// Full galleries used in Section 6 (Explore Our Range)
-$pureeGalleryItems = [
-['img' => asset('assets/images/Purees/brocco%20pop%201.png'), 'name' => 'Brocco Pop', 'slug' => 'brocco-pop'],
-['img' => asset('assets/images/Purees/brocco%20pop%202.png'), 'name' => 'Brocco Pop', 'slug' => 'brocco-pop'],
-['img' => asset('assets/images/Purees/brocco%20pop%203.png'), 'name' => 'Brocco Pop', 'slug' => 'brocco-pop'],
-['img' => asset('assets/images/Purees/berry%20swush%201.png'), 'name' => 'Berry Swush', 'slug' => 'berry-swush'],
-['img' => asset('assets/images/Purees/berry%20swush%202.png'), 'name' => 'Berry Swush', 'slug' => 'berry-swush'],
-['img' => asset('assets/images/Purees/berry%20swush%203.png'), 'name' => 'Berry Swush', 'slug' => 'berry-swush'],
-['img' => asset('assets/images/Purees/mangy%20chewy%201.png'), 'name' => 'Mangy Chewy', 'slug' => 'mangy-chewy'],
-['img' => asset('assets/images/Purees/mangy%20chewy%202.png'), 'name' => 'Mangy Chewy', 'slug' => 'mangy-chewy'],
-['img' => asset('assets/images/Purees/mangy%20chewy%203.png'), 'name' => 'Mangy Chewy', 'slug' => 'mangy-chewy'],
-['img' => asset('assets/images/Purees/appi%20pooch%201.png'), 'name' => 'Appi Pooch', 'slug' => 'appi-pooch'],
-['img' => asset('assets/images/Purees/appi%20pooch%202.png'), 'name' => 'Appi Pooch', 'slug' => 'appi-pooch'],
-['img' => asset('assets/images/Purees/appi%20pooch%203.png'), 'name' => 'Appi Pooch', 'slug' => 'appi-pooch'],
-];
-
-$puffGalleryItems = [
-['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
-['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/1.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
-['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/2.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
-['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/3.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
-['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/4.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
-['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/5.png'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
-['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/6.png'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
-['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/7.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
-['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/8.png'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
-['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/9.png'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
-
-['img' => asset('assets/images/Puffs/Manchurian%20Munchos/front.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
-['img' => asset('assets/images/Puffs/Manchurian%20Munchos/1.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
-['img' => asset('assets/images/Puffs/Manchurian%20Munchos/2.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
-['img' => asset('assets/images/Puffs/Manchurian%20Munchos/3.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
-['img' => asset('assets/images/Puffs/Manchurian%20Munchos/4.png'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
-['img' => asset('assets/images/Puffs/Manchurian%20Munchos/5.png'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
-['img' => asset('assets/images/Puffs/Manchurian%20Munchos/6.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
-['img' => asset('assets/images/Puffs/Manchurian%20Munchos/7.png'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
-['img' => asset('assets/images/Puffs/Manchurian%20Munchos/8.png'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
-
-['img' => asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
-['img' => asset('assets/images/Puffs/Tikka%20Puffies/back.png'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
-['img' => asset('assets/images/Puffs/Tikka%20Puffies/1.png'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
-['img' => asset('assets/images/Puffs/Tikka%20Puffies/2.png'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
-['img' => asset('assets/images/Puffs/Tikka%20Puffies/3.png'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
-['img' => asset('assets/images/Puffs/Tikka%20Puffies/4.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
-['img' => asset('assets/images/Puffs/Tikka%20Puffies/5.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
-['img' => asset('assets/images/Puffs/Tikka%20Puffies/6.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
-['img' => asset('assets/images/Puffs/Tikka%20Puffies/7.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
-['img' => asset('assets/images/Puffs/Tikka%20Puffies/8.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
-
-['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/front.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
-['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/back.png'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
-['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/3.png'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
-['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/4.png'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
-['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/5.png'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
-['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/6.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
-['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/7.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
-['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/8.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
-['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/9.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
-];
+// Front-image-only lists for homepage products section
+$pureeGalleryItems = $pureeItems;
+$puffGalleryItems = $puffItems;
 
 $favItems = [
 $pureeItems[1],
@@ -1159,6 +1103,12 @@ $blockCards = [
             min-height: auto;
         }
 
+        .nn-home-kicker {
+            font-size: 0.62rem;
+            letter-spacing: 0.14em;
+            margin-bottom: 0.45rem;
+        }
+
         .nn-home-hero-v2__veil {
             background: linear-gradient(180deg, rgba(255, 250, 242, 0.64) 0%, rgba(255, 250, 242, 0.56) 48%, rgba(255, 250, 242, 0.44) 100%);
         }
@@ -1170,26 +1120,26 @@ $blockCards = [
         }
 
         .nn-home-hero-v2__copy h1 {
-            font-size: clamp(1.9rem, 9vw, 2.9rem);
+            font-size: clamp(1.65rem, 8vw, 2.45rem);
         }
 
         .nn-home-hero-v2__subtitle {
-            font-size: 0.92rem;
+            font-size: 0.84rem;
         }
 
         .nn-home-hero-v2__meta {
-            font-size: 0.82rem;
+            font-size: 0.76rem;
             gap: 0.4rem;
         }
 
         .nn-home-hero-v2__description {
-            font-size: 0.85rem;
-            line-height: 1.5;
+            font-size: 0.78rem;
+            line-height: 1.4;
         }
 
         .nn-home-hero-v2__actions {
             flex-direction: column;
-            margin-top: 1.4rem;
+            margin-top: 1rem;
         }
 
         .nn-home-btn--primary,
@@ -1365,6 +1315,16 @@ $blockCards = [
 
         .nn-tab-panel-grid a img {
             height: 118px !important;
+        }
+
+        .nn-fp-section.nn-home-hero-v2 {
+            padding-top: calc(var(--nn-header-h, 100px) - 8px);
+            padding-bottom: 0.4rem;
+        }
+
+        .nn-fp-section.nn-home-hero-v2 .nn-home-hero-v2__inner {
+            padding-top: 0.45rem;
+            padding-bottom: 0.45rem;
         }
     }
 
