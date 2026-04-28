@@ -104,6 +104,12 @@ img {
   padding: 0;
 }
 
+@media (max-width: 767px) {
+  .page {
+    width: min(1430px, 95%);
+  }
+}
+
 .section {
   border: 0;
   border-radius: 0;
@@ -566,6 +572,7 @@ textarea {
   align-items: center;
 }
 
+.breadcrumbs li+li:before,
 .breadcrumbs li+li::before {
   content: "\203A";
   margin: 0 8px;
