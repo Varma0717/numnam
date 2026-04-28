@@ -106,7 +106,7 @@ img {
 
 @media (max-width: 767px) {
   .page {
-    width: min(1430px, 95%);
+    width: min(1430px, calc(100% - 16px));
   }
 }
 
@@ -911,6 +911,12 @@ textarea {
   flex-wrap: wrap;
   position: relative;
   z-index: 2;
+}
+
+@media (max-width: 767px) {
+  .footer-newsletter-inner {
+    width: min(1430px, calc(100% - 16px));
+  }
 }
 
 .footer-newsletter h3 {

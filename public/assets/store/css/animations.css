@@ -524,6 +524,12 @@
     gap: 16px;
 }
 
+@media (max-width: 767px) {
+    .sticky-cart-bar-inner {
+        width: min(1430px, calc(100% - 16px));
+    }
+}
+
 .sticky-cart-bar .product-mini {
     display: flex;
     align-items: center;
