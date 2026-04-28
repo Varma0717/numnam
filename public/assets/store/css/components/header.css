@@ -260,7 +260,7 @@
   inset: 0;
   z-index: 1002;
   background-color: rgba(255, 253, 250, 0.97);
-  background-image: url("{{ asset('assets/images/bg_products.png') }}");
+  background-image: url("/assets/images/bg_products.png");
   background-size: cover;
   background-position: center;
   display: flex;
