@@ -904,12 +904,178 @@ $blockCards = [
         background: #D95E8C;
     }
 
+    @media (max-width: 1199px) {
+        .nn-home-shell {
+            padding: 0 clamp(1rem, 3vw, 2rem);
+        }
+
+        .nn-home-kicker {
+            margin-bottom: 0.65rem;
+            font-size: 0.68rem;
+            letter-spacing: 0.18em;
+        }
+
+        .nn-home-section-title {
+            margin-bottom: 1.6rem;
+            font-size: clamp(1.55rem, 2.8vw, 2.45rem);
+        }
+
+        .nn-home-hero-v2__inner {
+            gap: 1.35rem;
+            padding-top: 2.5rem;
+            padding-bottom: 2rem;
+        }
+
+        .nn-home-hero-v2__copy h1 {
+            font-size: clamp(2.2rem, 4.5vw, 4rem);
+        }
+
+        .nn-home-hero-v2__subtitle {
+            font-size: clamp(0.98rem, 1.6vw, 1.3rem);
+        }
+
+        .nn-home-hero-v2__meta,
+        .nn-home-hero-v2__description {
+            font-size: 0.94rem;
+            line-height: 1.6;
+        }
+
+        .nn-home-btn--primary,
+        .nn-home-btn--ghost {
+            min-height: 52px;
+            padding-inline: 1.5rem;
+        }
+
+        .nn-home-trust__head {
+            margin-bottom: 1.6rem;
+        }
+
+        .nn-home-trust__head h2 {
+            font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+        }
+
+        .nn-home-trust__grid {
+            gap: 1rem;
+        }
+
+        .nn-home-trust__item {
+            padding: 0.7rem 0.5rem 0;
+        }
+
+        .nn-home-trust__badge {
+            width: 72px;
+            height: 72px;
+            margin-bottom: 0.8rem;
+        }
+
+        .nn-home-trust__badge svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .nn-home-trust__item h3 {
+            font-size: 1.08rem;
+        }
+
+        .nn-home-trust__item p {
+            margin-top: 0.5rem;
+            font-size: 0.86rem;
+            line-height: 1.5;
+        }
+
+        .nn-home-editorial-card,
+        .nn-home-product-stage {
+            border-radius: 24px;
+            padding: 1.25rem 1rem;
+        }
+
+        .nn-home-editorial-card h3,
+        .nn-home-product-stage h3 {
+            font-size: 1.08rem;
+        }
+
+        .nn-home-editorial-card p,
+        .nn-home-editorial-card li,
+        .nn-home-product-stage p {
+            font-size: 0.86rem;
+            line-height: 1.5;
+        }
+
+        .nn-home-editorial-card ul {
+            margin-top: 0.9rem;
+            gap: 0.55rem;
+        }
+
+        .nn-home-product-stage img {
+            height: 150px !important;
+        }
+
+        .nn-home-block5__head {
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-home-block5__head h2 {
+            font-size: clamp(1.7rem, 2.8vw, 2.45rem);
+        }
+
+        .nn-home-block5__grid {
+            gap: 1rem;
+        }
+
+        .nn-home-block5__card {
+            min-height: 220px;
+            border-radius: 24px;
+            padding: 1.15rem;
+        }
+
+        .nn-home-block5__eyebrow {
+            margin-bottom: 0.55rem;
+            font-size: 0.72rem;
+        }
+
+        .nn-home-block5__card h3 {
+            font-size: 1.2rem;
+            line-height: 1.12;
+        }
+
+        .nn-home-block5__card p {
+            margin-top: 0.7rem;
+            font-size: 0.86rem;
+            line-height: 1.5;
+        }
+
+        .nn-home-block5__products {
+            margin-top: 1rem;
+            gap: 0.55rem;
+        }
+
+        .nn-home-mini-product {
+            padding: 0.7rem 0.45rem;
+            border-radius: 18px;
+        }
+
+        .nn-home-mini-product img {
+            height: 56px;
+            margin-bottom: 0.4rem;
+        }
+
+        .nn-home-mini-product span {
+            font-size: 0.66rem;
+        }
+
+        .nn-home-mini-product a {
+            min-height: 30px;
+            padding: 0 0.7rem;
+            font-size: 0.64rem;
+        }
+    }
+
     @media (max-width: 1023px) {
         .nn-home-hero-v2__inner {
             grid-template-columns: 1fr;
-            gap: 2rem;
-            padding-top: 4rem;
-            padding-bottom: 4rem;
+            gap: 1.25rem;
+            padding-top: 2rem;
+            padding-bottom: 1.75rem;
         }
 
         .nn-home-hero-v2__visual {
@@ -932,29 +1098,32 @@ $blockCards = [
         }
 
         .nn-home-hero-v2__inner {
-            padding-top: 3.5rem;
-            padding-bottom: 3.5rem;
+            padding-top: 1.5rem;
+            padding-bottom: 1.25rem;
             min-height: auto;
         }
 
         .nn-home-hero-v2__copy h1 {
-            font-size: clamp(2.3rem, 12vw, 3.55rem);
+            font-size: clamp(1.9rem, 9vw, 2.9rem);
         }
 
         .nn-home-hero-v2__subtitle {
-            font-size: 1.05rem;
+            font-size: 0.92rem;
         }
 
         .nn-home-hero-v2__meta {
-            font-size: 0.94rem;
+            font-size: 0.82rem;
+            gap: 0.4rem;
         }
 
         .nn-home-hero-v2__description {
-            font-size: 0.98rem;
+            font-size: 0.85rem;
+            line-height: 1.5;
         }
 
         .nn-home-hero-v2__actions {
             flex-direction: column;
+            margin-top: 1.4rem;
         }
 
         .nn-home-btn--primary,
@@ -986,17 +1155,63 @@ $blockCards = [
         .nn-home-white-bg,
         .nn-home-block5,
         .nn-home-range {
-            padding-top: 58px !important;
-            padding-bottom: 58px !important;
+            padding-top: 34px !important;
+            padding-bottom: 34px !important;
         }
 
         .nn-home-trust__grid,
         .nn-home-block5__grid {
             grid-template-columns: 1fr;
+            gap: 0.8rem;
+        }
+
+        .nn-home-trust__head {
+            margin-bottom: 1.1rem;
+        }
+
+        .nn-home-trust__head h2 {
+            font-size: clamp(1.55rem, 7vw, 2.1rem);
+        }
+
+        .nn-home-trust__badge {
+            width: 60px;
+            height: 60px;
+        }
+
+        .nn-home-trust__badge svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .nn-home-trust__item h3 {
+            font-size: 0.98rem;
+        }
+
+        .nn-home-trust__item p {
+            font-size: 0.82rem;
+            line-height: 1.45;
         }
 
         .nn-home-carousel-section .nn-carousel-shell {
             padding: 0 0 70px !important;
+        }
+
+        .nn-home-editorial-card,
+        .nn-home-product-stage {
+            border-radius: 20px;
+            padding: 1rem 0.9rem;
+        }
+
+        .nn-home-editorial-card h3,
+        .nn-home-product-stage h3 {
+            font-size: 0.98rem;
+        }
+
+        .nn-home-editorial-card p,
+        .nn-home-editorial-card li,
+        .nn-home-product-stage p {
+            font-size: 0.81rem;
+            line-height: 1.45;
         }
 
         .nn-carousel-shell .nn-arrow-btn {
@@ -1015,6 +1230,52 @@ $blockCards = [
 
         .nn-home-block5__products {
             grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.5rem;
+        }
+
+        .nn-home-block5__head {
+            margin-bottom: 1rem;
+        }
+
+        .nn-home-block5__head h2 {
+            font-size: clamp(1.45rem, 6.8vw, 1.95rem);
+        }
+
+        .nn-home-block5__card {
+            min-height: 0;
+            border-radius: 20px;
+            padding: 0.95rem;
+        }
+
+        .nn-home-block5__eyebrow {
+            margin-bottom: 0.45rem;
+            font-size: 0.66rem;
+        }
+
+        .nn-home-block5__card h3 {
+            font-size: 1rem;
+        }
+
+        .nn-home-block5__card p {
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .nn-home-mini-product {
+            padding: 0.55rem 0.4rem;
+        }
+
+        .nn-home-mini-product img {
+            height: 48px;
+        }
+
+        .nn-home-mini-product span {
+            font-size: 0.62rem;
+        }
+
+        .nn-home-mini-product a {
+            min-height: 28px;
+            font-size: 0.6rem;
         }
 
         .nn-home-block5__products .nn-home-mini-product:last-child {
@@ -1037,7 +1298,46 @@ $blockCards = [
         }
 
         .nn-tab-panel-grid a img {
-            height: 140px !important;
+            height: 118px !important;
+        }
+    }
+
+    @media (max-height: 820px) {
+
+        .nn-fp-section.nn-home-trust,
+        .nn-fp-section.nn-home-block5,
+        .nn-fp-section.nn-home-carousel-section {
+            padding-bottom: 0.9rem;
+        }
+
+        .nn-home-hero-v2__inner {
+            padding-top: 1.75rem;
+            padding-bottom: 1rem;
+        }
+
+        .nn-home-trust__head,
+        .nn-home-block5__head {
+            margin-bottom: 1rem;
+        }
+
+        .nn-home-trust__badge {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 0.65rem;
+        }
+
+        .nn-home-editorial-card,
+        .nn-home-product-stage,
+        .nn-home-block5__card {
+            padding: 1rem 0.9rem;
+        }
+
+        .nn-home-block5__card {
+            min-height: 200px;
+        }
+
+        .nn-home-product-stage img {
+            height: 132px !important;
         }
     }
 
