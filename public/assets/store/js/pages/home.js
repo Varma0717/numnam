@@ -40,6 +40,7 @@
     var current = 0;
     var isAnimating = false;
     var slidesActive = true;
+    var fixedHideTimer = null;
 
     if (WRAPPER && SECTIONS.length) {
 
@@ -59,14 +60,23 @@
         function exitSlides() {
             slidesActive = false;
             document.documentElement.classList.remove('nn-slides-active');
-            // Hide the fixed panel completely so section 6 has no bleed-through
-            if (FIXED) FIXED.style.visibility = 'hidden';
             window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+
+            // Keep slide 5 visible while the browser starts the smooth scroll.
+            // Hiding the fixed panel too early causes a brief white flash.
+            if (fixedHideTimer) window.clearTimeout(fixedHideTimer);
+            fixedHideTimer = window.setTimeout(function () {
+                if (FIXED && !slidesActive) FIXED.style.visibility = 'hidden';
+            }, 380);
         }
 
         function reEnterSlides() {
             if (isAnimating) return;
             // Show fixed panel, re-enable slide lock, go to last slide
+            if (fixedHideTimer) {
+                window.clearTimeout(fixedHideTimer);
+                fixedHideTimer = null;
+            }
             if (FIXED) FIXED.style.visibility = '';
             document.documentElement.classList.add('nn-slides-active');
             window.scrollTo({ top: 0, behavior: 'instant' });
@@ -145,6 +155,10 @@
         /* ===== INIT ===== */
         function initSlides() {
             document.documentElement.classList.add('nn-slides-active');
+            if (fixedHideTimer) {
+                window.clearTimeout(fixedHideTimer);
+                fixedHideTimer = null;
+            }
             if (FIXED) FIXED.style.visibility = '';
             goTo(0);
         }
