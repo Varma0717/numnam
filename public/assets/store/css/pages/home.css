@@ -766,6 +766,34 @@
         }
     }
 
+    /* Short desktop/laptop screens: split block5 into two slides like mobile
+       so title and cards are not cramped under the sticky header. */
+    @media (min-width: 768px) and (max-height: 900px) {
+        .nn-fp-mobile-hide {
+            display: none !important;
+        }
+
+        .nn-home-block5b {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            align-items: stretch;
+        }
+
+        .nn-home-block5,
+        .nn-home-block5b {
+            padding-top: calc(var(--nn-header-h, 100px) + 12px) !important;
+        }
+
+        .nn-home-block5__head {
+            margin-bottom: 1.6rem;
+        }
+
+        .nn-home-block5__card {
+            min-height: 240px;
+        }
+    }
+
     @media (max-width: 767px) {
         .nn-home-hero-v2 {
             min-height: auto;
