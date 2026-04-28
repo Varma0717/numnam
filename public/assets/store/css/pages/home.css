@@ -333,7 +333,8 @@
 
     .nn-home-soft-bg,
     .nn-home-white-bg,
-    .nn-home-block5 {
+    .nn-home-block5,
+    .nn-home-block5b {
         background-image: url("/assets/images/bg_content.png");
         background-size: cover;
         background-position: center;
@@ -415,9 +416,10 @@
         padding: 92px 0;
     }
 
-    /* Desktop: second slide hidden — all 4 cards in one section */
+    /* Desktop: second slide hidden — all 4 cards in one section.
+       !important needed to override .nn-fp-section { display: flex } */
     .nn-home-block5b {
-        display: none;
+        display: none !important;
     }
 
     .nn-home-block5__head {
