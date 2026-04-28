@@ -279,10 +279,7 @@
   position: fixed;
   inset: 0;
   z-index: 1002;
-  background-color: rgba(255, 253, 250, 0.97);
-  background-image: url("/assets/images/bg_products.png");
-  background-size: cover;
-  background-position: center;
+  background: rgba(255, 253, 250, 0.65);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -300,19 +297,46 @@
   pointer-events: auto;
 }
 
+/* Animated signboard drop */
+.nn-fullscreen-menu::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: min(980px, 96vw);
+  height: min(90svh, 860px);
+  background-image: url("/assets/images/659d92d67d3c7025e7633126_PinkSign.png");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 100% 100%;
+  transform: translateY(-110vh) scale(0.98);
+  transform-origin: top center;
+  opacity: 0;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.nn-fullscreen-menu.open::before {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
 /* Inner 3-column layout */
 .nn-fullscreen-menu__inner {
-  width: 100%;
-  max-width: 1100px;
-  padding: 0 clamp(2rem, 6vw, 5rem);
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  width: min(980px, 96vw);
+  height: min(90svh, 860px);
+  padding: clamp(5.5rem, 10vh, 7.5rem) clamp(2rem, 6vw, 4.2rem) clamp(2rem, 6vh, 3.2rem);
+  display: flex;
   align-items: center;
-  gap: 3rem;
+  justify-content: center;
+  gap: 0;
   transform: translateY(24px);
   opacity: 0;
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.05s,
     opacity 0.4s ease 0.05s;
+  position: relative;
+  z-index: 2;
 }
 
 .nn-fullscreen-menu.open .nn-fullscreen-menu__inner {
@@ -322,7 +346,7 @@
 
 /* Left: utility / footer links */
 .nn-menu-foot {
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 0.7rem;
   align-items: flex-start;
@@ -355,15 +379,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.15rem;
+  justify-content: center;
+  gap: clamp(0.1rem, 1.2vh, 0.55rem);
+  width: min(560px, 85%);
 }
 
 .nn-menu-link {
   display: block;
   font-family: 'Poppins', sans-serif;
-  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-size: clamp(1.55rem, 3.4vw, 3rem);
   font-weight: 800;
-  line-height: 1.12;
+  line-height: 1.03;
   letter-spacing: -0.03em;
   color: #111111;
   text-decoration: none;
@@ -394,7 +420,7 @@
 
 .nn-menu-link:hover {
   color: var(--brand-1, #FF6B8A);
-  transform: translateX(4px);
+  transform: translateY(-1px);
 }
 
 .nn-menu-link.active {
@@ -403,7 +429,7 @@
 
 /* Right: social links */
 .nn-menu-social {
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: flex-end;
   gap: 1rem;
@@ -431,43 +457,21 @@
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
+  .nn-fullscreen-menu::before {
+    width: min(98vw, 740px);
+    height: min(92svh, 760px);
+    background-size: 100% 100%;
+  }
+
   .nn-fullscreen-menu__inner {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-    gap: 2rem;
-    padding: 2rem;
+    width: min(98vw, 740px);
+    height: min(92svh, 760px);
+    padding: clamp(4.8rem, 10vh, 6.6rem) clamp(1.2rem, 5vw, 2rem) clamp(1.6rem, 5vh, 2.4rem);
     text-align: center;
-  }
-
-  .nn-menu-foot {
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem 1.2rem;
-    order: 2;
-  }
-
-  .nn-menu-copyright {
-    width: 100%;
-    text-align: center;
-    margin-top: 0.5rem;
-  }
-
-  .nn-menu-main {
-    order: 1;
-    gap: 0.05rem;
   }
 
   .nn-menu-link {
-    font-size: clamp(1.9rem, 10vw, 2.8rem);
-  }
-
-  .nn-menu-social {
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    order: 3;
+    font-size: clamp(1.35rem, 7vw, 2.25rem);
   }
 }
 
