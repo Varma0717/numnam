@@ -26,6 +26,7 @@
        2. FULL PAGE SLIDES (BABYGOURMET STYLE)
     ========================================================= */
     var WRAPPER = document.getElementById('nn-fp-wrapper');
+    var FIXED  = document.getElementById('nn-fp-fixed');
 
     // Only count sections that are currently visible (allows mobile-only slides)
     function getSections() {
@@ -38,7 +39,7 @@
 
     var current = 0;
     var isAnimating = false;
-    var slidesActive = true; // ONLY first time
+    var slidesActive = true;
 
     if (WRAPPER && SECTIONS.length) {
 
@@ -52,44 +53,53 @@
             WRAPPER.style.transform =
                 'translate3d(0, -' + SECTIONS[index].offsetTop + 'px, 0)';
 
-            setTimeout(function () {
-                isAnimating = false;
-            }, 600);
+            setTimeout(function () { isAnimating = false; }, 650);
+        }
+
+        function exitSlides() {
+            slidesActive = false;
+            document.documentElement.classList.remove('nn-slides-active');
+            // Hide the fixed panel completely so section 6 has no bleed-through
+            if (FIXED) FIXED.style.visibility = 'hidden';
+            window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+        }
+
+        function reEnterSlides() {
+            if (isAnimating) return;
+            // Show fixed panel, re-enable slide lock, go to last slide
+            if (FIXED) FIXED.style.visibility = '';
+            document.documentElement.classList.add('nn-slides-active');
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            slidesActive = true;
+            goTo(SECTIONS.length - 1);
         }
 
         /* ===== WHEEL ===== */
         window.addEventListener('wheel', function (e) {
 
-            if (!slidesActive) return;
+            // Not in slides — check if user wants to scroll back up into slides
+            if (!slidesActive) {
+                if (e.deltaY < 0 && window.scrollY <= window.innerHeight) {
+                    e.preventDefault();
+                    reEnterSlides();
+                }
+                return;
+            }
 
             var isLast = current === SECTIONS.length - 1;
 
             if (e.deltaY > 0) {
-
                 if (isLast) {
-                    // EXIT SLIDES FOREVER
-                    slidesActive = false;
-
-                    document.documentElement.classList.remove('nn-slides-active');
-
-                    window.scrollTo({
-                        top: window.innerHeight,
-                        behavior: 'smooth'
-                    });
-
+                    exitSlides();
                     return;
                 }
-
                 e.preventDefault();
                 goTo(current + 1);
-
             } else {
-
                 if (current === 0) {
                     e.preventDefault();
                     return;
                 }
-
                 e.preventDefault();
                 goTo(current - 1);
             }
@@ -102,53 +112,49 @@
 
         window.addEventListener('touchstart', function (e) {
             startY = e.touches[0].clientY;
-        });
+        }, { passive: true });
 
         window.addEventListener('touchend', function (e) {
-
-            if (!slidesActive) return;
-
             var diff = startY - e.changedTouches[0].clientY;
 
             if (Math.abs(diff) < 50) return;
 
+            // Not in slides — check if swiping down (scroll up) to re-enter
+            if (!slidesActive) {
+                if (diff < 0 && window.scrollY <= window.innerHeight) {
+                    reEnterSlides();
+                }
+                return;
+            }
+
             var isLast = current === SECTIONS.length - 1;
 
             if (diff > 0) {
-
+                // Swipe up = scroll down
                 if (isLast) {
-                    slidesActive = false;
-
-                    document.documentElement.classList.remove('nn-slides-active');
-
-                    window.scrollTo({
-                        top: window.innerHeight,
-                        behavior: 'smooth'
-                    });
-
+                    exitSlides();
                 } else {
                     goTo(current + 1);
                 }
-
             } else {
+                // Swipe down = scroll up
                 if (current > 0) goTo(current - 1);
             }
-
         });
 
         /* ===== INIT ===== */
         function initSlides() {
             document.documentElement.classList.add('nn-slides-active');
+            if (FIXED) FIXED.style.visibility = '';
             goTo(0);
         }
 
         initSlides();
 
         window.addEventListener('resize', function () {
-            // Re-query visible sections in case breakpoint changed (mobile <-> desktop)
             SECTIONS = getSections();
             if (current >= SECTIONS.length) current = SECTIONS.length - 1;
-            goTo(current);
+            if (slidesActive) goTo(current);
         });
     }
 

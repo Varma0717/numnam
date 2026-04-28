@@ -1152,18 +1152,20 @@
         transition: none !important;
     }
 
-    /* Spacer: one viewport height of empty space in document flow,
-       pushes #nn-fp-normal below the fixed slide panel */
+    /* Spacer ensures section 6 starts below the viewport so slides show first */
     #nn-fp-spacer {
         height: 100vh;
         height: 100dvh;
         pointer-events: none;
     }
 
-    /* Normal content: z-index covers the fixed panel when scrolled into view */
+    /* Normal content: always sits above the fixed slides panel so section 6
+       cleanly covers it as the user scrolls. JS also sets visibility:hidden
+       on #nn-fp-fixed when slides exit, for a clean cut with no bleed-through. */
     #nn-fp-normal {
         position: relative;
-        z-index: 1;
+        z-index: 20;
+        background: #fff;
     }
 
     /* Slides 1-5: each fills the full viewport */
@@ -1247,12 +1249,4 @@
         .nn-fp-section.nn-home-carousel-section .nn-home-kicker {
             margin-bottom: 0.4rem;
         }
-    }
-
-    html:not(.nn-slides-active) #nn-fp-fixed {
-        z-index: 0;
-    }
-
-    html:not(.nn-slides-active) #nn-fp-normal {
-        z-index: 5;
     }
