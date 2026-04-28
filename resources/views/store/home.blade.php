@@ -1508,6 +1508,23 @@ $blockCards = [
             min-height: 100svh;
             max-height: 100svh;
         }
+
+        /* Keep mobile sticky header and bottom app bar from covering slide content */
+        .nn-fp-section.nn-home-trust,
+        .nn-fp-section.nn-home-carousel-section {
+            padding-top: calc(var(--nn-header-h, 78px) + 14px);
+            padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+        }
+
+        .nn-fp-section.nn-home-trust .nn-home-trust__head,
+        .nn-fp-section.nn-home-carousel-section .nn-home-section-title {
+            margin-top: 0;
+            margin-bottom: 0.9rem;
+        }
+
+        .nn-fp-section.nn-home-carousel-section .nn-home-kicker {
+            margin-bottom: 0.4rem;
+        }
     }
 </style>
 <script>
