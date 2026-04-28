@@ -1,4 +1,4 @@
-.nn-home-shell {
+    .nn-home-shell {
         width: 100%;
         max-width: 1400px;
         margin: 0 auto;
@@ -1103,12 +1103,14 @@
         height: 100vh;
         height: 100dvh;
         overflow: hidden;
-        z-index: 1;
+        z-index: 10;
     }
 
     /* Inner sliding wrapper — translates to show each slide */
     #nn-fp-wrapper {
         will-change: transform;
+        transform: translateZ(0);
+        backface-visibility: hidden;
         -webkit-transition: transform 0.75s cubic-bezier(0.77, 0, 0.175, 1);
         transition: transform 0.75s cubic-bezier(0.77, 0, 0.175, 1);
     }
@@ -1129,7 +1131,7 @@
     /* Normal content: z-index covers the fixed panel when scrolled into view */
     #nn-fp-normal {
         position: relative;
-        z-index: 2;
+        z-index: 1;
     }
 
     /* Slides 1-5: each fills the full viewport */
@@ -1212,4 +1214,12 @@
         .nn-fp-section.nn-home-carousel-section .nn-home-kicker {
             margin-bottom: 0.4rem;
         }
+    }
+
+    html:not(.nn-slides-active) #nn-fp-fixed {
+        z-index: 0;
+    }
+
+    html:not(.nn-slides-active) #nn-fp-normal {
+        z-index: 5;
     }
