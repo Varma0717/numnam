@@ -420,6 +420,8 @@ $blockCards = [
 
     .nn-home-hero-v2__copy {
         max-width: 760px;
+        margin: 0 auto;
+        text-align: center;
     }
 
     .nn-home-hero-v2__copy h1 {
@@ -451,6 +453,7 @@ $blockCards = [
         flex-wrap: wrap;
         gap: 0.65rem;
         align-items: center;
+        justify-content: center;
         font-size: 1rem;
         color: #262626;
     }
@@ -466,6 +469,8 @@ $blockCards = [
     .nn-home-hero-v2__description {
         margin: 1.2rem 0 0;
         max-width: 540px;
+        margin-left: auto;
+        margin-right: auto;
         font-size: 1.08rem;
         line-height: 1.8;
         color: #2F2F2F;
@@ -482,6 +487,7 @@ $blockCards = [
         display: flex;
         flex-wrap: wrap;
         gap: 0.9rem;
+        justify-content: center;
     }
 
     .nn-home-btn {
@@ -663,7 +669,7 @@ $blockCards = [
     .nn-home-soft-bg,
     .nn-home-white-bg,
     .nn-home-block5 {
-        background-image: url(assets);
+        background-image: url("{{ asset('assets/images/bg_content.png') }}");
         background-size: cover;
         background-position: center;
     }
@@ -1343,6 +1349,37 @@ $blockCards = [
 
     /* ===== Transform-based full-page scroll (homepage) ===== */
 
+    html,
+    body {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(42, 42, 42, 0.35) transparent;
+    }
+
+    body::-webkit-scrollbar {
+        width: 2px;
+        height: 2px;
+    }
+
+    body::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    body::-webkit-scrollbar-thumb {
+        background: rgba(42, 42, 42, 0.35);
+        border-radius: 10px;
+    }
+
+    html.nn-slides-active,
+    html.nn-slides-active body {
+        overflow: hidden;
+        scrollbar-width: none;
+    }
+
+    html.nn-slides-active body::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
+
     /* Remove default page padding — handled per-section */
     body.store-home .page {
         width: 100%;
@@ -1398,12 +1435,25 @@ $blockCards = [
         max-height: 100vh;
         max-height: 100dvh;
         width: 100%;
-        overflow-y: auto;
+        overflow-y: hidden;
         overflow-x: hidden;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+    }
+
+    .nn-fp-section.nn-home-hero-v2 {
+        justify-content: center;
+        align-items: stretch;
+        padding-top: var(--nn-header-h, 100px);
+        padding-bottom: clamp(1rem, 2.5vh, 1.75rem);
+    }
+
+    .nn-fp-section.nn-home-hero-v2 .nn-home-hero-v2__inner {
+        min-height: auto;
+        padding-top: clamp(0.5rem, 2vh, 1.1rem);
+        padding-bottom: clamp(0.5rem, 2vh, 1.1rem);
     }
 
     /* Non-hero slides: push content below the fixed header */
@@ -1517,6 +1567,7 @@ $blockCards = [
                 if (isLastSection) {
                     // Exit slide zone — scroll into normal page content
                     e.preventDefault();
+                    document.documentElement.classList.remove('nn-slides-active');
                     window.scrollTo({
                         top: window.innerHeight,
                         behavior: 'smooth'
@@ -1565,6 +1616,7 @@ $blockCards = [
             if (diff > 0) {
                 if (!canScrollDown) {
                     if (isLastSection) {
+                        document.documentElement.classList.remove('nn-slides-active');
                         window.scrollTo({
                             top: window.innerHeight,
                             behavior: 'smooth'
@@ -1583,9 +1635,26 @@ $blockCards = [
         recalcLayout();
         applyTransform();
 
+        function updateSlidesMode() {
+            if (window.scrollY <= 20) {
+                document.documentElement.classList.add('nn-slides-active');
+            } else {
+                document.documentElement.classList.remove('nn-slides-active');
+            }
+        }
+
+        updateSlidesMode();
+
+        window.addEventListener('scroll', function() {
+            updateSlidesMode();
+        }, {
+            passive: true
+        });
+
         window.addEventListener('resize', function() {
             recalcLayout();
             applyTransform();
+            updateSlidesMode();
         });
 
     })();
