@@ -406,7 +406,7 @@
   left: 50%;
   right: 50%;
   height: 3px;
-  background: var(--brand-1, #FF6B8A);
+  background: #243447;
   transition: left 0.3s cubic-bezier(0.22, 1, 0.36, 1),
     right 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   border-radius: 2px;
@@ -419,12 +419,12 @@
 }
 
 .nn-menu-link:hover {
-  color: var(--brand-1, #FF6B8A);
+  color: #243447;
   transform: translateY(-1px);
 }
 
 .nn-menu-link.active {
-  color: var(--brand-1, #FF6B8A);
+  color: #243447;
 }
 
 /* Right: social links */
