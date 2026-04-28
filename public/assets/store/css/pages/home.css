@@ -991,8 +991,8 @@
         }
 
         .nn-home-block5__products {
-            grid-template-columns: 1fr;
-            gap: 0.45rem;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.3rem;
             margin-top: 0.5rem;
         }
 
