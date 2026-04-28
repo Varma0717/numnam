@@ -1613,17 +1613,10 @@ $blockCards = [
         window.addEventListener('wheel', function(e) {
             // Only intercept scroll when in the slide zone (page hasn't scrolled yet)
             if (window.scrollY > 20) return;
-
-            var activeSection = SECTIONS[current];
-            if (!activeSection) return;
-
-            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight - 1;
-            var canScrollUp = activeSection.scrollTop > 0;
             var isLastSection = current === SECTIONS.length - 1;
             var isFirstSection = current === 0;
 
             if (e.deltaY > 0) {
-                if (canScrollDown) return;
                 if (isLastSection) {
                     // Exit slide zone — scroll into normal page content
                     e.preventDefault();
@@ -1637,7 +1630,6 @@ $blockCards = [
                 e.preventDefault();
                 goTo(current + 1);
             } else {
-                if (canScrollUp) return;
                 if (isFirstSection) {
                     e.preventDefault();
                     return;
@@ -1662,31 +1654,23 @@ $blockCards = [
 
             var endY = e.changedTouches[0].clientY;
             var diff = startY - endY;
-
-            var activeSection = SECTIONS[current];
-            if (!activeSection) return;
-
-            var canScrollDown = activeSection.scrollTop + activeSection.clientHeight < activeSection.scrollHeight - 1;
-            var canScrollUp = activeSection.scrollTop > 0;
             var isLastSection = current === SECTIONS.length - 1;
             var isFirstSection = current === 0;
 
             if (Math.abs(diff) < 50) return;
 
             if (diff > 0) {
-                if (!canScrollDown) {
-                    if (isLastSection) {
-                        document.documentElement.classList.remove('nn-slides-active');
-                        window.scrollTo({
-                            top: window.innerHeight,
-                            behavior: 'smooth'
-                        });
-                    } else {
-                        goTo(current + 1);
-                    }
+                if (isLastSection) {
+                    document.documentElement.classList.remove('nn-slides-active');
+                    window.scrollTo({
+                        top: window.innerHeight,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    goTo(current + 1);
                 }
             } else {
-                if (!canScrollUp && !isFirstSection) goTo(current - 1);
+                if (!isFirstSection) goTo(current - 1);
             }
         }, {
             passive: true
