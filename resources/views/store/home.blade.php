@@ -19,6 +19,66 @@ $puffItems = [
 ['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
 ];
 
+// Full galleries used in Section 6 (Explore Our Range)
+$pureeGalleryItems = [
+['img' => asset('assets/images/Purees/brocco%20pop%201.png'), 'name' => 'Brocco Pop', 'slug' => 'brocco-pop'],
+['img' => asset('assets/images/Purees/brocco%20pop%202.png'), 'name' => 'Brocco Pop', 'slug' => 'brocco-pop'],
+['img' => asset('assets/images/Purees/brocco%20pop%203.png'), 'name' => 'Brocco Pop', 'slug' => 'brocco-pop'],
+['img' => asset('assets/images/Purees/berry%20swush%201.png'), 'name' => 'Berry Swush', 'slug' => 'berry-swush'],
+['img' => asset('assets/images/Purees/berry%20swush%202.png'), 'name' => 'Berry Swush', 'slug' => 'berry-swush'],
+['img' => asset('assets/images/Purees/berry%20swush%203.png'), 'name' => 'Berry Swush', 'slug' => 'berry-swush'],
+['img' => asset('assets/images/Purees/mangy%20chewy%201.png'), 'name' => 'Mangy Chewy', 'slug' => 'mangy-chewy'],
+['img' => asset('assets/images/Purees/mangy%20chewy%202.png'), 'name' => 'Mangy Chewy', 'slug' => 'mangy-chewy'],
+['img' => asset('assets/images/Purees/mangy%20chewy%203.png'), 'name' => 'Mangy Chewy', 'slug' => 'mangy-chewy'],
+['img' => asset('assets/images/Purees/appi%20pooch%201.png'), 'name' => 'Appi Pooch', 'slug' => 'appi-pooch'],
+['img' => asset('assets/images/Purees/appi%20pooch%202.png'), 'name' => 'Appi Pooch', 'slug' => 'appi-pooch'],
+['img' => asset('assets/images/Purees/appi%20pooch%203.png'), 'name' => 'Appi Pooch', 'slug' => 'appi-pooch'],
+];
+
+$puffGalleryItems = [
+['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
+['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/1.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
+['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/2.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
+['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/3.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
+['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/4.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
+['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/5.png'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
+['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/6.png'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
+['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/7.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
+['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/8.png'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
+['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/9.png'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
+
+['img' => asset('assets/images/Puffs/Manchurian%20Munchos/front.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
+['img' => asset('assets/images/Puffs/Manchurian%20Munchos/1.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
+['img' => asset('assets/images/Puffs/Manchurian%20Munchos/2.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
+['img' => asset('assets/images/Puffs/Manchurian%20Munchos/3.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
+['img' => asset('assets/images/Puffs/Manchurian%20Munchos/4.png'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
+['img' => asset('assets/images/Puffs/Manchurian%20Munchos/5.png'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
+['img' => asset('assets/images/Puffs/Manchurian%20Munchos/6.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
+['img' => asset('assets/images/Puffs/Manchurian%20Munchos/7.png'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
+['img' => asset('assets/images/Puffs/Manchurian%20Munchos/8.png'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
+
+['img' => asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
+['img' => asset('assets/images/Puffs/Tikka%20Puffies/back.png'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
+['img' => asset('assets/images/Puffs/Tikka%20Puffies/1.png'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
+['img' => asset('assets/images/Puffs/Tikka%20Puffies/2.png'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
+['img' => asset('assets/images/Puffs/Tikka%20Puffies/3.png'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
+['img' => asset('assets/images/Puffs/Tikka%20Puffies/4.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
+['img' => asset('assets/images/Puffs/Tikka%20Puffies/5.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
+['img' => asset('assets/images/Puffs/Tikka%20Puffies/6.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
+['img' => asset('assets/images/Puffs/Tikka%20Puffies/7.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
+['img' => asset('assets/images/Puffs/Tikka%20Puffies/8.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
+
+['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/front.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
+['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/back.png'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
+['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/3.png'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
+['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/4.png'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
+['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/5.png'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
+['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/6.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
+['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/7.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
+['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/8.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
+['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/9.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
+];
+
 $favItems = [
 $pureeItems[1],
 $puffItems[0],
@@ -303,7 +363,7 @@ $blockCards = [
             </div>
 
             <div id="tabpanel-purees" class="grid grid-cols-2 gap-5 md:grid-cols-4 nn-tab-panel-grid" style="display:none;">
-                @foreach($pureeItems as $item)
+                @foreach($pureeGalleryItems as $item)
                 <a href="{{ route('store.product.show', $item['slug']) }}" style="display:block;text-decoration:none;">
                     <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:180px;width:100%;object-fit:contain;display:block;">
                 </a>
@@ -311,7 +371,7 @@ $blockCards = [
             </div>
 
             <div id="tabpanel-puffs" class="grid grid-cols-2 gap-5 md:grid-cols-4 nn-tab-panel-grid" style="display:none;">
-                @foreach($puffItems as $item)
+                @foreach($puffGalleryItems as $item)
                 <a href="{{ route('store.product.show', $item['slug']) }}" style="display:block;text-decoration:none;">
                     <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:180px;width:100%;object-fit:contain;display:block;">
                 </a>
@@ -319,7 +379,7 @@ $blockCards = [
             </div>
 
             <div id="tabpanel-all" class="grid grid-cols-2 gap-5 md:grid-cols-4 nn-tab-panel-grid">
-                @foreach(array_merge($pureeItems, $puffItems) as $item)
+                @foreach(array_merge($pureeGalleryItems, $puffGalleryItems) as $item)
                 <a href="{{ route('store.product.show', $item['slug']) }}" style="display:block;text-decoration:none;">
                     <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:180px;width:100%;object-fit:contain;display:block;">
                 </a>
