@@ -991,8 +991,8 @@
         }
 
         .nn-home-block5__products {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.35rem;
+            grid-template-columns: 1fr;
+            gap: 0.45rem;
             margin-top: 0.5rem;
         }
 
@@ -1014,9 +1014,9 @@
         }
 
         .nn-home-block5__products .nn-home-mini-product:last-child {
-            grid-column: 1 / -1;
-            max-width: 180px;
-            margin: 0 auto;
+            grid-column: auto;
+            max-width: none;
+            margin: 0;
         }
 
         .nn-home-range .flex.justify-center {
