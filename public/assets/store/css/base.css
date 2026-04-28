@@ -733,6 +733,13 @@ textarea {
   transform: translateY(-2px);
 }
 
+@media (max-width: 767px) {
+  .back-to-top {
+    right: 16px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 /* ============================================================
    Cookie Consent
    ============================================================ */
