@@ -62,6 +62,9 @@
             <a href="{{ route('store.recipes') }}">Recipes</a>
             <a href="{{ route('store.faq') }}">FAQ</a>
             <a href="{{ route('store.contact') }}">Contact</a>
+            <a href="{{ route('store.refer-friends') }}">Refer Friends</a>
+            <a href="{{ route('store.legal.terms') }}">Terms</a>
+            <a href="{{ route('store.legal.privacy') }}">Privacy</a>
             @auth
             <a href="{{ route('store.account') }}">My Account</a>
             @else
@@ -76,8 +79,12 @@
             <a href="{{ route('store.home') }}" class="nn-menu-link {{ request()->routeIs('store.home') ? 'active' : '' }}">Home</a>
             <a href="{{ route('store.products') }}" class="nn-menu-link {{ request()->routeIs('store.products*') ? 'active' : '' }}">Shop</a>
             <a href="{{ route('store.pricing') }}" class="nn-menu-link {{ request()->routeIs('store.pricing*') ? 'active' : '' }}">Subscriptions</a>
+            <a href="{{ route('store.recipes') }}" class="nn-menu-link {{ request()->routeIs('store.recipes') ? 'active' : '' }}">Recipes</a>
             <a href="{{ route('store.blog.index') }}" class="nn-menu-link {{ request()->routeIs('store.blog*') ? 'active' : '' }}">Learn</a>
             <a href="{{ route('store.about') }}" class="nn-menu-link {{ request()->routeIs('store.about') ? 'active' : '' }}">About</a>
+            <a href="{{ route('store.contact') }}" class="nn-menu-link {{ request()->routeIs('store.contact') ? 'active' : '' }}">Contact</a>
+            <a href="{{ route('store.faq') }}" class="nn-menu-link {{ request()->routeIs('store.faq') ? 'active' : '' }}">FAQ</a>
+            <a href="{{ route('store.refer-friends') }}" class="nn-menu-link {{ request()->routeIs('store.refer-friends') ? 'active' : '' }}">Refer Friends</a>
         </nav>
 
         {{-- Right: social links --}}
@@ -99,6 +106,16 @@
                     <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" />
                 </svg>
             </a>
+            <div class="nn-menu-social-auth">
+                @auth
+                <a href="{{ route('store.account') }}" class="nn-social-auth-link">My Account</a>
+                <a href="{{ route('store.logout') }}" onclick="event.preventDefault(); document.getElementById('nn-logout-form').submit();" class="nn-social-auth-link">Log out</a>
+                <form id="nn-logout-form" method="POST" action="{{ route('store.logout') }}" style="display:none;">@csrf</form>
+                @else
+                <a href="{{ route('store.login') }}" class="nn-social-auth-link">Login</a>
+                <a href="{{ route('store.register') }}" class="nn-social-auth-link">Register</a>
+                @endauth
+            </div>
         </div>
 
     </div>
