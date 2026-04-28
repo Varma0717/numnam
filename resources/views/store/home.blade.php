@@ -1171,11 +1171,15 @@ $blockCards = [
         .nn-home-white-bg,
         .nn-home-block5,
         .nn-home-range {
-            padding-top: 34px !important;
-            padding-bottom: 34px !important;
+            padding-top: calc(var(--nn-header-h, 78px) + 16px) !important;
+            padding-bottom: 20px !important;
         }
 
-        .nn-home-trust__grid,
+        .nn-home-trust__grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+
         .nn-home-block5__grid {
             grid-template-columns: 1fr;
             gap: 0.8rem;
@@ -1208,8 +1212,30 @@ $blockCards = [
             line-height: 1.45;
         }
 
+        /* Sections 3 & 4: on mobile hide side editorial cards, show only product stage + bottom arrows */
         .nn-home-carousel-section .nn-carousel-shell {
-            padding: 0 0 70px !important;
+            padding: 0 0 60px !important;
+        }
+
+        .nn-home-carousel-section .grid>.nn-home-editorial-card {
+            display: none;
+        }
+
+        .nn-home-carousel-section .grid {
+            grid-template-columns: 1fr !important;
+        }
+
+        .nn-home-section-title {
+            font-size: clamp(1.4rem, 6vw, 1.9rem);
+            margin-bottom: 0.9rem;
+        }
+
+        .nn-home-product-stage img {
+            height: 160px !important;
+        }
+
+        .nn-home-product-stage h3 {
+            font-size: 1.1rem;
         }
 
         .nn-home-editorial-card,
