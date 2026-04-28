@@ -26,7 +26,7 @@
        2. FULL PAGE SLIDES (BABYGOURMET STYLE)
     ========================================================= */
     var WRAPPER = document.getElementById('nn-fp-wrapper');
-    var FIXED  = document.getElementById('nn-fp-fixed');
+    var FIXED = document.getElementById('nn-fp-fixed');
 
     // Only count sections that are currently visible (allows mobile-only slides)
     function getSections() {
