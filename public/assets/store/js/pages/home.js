@@ -25,8 +25,16 @@
     /* =========================================================
        2. FULL PAGE SLIDES (BABYGOURMET STYLE)
     ========================================================= */
-    var SECTIONS = document.querySelectorAll('.nn-fp-section');
     var WRAPPER = document.getElementById('nn-fp-wrapper');
+
+    // Only count sections that are currently visible (allows mobile-only slides)
+    function getSections() {
+        return Array.from(document.querySelectorAll('.nn-fp-section')).filter(function (s) {
+            return getComputedStyle(s).display !== 'none';
+        });
+    }
+
+    var SECTIONS = getSections();
 
     var current = 0;
     var isAnimating = false;
@@ -137,6 +145,9 @@
         initSlides();
 
         window.addEventListener('resize', function () {
+            // Re-query visible sections in case breakpoint changed (mobile <-> desktop)
+            SECTIONS = getSections();
+            if (current >= SECTIONS.length) current = SECTIONS.length - 1;
             goTo(current);
         });
     }

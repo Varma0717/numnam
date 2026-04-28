@@ -267,6 +267,30 @@ $blockCards = [
                         <a href="{{ route('store.about') }}" class="nn-home-btn nn-home-btn--small">Visit the Learn Section</a>
                     </article>
 
+                    <article class="nn-home-block5__card nn-home-block5__card--blush nn-fp-mobile-hide">
+                        <p class="nn-home-block5__eyebrow">{{ $blockCards[2]['eyebrow'] }}</p>
+                        <h3>{{ $blockCards[2]['title'] }}</h3>
+                        <p>{{ $blockCards[2]['copy'] }}</p>
+                        <a href="{{ route('store.about') }}" class="nn-home-btn nn-home-btn--small nn-home-btn--ghost-soft">Read Our Story</a>
+                    </article>
+
+                    <article class="nn-home-block5__card nn-home-block5__card--sky nn-fp-mobile-hide">
+                        <p class="nn-home-block5__eyebrow">{{ $blockCards[3]['eyebrow'] }}</p>
+                        <h3>{{ $blockCards[3]['title'] }}</h3>
+                        <p>{{ $blockCards[3]['copy'] }}</p>
+                        <div class="nn-home-block5__actions">
+                            <a href="{{ route('store.products') }}" class="nn-home-btn nn-home-btn--small">View Store</a>
+                            <a href="{{ route('store.blog.index') }}" class="nn-home-btn nn-home-btn--small nn-home-btn--ghost-soft">Learn More</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        {{-- Mobile only: second slide for Why NumNam Matters (cards 3 & 4) --}}
+        <section class="nn-home-block5b nn-fp-section">
+            <div class="nn-home-shell">
+                <div class="nn-home-block5__grid">
                     <article class="nn-home-block5__card nn-home-block5__card--blush">
                         <p class="nn-home-block5__eyebrow">{{ $blockCards[2]['eyebrow'] }}</p>
                         <h3>{{ $blockCards[2]['title'] }}</h3>

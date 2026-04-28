@@ -415,6 +415,11 @@
         padding: 92px 0;
     }
 
+    /* Desktop: second slide hidden — all 4 cards in one section */
+    .nn-home-block5b {
+        display: none;
+    }
+
     .nn-home-block5__head {
         text-align: center;
         margin-bottom: 2.8rem;
@@ -831,9 +836,27 @@
         .nn-home-soft-bg,
         .nn-home-white-bg,
         .nn-home-block5,
+        .nn-home-block5b,
         .nn-home-range {
             padding-top: calc(var(--nn-header-h, 78px) + 10px) !important;
             padding-bottom: 12px !important;
+        }
+
+        /* Mobile split: hide cards 3 & 4 from first slide, show second slide */
+        .nn-fp-mobile-hide {
+            display: none !important;
+        }
+
+        .nn-home-block5b {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            align-items: stretch;
+        }
+
+        .nn-home-block5b .nn-home-block5__grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.6rem;
         }
 
         .nn-home-trust__grid {
@@ -1175,6 +1198,7 @@
     /* Non-hero slides: push content below the fixed header */
     .nn-fp-section.nn-home-trust,
     .nn-fp-section.nn-home-block5,
+    .nn-fp-section.nn-home-block5b,
     .nn-fp-section.nn-home-carousel-section {
         justify-content: center;
         align-items: stretch;
