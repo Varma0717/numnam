@@ -63,7 +63,6 @@
                     slidesActive = false;
 
                     document.documentElement.classList.remove('nn-slides-active');
-                    document.documentElement.classList.add('nn-slides-done');
 
                     window.scrollTo({
                         top: window.innerHeight,
@@ -113,7 +112,6 @@
                     slidesActive = false;
 
                     document.documentElement.classList.remove('nn-slides-active');
-                    document.documentElement.classList.add('nn-slides-done');
 
                     window.scrollTo({
                         top: window.innerHeight,

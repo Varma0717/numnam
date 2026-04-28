@@ -1128,12 +1128,6 @@
         pointer-events: none;
     }
 
-    /* Once slides are done, hide the fixed panel so slide 5 can't bleed through section 6 */
-    html.nn-slides-done #nn-fp-fixed {
-        visibility: hidden;
-        pointer-events: none;
-    }
-
     /* Normal content: z-index covers the fixed panel when scrolled into view */
     #nn-fp-normal {
         position: relative;
