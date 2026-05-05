@@ -32,12 +32,10 @@ class CheckoutPaymentController extends Controller
         }
 
         $gateway = $request->validate([
-            'gateway' => 'required|in:razorpay,stripe',
+            'gateway' => 'required|in:razorpay',
         ])['gateway'];
 
-        $result = $gateway === 'razorpay'
-            ? $this->paymentGatewayService->createRazorpayOrder($order)
-            : $this->paymentGatewayService->createStripePaymentIntent($order);
+        $result = $this->paymentGatewayService->createRazorpayOrder($order);
 
         PaymentEvent::create([
             'order_id' => $order->id,
@@ -64,5 +62,60 @@ class CheckoutPaymentController extends Controller
         ]);
 
         return response()->json($result);
+    }
+
+    public function verify(Request $request, Order $order): JsonResponse
+    {
+        if ($order->user_id !== $request->user()->id) {
+            abort(403);
+        }
+
+        $payload = $request->validate([
+            'razorpay_order_id' => 'required|string|max:120',
+            'razorpay_payment_id' => 'required|string|max:120',
+            'razorpay_signature' => 'required|string|max:255',
+        ]);
+
+        $isValid = $this->paymentGatewayService->verifyRazorpayCheckoutSignature(
+            $payload['razorpay_order_id'],
+            $payload['razorpay_payment_id'],
+            $payload['razorpay_signature']
+        );
+
+        PaymentEvent::create([
+            'order_id' => $order->id,
+            'gateway' => 'razorpay',
+            'event_type' => 'checkout.payment.verify',
+            'external_reference' => $payload['razorpay_payment_id'],
+            'status' => $isValid ? 'paid' : 'signature_invalid',
+            'amount' => $order->total,
+            'currency' => 'INR',
+            'signature_valid' => $isValid,
+            'note' => $isValid ? 'Client-side payment verification succeeded' : 'Invalid Razorpay checkout signature',
+            'payload' => $payload,
+        ]);
+
+        if (! $isValid) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Payment signature verification failed.',
+            ], 422);
+        }
+
+        $order->update([
+            'payment_status' => 'paid',
+            'payment_gateway' => 'razorpay',
+            'payment_reference' => $payload['razorpay_order_id'],
+            'payment_meta' => array_merge($order->payment_meta ?? [], [
+                'razorpay_payment_id' => $payload['razorpay_payment_id'],
+                'razorpay_signature' => $payload['razorpay_signature'],
+            ]),
+            'status' => in_array($order->status, ['pending', 'failed'], true) ? 'processing' : $order->status,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment verified successfully.',
+        ]);
     }
 }

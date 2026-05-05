@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NewOrderAdminNotification;
+use App\Mail\OrderPlacedCustomerNotification;
 use App\Models\Blog;
 use App\Models\CartItem;
 use App\Models\Category;
@@ -25,6 +27,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class StorefrontController extends Controller
 {
@@ -859,6 +862,10 @@ class StorefrontController extends Controller
             }
         });
 
+        if ($order) {
+            $this->sendOrderCreationNotifications($order);
+        }
+
         $request->session()->forget('cart');
         if ($request->user()) {
             CartItem::query()->where('user_id', $request->user()->id)->delete();
@@ -942,6 +949,37 @@ class StorefrontController extends Controller
         $request->user()->update(['password' => \Illuminate\Support\Facades\Hash::make($request->new_password)]);
 
         return back()->with('success', 'Password changed successfully.');
+    }
+
+    private function sendOrderCreationNotifications(Order $order): void
+    {
+        $order->loadMissing(['items', 'user']);
+
+        if ($order->user?->email) {
+            try {
+                Mail::to($order->user->email)->send(new OrderPlacedCustomerNotification($order));
+            } catch (\Throwable $e) {
+                Log::warning('Customer order confirmation email failed', [
+                    'order_id' => $order->id,
+                    'order_number' => $order->order_number,
+                    'message' => $e->getMessage(),
+                ]);
+            }
+        }
+
+        $adminRecipient = (string) config('mail.order_recipient', '');
+        if ($adminRecipient) {
+            try {
+                Mail::to($adminRecipient)->send(new NewOrderAdminNotification($order));
+            } catch (\Throwable $e) {
+                Log::warning('Admin order notification email failed', [
+                    'order_id' => $order->id,
+                    'order_number' => $order->order_number,
+                    'recipient' => $adminRecipient,
+                    'message' => $e->getMessage(),
+                ]);
+            }
+        }
     }
 
     private function hydrateCart(Request $request): array

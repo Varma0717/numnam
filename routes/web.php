@@ -98,6 +98,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/checkout/pay/{order}', [CheckoutPaymentController::class, 'createSession'])
         ->name('store.checkout.payment.session');
+    Route::post('/checkout/pay/{order}/verify', [CheckoutPaymentController::class, 'verify'])
+        ->name('store.checkout.payment.verify');
 });
 
 Route::middleware('guest')->group(function () {

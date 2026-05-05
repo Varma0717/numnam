@@ -51,6 +51,34 @@
 </section>
 
 <section class="admin-panel">
+    <h3>Customer & Shipping</h3>
+    <div class="admin-grid" style="grid-template-columns:repeat(2,minmax(0,1fr)); gap: .75rem;">
+        <div>
+            <strong>Customer Name:</strong>
+            <div>{{ $order->user?->name ?? $order->ship_name }}</div>
+        </div>
+        <div>
+            <strong>Customer Email:</strong>
+            <div>{{ $order->user?->email ?? 'N/A' }}</div>
+        </div>
+        <div>
+            <strong>Customer Phone:</strong>
+            <div>{{ $order->ship_phone ?: ($order->user?->phone ?? 'N/A') }}</div>
+        </div>
+        <div>
+            <strong>Payment:</strong>
+            <div>{{ strtoupper($order->payment_gateway ?: $order->payment_method ?: 'N/A') }} ({{ strtoupper($order->payment_status ?: 'PENDING') }})</div>
+        </div>
+        <div style="grid-column:1 / -1;">
+            <strong>Shipping Address:</strong>
+            <div>
+                {{ $order->ship_name }}, {{ $order->ship_address }}, {{ $order->ship_city }}, {{ $order->ship_state }} - {{ $order->ship_pincode }}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="admin-panel">
     <h3>Payment Timeline</h3>
     <form method="POST" action="{{ route('admin.orders.timeline-note', $order) }}" style="display:flex; gap:.5rem; margin-bottom:.7rem;">
         @csrf

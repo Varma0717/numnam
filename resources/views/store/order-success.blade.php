@@ -36,6 +36,20 @@
         <p class="mt-1 text-sm font-semibold text-slate-500">Order #{{ $order->order_number }}</p>
         <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-500">We've received your order and will begin processing it soon. You'll receive an email confirmation with tracking details.</p>
         <div class="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            @if($order->payment_gateway === 'razorpay' && $order->payment_status !== 'paid')
+            <button
+                id="rzp-pay-now"
+                type="button"
+                class="inline-flex h-11 items-center rounded-full bg-slate-900 px-7 text-sm font-semibold text-white transition hover:bg-slate-800"
+                data-session-url="{{ route('store.checkout.payment.session', $order) }}"
+                data-verify-url="{{ route('store.checkout.payment.verify', $order) }}"
+                data-order-number="{{ $order->order_number }}"
+                data-customer-name="{{ $order->ship_name }}"
+                data-customer-email="{{ $order->user?->email }}"
+                data-customer-phone="{{ $order->ship_phone }}">
+                Complete Payment
+            </button>
+            @endif
             <a class="inline-flex h-11 items-center rounded-full bg-numnam-600 px-7 text-sm font-semibold text-white transition hover:bg-numnam-700" href="{{ route('store.account') }}">View My Orders</a>
             <a class="inline-flex h-11 items-center rounded-full border border-slate-200 bg-white px-7 text-sm font-semibold text-slate-700 transition hover:bg-slate-50" href="{{ route('store.products') }}">Continue Shopping</a>
         </div>
@@ -82,4 +96,95 @@
         </div>
     </div>
 </section>
+@endsection
+
+@section('scripts')
+@if($order->payment_gateway === 'razorpay' && $order->payment_status !== 'paid')
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    (function() {
+        const payBtn = document.getElementById('rzp-pay-now');
+        if (!payBtn) {
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+        const setLoading = (isLoading) => {
+            payBtn.disabled = isLoading;
+            payBtn.textContent = isLoading ? 'Opening Razorpay...' : 'Complete Payment';
+        };
+
+        payBtn.addEventListener('click', async function() {
+            if (typeof window.Razorpay === 'undefined') {
+                alert('Unable to load Razorpay checkout. Please refresh and try again.');
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+                const sessionResponse = await fetch(payBtn.dataset.sessionUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        gateway: 'razorpay'
+                    })
+                });
+
+                const sessionResult = await sessionResponse.json();
+                if (!sessionResponse.ok || !sessionResult.success) {
+                    throw new Error(sessionResult.message || 'Unable to initialize payment.');
+                }
+
+                const options = {
+                    key: sessionResult.publishable_key,
+                    amount: sessionResult.data.amount,
+                    currency: sessionResult.data.currency || 'INR',
+                    name: 'NumNam',
+                    description: 'Order ' + payBtn.dataset.orderNumber,
+                    order_id: sessionResult.data.id,
+                    prefill: {
+                        name: payBtn.dataset.customerName || '',
+                        email: payBtn.dataset.customerEmail || '',
+                        contact: payBtn.dataset.customerPhone || ''
+                    },
+                    handler: async function(response) {
+                        const verifyResponse = await fetch(payBtn.dataset.verifyUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify(response)
+                        });
+
+                        const verifyResult = await verifyResponse.json();
+                        if (!verifyResponse.ok || !verifyResult.success) {
+                            throw new Error(verifyResult.message || 'Payment verification failed.');
+                        }
+
+                        window.location.reload();
+                    }
+                };
+
+                const razorpay = new window.Razorpay(options);
+                razorpay.on('payment.failed', function(event) {
+                    alert(event?.error?.description || 'Payment failed. Please try again.');
+                });
+                razorpay.open();
+            } catch (error) {
+                alert(error.message || 'Unable to start payment.');
+            } finally {
+                setLoading(false);
+            }
+        });
+    })();
+</script>
+@endif
 @endsection
