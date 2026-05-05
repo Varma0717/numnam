@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\CartItem;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,10 +26,18 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('store.*', function ($view) {
-            $cartItemCount = collect(session('cart', []))
-                ->sum(function ($line) {
-                    return (int) ($line['qty'] ?? 0);
-                });
+            $user = auth()->user();
+
+            if ($user) {
+                $cartItemCount = (int) CartItem::query()
+                    ->where('user_id', $user->id)
+                    ->sum('qty');
+            } else {
+                $cartItemCount = collect(session('cart', []))
+                    ->sum(function ($line) {
+                        return (int) ($line['qty'] ?? 0);
+                    });
+            }
 
             $view->with('cartItemCount', $cartItemCount);
         });
