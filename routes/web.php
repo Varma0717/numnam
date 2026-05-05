@@ -96,6 +96,8 @@ Route::middleware('auth')->group(function () {
     // Product reviews
     Route::post('/products/{product:slug}/reviews', [StorefrontController::class, 'storeReview'])->name('store.review.store');
 
+    Route::get('/checkout/pay/{order}', [CheckoutPaymentController::class, 'show'])
+        ->name('store.checkout.payment.page');
     Route::post('/checkout/pay/{order}', [CheckoutPaymentController::class, 'createSession'])
         ->name('store.checkout.payment.session');
     Route::post('/checkout/pay/{order}/verify', [CheckoutPaymentController::class, 'verify'])

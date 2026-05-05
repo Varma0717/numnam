@@ -873,12 +873,13 @@ class StorefrontController extends Controller
 
         if ($order && in_array($order->payment_gateway, ['razorpay'], true)) {
             if ($gatewayInitError) {
-                return redirect()->route('store.order.success', $order)
+                return redirect()->route('store.checkout.payment.page', $order)
                     ->withErrors(['payment' => $gatewayInitError . ' You can retry payment below.'])
                     ->with('status', 'Order created. Please complete payment to confirm.');
             }
 
-            return redirect()->route('store.order.success', $order)->with('status', 'Order created. Payment session initialized for ' . strtoupper($order->payment_gateway) . '.');
+            return redirect()->route('store.checkout.payment.page', $order)
+                ->with('status', 'Order created. Continue to complete your payment.');
         }
 
         return redirect()->route('store.order.success', $order)->with('status', 'Order placed successfully.');
@@ -887,6 +888,12 @@ class StorefrontController extends Controller
     public function orderSuccess(Request $request, Order $order)
     {
         abort_unless($order->user_id === $request->user()->id, 403);
+
+        if ($order->payment_gateway === 'razorpay' && $order->payment_status !== 'paid') {
+            return redirect()->route('store.checkout.payment.page', $order)
+                ->withErrors(['payment' => 'Please complete payment before viewing order success.']);
+        }
+
         $order->load('items');
         return view('store.order-success', compact('order'));
     }

@@ -18,6 +18,24 @@ class CheckoutPaymentController extends Controller
         $this->paymentGatewayService = $paymentGatewayService;
     }
 
+    public function show(Request $request, Order $order)
+    {
+        if ($order->user_id !== $request->user()->id) {
+            abort(403);
+        }
+
+        if ($order->payment_gateway !== 'razorpay') {
+            return redirect()->route('store.order.success', $order);
+        }
+
+        if ($order->payment_status === 'paid') {
+            return redirect()->route('store.order.success', $order)
+                ->with('status', 'Payment already completed.');
+        }
+
+        return view('store.checkout-payment', compact('order'));
+    }
+
     public function createSession(Request $request, Order $order): JsonResponse
     {
         if ($order->user_id !== $request->user()->id) {
