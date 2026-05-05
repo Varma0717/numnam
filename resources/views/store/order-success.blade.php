@@ -46,7 +46,11 @@
                 data-order-number="{{ $order->order_number }}"
                 data-customer-name="{{ $order->ship_name }}"
                 data-customer-email="{{ $order->user?->email }}"
-                data-customer-phone="{{ $order->ship_phone }}">
+                data-customer-phone="{{ $order->ship_phone }}"
+                data-razorpay-key="{{ config('services.razorpay.key_id') }}"
+                data-razorpay-order-id="{{ $order->payment_reference }}"
+                data-razorpay-amount="{{ (int) round(((float) $order->total) * 100) }}"
+                data-razorpay-currency="INR">
                 Complete Payment
             </button>
             @endif
@@ -124,30 +128,46 @@
             setLoading(true);
 
             try {
-                const sessionResponse = await fetch(payBtn.dataset.sessionUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        gateway: 'razorpay'
-                    })
-                });
+                let orderId = payBtn.dataset.razorpayOrderId || '';
+                let amount = Number(payBtn.dataset.razorpayAmount || 0);
+                let currency = payBtn.dataset.razorpayCurrency || 'INR';
+                const razorpayKey = payBtn.dataset.razorpayKey || '';
 
-                const sessionResult = await sessionResponse.json();
-                if (!sessionResponse.ok || !sessionResult.success) {
-                    throw new Error(sessionResult.message || 'Unable to initialize payment.');
+                // Fallback: request a fresh session only if required data is missing.
+                if (!orderId || !amount) {
+                    const sessionResponse = await fetch(payBtn.dataset.sessionUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            gateway: 'razorpay'
+                        })
+                    });
+
+                    const sessionResult = await sessionResponse.json();
+                    if (!sessionResponse.ok || !sessionResult.success) {
+                        throw new Error(sessionResult.message || 'Unable to initialize payment.');
+                    }
+
+                    orderId = sessionResult.data.id;
+                    amount = Number(sessionResult.data.amount || 0);
+                    currency = sessionResult.data.currency || 'INR';
+                }
+
+                if (!razorpayKey || !orderId || !amount) {
+                    throw new Error('Razorpay checkout details are incomplete. Please contact support.');
                 }
 
                 const options = {
-                    key: sessionResult.publishable_key,
-                    amount: sessionResult.data.amount,
-                    currency: sessionResult.data.currency || 'INR',
+                    key: razorpayKey,
+                    amount: amount,
+                    currency: currency,
                     name: 'NumNam',
                     description: 'Order ' + payBtn.dataset.orderNumber,
-                    order_id: sessionResult.data.id,
+                    order_id: orderId,
                     prefill: {
                         name: payBtn.dataset.customerName || '',
                         email: payBtn.dataset.customerEmail || '',
