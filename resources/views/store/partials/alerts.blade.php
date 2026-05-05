@@ -17,13 +17,21 @@ $flashQueue[] = [
 @endphp
 
 @if(!empty($flashQueue))
-<input type="hidden" id="numnam-flash-data" value="{{ e(json_encode($flashQueue)) }}">
+<script id="numnam-flash-data" type="application/json">
+    {
+        !!json_encode($flashQueue, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!
+    }
+</script>
 <script>
     window.__numnamFlashQueue = window.__numnamFlashQueue || [];
-    const flashInput = document.getElementById('numnam-flash-data');
-    if (flashInput && flashInput.value) {
+    const flashDataEl = document.getElementById('numnam-flash-data');
+
+    if (flashDataEl) {
         try {
-            window.__numnamFlashQueue.push(...JSON.parse(flashInput.value));
+            const flashQueuePayload = JSON.parse(flashDataEl.textContent || '[]');
+            if (Array.isArray(flashQueuePayload)) {
+                window.__numnamFlashQueue.push(...flashQueuePayload);
+            }
         } catch (error) {
             console.error('Failed to parse flash queue payload', error);
         }
