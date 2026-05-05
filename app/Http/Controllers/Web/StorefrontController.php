@@ -873,7 +873,9 @@ class StorefrontController extends Controller
 
         if ($order && in_array($order->payment_gateway, ['razorpay'], true)) {
             if ($gatewayInitError) {
-                return redirect()->route('store.account')->withErrors(['payment' => $gatewayInitError]);
+                return redirect()->route('store.order.success', $order)
+                    ->withErrors(['payment' => $gatewayInitError . ' You can retry payment below.'])
+                    ->with('status', 'Order created. Please complete payment to confirm.');
             }
 
             return redirect()->route('store.order.success', $order)->with('status', 'Order created. Payment session initialized for ' . strtoupper($order->payment_gateway) . '.');
