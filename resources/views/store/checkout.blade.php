@@ -21,7 +21,7 @@
 
 <section class="section pt-4">
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-start">
-        <form method="POST" action="{{ route('store.checkout.place-order') }}" class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
+        <form id="checkout-form" method="POST" action="{{ route('store.checkout.place-order') }}" class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
             @csrf
             <h2 class="text-xl font-semibold tracking-tight text-slate-900">Shipping Information</h2>
             <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -178,4 +178,116 @@
         </aside>
     </div>
 </section>
+@endsection
+
+@section('scripts')
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    (function() {
+        const checkoutForm = document.getElementById('checkout-form');
+        if (!checkoutForm) {
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+        const submitBtn = checkoutForm.querySelector('button[type="submit"]');
+        const defaultBtnText = submitBtn ? submitBtn.textContent : 'Place Secure Order';
+
+        const setLoading = (isLoading, label = 'Processing...') => {
+            if (!submitBtn) return;
+            submitBtn.disabled = isLoading;
+            submitBtn.textContent = isLoading ? label : defaultBtnText;
+        };
+
+        checkoutForm.addEventListener('submit', async function(event) {
+            const selectedPayment = checkoutForm.querySelector('input[name="payment_method"]:checked')?.value;
+
+            if (selectedPayment !== 'razorpay') {
+                return;
+            }
+
+            event.preventDefault();
+
+            if (typeof window.Razorpay === 'undefined') {
+                alert('Unable to load Razorpay checkout. Please refresh and try again.');
+                return;
+            }
+
+            setLoading(true, 'Creating order...');
+
+            try {
+                const formData = new FormData(checkoutForm);
+                const response = await fetch(checkoutForm.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: formData,
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    if (result?.message) {
+                        throw new Error(result.message);
+                    }
+
+                    if (result?.errors) {
+                        const firstError = Object.values(result.errors)[0];
+                        if (Array.isArray(firstError) && firstError.length) {
+                            throw new Error(firstError[0]);
+                        }
+                    }
+
+                    throw new Error('Unable to create order. Please try again.');
+                }
+
+                const options = {
+                    key: result.razorpay_key,
+                    amount: result.amount,
+                    currency: result.currency || 'INR',
+                    name: 'NumNam',
+                    description: 'Order ' + result.order_number,
+                    order_id: result.razorpay_order_id,
+                    prefill: {
+                        name: checkoutForm.querySelector('#ship_name')?.value || '',
+                        email: '{{ auth()->user()?->email }}',
+                        contact: checkoutForm.querySelector('#ship_phone')?.value || '',
+                    },
+                    handler: async function(paymentResponse) {
+                        const verifyResponse = await fetch(result.verify_url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Accept': 'application/json',
+                            },
+                            body: JSON.stringify(paymentResponse),
+                        });
+
+                        const verifyResult = await verifyResponse.json();
+
+                        if (!verifyResponse.ok || !verifyResult.success) {
+                            throw new Error(verifyResult.message || 'Payment verification failed.');
+                        }
+
+                        window.location.href = result.success_url;
+                    },
+                };
+
+                const razorpay = new window.Razorpay(options);
+                razorpay.on('payment.failed', function(eventObj) {
+                    alert(eventObj?.error?.description || 'Payment failed. Please try again.');
+                });
+                setLoading(false);
+                razorpay.open();
+            } catch (error) {
+                setLoading(false);
+                alert(error.message || 'Unable to proceed with payment.');
+            }
+        });
+    })();
+</script>
 @endsection

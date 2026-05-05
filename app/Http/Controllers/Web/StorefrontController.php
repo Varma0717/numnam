@@ -680,11 +680,12 @@ class StorefrontController extends Controller
         ]);
     }
 
-    public function placeOrder(Request $request): RedirectResponse
+    public function placeOrder(Request $request): RedirectResponse|JsonResponse
     {
         $cart = $this->hydrateCart($request);
         $order = null;
         $gatewayInitError = null;
+        $gatewayInitResult = null;
 
         if (empty($cart['items'])) {
             return redirect()->route('store.products')->withErrors(['checkout' => 'Cart is empty.']);
@@ -732,7 +733,7 @@ class StorefrontController extends Controller
             }
         }
 
-        DB::transaction(function () use ($request, $validated, $cart, &$order, &$gatewayInitError) {
+        DB::transaction(function () use ($request, $validated, $cart, &$order, &$gatewayInitError, &$gatewayInitResult) {
             $user = $request->user();
             $isFirstOrder = $user->orders()->doesntExist();
             $discounts = $this->discountService->resolve(
@@ -837,6 +838,7 @@ class StorefrontController extends Controller
 
             if (in_array($order->payment_gateway, ['razorpay'], true)) {
                 $gatewayResult = $this->paymentGatewayService->createRazorpayOrder($order);
+                $gatewayInitResult = $gatewayResult;
 
                 PaymentEvent::create([
                     'order_id' => $order->id,
@@ -872,13 +874,37 @@ class StorefrontController extends Controller
         }
 
         if ($order && in_array($order->payment_gateway, ['razorpay'], true)) {
+            if ($request->expectsJson()) {
+                if ($gatewayInitError) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => $gatewayInitError,
+                        'order_id' => $order->id,
+                        'order_number' => $order->order_number,
+                    ], 422);
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'order_id' => $order->id,
+                    'order_number' => $order->order_number,
+                    'amount' => (int) round(((float) $order->total) * 100),
+                    'currency' => 'INR',
+                    'razorpay_key' => (string) config('services.razorpay.key_id'),
+                    'razorpay_order_id' => $order->payment_reference,
+                    'verify_url' => route('store.checkout.payment.verify', $order),
+                    'success_url' => route('store.order.success', $order),
+                    'session_result' => $gatewayInitResult,
+                ]);
+            }
+
             if ($gatewayInitError) {
-                return redirect()->route('store.checkout.payment.page', $order)
+                return redirect()->route('store.order.success', $order)
                     ->withErrors(['payment' => $gatewayInitError . ' You can retry payment below.'])
                     ->with('status', 'Order created. Please complete payment to confirm.');
             }
 
-            return redirect()->route('store.checkout.payment.page', $order)
+            return redirect()->route('store.order.success', $order)
                 ->with('status', 'Order created. Continue to complete your payment.');
         }
 
@@ -888,11 +914,6 @@ class StorefrontController extends Controller
     public function orderSuccess(Request $request, Order $order)
     {
         abort_unless($order->user_id === $request->user()->id, 403);
-
-        if ($order->payment_gateway === 'razorpay' && $order->payment_status !== 'paid') {
-            return redirect()->route('store.checkout.payment.page', $order)
-                ->withErrors(['payment' => 'Please complete payment before viewing order success.']);
-        }
 
         $order->load('items');
         return view('store.order-success', compact('order'));

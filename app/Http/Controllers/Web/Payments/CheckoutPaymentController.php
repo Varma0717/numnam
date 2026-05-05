@@ -53,6 +53,16 @@ class CheckoutPaymentController extends Controller
             'gateway' => 'required|in:razorpay',
         ])['gateway'];
 
+        if ($gateway === 'razorpay' && $order->payment_reference && !empty($order->payment_meta)) {
+            return response()->json([
+                'success' => true,
+                'gateway' => 'razorpay',
+                'data' => $order->payment_meta,
+                'publishable_key' => (string) config('services.razorpay.key_id'),
+                'reused' => true,
+            ]);
+        }
+
         $result = $this->paymentGatewayService->createRazorpayOrder($order);
 
         PaymentEvent::create([
