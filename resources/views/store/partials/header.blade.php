@@ -71,7 +71,7 @@
             <a href="{{ route('store.login') }}">Login</a>
             <a href="{{ route('store.register') }}">Register</a>
             @endauth
-            <span class="nn-menu-copyright">&copy; {{ date('Y') }} NumNam</span>
+            <span class="nn-menu-copyright">Copyright {{ date('Y') }} NumNam. All rights reserved.</span>
         </div>
 
         {{-- Center: main nav links --}}

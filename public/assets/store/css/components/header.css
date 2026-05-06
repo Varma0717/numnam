@@ -278,6 +278,9 @@
 .nn-fullscreen-menu {
   position: fixed;
   inset: 0;
+  --nn-board-top-safe: clamp(11.5rem, 24vh, 16rem);
+  --nn-board-bottom-safe: clamp(2.2rem, 6vh, 3.6rem);
+  --nn-board-side-safe: clamp(2rem, 6vw, 4.2rem);
   z-index: 1002;
   background: linear-gradient(rgba(255, 253, 250, 0.75), rgba(255, 253, 250, 0.75)),
     url("/assets/images/bg_products.png") center center / cover no-repeat;
@@ -327,11 +330,12 @@
 .nn-fullscreen-menu__inner {
   width: min(980px, 96vw);
   height: min(90svh, 860px);
-  padding: clamp(9rem, 20vh, 13rem) clamp(2rem, 6vw, 4.2rem) clamp(2rem, 6vh, 3.2rem);
+  padding: var(--nn-board-top-safe) var(--nn-board-side-safe) var(--nn-board-bottom-safe);
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
   gap: 0;
+  overflow-y: auto;
   transform: translateY(24px);
   opacity: 0;
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.05s,
@@ -381,9 +385,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: clamp(0.05rem, 0.9vh, 0.45rem);
   flex: 1;
+  padding-top: clamp(1.25rem, 4vh, 2.5rem);
 }
 
 .nn-menu-link {
@@ -485,6 +490,12 @@
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
+  .nn-fullscreen-menu {
+    --nn-board-top-safe: clamp(10.5rem, 23vh, 13.5rem);
+    --nn-board-bottom-safe: clamp(1.6rem, 5vh, 2.4rem);
+    --nn-board-side-safe: clamp(1.2rem, 5vw, 2rem);
+  }
+
   .nn-fullscreen-menu::before {
     width: min(98vw, 740px);
     height: min(92svh, 760px);
@@ -494,7 +505,6 @@
   .nn-fullscreen-menu__inner {
     width: min(98vw, 740px);
     height: min(92svh, 760px);
-    padding: clamp(8rem, 18vh, 11rem) clamp(1.2rem, 5vw, 2rem) clamp(1.6rem, 5vh, 2.4rem);
     text-align: center;
     justify-content: center;
   }
@@ -506,6 +516,17 @@
 
   .nn-menu-link {
     font-size: clamp(1.35rem, 7vw, 2.25rem);
+  }
+}
+
+@media (max-height: 860px) and (min-width: 769px) {
+  .nn-fullscreen-menu {
+    --nn-board-top-safe: clamp(12rem, 26vh, 15rem);
+    --nn-board-bottom-safe: clamp(1.8rem, 5vh, 3rem);
+  }
+
+  .nn-menu-main {
+    padding-top: clamp(1.5rem, 5vh, 3rem);
   }
 }
 

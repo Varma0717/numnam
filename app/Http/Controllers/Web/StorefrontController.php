@@ -674,9 +674,67 @@ class StorefrontController extends Controller
             return redirect()->route('store.products')->withErrors(['checkout' => 'Cart is empty.']);
         }
 
+        $discounts = $this->discountService->resolve(
+            $request->user(),
+            (float) $cart['totals']['subtotal'],
+            old('coupon_code') ?: null,
+        );
+
         return view('store.checkout', [
             'items' => $cart['items'],
             'totals' => $cart['totals'],
+            'discounts' => $discounts,
+            'summary' => $this->buildCheckoutSummary($cart['totals'], $discounts),
+        ]);
+    }
+
+    public function previewCheckoutCoupon(Request $request): JsonResponse
+    {
+        $cart = $this->hydrateCart($request);
+
+        if (empty($cart['items'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cart is empty.',
+            ], 422);
+        }
+
+        $validated = $request->validate([
+            'coupon_code' => 'nullable|string|max:32',
+        ]);
+
+        $couponCode = trim((string) ($validated['coupon_code'] ?? ''));
+        $discounts = $this->discountService->resolve(
+            $request->user(),
+            (float) $cart['totals']['subtotal'],
+            $couponCode !== '' ? $couponCode : null,
+        );
+        $summary = $this->buildCheckoutSummary($cart['totals'], $discounts);
+
+        if ($couponCode !== '' && ! $discounts['coupon']) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Coupon code is invalid or unavailable for this cart.',
+                'summary' => $summary,
+                'discounts' => [
+                    'coupon_code' => null,
+                    'coupon_discount' => 0,
+                    'referral_discount' => $discounts['referral_discount'],
+                    'total_discount' => $discounts['total_discount'],
+                ],
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => $couponCode !== '' ? 'Coupon applied successfully.' : 'Discount summary updated.',
+            'summary' => $summary,
+            'discounts' => [
+                'coupon_code' => $discounts['coupon']?->code,
+                'coupon_discount' => $discounts['coupon_discount'],
+                'referral_discount' => $discounts['referral_discount'],
+                'total_discount' => $discounts['total_discount'],
+            ],
         ]);
     }
 
@@ -1055,6 +1113,22 @@ class StorefrontController extends Controller
                 'shipping_fee' => $shippingFee,
                 'total' => $subtotal + $shippingFee,
             ],
+        ];
+    }
+
+    private function buildCheckoutSummary(array $totals, array $discounts): array
+    {
+        $subtotal = (float) ($totals['subtotal'] ?? 0);
+        $shippingFee = (float) ($totals['shipping_fee'] ?? 0);
+        $totalDiscount = min($subtotal, (float) ($discounts['total_discount'] ?? 0));
+
+        return [
+            'subtotal' => $subtotal,
+            'shipping_fee' => $shippingFee,
+            'coupon_discount' => (float) ($discounts['coupon_discount'] ?? 0),
+            'referral_discount' => (float) ($discounts['referral_discount'] ?? 0),
+            'total_discount' => $totalDiscount,
+            'total' => max(0, $subtotal - $totalDiscount + $shippingFee),
         ];
     }
 

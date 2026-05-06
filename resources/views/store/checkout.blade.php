@@ -116,7 +116,13 @@
             <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div class="form-group">
                     <label for="coupon_code" class="mb-1 block text-sm font-medium text-slate-700">Coupon Code</label>
-                    <input class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400" id="coupon_code" name="coupon_code" placeholder="Enter coupon code" value="{{ old('coupon_code') }}">
+                    <div class="flex flex-col gap-2 sm:flex-row">
+                        <input class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400" id="coupon_code" name="coupon_code" placeholder="Enter coupon code" value="{{ old('coupon_code') }}">
+                        <button type="button" id="coupon-apply-btn" class="inline-flex h-11 shrink-0 items-center justify-center rounded-xl border border-numnam-200 bg-numnam-50 px-4 text-sm font-semibold text-numnam-700 transition-colors duration-200 hover:border-numnam-300 hover:bg-numnam-100">
+                            Apply
+                        </button>
+                    </div>
+                    <p id="coupon-feedback" class="text-sm text-slate-500" aria-live="polite"></p>
                 </div>
                 <div class="form-group">
                     @if(auth()->check() && auth()->user()->referred_by)
@@ -156,9 +162,11 @@
                 <strong class="text-slate-900">Rs {{ number_format($item['line_total'], 0) }}</strong>
             </div>
             @endforeach
-            <div class="mt-4 flex items-center justify-between border-t border-slate-200 pt-4 text-sm text-slate-600"><span>Subtotal</span><strong class="text-slate-900">Rs {{ number_format($totals['subtotal'], 0) }}</strong></div>
-            <div class="mt-2 flex items-center justify-between text-sm text-slate-600"><span>Shipping</span><strong class="text-slate-900">{{ $totals['shipping_fee'] > 0 ? 'Rs ' . number_format($totals['shipping_fee'], 0) : 'Free' }}</strong></div>
-            <div class="mt-4 flex items-center justify-between border-t border-slate-200 pt-4"><span class="text-base font-semibold text-slate-900">Total</span><strong class="text-xl text-slate-900">Rs {{ number_format($totals['total'], 0) }}</strong></div>
+            <div class="mt-4 flex items-center justify-between border-t border-slate-200 pt-4 text-sm text-slate-600"><span>Subtotal</span><strong id="summary-subtotal" class="text-slate-900">Rs {{ number_format($summary['subtotal'], 0) }}</strong></div>
+            <div class="mt-2 flex items-center justify-between text-sm text-slate-600"><span>Shipping</span><strong id="summary-shipping" class="text-slate-900">{{ $summary['shipping_fee'] > 0 ? 'Rs ' . number_format($summary['shipping_fee'], 0) : 'Free' }}</strong></div>
+            <div id="summary-coupon-row" class="mt-2 flex items-center justify-between text-sm text-emerald-700 {{ $summary['coupon_discount'] > 0 ? '' : 'hidden' }}"><span>Coupon Discount</span><strong id="summary-coupon-discount">- Rs {{ number_format($summary['coupon_discount'], 0) }}</strong></div>
+            <div id="summary-referral-row" class="mt-2 flex items-center justify-between text-sm text-emerald-700 {{ $summary['referral_discount'] > 0 ? '' : 'hidden' }}"><span>Referral Discount</span><strong id="summary-referral-discount">- Rs {{ number_format($summary['referral_discount'], 0) }}</strong></div>
+            <div class="mt-4 flex items-center justify-between border-t border-slate-200 pt-4"><span class="text-base font-semibold text-slate-900">Total</span><strong id="summary-total" class="text-xl text-slate-900">Rs {{ number_format($summary['total'], 0) }}</strong></div>
 
             <div class="mt-5 space-y-2 border-t border-slate-200 pt-4">
                 <p class="inline-flex items-center gap-1.5 text-sm text-slate-600">
@@ -192,6 +200,119 @@
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
         const submitBtn = checkoutForm.querySelector('button[type="submit"]');
         const defaultBtnText = submitBtn ? submitBtn.textContent : 'Place Secure Order';
+        const couponInput = document.getElementById('coupon_code');
+        const couponApplyBtn = document.getElementById('coupon-apply-btn');
+        const couponFeedback = document.getElementById('coupon-feedback');
+        const summarySubtotal = document.getElementById('summary-subtotal');
+        const summaryShipping = document.getElementById('summary-shipping');
+        const summaryCouponRow = document.getElementById('summary-coupon-row');
+        const summaryCouponDiscount = document.getElementById('summary-coupon-discount');
+        const summaryReferralRow = document.getElementById('summary-referral-row');
+        const summaryReferralDiscount = document.getElementById('summary-referral-discount');
+        const summaryTotal = document.getElementById('summary-total');
+
+        const formatMoney = (amount) => {
+            const numericAmount = Number(amount || 0);
+            return 'Rs ' + Math.round(numericAmount).toLocaleString('en-IN');
+        };
+
+        const setCouponFeedback = (message, isError = false) => {
+            if (!couponFeedback) {
+                return;
+            }
+
+            couponFeedback.textContent = message || '';
+            couponFeedback.classList.toggle('text-red-600', isError);
+            couponFeedback.classList.toggle('text-emerald-700', !isError && !!message);
+            couponFeedback.classList.toggle('text-slate-500', !message);
+        };
+
+        const updateSummary = (summary) => {
+            if (!summary) {
+                return;
+            }
+
+            if (summarySubtotal) {
+                summarySubtotal.textContent = formatMoney(summary.subtotal);
+            }
+
+            if (summaryShipping) {
+                summaryShipping.textContent = Number(summary.shipping_fee || 0) > 0 ? formatMoney(summary.shipping_fee) : 'Free';
+            }
+
+            if (summaryCouponRow && summaryCouponDiscount) {
+                const couponDiscount = Number(summary.coupon_discount || 0);
+                summaryCouponRow.classList.toggle('hidden', couponDiscount <= 0);
+                summaryCouponDiscount.textContent = '- ' + formatMoney(couponDiscount);
+            }
+
+            if (summaryReferralRow && summaryReferralDiscount) {
+                const referralDiscount = Number(summary.referral_discount || 0);
+                summaryReferralRow.classList.toggle('hidden', referralDiscount <= 0);
+                summaryReferralDiscount.textContent = '- ' + formatMoney(referralDiscount);
+            }
+
+            if (summaryTotal) {
+                summaryTotal.textContent = formatMoney(summary.total);
+            }
+        };
+
+        const applyCouponPreview = async () => {
+            if (!couponApplyBtn || !couponInput) {
+                return;
+            }
+
+            couponApplyBtn.disabled = true;
+            couponApplyBtn.textContent = 'Applying...';
+            setCouponFeedback('');
+
+            try {
+                const response = await fetch("{{ route('store.checkout.coupon-preview') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: JSON.stringify({
+                        coupon_code: couponInput.value,
+                    }),
+                });
+
+                const result = await response.json();
+                updateSummary(result.summary);
+
+                if (!response.ok || !result.success) {
+                    setCouponFeedback(result.message || 'Unable to apply coupon.', true);
+                    return;
+                }
+
+                if (result.discounts?.coupon_code) {
+                    couponInput.value = result.discounts.coupon_code;
+                }
+
+                setCouponFeedback(result.message || 'Coupon applied successfully.');
+            } catch (error) {
+                setCouponFeedback(error.message || 'Unable to apply coupon.', true);
+            } finally {
+                couponApplyBtn.disabled = false;
+                couponApplyBtn.textContent = 'Apply';
+            }
+        };
+
+        if (couponApplyBtn) {
+            couponApplyBtn.addEventListener('click', applyCouponPreview);
+        }
+
+        if (couponInput) {
+            couponInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    applyCouponPreview();
+                }
+            });
+        }
 
         const setLoading = (isLoading, label = 'Processing...') => {
             if (!submitBtn) return;
