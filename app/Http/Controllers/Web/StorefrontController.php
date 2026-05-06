@@ -607,7 +607,7 @@ class StorefrontController extends Controller
                 'product_id' => $product->id,
             ]);
 
-            $item->qty = max(1, (int) $item->qty) + $qty;
+            $item->qty = ($item->exists ? max(0, (int) $item->qty) : 0) + $qty;
             $item->save();
         } else {
             $cart = $request->session()->get('cart', []);

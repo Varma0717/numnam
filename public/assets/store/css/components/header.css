@@ -326,16 +326,15 @@
   opacity: 1;
 }
 
-/* Inner 3-column layout */
+/* Inner 3-column layout – CSS Grid for true horizontal centering */
 .nn-fullscreen-menu__inner {
   width: min(980px, 96vw);
   height: min(90svh, 860px);
   padding: var(--nn-board-top-safe) var(--nn-board-side-safe) var(--nn-board-bottom-safe);
-  display: flex;
-  align-items: stretch;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(100px, 150px) 1fr minmax(100px, 150px);
+  align-items: start;
   gap: 0;
-  overflow-y: auto;
   transform: translateY(24px);
   opacity: 0;
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.05s,
@@ -355,7 +354,8 @@
   flex-direction: column;
   gap: 0.65rem;
   align-items: flex-start;
-  min-width: 120px;
+  min-width: 0;
+  padding-top: clamp(1.5rem, 4vh, 2.5rem);
 }
 
 .nn-menu-foot a {
@@ -387,8 +387,7 @@
   align-items: center;
   justify-content: flex-start;
   gap: clamp(0.05rem, 0.9vh, 0.45rem);
-  flex: 1;
-  padding-top: clamp(1.25rem, 4vh, 2.5rem);
+  padding-top: clamp(1.5rem, 4vh, 2.5rem);
 }
 
 .nn-menu-link {
@@ -440,7 +439,9 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 0.85rem;
-  min-width: 120px;
+  min-width: 0;
+  padding-top: clamp(1.5rem, 4vh, 2.5rem);
+  justify-self: end;
 }
 
 .nn-social-link {
@@ -505,8 +506,9 @@
   .nn-fullscreen-menu__inner {
     width: min(98vw, 740px);
     height: min(92svh, 760px);
+    grid-template-columns: 1fr;
+    justify-items: center;
     text-align: center;
-    justify-content: center;
   }
 
   .nn-menu-foot,
