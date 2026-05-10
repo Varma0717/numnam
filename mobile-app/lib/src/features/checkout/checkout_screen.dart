@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../../config/app_config.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
@@ -29,9 +30,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   String _paymentMethod = 'cod';
   bool _placing = false;
   String? _error;
+  late final Razorpay _razorpay;
+
+  @override
+  void initState() {
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _onPaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _onPaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _onExternalWallet);
+  }
 
   @override
   void dispose() {
+    _razorpay.clear();
     _nameCtrl.dispose();
     _phoneCtrl.dispose();
     _addressCtrl.dispose();
@@ -104,20 +116,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Future<void> _initiateRazorpay() async {
-    // Razorpay integration — the user will add their API key
-    // For now, use the razorpay_flutter package
+    final cart = context.read<CartProvider>();
+    final amount = (cart.cart.totals.total * 100).toInt(); // paise
+
+    if (amount <= 0) {
+      setState(() => _error = 'Invalid order total for payment.');
+      return;
+    }
+
     try {
-      // dynamic import so app compiles even without the package configured
-      final cart = context.read<CartProvider>();
-      final amount = (cart.cart.totals.total * 100).toInt(); // paise
-
-      // Using the Razorpay Flutter plugin
-      final razorpayFlutter = await _getRazorpayInstance();
-      if (razorpayFlutter == null) {
-        await _submitOrder(); // fallback to COD-style
-        return;
-      }
-
       final options = {
         'key': AppConfig.razorpayKeyId,
         'amount': amount,
@@ -129,45 +136,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         'theme': {'color': '#FF6B8A'},
       };
 
-      razorpayFlutter.open(options);
+      _razorpay.open(options);
     } catch (e) {
       setState(() => _error = 'Payment initialization failed');
     }
   }
 
-  dynamic _razorpay;
+  void _onPaymentSuccess(PaymentSuccessResponse response) {
+    _submitOrder(paymentReference: response.paymentId ?? 'razorpay_success');
+  }
 
-  Future<dynamic> _getRazorpayInstance() async {
-    try {
-      // ignore: depend_on_referenced_packages
-      final razorpayLib = await Future.value(null).then((_) async {
-        // Dynamically use Razorpay - import is at top
-        return null;
-      });
-      if (razorpayLib != null) return razorpayLib;
+  void _onPaymentError(PaymentFailureResponse response) {
+    setState(() {
+      _placing = false;
+      _error = 'Payment failed. Please try again or use COD.';
+    });
+  }
 
-      // Direct Razorpay usage
-      if (_razorpay == null) {
-        try {
-          final module = _RazorpayWrapper();
-          _razorpay = module;
-          module.on('payment.success', (response) {
-            _submitOrder(
-                paymentReference: response?.paymentId ?? 'razorpay_success');
-          });
-          module.on('payment.error', (_) {
-            setState(
-                () => _error = 'Payment failed. Please try again or use COD.');
-          });
-          module.on('external_wallet', (_) {});
-        } catch (_) {
-          return null;
-        }
-      }
-      return _razorpay;
-    } catch (_) {
-      return null;
-    }
+  void _onExternalWallet(ExternalWalletResponse response) {
+    // External wallet was selected; no action required here.
   }
 
   @override
@@ -375,19 +362,5 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ],
       ),
     );
-  }
-}
-
-// Simple wrapper to handle Razorpay dynamic loading
-class _RazorpayWrapper {
-  final Map<String, Function> _handlers = {};
-
-  void on(String event, Function handler) {
-    _handlers[event] = handler;
-  }
-
-  void open(Map<String, dynamic> options) {
-    // This will be replaced with actual Razorpay.open() in production
-    // when razorpay_flutter package is properly configured
   }
 }

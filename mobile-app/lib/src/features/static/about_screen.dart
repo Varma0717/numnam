@@ -20,9 +20,9 @@ class AboutScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: kCoral.withValues(alpha: 0.08),
+              color: kCoral.withOpacity(0.08),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: kCoral.withValues(alpha: 0.2)),
+              border: Border.all(color: kCoral.withOpacity(0.2)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,9 +153,9 @@ class AboutScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: kCoral.withValues(alpha: 0.06),
+              color: kCoral.withOpacity(0.06),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: kCoral.withValues(alpha: 0.15)),
+              border: Border.all(color: kCoral.withOpacity(0.15)),
             ),
             child: Column(
               children: [
@@ -239,7 +239,7 @@ class _PillarTile extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: kCoral.withValues(alpha: 0.1),
+              color: kCoral.withOpacity(0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: kCoral, size: 20),
