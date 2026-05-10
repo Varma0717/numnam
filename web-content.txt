@@ -1,0 +1,61 @@
+<div class="nav-bar"><a href="/?r=0" aria-current="page" class="link-block-2 w-inline-block"><img src="https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad573_Baby-Gourmet-Logo-Small.png" loading="lazy" width="200" data-w-id="b99a21e9-0bc7-1c07-09f7-449699acc814" alt="Baby Gourmet Logo
+" class="image-58" style="transform: translate3d(0px, 0px, 0px) scale3d(1.00074, 1.00074, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; will-change: transform;"></a><div data-w-id="b99a21e9-0bc7-1c07-09f7-449699acc815" class="menu-button"><div class="menu_button_text">MENU</div><div data-w-id="b99a21e9-0bc7-1c07-09f7-449699acc818" class="burger-line" style="transform: translate3d(0px, 10px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(45deg) skew(0deg, 0deg); transform-style: preserve-3d;"></div><div data-w-id="b99a21e9-0bc7-1c07-09f7-449699acc819" class="burger-line" style="opacity: 0;"></div><div data-w-id="b99a21e9-0bc7-1c07-09f7-449699acc81a" class="burger-line" style="transform: translate3d(0px, -10px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(-45deg) skew(0deg, 0deg); transform-style: preserve-3d;"></div></div><div data-w-id="b99a21e9-0bc7-1c07-09f7-449699acc81b" class="full-screen-menu" style="display: flex; opacity: 1; transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"><div class="sign-drop-down" style="transform: translate3d(0px, 100vh, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"></div><div class="jen-jill-sign"><img src="https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad57c_image%20(27).png" loading="lazy" width="312" sizes="(max-width: 479px) 100vw, 312px" alt="" srcset="https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad57c_image%2520(27)-p-500.png 500w, https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad57c_image%2520(27)-p-800.png 800w, https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad57c_image%2520(27)-p-1080.png 1080w, https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad57c_image%20(27).png 1167w"></div></div><div class="full-screen-menu awning-active" style="display: flex;"><div class="footer_nav_links"><a href="/contact" class="contact w-inline-block"><div class="text-block-4">Contact</div></a><a href="/blog" class="blog w-inline-block"><div class="text-block-4">Blog</div></a><a href="/faq" class="faq w-inline-block"><div class="text-block-4">FAQ</div></a><a href="/privacy" class="privacy w-inline-block"><div class="text-block-4">Privacy</div></a><div class="copyright"><div class="text-block-4">© 2025 Baby Gourmet</div></div></div><div data-w-id="b99a21e9-0bc7-1c07-09f7-449699acc82d" class="menu-links-main" style="display: flex; opacity: 1;"><div class="nav-group-1"><a href="/baby-gourmet-products" class="nav-link-1">Baby Gourmet </a><a href="/simply-gourmet-products" class="nav-link-1">Simply Gourmet </a><a href="/pouches-squoosh-products" class="nav-link-2">Squoosh</a><a href="/all-products" class="nav-link-2">All Food</a><a href="/where-to-buy" class="nav-link-3">Where To Buy</a><a href="/our-differences" class="nav-link-3">Our quality</a><a href="/our-story" class="nav-link-3">Our Story</a><a href="/?r=0" aria-current="page" class="nav-link-4 home-link">Home</a></div></div><div class="socials"><div class="social-image-links"><a href="https://www.pinterest.ca/babygourmet/" target="_blank" class="pinterest-button w-inline-block"><img src="https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad43a_PinterestIconBabyG.png" loading="lazy" width="75" alt="Pinterest Link Icon" class="social_media_icons"></a><a href="https://www.instagram.com/organicbabygourmet/" target="_blank" class="instagram-button w-inline-block"><img src="https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad442_Instagram.svg" loading="lazy" width="75" alt="Instagram Link Button" class="social_media_icons"></a><a href="https://www.facebook.com/organicbabygourmet" target="_blank" class="facebook-button w-inline-block"><img src="https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad443_Facebook.svg" loading="lazy" alt="Facebook Footer Button Link" width="34" class="social_media_icons"></a><a href="https://www.tiktok.com/@organicbabygourmet?lang=en" target="_blank" class="tiktok-button w-inline-block"><img src="https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad564_TikTokIcon.png" loading="lazy" sizes="(max-width: 991px) 34px, (max-width: 1279px) 3vw, (max-width: 1439px) 34px, (max-width: 1919px) 2vw, 34px" width="34" alt="Tik Tok Link Button" srcset="https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad564_TikTokIcon-p-500.png 500w, https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad564_TikTokIcon-p-800.png 800w, https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad564_TikTokIcon.png 1080w" class="social_media_icons"></a><a href="https://www.linkedin.com/company/baby-gourmet-foods-inc-/mycompany/?viewAsMember=true" target="_blank" class="linkedin-button w-inline-block"><img src="https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad538_LinkedInIcon.png" loading="lazy" alt="LinkedIn Link Footer Button
+" width="34" class="social_media_icons"></a><a href="https://www.youtube.com/@OrganicBabyGourmet" target="_blank" class="youtube-button w-inline-block"><img src="https://cdn.prod.website-files.com/65972a5bcfd9f0979b5ad41f/65972a5bcfd9f0979b5ad48d_YouTubeIconBabyG.svg" loading="lazy" alt="Youtube Link Button Footer" width="34" class="social_media_icons"></a></div><div id="English" class="locales-wrapper w-locales-list"><div data-hover="false" data-delay="0" class="w-dropdown"><div class="dropdown-toggle w-dropdown-toggle" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0" aria-haspopup="menu" aria-expanded="false" role="button" tabindex="0"><div class="icon w-icon-dropdown-toggle" aria-hidden="true"></div><div class="text-block-33">English</div></div><nav class="dropdown-list w-dropdown-list" id="w-dropdown-list-0" aria-labelledby="w-dropdown-toggle-0"><div role="list" class="w-locales-items"><div role="listitem" class="locale w-locales-item"><a hreflang="en" href="/?r=0" aria-current="page" class="link-2 w--current" tabindex="0">English</a></div><div role="listitem" class="locale w-locales-item"><a hreflang="fr-CA" href="/fr-ca" class="link-2" tabindex="0">French (Canada)</a></div></div></nav></div></div></div></div></div>
+
+
+
+.nav-bar {
+    z-index: 999;
+    background-color: #0000;
+    background-image: url(https://cdn.prod.website-files.com/65972a5…/65972a5…_Baby-Gourmet-Navigation-Background-desktop-repeat.png);
+    background-position: 50% 0;
+    background-repeat: repeat-x;
+    background-size: contain;
+    background-attachment: scroll;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    display: flex;
+    position: fixed;
+    inset: 0% 0% auto;
+}s
+
+
+.menu-button {
+    z-index: 1001;
+    cursor: pointer;
+    background-color: #0000;
+    background-image: url(https://cdn.prod.website-files.com/65972a5…/65972a5…_HamburgerMenuIconWhite.png);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border-radius: 8px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 85px;
+    margin-top: 1vh;
+    padding-top: 0;
+    padding-bottom: 2vw;
+    display: flex;
+    position: absolute;
+    inset: 0% 15% auto auto;
+}
+
+.full-screen-menu {
+    z-index: 998;
+    background-color: #fffffff2;
+    background-image: url(https://cdn.prod.website-files.com/65972a5…/65972a5…_Baby-Gourmet-Navigation-Background-desktop-repeat.png), url(https://cdn.prod.website-files.com/65972a5…/65972a5…_background-white-wood-scaled-50opacity.png);
+    background-position: 50% 0, 50%;
+    background-repeat: repeat-x, repeat;
+    background-size: 648px 79px, auto;
+    flex-direction: column;
+    justify-content: center;
+    align-self: auto;
+    align-items: center;
+    display: none;
+    position: fixed;
+    inset: 0%;
+}
