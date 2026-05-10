@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: _ComingSoonBanner(
-                message: 'No featured products yet — check back soon!',
+                message: 'Featured products are being refreshed. Browse the full Shop catalog now.',
               ),
             )
           else
@@ -387,7 +387,7 @@ class _TrustRow extends StatelessWidget {
   }
 }
 
-// ── Coming soon banner ───────────────────────────────────────────────────
+// ── Notice banner ────────────────────────────────────────────────────────
 class _ComingSoonBanner extends StatelessWidget {
   const _ComingSoonBanner({required this.message});
   final String message;

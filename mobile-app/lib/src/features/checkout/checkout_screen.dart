@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -69,7 +70,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     await _submitOrder();
   }
 
-  Future<void> _submitOrder({String? paymentReference}) async {
+  Future<void> _submitOrder({
+    String? paymentReference,
+    String? razorpayOrderId,
+    String? razorpaySignature,
+  }) async {
     setState(() {
       _placing = true;
       _error = null;
@@ -91,7 +96,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         'ship_pincode': _pincodeCtrl.text.trim(),
         if (_couponCtrl.text.trim().isNotEmpty)
           'coupon_code': _couponCtrl.text.trim(),
-        if (paymentReference != null) 'payment_reference': paymentReference,
+        if (paymentReference != null) ...{
+          'payment_reference': paymentReference,
+          'payment_provider': 'razorpay',
+          if (razorpayOrderId != null && razorpayOrderId.isNotEmpty)
+            'razorpay_order_id': razorpayOrderId,
+          if (razorpaySignature != null && razorpaySignature.isNotEmpty)
+            'razorpay_signature': razorpaySignature,
+        },
       };
 
       final api = context.read<ApiClient>();
@@ -107,9 +119,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           arguments: orderNumber,
         );
       }
-    } catch (e) {
+    } on DioException catch (e) {
       setState(() {
-        _error = 'Failed to place order. Please try again.';
+        _error = _extractError(e);
+        _placing = false;
+      });
+    } catch (_) {
+      setState(() {
+        _error = 'Unable to place order. Please try again.';
         _placing = false;
       });
     }
@@ -130,8 +147,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         'amount': amount,
         'name': 'NumNam',
         'description': 'Order payment',
+        'timeout': 300,
         'prefill': {
+          'name': _nameCtrl.text.trim(),
           'contact': _phoneCtrl.text.trim(),
+        },
+        'notes': {
+          'shipping_name': _nameCtrl.text.trim(),
+          'shipping_phone': _phoneCtrl.text.trim(),
         },
         'theme': {'color': '#FF6B8A'},
       };
@@ -143,7 +166,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _onPaymentSuccess(PaymentSuccessResponse response) {
-    _submitOrder(paymentReference: response.paymentId ?? 'razorpay_success');
+    final paymentId = response.paymentId;
+    if (paymentId == null || paymentId.isEmpty) {
+      setState(() {
+        _placing = false;
+        _error = 'Payment succeeded but reference is missing. Please contact support.';
+      });
+      return;
+    }
+    _submitOrder(
+      paymentReference: paymentId,
+      razorpayOrderId: response.orderId,
+      razorpaySignature: response.signature,
+    );
   }
 
   void _onPaymentError(PaymentFailureResponse response) {
@@ -155,6 +190,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   void _onExternalWallet(ExternalWalletResponse response) {
     // External wallet was selected; no action required here.
+  }
+
+  String _extractError(DioException e) {
+    final data = e.response?.data;
+    if (data is Map<String, dynamic>) {
+      if (data['message'] != null) return data['message'].toString();
+      if (data['errors'] is Map) {
+        final errors = data['errors'] as Map;
+        if (errors.isNotEmpty) {
+          final first = errors.values.first;
+          if (first is List && first.isNotEmpty) return first.first.toString();
+          return first.toString();
+        }
+      }
+    }
+    return 'Unable to place order. Please try again.';
   }
 
   @override
@@ -184,7 +235,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               keyboardType: TextInputType.phone,
               textInputAction: TextInputAction.next,
               decoration: const InputDecoration(labelText: 'Phone Number'),
-              validator: (v) => v?.trim().isEmpty == true ? 'Required' : null,
+              validator: (v) {
+                final value = v?.trim() ?? '';
+                if (value.isEmpty) return 'Required';
+                if (value.length < 10) return 'Enter a valid phone number';
+                return null;
+              },
             ),
             const SizedBox(height: 12),
             TextFormField(
@@ -224,7 +280,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.done,
               decoration: const InputDecoration(labelText: 'Pincode'),
-              validator: (v) => v?.trim().isEmpty == true ? 'Required' : null,
+              validator: (v) {
+                final value = v?.trim() ?? '';
+                if (value.isEmpty) return 'Required';
+                if (value.length < 6) return 'Enter a valid pincode';
+                return null;
+              },
             ),
 
             const SizedBox(height: 24),

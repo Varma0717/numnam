@@ -3,6 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class AppConfig {
   const AppConfig._();
 
+  static const String _defaultApiBase = 'https://numnam.com/api/v1';
+
   static String? _envValue(String key) {
     try {
       final value = dotenv.env[key];
@@ -18,9 +20,9 @@ class AppConfig {
   static String get apiBaseUrl {
     final fromEnv = _envValue('API_BASE_URL');
     if (fromEnv != null) {
-      return fromEnv;
+      return fromEnv.replaceAll(RegExp(r'/$'), '');
     }
-    return 'https://numnam.com/api/v1';
+    return _defaultApiBase;
   }
 
   static String get siteBaseUrl {

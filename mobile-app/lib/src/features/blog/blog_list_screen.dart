@@ -72,8 +72,8 @@ class _BlogListScreenState extends State<BlogListScreen> {
               : _blogs.isEmpty
                   ? const EmptyState(
                       icon: Icons.article_outlined,
-                      title: 'No Articles Yet',
-                      subtitle: 'Check back soon for tasty reads!',
+                      title: 'No Articles Published',
+                      subtitle: 'Please visit numnam.com/blog for the latest updates.',
                     )
                   : RefreshIndicator(
                       color: kCoral,

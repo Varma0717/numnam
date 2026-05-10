@@ -37,16 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _socialLogin(String provider) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$provider login coming soon'),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
@@ -199,46 +189,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         : const Text('Sign In'),
                   ),
                 ),
-                const SizedBox(height: 28),
-                Row(
-                  children: [
-                    Expanded(child: Divider(color: Colors.grey.shade200)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        'or continue with',
-                        style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade400),
-                      ),
-                    ),
-                    Expanded(child: Divider(color: Colors.grey.shade200)),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _SocialButton(
-                      icon: Icons.g_mobiledata_rounded,
-                      color: const Color(0xFFDB4437),
-                      label: 'Google',
-                      onTap: () => _socialLogin('Google'),
-                    ),
-                    const SizedBox(width: 16),
-                    _SocialButton(
-                      icon: Icons.facebook_rounded,
-                      color: const Color(0xFF1877F2),
-                      label: 'Facebook',
-                      onTap: () => _socialLogin('Facebook'),
-                    ),
-                    const SizedBox(width: 16),
-                    _SocialButton(
-                      icon: Icons.shopping_bag_outlined,
-                      color: const Color(0xFFFF9900),
-                      label: 'Amazon',
-                      onTap: () => _socialLogin('Amazon'),
-                    ),
-                  ],
-                ),
                 const SizedBox(height: 32),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -260,45 +210,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SocialButton extends StatelessWidget {
-  const _SocialButton({
-    required this.icon,
-    required this.color,
-    required this.label,
-    required this.onTap,
-  });
-  final IconData icon;
-  final Color color;
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 80,
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade50,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.grey.shade200),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: color, size: 28),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: GoogleFonts.poppins(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.grey.shade600),
-            ),
-          ],
         ),
       ),
     );

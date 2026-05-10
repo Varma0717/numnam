@@ -140,7 +140,7 @@ class NumNamApp extends StatelessWidget {
         titleTextStyle: GoogleFonts.baloo2(fontSize: 22, fontWeight: FontWeight.w800, color: kNavy),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: Colors.white,
         elevation: 0,
         shape: RoundedRectangleBorder(

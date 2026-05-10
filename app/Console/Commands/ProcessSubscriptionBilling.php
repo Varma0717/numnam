@@ -2,8 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\NewSubscriptionAdminNotification;
+use App\Mail\SubscriptionStatusNotification;
 use App\Models\Subscription;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 class ProcessSubscriptionBilling extends Command
 {
@@ -56,6 +59,8 @@ class ProcessSubscriptionBilling extends Command
             }
 
             $subscription->save();
+
+            $this->notifyBillingFailure($subscription, $reason, $retryCount, $maxRetries);
 
             $this->warn(sprintf(
                 'Subscription #%d billing failed (%s). Retry %d/%d%s',
@@ -112,5 +117,51 @@ class ProcessSubscriptionBilling extends Command
         ));
 
         return [true, null];
+    }
+
+    private function notifyBillingFailure(
+        Subscription $subscription,
+        string $reason,
+        int $retryCount,
+        int $maxRetries
+    ): void {
+        $subscription->loadMissing('user');
+
+        $action = $subscription->status === 'cancelled'
+            ? 'billing_cancelled'
+            : 'billing_retry_failed';
+
+        if ($subscription->user?->email) {
+            try {
+                Mail::to($subscription->user->email)->queue(
+                    new SubscriptionStatusNotification(
+                        $subscription->fresh()->loadMissing('user'),
+                        $action,
+                        $reason,
+                        $retryCount,
+                        $maxRetries
+                    )
+                );
+            } catch (\Throwable $exception) {
+                report($exception);
+            }
+        }
+
+        $adminRecipient = (string) config('mail.order_recipient', '');
+        if ($adminRecipient !== '') {
+            try {
+                Mail::to($adminRecipient)->queue(
+                    new NewSubscriptionAdminNotification(
+                        $subscription->fresh()->loadMissing('user'),
+                        $action,
+                        $reason,
+                        $retryCount,
+                        $maxRetries
+                    )
+                );
+            } catch (\Throwable $exception) {
+                report($exception);
+            }
+        }
     }
 }
