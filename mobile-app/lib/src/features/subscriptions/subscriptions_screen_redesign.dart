@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../models/pricing_plan.dart';
 import '../../shared/theme/colors.dart';
-import '../checkout/checkout_screen.dart';
+import 'subscription_checkout_screen.dart';
 
 class SubscriptionsScreenRedesign extends StatefulWidget {
   static const routeName = '/subscriptions-redesign';
-  
+
   const SubscriptionsScreenRedesign({super.key});
 
   @override
@@ -21,7 +22,6 @@ class _SubscriptionsScreenRedesignState
     extends State<SubscriptionsScreenRedesign> {
   List<PricingPlan> _plans = [];
   bool _loading = true;
-  String _selectedBilling = 'monthly';
 
   @override
   void initState() {
@@ -71,21 +71,25 @@ class _SubscriptionsScreenRedesignState
                 // Hero Section
                 SliverToBoxAdapter(
                   child: Container(
-                    padding: const EdgeInsets.fromLTRB(20, 40, 20, 32),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [kCoral.withOpacity(0.1), kYellow.withOpacity(0.1)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
+                    padding: const EdgeInsets.fromLTRB(20, 50, 20, 40),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
                     ),
                     child: Column(
                       children: [
-                        Text(
-                          '📦',
-                          style: const TextStyle(fontSize: 60),
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: kCoral.withOpacity(0.12),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const FaIcon(
+                            FontAwesomeIcons.boxOpen,
+                            size: 48,
+                            color: kCoral,
+                          ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 24),
                         Text(
                           'Subscribe & Save',
                           style: GoogleFonts.baloo2(
@@ -126,24 +130,28 @@ class _SubscriptionsScreenRedesignState
                         ),
                         const SizedBox(height: 16),
                         _buildBenefit(
-                          '💰',
+                          FontAwesomeIcons.piggyBank,
                           'Save More',
                           'Get up to 25% off on all products',
+                          kCoral,
                         ),
                         _buildBenefit(
-                          '🚚',
+                          FontAwesomeIcons.truck,
                           'Free Delivery',
                           'Free shipping on all subscription orders',
+                          kMint,
                         ),
                         _buildBenefit(
-                          '✨',
+                          FontAwesomeIcons.leaf,
                           'Fresh & Organic',
                           'Delivered fresh to your doorstep monthly',
+                          kYellow,
                         ),
                         _buildBenefit(
-                          '⏰',
+                          FontAwesomeIcons.clock,
                           'Flexible',
                           'Cancel, pause, or modify anytime',
+                          kLavender,
                         ),
                       ],
                     ),
@@ -196,18 +204,37 @@ class _SubscriptionsScreenRedesignState
     );
   }
 
-  Widget _buildBenefit(String emoji, String title, String description) {
+  Widget _buildBenefit(
+      IconData icon, String title, String description, Color color) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFFFD6E5), width: 2),
+        border: Border.all(color: color.withOpacity(0.2), width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 32)),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: FaIcon(
+              icon,
+              size: 24,
+              color: color,
+            ),
+          ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
@@ -271,7 +298,8 @@ class _SubscriptionsScreenRedesignState
             // Popular Badge
             if (plan.isPopular)
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -383,10 +411,10 @@ class _SubscriptionsScreenRedesignState
               height: 56,
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: Navigate to subscription checkout
+                  // Navigate to subscription-specific checkout
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => const CheckoutScreen(),
+                      builder: (_) => SubscriptionCheckoutScreen(plan: plan),
                     ),
                   );
                 },
@@ -429,7 +457,8 @@ class _SubscriptionsScreenRedesignState
                 runSpacing: 8,
                 children: plan.products.take(5).map((product) {
                   return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: plan.isPopular
                           ? Colors.white.withOpacity(0.2)

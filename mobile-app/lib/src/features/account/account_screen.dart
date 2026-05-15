@@ -12,6 +12,7 @@ import 'contact_form_screen.dart';
 import '../static/about_screen.dart';
 import '../static/faq_screen.dart';
 import '../static/static_page_screen.dart';
+import '../blog/blog_list_screen.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -84,7 +85,6 @@ class AccountScreen extends StatelessWidget {
                   ),
                 ),
               const SizedBox(height: 28),
-
               _tile(context, Icons.person_outline_rounded, 'Edit Profile', () {
                 Navigator.of(context).pushNamed(EditProfileScreen.routeName);
               }),
@@ -97,16 +97,18 @@ class AccountScreen extends StatelessWidget {
               _tile(context, Icons.mail_outline_rounded, 'Contact Us', () {
                 Navigator.of(context).pushNamed(ContactFormScreen.routeName);
               }),
-
               const Divider(height: 32),
-
               _tile(context, Icons.info_outline_rounded, 'About NumNam', () {
                 Navigator.of(context).pushNamed(AboutScreen.routeName);
               }),
               _tile(context, Icons.help_outline_rounded, 'FAQ', () {
                 Navigator.of(context).pushNamed(FaqScreen.routeName);
               }),
-              _tile(context, Icons.description_outlined, 'Terms & Conditions', () {
+              _tile(context, Icons.article_outlined, 'Blog & Tips', () {
+                Navigator.of(context).pushNamed(BlogListScreen.routeName);
+              }),
+              _tile(context, Icons.description_outlined, 'Terms & Conditions',
+                  () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => StaticPageScreen(
                     title: StaticPages.termsTitle,
@@ -122,7 +124,8 @@ class AccountScreen extends StatelessWidget {
                   ),
                 ));
               }),
-              _tile(context, Icons.local_shipping_outlined, 'Shipping Policy', () {
+              _tile(context, Icons.local_shipping_outlined, 'Shipping Policy',
+                  () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => StaticPageScreen(
                     title: StaticPages.shippingTitle,
@@ -130,7 +133,8 @@ class AccountScreen extends StatelessWidget {
                   ),
                 ));
               }),
-              _tile(context, Icons.assignment_return_outlined, 'Refund Policy', () {
+              _tile(context, Icons.assignment_return_outlined, 'Refund Policy',
+                  () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => StaticPageScreen(
                     title: StaticPages.refundTitle,
@@ -138,7 +142,6 @@ class AccountScreen extends StatelessWidget {
                   ),
                 ));
               }),
-
               const SizedBox(height: 32),
               SizedBox(
                 height: 48,
@@ -179,9 +182,8 @@ class AccountScreen extends StatelessWidget {
             style: GoogleFonts.poppins(
                 fontSize: 14, fontWeight: FontWeight.w500, color: kNavy)),
         trailing:
-            const Icon(Icons.chevron_right_rounded, color: Color(0xFFCCC)),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            const Icon(Icons.chevron_right_rounded, color: Color(0x000ffccc)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         tileColor: Colors.white,
         onTap: onTap,
       ),

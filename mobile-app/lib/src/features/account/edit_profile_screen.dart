@@ -77,40 +77,71 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Future<void> _pickAvatar() async {
     final picker = ImagePicker();
-    final file = await picker.pickImage(source: ImageSource.gallery, maxWidth: 512, imageQuality: 80);
+    final file = await picker.pickImage(
+        source: ImageSource.gallery, maxWidth: 512, imageQuality: 80);
     if (file == null) return;
-    setState(() { _saving = true; _error = null; _success = null; });
+    setState(() {
+      _saving = true;
+      _error = null;
+      _success = null;
+    });
     final ok = await context.read<AuthProvider>().uploadAvatar(file.path);
+    if (!mounted) return;
+    final authError = context.read<AuthProvider>().error;
     setState(() {
       _saving = false;
-      if (ok) _success = 'Avatar updated!';
-      else _error = context.read<AuthProvider>().error ?? 'Upload failed';
+      if (ok) {
+        _success = 'Avatar updated!';
+      } else {
+        _error = authError ?? 'Upload failed';
+      }
     });
   }
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
-    setState(() { _saving = true; _error = null; _success = null; });
+    setState(() {
+      _saving = true;
+      _error = null;
+      _success = null;
+    });
     try {
       await context.read<AuthProvider>().updateProfile({
         'name': _nameCtrl.text.trim(),
         'phone': _phoneCtrl.text.trim().isEmpty ? null : _phoneCtrl.text.trim(),
-        'date_of_birth': _dobCtrl.text.trim().isEmpty ? null : _dobCtrl.text.trim(),
+        'date_of_birth':
+            _dobCtrl.text.trim().isEmpty ? null : _dobCtrl.text.trim(),
         'gender': _gender,
-        'address_line1': _addressLine1Ctrl.text.trim().isEmpty ? null : _addressLine1Ctrl.text.trim(),
-        'address_line2': _addressLine2Ctrl.text.trim().isEmpty ? null : _addressLine2Ctrl.text.trim(),
+        'address_line1': _addressLine1Ctrl.text.trim().isEmpty
+            ? null
+            : _addressLine1Ctrl.text.trim(),
+        'address_line2': _addressLine2Ctrl.text.trim().isEmpty
+            ? null
+            : _addressLine2Ctrl.text.trim(),
         'city': _cityCtrl.text.trim().isEmpty ? null : _cityCtrl.text.trim(),
         'state': _stateCtrl.text.trim().isEmpty ? null : _stateCtrl.text.trim(),
-        'postal_code': _postalCodeCtrl.text.trim().isEmpty ? null : _postalCodeCtrl.text.trim(),
-        'country': _countryCtrl.text.trim().isEmpty ? null : _countryCtrl.text.trim(),
+        'postal_code': _postalCodeCtrl.text.trim().isEmpty
+            ? null
+            : _postalCodeCtrl.text.trim(),
+        'country':
+            _countryCtrl.text.trim().isEmpty ? null : _countryCtrl.text.trim(),
       });
+      if (!mounted) return;
       final authError = context.read<AuthProvider>().error;
       setState(() {
         _saving = false;
-        if (authError != null) { _error = authError; } else { _success = 'Profile updated!'; }
+        if (authError != null) {
+          _error = authError;
+        } else {
+          _success = 'Profile updated!';
+        }
       });
     } catch (e) {
-      setState(() { _error = 'Failed to update profile'; _saving = false; });
+      if (!mounted) return;
+      setState(() {
+        _error = 'Failed to update profile';
+        _saving = false;
+      });
     }
   }
 
@@ -140,16 +171,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       child: user?.avatar == null
                           ? Text(
                               (user?.name ?? 'U').substring(0, 1).toUpperCase(),
-                              style: GoogleFonts.baloo2(fontSize: 36, fontWeight: FontWeight.w900, color: kCoral),
+                              style: GoogleFonts.baloo2(
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.w900,
+                                  color: kCoral),
                             )
                           : null,
                     ),
                     Positioned(
-                      bottom: 0, right: 0,
+                      bottom: 0,
+                      right: 0,
                       child: Container(
                         padding: const EdgeInsets.all(6),
-                        decoration: const BoxDecoration(color: kCoral, shape: BoxShape.circle),
-                        child: const Icon(Icons.camera_alt, size: 16, color: Colors.white),
+                        decoration: const BoxDecoration(
+                            color: kCoral, shape: BoxShape.circle),
+                        child: const Icon(Icons.camera_alt,
+                            size: 16, color: Colors.white),
                       ),
                     ),
                   ],
@@ -164,7 +201,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             TextFormField(
               controller: _nameCtrl,
               textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(labelText: 'Full Name', prefixIcon: Icon(Icons.person_outline)),
+              decoration: const InputDecoration(
+                  labelText: 'Full Name',
+                  prefixIcon: Icon(Icons.person_outline)),
               validator: (v) => v?.trim().isEmpty == true ? 'Required' : null,
             ),
             const SizedBox(height: 14),
@@ -172,7 +211,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               controller: _phoneCtrl,
               keyboardType: TextInputType.phone,
               textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(labelText: 'Phone', prefixIcon: Icon(Icons.phone_outlined)),
+              decoration: const InputDecoration(
+                  labelText: 'Phone', prefixIcon: Icon(Icons.phone_outlined)),
             ),
             const SizedBox(height: 14),
             TextFormField(
@@ -187,8 +227,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             const SizedBox(height: 14),
             DropdownButtonFormField<String>(
-              value: _gender,
-              decoration: const InputDecoration(labelText: 'Gender', prefixIcon: Icon(Icons.wc_outlined)),
+              initialValue: _gender,
+              decoration: const InputDecoration(
+                  labelText: 'Gender', prefixIcon: Icon(Icons.wc_outlined)),
               items: const [
                 DropdownMenuItem(value: 'male', child: Text('Male')),
                 DropdownMenuItem(value: 'female', child: Text('Female')),
@@ -204,7 +245,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             TextFormField(
               controller: _addressLine1Ctrl,
               textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(labelText: 'Address Line 1', prefixIcon: Icon(Icons.home_outlined)),
+              decoration: const InputDecoration(
+                  labelText: 'Address Line 1',
+                  prefixIcon: Icon(Icons.home_outlined)),
             ),
             const SizedBox(height: 14),
             TextFormField(
@@ -257,11 +300,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             // Status messages
             if (_error != null) ...[
               const SizedBox(height: 16),
-              Text(_error!, style: GoogleFonts.poppins(fontSize: 13, color: const Color(0xFFB91C1C))),
+              Text(_error!,
+                  style: GoogleFonts.poppins(
+                      fontSize: 13, color: const Color(0xFFB91C1C))),
             ],
             if (_success != null) ...[
               const SizedBox(height: 16),
-              Text(_success!, style: GoogleFonts.poppins(fontSize: 13, color: kMint)),
+              Text(_success!,
+                  style: GoogleFonts.poppins(fontSize: 13, color: kMint)),
             ],
             const SizedBox(height: 24),
             SizedBox(
@@ -269,7 +315,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: FilledButton(
                 onPressed: _saving ? null : _save,
                 child: _saving
-                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2, color: Colors.white))
                     : const Text('Save Changes'),
               ),
             ),
@@ -281,6 +331,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Widget _sectionHeader(String text) {
     return Text(text,
-        style: GoogleFonts.baloo2(fontSize: 18, fontWeight: FontWeight.w700, color: kNavy));
+        style: GoogleFonts.baloo2(
+            fontSize: 18, fontWeight: FontWeight.w700, color: kNavy));
   }
 }

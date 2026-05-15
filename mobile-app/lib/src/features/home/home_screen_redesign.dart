@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../models/product.dart';
 import '../../models/pricing_plan.dart';
 import '../../shared/theme/colors.dart';
-import '../../shared/widgets/product_card.dart';
 import '../shop/product_detail_screen_redesign.dart';
 import '../shop/shop_screen.dart';
 import '../subscriptions/subscriptions_screen.dart';
+import '../blog/blog_list_screen.dart';
 
 class HomeScreenRedesign extends StatefulWidget {
   const HomeScreenRedesign({super.key});
@@ -56,19 +57,21 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
   Future<void> _load() async {
     try {
       final api = context.read<ApiClient>();
-      
+
       // Fetch featured products
-      final featuredResp = await api.dio.get(ApiEndpoints.products, queryParameters: {
+      final featuredResp =
+          await api.dio.get(ApiEndpoints.products, queryParameters: {
         'per_page': 6,
         'featured': 1,
       });
-      
+
       // Fetch best sellers (or popular products)
-      final bestSellersResp = await api.dio.get(ApiEndpoints.products, queryParameters: {
+      final bestSellersResp =
+          await api.dio.get(ApiEndpoints.products, queryParameters: {
         'per_page': 6,
         'sort': 'popular',
       });
-      
+
       // Fetch subscription plans
       final plansResp = await api.dio.get(ApiEndpoints.pricingPlans);
 
@@ -101,7 +104,9 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
     } else {
       list = [];
     }
-    return list.map((e) => Product.fromJson(e as Map<String, dynamic>)).toList();
+    return list
+        .map((e) => Product.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   List<PricingPlan> _parsePlans(dynamic data) {
@@ -113,7 +118,9 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
     } else {
       list = [];
     }
-    return list.map((e) => PricingPlan.fromJson(e as Map<String, dynamic>)).toList();
+    return list
+        .map((e) => PricingPlan.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   @override
@@ -132,36 +139,28 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                 children: [
                   PageView(
                     controller: _bannerController,
-                    onPageChanged: (index) => setState(() => _currentBanner = index),
+                    onPageChanged: (index) =>
+                        setState(() => _currentBanner = index),
                     children: [
                       _buildHeroBanner(
-                        title: '🥄 Nutritious Baby Food',
-                        subtitle: 'Organic & Homemade',
-                        gradient: LinearGradient(
-                          colors: [kCoral.withOpacity(0.9), kYellow.withOpacity(0.9)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
+                        title: 'Nutritious Baby Food',
+                        subtitle: 'Organic & Homemade with Love',
+                        icon: FontAwesomeIcons.bowlFood,
+                        color: kCoral,
                         imageAsset: 'assets/images/banner1.png',
                       ),
                       _buildHeroBanner(
-                        title: '📦 Subscribe & Save',
-                        subtitle: 'Up to 25% Off',
-                        gradient: LinearGradient(
-                          colors: [kMint.withOpacity(0.9), kLavender.withOpacity(0.9)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
+                        title: 'Subscribe & Save',
+                        subtitle: 'Up to 25% Off Regular Price',
+                        icon: FontAwesomeIcons.boxOpen,
+                        color: kMint,
                         imageAsset: 'assets/images/banner2.png',
                       ),
                       _buildHeroBanner(
-                        title: '🌟 Fresh & Healthy',
-                        subtitle: 'Stage-wise Nutrition',
-                        gradient: LinearGradient(
-                          colors: [kYellow.withOpacity(0.9), kMint.withOpacity(0.9)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
+                        title: 'Fresh & Healthy',
+                        subtitle: 'Stage-wise Nutrition Plans',
+                        icon: FontAwesomeIcons.heartPulse,
+                        color: kLavender,
                         imageAsset: 'assets/images/banner3.png',
                       ),
                     ],
@@ -203,17 +202,25 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                   const SizedBox(height: 12),
                   Row(
                     children: [
-                      Expanded(child: _buildCategoryCard('4-6 Months', '👶', kCoral)),
+                      Expanded(
+                          child: _buildCategoryCard(
+                              '4-6 Months', FontAwesomeIcons.baby, kCoral)),
                       const SizedBox(width: 12),
-                      Expanded(child: _buildCategoryCard('6-9 Months', '🍼', kYellow)),
+                      Expanded(
+                          child: _buildCategoryCard('6-9 Months',
+                              FontAwesomeIcons.babyCarriage, kYellow)),
                     ],
                   ),
                   const SizedBox(height: 12),
                   Row(
                     children: [
-                      Expanded(child: _buildCategoryCard('9-12 Months', '🥄', kMint)),
+                      Expanded(
+                          child: _buildCategoryCard(
+                              '9-12 Months', FontAwesomeIcons.utensils, kMint)),
                       const SizedBox(width: 12),
-                      Expanded(child: _buildCategoryCard('12+ Months', '🍽️', kLavender)),
+                      Expanded(
+                          child: _buildCategoryCard('12+ Months',
+                              FontAwesomeIcons.plateWheat, kLavender)),
                     ],
                   ),
                 ],
@@ -234,9 +241,11 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildTrustBadge('🥬', 'Organic'),
-                  _buildTrustBadge('🔬', 'Lab Tested'),
-                  _buildTrustBadge('✅', 'No Additives'),
+                  _buildTrustBadge(FontAwesomeIcons.leaf, 'Organic', kMint),
+                  _buildTrustBadge(
+                      FontAwesomeIcons.flaskVial, 'Lab Tested', kLavender),
+                  _buildTrustBadge(
+                      FontAwesomeIcons.shield, 'No Additives', kCoral),
                 ],
               ),
             ),
@@ -258,7 +267,8 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                     },
                     child: Text(
                       'View All',
-                      style: TextStyle(color: kCoral, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(color: kCoral, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ],
@@ -286,11 +296,13 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                   child: Center(
                     child: Column(
                       children: [
-                        Icon(Icons.shopping_bag_outlined, size: 48, color: kNavy.withOpacity(0.5)),
+                        Icon(Icons.shopping_bag_outlined,
+                            size: 48, color: kNavy.withOpacity(0.5)),
                         const SizedBox(height: 12),
                         Text(
                           'No featured products yet',
-                          style: TextStyle(color: kNavy.withOpacity(0.7), fontSize: 16),
+                          style: TextStyle(
+                              color: kNavy.withOpacity(0.7), fontSize: 16),
                         ),
                       ],
                     ),
@@ -323,16 +335,19 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildSectionTitle('Subscription Plans', Icons.card_membership_rounded),
+                    _buildSectionTitle(
+                        'Subscription Plans', Icons.card_membership_rounded),
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const SubscriptionsScreen()),
+                          MaterialPageRoute(
+                              builder: (_) => const SubscriptionsScreen()),
                         );
                       },
                       child: Text(
                         'Explore',
-                        style: TextStyle(color: kCoral, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            color: kCoral, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ],
@@ -350,7 +365,8 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                   scrollDirection: Axis.horizontal,
                   itemCount: _plans.length > 3 ? 3 : _plans.length,
                   separatorBuilder: (_, __) => const SizedBox(width: 12),
-                  itemBuilder: (_, index) => _buildSubscriptionCard(_plans[index]),
+                  itemBuilder: (_, index) =>
+                      _buildSubscriptionCard(_plans[index]),
                 ),
               ),
             ),
@@ -360,7 +376,8 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                child: _buildSectionTitle('Best Sellers', Icons.trending_up_rounded),
+                child: _buildSectionTitle(
+                    'Best Sellers', Icons.trending_up_rounded),
               ),
             ),
 
@@ -382,6 +399,83 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
               ),
             ),
 
+          // Blog & Tips Section
+          SliverToBoxAdapter(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [kLavender.withOpacity(0.2), kMint.withOpacity(0.2)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: kLavender.withOpacity(0.4), width: 2),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: kLavender.withOpacity(0.3),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const FaIcon(FontAwesomeIcons.bookOpen,
+                            color: kLavender, size: 22),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        'Tips & Recipes',
+                        style: GoogleFonts.baloo2(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                          color: kNavy,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Expert advice on baby nutrition, feeding tips, and delicious recipes',
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      color: const Color(0xFF6B6B8A),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushNamed(BlogListScreen.routeName);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: kLavender,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: Text(
+                        'Read Our Blog',
+                        style: GoogleFonts.poppins(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
           // Bottom Spacing
           const SliverToBoxAdapter(child: SizedBox(height: 80)),
         ],
@@ -392,51 +486,80 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
   Widget _buildHeroBanner({
     required String title,
     required String subtitle,
-    required Gradient gradient,
+    required IconData icon,
+    required Color color,
     String? imageAsset,
   }) {
     return Container(
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: gradient,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: kCoral.withOpacity(0.2),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: color.withOpacity(0.15),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
+            spreadRadius: 0,
           ),
         ],
       ),
       child: Stack(
         children: [
+          // Subtle gradient background
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  color.withOpacity(0.08),
+                  color.withOpacity(0.02),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(24),
+            ),
+          ),
           if (imageAsset != null)
             Positioned(
-              right: -20,
-              bottom: -20,
+              right: -40,
+              bottom: -40,
               child: Opacity(
-                opacity: 0.3,
+                opacity: 0.08,
                 child: Image.asset(
                   imageAsset,
-                  width: 180,
-                  height: 180,
+                  width: 220,
+                  height: 220,
                   fit: BoxFit.contain,
                   errorBuilder: (_, __, ___) => const SizedBox(),
                 ),
               ),
             ),
           Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(28),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: FaIcon(
+                    icon,
+                    size: 32,
+                    color: color,
+                  ),
+                ),
+                const SizedBox(height: 20),
                 Text(
                   title,
                   style: GoogleFonts.baloo2(
-                    fontSize: 32,
+                    fontSize: 30,
                     fontWeight: FontWeight.w900,
-                    color: Colors.white,
+                    color: kNavy,
                     height: 1.1,
                   ),
                 ),
@@ -444,9 +567,9 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                 Text(
                   subtitle,
                   style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white.withOpacity(0.95),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: kNavy.withOpacity(0.65),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -457,20 +580,28 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: kNavy,
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                    backgroundColor: color,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 28, vertical: 14),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     elevation: 0,
                   ),
-                  child: Text(
-                    'Shop Now',
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Shop Now',
+                        style: GoogleFonts.poppins(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Icon(Icons.arrow_forward, size: 18),
+                    ],
                   ),
                 ),
               ],
@@ -505,7 +636,7 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
     );
   }
 
-  Widget _buildCategoryCard(String label, String emoji, Color color) {
+  Widget _buildCategoryCard(String label, IconData icon, Color color) {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
@@ -515,26 +646,42 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
         );
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 12),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withOpacity(0.3), width: 2),
+          border: Border.all(color: color.withOpacity(0.2), width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Column(
           children: [
-            Text(
-              emoji,
-              style: const TextStyle(fontSize: 32),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: FaIcon(
+                icon,
+                size: 26,
+                color: color,
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             Text(
               label,
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: kNavy,
+                height: 1.3,
               ),
             ),
           ],
@@ -543,11 +690,22 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
     );
   }
 
-  Widget _buildTrustBadge(String emoji, String label) {
+  Widget _buildTrustBadge(IconData icon, String label, Color color) {
     return Column(
       children: [
-        Text(emoji, style: const TextStyle(fontSize: 28)),
-        const SizedBox(height: 6),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.12),
+            shape: BoxShape.circle,
+          ),
+          child: FaIcon(
+            icon,
+            size: 24,
+            color: color,
+          ),
+        ),
+        const SizedBox(height: 8),
         Text(
           label,
           style: GoogleFonts.poppins(
@@ -584,7 +742,8 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
               child: Container(
                 decoration: BoxDecoration(
                   color: kCream,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(18)),
                 ),
                 child: Stack(
                   children: [
@@ -618,7 +777,8 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                         top: 8,
                         right: 8,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
                             color: kCoral,
                             borderRadius: BorderRadius.circular(8),
@@ -762,7 +922,9 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                 '/${plan.billingCycle ?? 'month'}',
                 style: GoogleFonts.poppins(
                   fontSize: 12,
-                  color: plan.isPopular ? Colors.white.withOpacity(0.9) : kNavy.withOpacity(0.6),
+                  color: plan.isPopular
+                      ? Colors.white.withOpacity(0.9)
+                      : kNavy.withOpacity(0.6),
                 ),
               ),
             ],
@@ -773,7 +935,8 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
             child: ElevatedButton(
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const SubscriptionsScreen()),
+                  MaterialPageRoute(
+                      builder: (_) => const SubscriptionsScreen()),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -821,7 +984,8 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
               child: Container(
                 decoration: BoxDecoration(
                   color: kCream,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(14)),
                 ),
                 child: Center(
                   child: product.imageUrl != null
@@ -829,7 +993,8 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                           imageUrl: product.imageUrl!,
                           fit: BoxFit.cover,
                           width: double.infinity,
-                          placeholder: (_, __) => const CircularProgressIndicator(
+                          placeholder: (_, __) =>
+                              const CircularProgressIndicator(
                             color: kCoral,
                             strokeWidth: 2,
                           ),

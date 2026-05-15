@@ -38,6 +38,8 @@ migrate_working_dir/
 # Signing keystore — keep out of version control
 android/app/numnam-key.jks
 android/app/key.properties
+android/key.properties
+android/numnam-keystore.jks
 
 # iOS Pods
 ios/Pods/

@@ -9,7 +9,6 @@ import 'core/storage_service.dart';
 import 'features/cart/cart_provider.dart';
 import 'features/home/home_screen_redesign.dart';
 import 'features/shop/shop_screen_redesign.dart';
-import 'features/shop/product_detail_screen_redesign.dart';
 import 'features/cart/cart_screen_redesign.dart';
 import 'features/subscriptions/subscriptions_screen_redesign.dart';
 import 'features/checkout/checkout_screen.dart';
@@ -23,7 +22,6 @@ import 'features/account/contact_form_screen.dart';
 import 'features/auth/login_screen.dart';
 import 'features/auth/register_screen.dart';
 import 'features/auth/forgot_password_screen.dart';
-import 'features/subscriptions/subscriptions_screen.dart';
 import 'features/blog/blog_list_screen.dart';
 import 'features/blog/blog_detail_screen.dart';
 import 'features/static/about_screen.dart';
@@ -118,16 +116,25 @@ class NumNamApp extends StatelessWidget {
       ),
       scaffoldBackgroundColor: kCream,
       textTheme: base.copyWith(
-        displayLarge: base.displayLarge?.copyWith(color: kNavy, fontWeight: FontWeight.w900),
-        displayMedium: base.displayMedium?.copyWith(color: kNavy, fontWeight: FontWeight.w800),
-        displaySmall: base.displaySmall?.copyWith(color: kNavy, fontWeight: FontWeight.w800),
-        headlineLarge: base.headlineLarge?.copyWith(color: kNavy, fontWeight: FontWeight.w800),
-        headlineMedium: base.headlineMedium?.copyWith(color: kNavy, fontWeight: FontWeight.w700),
-        headlineSmall: base.headlineSmall?.copyWith(color: kNavy, fontWeight: FontWeight.w700),
-        titleLarge: base.titleLarge?.copyWith(color: kNavy, fontWeight: FontWeight.w700),
-        titleMedium: bodyBase.titleMedium?.copyWith(color: kNavy, fontWeight: FontWeight.w600),
+        displayLarge: base.displayLarge
+            ?.copyWith(color: kNavy, fontWeight: FontWeight.w900),
+        displayMedium: base.displayMedium
+            ?.copyWith(color: kNavy, fontWeight: FontWeight.w800),
+        displaySmall: base.displaySmall
+            ?.copyWith(color: kNavy, fontWeight: FontWeight.w800),
+        headlineLarge: base.headlineLarge
+            ?.copyWith(color: kNavy, fontWeight: FontWeight.w800),
+        headlineMedium: base.headlineMedium
+            ?.copyWith(color: kNavy, fontWeight: FontWeight.w700),
+        headlineSmall: base.headlineSmall
+            ?.copyWith(color: kNavy, fontWeight: FontWeight.w700),
+        titleLarge: base.titleLarge
+            ?.copyWith(color: kNavy, fontWeight: FontWeight.w700),
+        titleMedium: bodyBase.titleMedium
+            ?.copyWith(color: kNavy, fontWeight: FontWeight.w600),
         bodyLarge: bodyBase.bodyLarge?.copyWith(color: kNavy),
-        bodyMedium: bodyBase.bodyMedium?.copyWith(color: const Color(0xFF4A4A6A)),
+        bodyMedium:
+            bodyBase.bodyMedium?.copyWith(color: const Color(0xFF4A4A6A)),
         bodySmall: bodyBase.bodySmall?.copyWith(color: const Color(0xFF6B6B8A)),
       ),
       appBarTheme: AppBarTheme(
@@ -136,7 +143,8 @@ class NumNamApp extends StatelessWidget {
         elevation: 0,
         scrolledUnderElevation: 2,
         shadowColor: kCoral.withOpacity(0.12),
-        titleTextStyle: GoogleFonts.baloo2(fontSize: 22, fontWeight: FontWeight.w800, color: kNavy),
+        titleTextStyle: GoogleFonts.baloo2(
+            fontSize: 22, fontWeight: FontWeight.w800, color: kNavy),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       cardTheme: CardThemeData(
@@ -157,7 +165,8 @@ class NumNamApp extends StatelessWidget {
           return const IconThemeData(color: Color(0xFF9E9EBE), size: 24);
         }),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
-          final style = GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w700);
+          final style =
+              GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w700);
           if (states.contains(WidgetState.selected)) {
             return style.copyWith(color: kCoral);
           }
