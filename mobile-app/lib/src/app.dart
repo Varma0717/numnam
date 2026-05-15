@@ -7,10 +7,11 @@ import 'core/api_client.dart';
 import 'core/auth_provider.dart';
 import 'core/storage_service.dart';
 import 'features/cart/cart_provider.dart';
-import 'features/home/home_screen.dart';
-import 'features/shop/shop_screen.dart';
-import 'features/shop/product_detail_screen.dart';
-import 'features/cart/cart_screen.dart';
+import 'features/home/home_screen_redesign.dart';
+import 'features/shop/shop_screen_redesign.dart';
+import 'features/shop/product_detail_screen_redesign.dart';
+import 'features/cart/cart_screen_redesign.dart';
+import 'features/subscriptions/subscriptions_screen_redesign.dart';
 import 'features/checkout/checkout_screen.dart';
 import 'features/checkout/order_success_screen.dart';
 import 'features/orders/orders_screen.dart';
@@ -70,7 +71,6 @@ class NumNamApp extends StatelessWidget {
           LoginScreen.routeName: (_) => const LoginScreen(),
           RegisterScreen.routeName: (_) => const RegisterScreen(),
           ForgotPasswordScreen.routeName: (_) => const ForgotPasswordScreen(),
-          ProductDetailScreen.routeName: (_) => const ProductDetailScreen(),
           CheckoutScreen.routeName: (_) => const CheckoutScreen(),
           OrderSuccessScreen.routeName: (_) => const OrderSuccessScreen(),
           OrdersScreen.routeName: (_) => const OrdersScreen(),
@@ -78,7 +78,6 @@ class NumNamApp extends StatelessWidget {
           WishlistScreen.routeName: (_) => const WishlistScreen(),
           EditProfileScreen.routeName: (_) => const EditProfileScreen(),
           ContactFormScreen.routeName: (_) => const ContactFormScreen(),
-          SubscriptionsScreen.routeName: (_) => const SubscriptionsScreen(),
           BlogListScreen.routeName: (_) => const BlogListScreen(),
           BlogDetailScreen.routeName: (_) => const BlogDetailScreen(),
           AboutScreen.routeName: (_) => const AboutScreen(),
@@ -276,15 +275,17 @@ class _ShellState extends State<_Shell> {
   Widget _screenAt(int i) {
     switch (i) {
       case 0:
-        return const HomeScreen();
+        return const HomeScreenRedesign();
       case 1:
-        return const ShopScreen();
+        return const ShopScreenRedesign();
       case 2:
-        return const CartScreen();
+        return const CartScreenRedesign();
       case 3:
+        return const SubscriptionsScreenRedesign();
+      case 4:
         return const AccountScreen();
       default:
-        return const HomeScreen();
+        return const HomeScreenRedesign();
     }
   }
 
@@ -380,6 +381,11 @@ class AppBottomNav extends StatelessWidget {
               child: const Icon(Icons.shopping_bag_rounded),
             ),
             label: 'Cart',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.card_membership_outlined),
+            selectedIcon: Icon(Icons.card_membership_rounded),
+            label: 'Subscribe',
           ),
           const NavigationDestination(
             icon: Icon(Icons.person_outline_rounded),
