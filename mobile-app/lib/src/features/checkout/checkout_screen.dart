@@ -6,6 +6,7 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../../config/app_config.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
+import '../../models/site_settings.dart';
 import '../../shared/theme/colors.dart';
 import '../../shared/widgets/inner_page_nav.dart';
 import '../cart/cart_provider.dart';
@@ -28,9 +29,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final _stateCtrl = TextEditingController();
   final _pincodeCtrl = TextEditingController();
   final _couponCtrl = TextEditingController();
-  String _paymentMethod = 'cod';
+  String _paymentMethod = 'razorpay';
   bool _placing = false;
+  bool _loadingSettings = true;
   String? _error;
+  SiteSettings? _siteSettings;
   late final Razorpay _razorpay;
 
   @override
@@ -40,6 +43,29 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _onPaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _onPaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _onExternalWallet);
+    _loadSettings();
+  }
+
+  Future<void> _loadSettings() async {
+    try {
+      final api = context.read<ApiClient>();
+      final resp = await api.dio.get(ApiEndpoints.settings);
+      if (mounted) {
+        setState(() {
+          _siteSettings = SiteSettings.fromJson(
+            resp.data['data'] as Map<String, dynamic>? ?? {},
+          );
+          _loadingSettings = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _siteSettings = const SiteSettings();
+          _loadingSettings = false;
+        });
+      }
+    }
   }
 
   @override
@@ -170,7 +196,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     if (paymentId == null || paymentId.isEmpty) {
       setState(() {
         _placing = false;
-        _error = 'Payment succeeded but reference is missing. Please contact support.';
+        _error =
+            'Payment succeeded but reference is missing. Please contact support.';
       });
       return;
     }
@@ -287,7 +314,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 return null;
               },
             ),
-
             const SizedBox(height: 24),
             Text('Coupon Code',
                 style: GoogleFonts.baloo2(
@@ -295,20 +321,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             const SizedBox(height: 10),
             TextFormField(
               controller: _couponCtrl,
-              decoration: const InputDecoration(
-                  labelText: 'Enter coupon (optional)'),
+              decoration:
+                  const InputDecoration(labelText: 'Enter coupon (optional)'),
             ),
-
             const SizedBox(height: 24),
             Text('Payment Method',
                 style: GoogleFonts.baloo2(
                     fontSize: 20, fontWeight: FontWeight.w700, color: kNavy)),
             const SizedBox(height: 10),
-            _paymentTile('cod', 'Cash on Delivery', Icons.money_rounded),
-            const SizedBox(height: 8),
-            _paymentTile(
-                'razorpay', 'Pay Online (Razorpay)', Icons.credit_card),
-
+            if (_loadingSettings)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: CircularProgressIndicator(color: kCoral),
+                ),
+              )
+            else ...[
+              // Show COD only if admin has enabled it
+              if (_siteSettings?.codEnabled == true) ...[
+                _paymentTile('cod', 'Cash on Delivery', Icons.money_rounded),
+                const SizedBox(height: 8),
+              ],
+              _paymentTile(
+                  'razorpay', 'Pay Online (Razorpay)', Icons.credit_card),
+            ],
             const SizedBox(height: 24),
             Text('Order Summary',
                 style: GoogleFonts.baloo2(
@@ -328,15 +364,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                 )),
             const Divider(height: 20),
-            _summaryRow('Subtotal',
-                '₹${cart.cart.totals.subtotal.toStringAsFixed(0)}'),
+            _summaryRow(
+                'Subtotal', '₹${cart.cart.totals.subtotal.toStringAsFixed(0)}'),
             if (cart.cart.totals.shippingFee > 0)
               _summaryRow('Shipping',
                   '₹${cart.cart.totals.shippingFee.toStringAsFixed(0)}'),
             _summaryRow(
                 'Total', '₹${cart.cart.totals.total.toStringAsFixed(0)}',
                 bold: true),
-
             if (_error != null) ...[
               const SizedBox(height: 16),
               Container(
@@ -350,7 +385,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         fontSize: 13, color: const Color(0xFFB91C1C))),
               ),
             ],
-
             const SizedBox(height: 24),
             SizedBox(
               height: 52,

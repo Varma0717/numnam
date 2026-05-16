@@ -58,6 +58,8 @@ Route::prefix('v1')->group(function () {
         Route::middleware('jwt.auth')->group(function () {
             Route::get('homepage', [MobileContentController::class, 'homepage']);
 
+            Route::get('settings', [MobileContentController::class, 'settings']);
+
             Route::get('products', [MobileContentController::class, 'products']);
             Route::get('products/{slug}', [MobileContentController::class, 'productShow']);
 

@@ -11,7 +11,7 @@ import '../cart/cart_provider.dart';
 
 class ProductDetailScreenRedesign extends StatefulWidget {
   static const routeName = '/product-detail-redesign';
-  
+
   final int productId;
   const ProductDetailScreenRedesign({super.key, required this.productId});
 
@@ -39,11 +39,15 @@ class _ProductDetailScreenRedesignState
     setState(() => _loading = true);
     try {
       final api = context.read<ApiClient>();
-      
+
       // Fetch product details
+      debugPrint('🔍 Loading product ID: ${widget.productId}');
       final productResp =
           await api.dio.get('${ApiEndpoints.products}/${widget.productId}');
-      
+
+      debugPrint('✅ Product response received');
+      debugPrint('Response data: ${productResp.data}');
+
       // Fetch reviews
       try {
         final reviewsResp = await api.dio.get(
@@ -51,21 +55,27 @@ class _ProductDetailScreenRedesignState
         );
         if (mounted) {
           setState(() {
-            _product = Product.fromJson(productResp.data['data'] ?? productResp.data);
+            _product =
+                Product.fromJson(productResp.data['data'] ?? productResp.data);
             _reviews = _parseReviews(reviewsResp.data);
             _loading = false;
           });
+          debugPrint('✅ Product loaded: ${_product?.name}');
         }
-      } catch (_) {
+      } catch (e) {
+        debugPrint('⚠️  Reviews failed (non-critical): $e');
         // Reviews endpoint might not exist, continue without them
         if (mounted) {
           setState(() {
-            _product = Product.fromJson(productResp.data['data'] ?? productResp.data);
+            _product =
+                Product.fromJson(productResp.data['data'] ?? productResp.data);
             _loading = false;
           });
+          debugPrint('✅ Product loaded without reviews: ${_product?.name}');
         }
       }
     } catch (e) {
+      debugPrint('❌ Product load error: $e');
       if (mounted) setState(() => _loading = false);
     }
   }
@@ -79,19 +89,17 @@ class _ProductDetailScreenRedesignState
     } else {
       list = [];
     }
-    return list
-        .map((e) => Review.fromJson(e as Map<String, dynamic>))
-        .toList();
+    return list.map((e) => Review.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   Future<void> _addToCart() async {
     if (_product == null || !_product!.inStock) return;
-    
+
     setState(() => _addingToCart = true);
     try {
       final cartProvider = context.read<CartProvider>();
       await cartProvider.addItem(_product!.id, _quantity);
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -101,7 +109,8 @@ class _ProductDetailScreenRedesignState
             ),
             backgroundColor: kMint,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
         setState(() => _addingToCart = false);
@@ -116,7 +125,8 @@ class _ProductDetailScreenRedesignState
             ),
             backgroundColor: Colors.red,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
         setState(() => _addingToCart = false);
@@ -153,7 +163,8 @@ class _ProductDetailScreenRedesignState
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.error_outline, size: 80, color: kNavy.withOpacity(0.3)),
+              Icon(Icons.error_outline,
+                  size: 80, color: kNavy.withOpacity(0.3)),
               const SizedBox(height: 16),
               Text(
                 'Product not found',
@@ -477,7 +488,8 @@ class _ProductDetailScreenRedesignState
                     // Description
                     if (_product!.description != null) ...[
                       const Divider(height: 32),
-                      _buildSectionTitle('Description', Icons.description_outlined),
+                      _buildSectionTitle(
+                          'Description', Icons.description_outlined),
                       const SizedBox(height: 12),
                       Text(
                         _product!.description!,
@@ -507,7 +519,8 @@ class _ProductDetailScreenRedesignState
                     // Nutrition Facts
                     if (_product!.nutritionInfo != null) ...[
                       const Divider(height: 32),
-                      _buildSectionTitle('Nutrition Info', Icons.favorite_outline),
+                      _buildSectionTitle(
+                          'Nutrition Info', Icons.favorite_outline),
                       const SizedBox(height: 16),
                       _buildNutritionTable(),
                     ],
@@ -520,7 +533,9 @@ class _ProductDetailScreenRedesignState
                         Icons.star_outline,
                       ),
                       const SizedBox(height: 16),
-                      ..._reviews.take(3).map((review) => _buildReviewCard(review)),
+                      ..._reviews
+                          .take(3)
+                          .map((review) => _buildReviewCard(review)),
                     ],
 
                     const SizedBox(height: 100), // Space for bottom button
@@ -549,7 +564,8 @@ class _ProductDetailScreenRedesignState
           child: SizedBox(
             height: 56,
             child: ElevatedButton(
-              onPressed: _product!.inStock && !_addingToCart ? _addToCart : null,
+              onPressed:
+                  _product!.inStock && !_addingToCart ? _addToCart : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: kCoral,
                 foregroundColor: Colors.white,

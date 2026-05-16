@@ -8,6 +8,7 @@ use App\Models\Menu;
 use App\Models\Page;
 use App\Models\PricingPlan;
 use App\Models\Product;
+use App\Models\SiteSetting;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
@@ -56,9 +57,9 @@ class MobileContentController extends BaseMobileController
         $featuredProducts = [];
         if (Schema::hasTable('products')) {
             $featuredProducts = Product::query()
-                ->when(Schema::hasColumn('products', 'is_active'), fn ($q) => $q->where('is_active', true))
-                ->when(Schema::hasColumn('products', 'status'), fn ($q) => $q->where('status', 'published'))
-                ->when(Schema::hasColumn('products', 'is_featured'), fn ($q) => $q->where('is_featured', true))
+                ->when(Schema::hasColumn('products', 'is_active'), fn($q) => $q->where('is_active', true))
+                ->when(Schema::hasColumn('products', 'status'), fn($q) => $q->where('status', 'published'))
+                ->when(Schema::hasColumn('products', 'is_featured'), fn($q) => $q->where('is_featured', true))
                 ->orderByDesc('id')
                 ->limit(8)
                 ->get(['id', 'name', 'slug', 'image', 'price', 'sale_price']);
@@ -76,7 +77,7 @@ class MobileContentController extends BaseMobileController
         $latestBlogs = [];
         if (Schema::hasTable('blogs')) {
             $latestBlogs = Blog::query()
-                ->when(Schema::hasColumn('blogs', 'status'), fn ($q) => $q->where('status', 'published'))
+                ->when(Schema::hasColumn('blogs', 'status'), fn($q) => $q->where('status', 'published'))
                 ->orderByDesc('published_at')
                 ->limit(5)
                 ->get(['id', 'title', 'slug', 'excerpt', 'featured_image', 'published_at']);
@@ -113,8 +114,8 @@ class MobileContentController extends BaseMobileController
         }
 
         $query = Product::query()
-            ->when(Schema::hasColumn('products', 'is_active'), fn ($q) => $q->where('is_active', true))
-            ->when(Schema::hasColumn('products', 'status'), fn ($q) => $q->where('status', 'published'))
+            ->when(Schema::hasColumn('products', 'is_active'), fn($q) => $q->where('is_active', true))
+            ->when(Schema::hasColumn('products', 'status'), fn($q) => $q->where('status', 'published'))
             ->with('productCategory:id,name,slug');
 
         if ($request->filled('category_id')) {
@@ -153,8 +154,8 @@ class MobileContentController extends BaseMobileController
         $product = Product::query()
             ->with(['productCategory:id,name,slug'])
             ->where('slug', $slug)
-            ->when(Schema::hasColumn('products', 'is_active'), fn ($q) => $q->where('is_active', true))
-            ->when(Schema::hasColumn('products', 'status'), fn ($q) => $q->where('status', 'published'))
+            ->when(Schema::hasColumn('products', 'is_active'), fn($q) => $q->where('is_active', true))
+            ->when(Schema::hasColumn('products', 'status'), fn($q) => $q->where('status', 'published'))
             ->first();
 
         if (! $product) {
@@ -212,7 +213,7 @@ class MobileContentController extends BaseMobileController
 
         $query = Blog::query()
             ->with(['category:id,name,slug'])
-            ->when(Schema::hasColumn('blogs', 'status'), fn ($q) => $q->where('status', 'published'))
+            ->when(Schema::hasColumn('blogs', 'status'), fn($q) => $q->where('status', 'published'))
             ->orderByDesc('published_at');
 
         if ($request->filled('category_id')) {
@@ -247,7 +248,7 @@ class MobileContentController extends BaseMobileController
         $blog = Blog::query()
             ->with(['category:id,name,slug', 'author:id,name'])
             ->where('slug', $slug)
-            ->when(Schema::hasColumn('blogs', 'status'), fn ($q) => $q->where('status', 'published'))
+            ->when(Schema::hasColumn('blogs', 'status'), fn($q) => $q->where('status', 'published'))
             ->first();
 
         if (! $blog) {
@@ -307,5 +308,20 @@ class MobileContentController extends BaseMobileController
             'status' => $message->status,
             'submitted_at' => optional($message->created_at)->toIso8601String(),
         ], 'Contact form submitted successfully.', 201);
+    }
+
+    public function settings(): JsonResponse
+    {
+        if (! Schema::hasTable('site_settings')) {
+            return $this->success([], 'Settings table is not migrated yet.');
+        }
+
+        $settings = SiteSetting::query()
+            ->where('is_public', true)
+            ->get()
+            ->pluck('value', 'key')
+            ->toArray();
+
+        return $this->success($settings, 'Public settings fetched successfully.');
     }
 }

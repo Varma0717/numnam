@@ -13,6 +13,7 @@ class ApiEndpoints {
 
   // Content
   static const homepage = '/mobile/homepage';
+  static const settings = '/mobile/settings';
   static const products = '/mobile/products';
   static const pricingPlans = '/mobile/pricing-plans';
   static const blogs = '/mobile/blogs';

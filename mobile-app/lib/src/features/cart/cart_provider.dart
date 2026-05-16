@@ -22,10 +22,14 @@ class CartProvider extends ChangeNotifier {
     _loading = true;
     notifyListeners();
     try {
+      debugPrint('🛒 Loading cart...');
       final resp = await _api.dio.get(ApiEndpoints.cart);
-      _cart =
-          CartResponse.fromJson(resp.data['data'] as Map<String, dynamic>);
-    } catch (_) {
+      debugPrint('✅ Cart response received');
+      debugPrint('Cart data: ${resp.data}');
+      _cart = CartResponse.fromJson(resp.data['data'] as Map<String, dynamic>);
+      debugPrint('✅ Cart loaded: ${_cart.items.length} items');
+    } catch (e) {
+      debugPrint('❌ Cart load error: $e');
       // keep current state
     }
     _loading = false;
@@ -34,11 +38,14 @@ class CartProvider extends ChangeNotifier {
   }
 
   Future<void> addItem(int productId, [int qty = 1]) async {
+    debugPrint('🛒 Adding to cart: Product ID=$productId, Qty=$qty');
     final resp = await _api.dio.post(ApiEndpoints.cart, data: {
       'product_id': productId,
       'qty': qty,
     });
+    debugPrint('✅ Add to cart response: ${resp.data}');
     _cart = CartResponse.fromJson(resp.data['data'] as Map<String, dynamic>);
+    debugPrint('✅ Cart updated: ${_cart.items.length} items');
     notifyListeners();
   }
 

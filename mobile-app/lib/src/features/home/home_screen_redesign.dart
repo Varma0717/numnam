@@ -519,46 +519,42 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
               ),
             ),
           ),
-          errorWidget: (_, __, ___) => Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  fallbackColor.withOpacity(0.4),
-                  fallbackColor.withOpacity(0.2),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          errorWidget: (context, url, error) {
+            debugPrint('❌ Banner image failed: $url - Error: $error');
+            return Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    fallbackColor.withOpacity(0.4),
+                    fallbackColor.withOpacity(0.2),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
-            ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.image_outlined,
-                    size: 60,
-                    color: Colors.white.withOpacity(0.7),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'NumNam Baby Food',
-                    style: GoogleFonts.baloo2(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.image_outlined,
+                      size: 60,
+                      color: Colors.white.withOpacity(0.7),
                     ),
-                  ),
-                  Text(
-                    'Nutritious & Delicious',
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      color: Colors.white.withOpacity(0.9),
+                    const SizedBox(height: 12),
+                    Text(
+                      'NumNam Baby Food',
+                      style: GoogleFonts.baloo2(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );
