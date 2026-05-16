@@ -130,11 +130,11 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
       onRefresh: _load,
       child: CustomScrollView(
         slivers: [
-          // Hero Banner Section
+          // Image-Only Banner Slider (No Text, No Buttons)
           SliverToBoxAdapter(
             child: Container(
-              height: 280,
-              margin: const EdgeInsets.only(bottom: 16),
+              height: 220,
+              margin: const EdgeInsets.fromLTRB(16, 16, 16, 12),
               child: Stack(
                 children: [
                   PageView(
@@ -142,31 +142,22 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                     onPageChanged: (index) =>
                         setState(() => _currentBanner = index),
                     children: [
-                      _buildHeroBanner(
-                        title: 'Nutritious Baby Food',
-                        subtitle: 'Organic & Homemade with Love',
-                        icon: FontAwesomeIcons.bowlFood,
-                        color: kCoral,
-                        imageAsset: 'assets/images/banner1.png',
+                      _buildImageBanner(
+                        'https://numnam.com/storage/banners/banner1.jpg',
+                        kCoral,
                       ),
-                      _buildHeroBanner(
-                        title: 'Subscribe & Save',
-                        subtitle: 'Up to 25% Off Regular Price',
-                        icon: FontAwesomeIcons.boxOpen,
-                        color: kMint,
-                        imageAsset: 'assets/images/banner2.png',
+                      _buildImageBanner(
+                        'https://numnam.com/storage/banners/banner2.jpg',
+                        kMint,
                       ),
-                      _buildHeroBanner(
-                        title: 'Fresh & Healthy',
-                        subtitle: 'Stage-wise Nutrition Plans',
-                        icon: FontAwesomeIcons.heartPulse,
-                        color: kLavender,
-                        imageAsset: 'assets/images/banner3.png',
+                      _buildImageBanner(
+                        'https://numnam.com/storage/banners/banner3.jpg',
+                        kYellow,
                       ),
                     ],
                   ),
                   Positioned(
-                    bottom: 16,
+                    bottom: 12,
                     left: 0,
                     right: 0,
                     child: Row(
@@ -174,13 +165,20 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                       children: List.generate(3, (index) {
                         return Container(
                           margin: const EdgeInsets.symmetric(horizontal: 4),
-                          width: _currentBanner == index ? 24 : 8,
+                          width: _currentBanner == index ? 28 : 8,
                           height: 8,
                           decoration: BoxDecoration(
                             color: _currentBanner == index
                                 ? Colors.white
                                 : Colors.white.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(4),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                           ),
                         );
                       }),
@@ -483,131 +481,85 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
     );
   }
 
-  Widget _buildHeroBanner({
-    required String title,
-    required String subtitle,
-    required IconData icon,
-    required Color color,
-    String? imageAsset,
-  }) {
+  Widget _buildImageBanner(String imageUrl, Color fallbackColor) {
     return Container(
-      margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        color: fallbackColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.15),
-            blurRadius: 24,
-            offset: const Offset(0, 8),
-            spreadRadius: 0,
+            color: fallbackColor.withOpacity(0.15),
+            blurRadius: 20,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
-      child: Stack(
-        children: [
-          // Subtle gradient background
-          Container(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: CachedNetworkImage(
+          imageUrl: imageUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          placeholder: (_, __) => Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  color.withOpacity(0.08),
-                  color.withOpacity(0.02),
+                  fallbackColor.withOpacity(0.3),
+                  fallbackColor.withOpacity(0.1),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(24),
             ),
-          ),
-          if (imageAsset != null)
-            Positioned(
-              right: -40,
-              bottom: -40,
-              child: Opacity(
-                opacity: 0.08,
-                child: Image.asset(
-                  imageAsset,
-                  width: 220,
-                  height: 220,
-                  fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) => const SizedBox(),
-                ),
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 2,
               ),
             ),
-          Padding(
-            padding: const EdgeInsets.all(28),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: color.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(16),
+          ),
+          errorWidget: (_, __, ___) => Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  fallbackColor.withOpacity(0.4),
+                  fallbackColor.withOpacity(0.2),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.image_outlined,
+                    size: 60,
+                    color: Colors.white.withOpacity(0.7),
                   ),
-                  child: FaIcon(
-                    icon,
-                    size: 32,
-                    color: color,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  title,
-                  style: GoogleFonts.baloo2(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w900,
-                    color: kNavy,
-                    height: 1.1,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  subtitle,
-                  style: GoogleFonts.poppins(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: kNavy.withOpacity(0.65),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const ShopScreen()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: color,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 28, vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                  const SizedBox(height: 12),
+                  Text(
+                    'NumNam Baby Food',
+                    style: GoogleFonts.baloo2(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
                     ),
-                    elevation: 0,
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Shop Now',
-                        style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Icon(Icons.arrow_forward, size: 18),
-                    ],
+                  Text(
+                    'Nutritious & Delicious',
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      color: Colors.white.withOpacity(0.9),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
