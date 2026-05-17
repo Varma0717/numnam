@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'core/api_client.dart';
 import 'core/auth_provider.dart';
 import 'core/storage_service.dart';
+import 'core/wishlist_provider.dart';
 import 'features/cart/cart_provider.dart';
 import 'features/home/home_screen_redesign.dart';
 import 'features/shop/shop_screen_redesign.dart';
@@ -45,6 +46,9 @@ class NumNamApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<CartProvider>(
           create: (_) => CartProvider(apiClient),
+        ),
+        ChangeNotifierProvider<WishlistProvider>(
+          create: (_) => WishlistProvider(apiClient),
         ),
       ],
       child: MaterialApp(
@@ -270,12 +274,15 @@ class _ShellState extends State<_Shell> {
       final auth = context.read<AuthProvider>();
       if (auth.isAuthenticated) {
         context.read<CartProvider>().loadCart();
+        context.read<WishlistProvider>().loadWishlist();
       }
       auth.addListener(() {
         if (auth.isAuthenticated) {
           context.read<CartProvider>().loadCart();
+          context.read<WishlistProvider>().loadWishlist();
         } else {
           context.read<CartProvider>().reset();
+          context.read<WishlistProvider>().reset();
         }
       });
     });
@@ -300,7 +307,7 @@ class _ShellState extends State<_Shell> {
 
   @override
   Widget build(BuildContext context) {
-    final cartCount = context.watch<CartProvider>().cart.items.length;
+    final cartCount = context.watch<CartProvider>().cart.itemCount;
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -310,6 +317,13 @@ class _ShellState extends State<_Shell> {
           ],
         ),
         centerTitle: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite_outline_rounded),
+            onPressed: () => Navigator.of(context).pushNamed(WishlistScreen.routeName),
+          ),
+          const SizedBox(width: 8),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(3),
           child: Container(

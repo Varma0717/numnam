@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../shared/theme/colors.dart';
+import '../../models/cart.dart';
 import '../cart/cart_provider.dart';
 import '../checkout/checkout_screen.dart';
 
@@ -82,7 +83,11 @@ class CartScreenRedesign extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           ElevatedButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              // Using pop might not be the best if it's in a shell tab,
+              // but consistency with original code.
+              Navigator.of(context).maybePop();
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: kCoral,
               foregroundColor: Colors.white,
@@ -114,10 +119,9 @@ class CartScreenRedesign extends StatelessWidget {
 
   Widget _buildCartItem(
     BuildContext context,
-    dynamic item,
+    CartItem item,
     CartProvider cartProvider,
   ) {
-    final product = item.product;
     final quantity = item.qty;
 
     return Container(
@@ -141,9 +145,9 @@ class CartScreenRedesign extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(14),
-                child: product.imageUrl != null
+                child: item.imageUrl != null
                     ? CachedNetworkImage(
-                        imageUrl: product.imageUrl!,
+                        imageUrl: item.imageUrl!,
                         fit: BoxFit.cover,
                         placeholder: (_, __) => const Center(
                           child: CircularProgressIndicator(
@@ -172,7 +176,7 @@ class CartScreenRedesign extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product.name,
+                    item.name,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
@@ -186,24 +190,13 @@ class CartScreenRedesign extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '₹${product.effectivePrice.toStringAsFixed(0)}',
+                        '₹${item.unitPrice.toStringAsFixed(0)}',
                         style: GoogleFonts.baloo2(
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
                           color: kCoral,
                         ),
                       ),
-                      if (product.isOnSale) ...[
-                        const SizedBox(width: 8),
-                        Text(
-                          '₹${product.price.toStringAsFixed(0)}',
-                          style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            color: kNavy.withOpacity(0.4),
-                            decoration: TextDecoration.lineThrough,
-                          ),
-                        ),
-                      ],
                     ],
                   ),
                   const SizedBox(height: 12),
@@ -215,7 +208,9 @@ class CartScreenRedesign extends StatelessWidget {
                         Icons.remove,
                         () {
                           if (quantity > 1) {
-                            cartProvider.updateQty(product.id, quantity - 1);
+                            cartProvider.updateQty(item.productId, quantity - 1);
+                          } else {
+                            cartProvider.removeItem(item.productId);
                           }
                         },
                       ),
@@ -234,14 +229,12 @@ class CartScreenRedesign extends StatelessWidget {
                       _buildQuantityButton(
                         Icons.add,
                         () {
-                          if (quantity < product.stock) {
-                            cartProvider.updateQty(product.id, quantity + 1);
-                          }
+                          cartProvider.updateQty(item.productId, quantity + 1);
                         },
                       ),
                       const Spacer(),
                       IconButton(
-                        onPressed: () => cartProvider.removeItem(product.id),
+                        onPressed: () => cartProvider.removeItem(item.productId),
                         icon: const Icon(Icons.delete_outline),
                         color: Colors.red,
                       ),
@@ -314,11 +307,7 @@ class CartScreenRedesign extends StatelessWidget {
               height: 56,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => const CheckoutScreen(),
-                    ),
-                  );
+                  Navigator.of(context).pushNamed(CheckoutScreen.routeName);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: kCoral,

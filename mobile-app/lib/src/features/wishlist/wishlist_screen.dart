@@ -4,15 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
+import '../../core/wishlist_provider.dart';
 import '../../shared/theme/colors.dart';
 import '../../shared/widgets/empty_state.dart';
 import '../../shared/widgets/error_view.dart';
-import '../../shared/widgets/inner_page_nav.dart';
 import '../../shared/widgets/loading_indicator.dart';
-import '../../shared/widgets/price_tag.dart';
 import '../auth/auth_gate.dart';
 import '../cart/cart_provider.dart';
-import '../shop/product_detail_screen.dart';
+import '../shop/product_detail_screen_redesign.dart';
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
@@ -23,17 +22,18 @@ class WishlistScreen extends StatefulWidget {
 }
 
 class _WishlistScreenState extends State<WishlistScreen> {
-  List<_WishItem> _items = [];
+  List<_WishItem> _fullItems = [];
   bool _loading = true;
   String? _error;
 
   @override
   void initState() {
     super.initState();
-    _load();
+    _loadFullDetails();
   }
 
-  Future<void> _load() async {
+  // We fetch full details for the list, but sync removal with the provider
+  Future<void> _loadFullDetails() async {
     setState(() {
       _loading = true;
       _error = null;
@@ -50,99 +50,87 @@ class _WishlistScreenState extends State<WishlistScreen> {
       } else {
         list = [];
       }
-      setState(() {
-        _items = list.map((e) => _WishItem.fromJson(e)).toList();
-        _loading = false;
-      });
-    } catch (_) {
-      setState(() {
-        _error = 'Failed to load wishlist';
-        _loading = false;
-      });
-    }
-  }
 
-  Future<void> _remove(int productId) async {
-    try {
-      final api = context.read<ApiClient>();
-      await api.dio.delete('${ApiEndpoints.wishlist}/$productId');
-      setState(() => _items.removeWhere((i) => i.productId == productId));
-    } catch (_) {}
-  }
-
-  Future<void> _addToCart(int productId) async {
-    final cart = context.read<CartProvider>();
-    await cart.addItem(productId, 1);
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Added to cart'),
-          backgroundColor: kMint,
-          duration: Duration(seconds: 1),
-        ),
-      );
+      if (mounted) {
+        setState(() {
+          _fullItems = list.map((e) => _WishItem.fromJson(e)).toList();
+          _loading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = 'Failed to load wishlist items';
+          _loading = false;
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final wishlistProvider = context.watch<WishlistProvider>();
+
+    // Filter _fullItems based on what's still in the global provider (optimistic sync)
+    final items = _fullItems.where((item) => wishlistProvider.isWished(item.productId)).toList();
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Wishlist')),
-      bottomNavigationBar: const InnerPageNav(),
+      backgroundColor: kCream,
+      appBar: AppBar(
+        title: const Text('My Wishlist'),
+        centerTitle: true,
+      ),
       body: AuthGate(
         child: _loading
-            ? const LoadingIndicator(message: 'Loading wishlist...')
-            : _error != null
-                ? ErrorView(message: _error!, onRetry: _load)
-                : _items.isEmpty
-                    ? const EmptyState(
-                        icon: Icons.favorite_border_rounded,
-                        title: 'Your Wishlist is Empty',
-                        subtitle: 'Save items you love here!',
-                      )
-                    : RefreshIndicator(
-                        color: kCoral,
-                        onRefresh: _load,
-                        child: ListView.separated(
-                          padding: const EdgeInsets.all(16),
-                          itemCount: _items.length,
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(height: 12),
-                          itemBuilder: (_, i) {
-                            final item = _items[i];
-                            return _WishTile(
-                              item: item,
-                              onRemove: () => _remove(item.productId),
-                              onAddToCart: () => _addToCart(item.productId),
-                              onTap: () => Navigator.of(context).pushNamed(
-                                ProductDetailScreen.routeName,
-                                arguments: item.slug,
-                              ),
+            ? const LoadingIndicator(message: 'Loading your favorites...')
+            : items.isEmpty
+                ? const EmptyState(
+                    icon: Icons.favorite_border_rounded,
+                    title: 'Your Wishlist is Empty',
+                    subtitle: 'Save items you love to find them easily later!',
+                  )
+                : RefreshIndicator(
+                    color: kCoral,
+                    onRefresh: _loadFullDetails,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: items.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 12),
+                      itemBuilder: (_, i) {
+                        final item = items[i];
+                        return _WishTile(
+                          item: item,
+                          onRemove: () => wishlistProvider.toggleWishlist(item.productId),
+                          onAddToCart: () {
+                            context.read<CartProvider>().addItem(item.productId, 1);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Added to cart'), duration: Duration(seconds: 1)),
                             );
                           },
-                        ),
-                      ),
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => ProductDetailScreenRedesign(productId: item.productId),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
       ),
     );
   }
 }
 
 class _WishItem {
-  final int id;
   final int productId;
   final String name;
-  final String slug;
-  final String? image;
   final String? imageUrl;
   final double price;
   final double? salePrice;
 
   _WishItem({
-    required this.id,
     required this.productId,
     required this.name,
-    required this.slug,
-    this.image,
     this.imageUrl,
     required this.price,
     this.salePrice,
@@ -150,28 +138,19 @@ class _WishItem {
 
   factory _WishItem.fromJson(Map<String, dynamic> json) {
     final product = json['product'] as Map<String, dynamic>?;
-    double _d(dynamic v) => (v is num ? v.toDouble() : double.tryParse('$v') ?? 0);
+    double toD(dynamic v) => (v is num ? v.toDouble() : double.tryParse('$v') ?? 0);
     return _WishItem(
-      id: json['id'] ?? 0,
-      productId: json['product_id'] ?? product?['id'] ?? 0,
+      productId: (json['product_id'] ?? product?['id'] ?? 0) as int,
       name: product?['name'] ?? json['name'] ?? '',
-      slug: product?['slug'] ?? '',
-      image: product?['image'] ?? product?['primary_image'],
       imageUrl: product?['image_url'] as String?,
-      price: _d(product?['price'] ?? json['price']),
-      salePrice: product?['sale_price'] != null
-          ? _d(product!['sale_price'])
-          : null,
+      price: toD(product?['price'] ?? json['price']),
+      salePrice: product?['sale_price'] != null ? toD(product!['sale_price']) : null,
     );
   }
 }
 
 class _WishTile extends StatelessWidget {
-  const _WishTile(
-      {required this.item,
-      required this.onRemove,
-      required this.onAddToCart,
-      this.onTap});
+  const _WishTile({required this.item, required this.onRemove, required this.onAddToCart, this.onTap});
   final _WishItem item;
   final VoidCallback onRemove;
   final VoidCallback onAddToCart;
@@ -182,30 +161,25 @@ class _WishTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(color: const Color(0xFFFFD6E5), width: 1.5),
         ),
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(14),
               child: SizedBox(
-                width: 72,
-                height: 72,
-                child: item.imageUrl != null && item.imageUrl!.isNotEmpty
-                    ? CachedNetworkImage(
-                        imageUrl: item.imageUrl!,
-                        fit: BoxFit.cover,
-                      )
-                    : Container(
-                        color: const Color(0xFFFFF0F5),
-                        child: const Icon(Icons.image, color: kLavender)),
+                width: 80,
+                height: 80,
+                child: item.imageUrl != null
+                    ? CachedNetworkImage(imageUrl: item.imageUrl!, fit: BoxFit.cover)
+                    : Container(color: kCream, child: const Icon(Icons.image, color: kCoral)),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,26 +187,31 @@ class _WishTile extends StatelessWidget {
                   Text(item.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: kNavy)),
-                  const SizedBox(height: 4),
-                  PriceTag(
-                      price: item.price, salePrice: item.salePrice, fontSize: 13),
+                      style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600, color: kNavy)),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Text('₹${(item.salePrice ?? item.price).toStringAsFixed(0)}',
+                          style: GoogleFonts.baloo2(fontSize: 18, fontWeight: FontWeight.w800, color: kCoral)),
+                      if (item.salePrice != null) ...[
+                        const SizedBox(width: 8),
+                        Text('₹${item.price.toStringAsFixed(0)}',
+                            style: GoogleFonts.poppins(
+                                fontSize: 12, color: kNavy.withOpacity(0.4), decoration: TextDecoration.lineThrough)),
+                      ],
+                    ],
+                  ),
                 ],
               ),
             ),
             Column(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.shopping_cart_outlined, size: 20),
-                  color: kMint,
+                  icon: const Icon(Icons.add_shopping_cart_rounded, color: kMint),
                   onPressed: onAddToCart,
                 ),
                 IconButton(
-                  icon: const Icon(Icons.delete_outline_rounded, size: 20),
-                  color: kCoral,
+                  icon: const Icon(Icons.delete_outline_rounded, color: kCoral),
                   onPressed: onRemove,
                 ),
               ],

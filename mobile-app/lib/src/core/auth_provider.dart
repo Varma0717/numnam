@@ -55,20 +55,45 @@ class AuthProvider extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
+      debugPrint('🔐 Attempting login for: $email');
+      debugPrint('📡 API Endpoint: ${ApiEndpoints.login}');
+
       final resp = await _api.dio.post(ApiEndpoints.login, data: {
         'email': email,
         'password': password,
       });
+
+      debugPrint('✅ Login response received');
+      debugPrint('Response status: ${resp.statusCode}');
+      debugPrint('Response data keys: ${resp.data?.keys}');
+
       final data = resp.data['data'] as Map<String, dynamic>;
       final token = data['access_token'] as String;
       await _storage.saveToken(token);
       _user = User.fromJson(data['user'] as Map<String, dynamic>);
       await _storage.saveUser(data['user'] as Map<String, dynamic>);
+
+      debugPrint('✅ Login successful for: ${_user?.name}');
+
       _isLoading = false;
       notifyListeners();
       return true;
     } on DioException catch (e) {
+      debugPrint('❌ Login DioException occurred');
+      debugPrint('Error type: ${e.type}');
+      debugPrint('Error message: ${e.message}');
+      debugPrint('Response status: ${e.response?.statusCode}');
+      debugPrint('Response data: ${e.response?.data}');
+
       _error = _extractError(e);
+      debugPrint('Extracted error message: $_error');
+
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      debugPrint('❌ Unexpected error during login: $e');
+      _error = 'An unexpected error occurred. Please try again.';
       _isLoading = false;
       notifyListeners();
       return false;
@@ -126,7 +151,8 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
     try {
       final formData = FormData.fromMap({
-        'avatar': await MultipartFile.fromFile(filePath, filename: 'avatar.jpg'),
+        'avatar':
+            await MultipartFile.fromFile(filePath, filename: 'avatar.jpg'),
       });
       final resp = await _api.dio.post(ApiEndpoints.avatar, data: formData);
       final data = resp.data['data'] as Map<String, dynamic>;
@@ -219,15 +245,56 @@ class AuthProvider extends ChangeNotifier {
   }
 
   String _extractError(DioException e) {
+    debugPrint('🔍 Extracting error details...');
+
+    // Network/connectivity errors
+    if (e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.sendTimeout ||
+        e.type == DioExceptionType.receiveTimeout) {
+      debugPrint('⏱️ Timeout error');
+      return 'Connection timeout. Please check your internet connection.';
+    }
+
+    if (e.type == DioExceptionType.connectionError) {
+      debugPrint('🌐 Connection error - cannot reach server');
+      return 'Unable to connect to server. Please check your internet connection.';
+    }
+
     final data = e.response?.data;
+    debugPrint('Response data type: ${data.runtimeType}');
+    debugPrint('Response data: $data');
+
     if (data is Map<String, dynamic>) {
-      if (data['message'] != null) return data['message'].toString();
+      // Check for 'message' field
+      if (data['message'] != null) {
+        debugPrint('Found message field: ${data['message']}');
+        return data['message'].toString();
+      }
+
+      // Check for 'errors' field (Laravel validation errors)
       if (data['errors'] is Map) {
         final errors = data['errors'] as Map;
-        final first = errors.values.first;
-        if (first is List && first.isNotEmpty) return first.first.toString();
+        debugPrint('Found errors field: $errors');
+        if (errors.isNotEmpty) {
+          final first = errors.values.first;
+          if (first is List && first.isNotEmpty) {
+            debugPrint('Returning first validation error: ${first.first}');
+            return first.first.toString();
+          }
+          debugPrint('Returning first error as string: $first');
+          return first.toString();
+        }
       }
     }
+
+    // If we have a response code, include it in the error
+    final statusCode = e.response?.statusCode;
+    if (statusCode != null) {
+      debugPrint('⚠️ HTTP $statusCode error with no parseable message');
+      return 'Server error ($statusCode). Please try again.';
+    }
+
+    debugPrint('⚠️ Could not extract specific error, using generic message');
     return 'Something went wrong. Please try again.';
   }
 }
