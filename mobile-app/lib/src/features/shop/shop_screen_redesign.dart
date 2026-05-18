@@ -8,6 +8,7 @@ import '../../core/wishlist_provider.dart';
 import '../cart/cart_provider.dart';
 import '../../models/product.dart';
 import '../../shared/theme/colors.dart';
+import '../../app.dart';
 import 'product_detail_screen_redesign.dart';
 
 class ShopScreenRedesign extends StatefulWidget {
@@ -83,7 +84,9 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
     } else {
       list = [];
     }
-    return list.map((e) => Product.fromJson(e as Map<String, dynamic>)).toList();
+    return list
+        .map((e) => Product.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   void _applyFilters() {
@@ -103,6 +106,7 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
 
   @override
   Widget build(BuildContext context) {
+    final cartCount = context.watch<CartProvider>().cart.itemCount;
     return Scaffold(
       backgroundColor: kCream,
       appBar: AppBar(
@@ -136,11 +140,13 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
                     fillColor: kCream,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: Color(0xFFFFD6E5), width: 1.5),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFFFD6E5), width: 1.5),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: Color(0xFFFFD6E5), width: 1.5),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFFFD6E5), width: 1.5),
                     ),
                   ),
                 ),
@@ -160,7 +166,8 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
                     ),
                     const Spacer(),
                     IconButton(
-                      icon: Icon(_gridView ? Icons.view_list : Icons.grid_view, color: kCoral),
+                      icon: Icon(_gridView ? Icons.view_list : Icons.grid_view,
+                          color: kCoral),
                       onPressed: () => setState(() => _gridView = !_gridView),
                     ),
                   ],
@@ -181,20 +188,24 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
                         child: _gridView
                             ? GridView.builder(
                                 padding: const EdgeInsets.all(16),
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
                                   childAspectRatio: 0.65,
                                   crossAxisSpacing: 14,
                                   mainAxisSpacing: 14,
                                 ),
                                 itemCount: _filteredProducts.length,
-                                itemBuilder: (context, index) => _buildGridCard(_filteredProducts[index]),
+                                itemBuilder: (context, index) =>
+                                    _buildGridCard(_filteredProducts[index]),
                               )
                             : ListView.separated(
                                 padding: const EdgeInsets.all(16),
                                 itemCount: _filteredProducts.length,
-                                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                                itemBuilder: (context, index) => _buildListCard(_filteredProducts[index]),
+                                separatorBuilder: (_, __) =>
+                                    const SizedBox(height: 12),
+                                itemBuilder: (context, index) =>
+                                    _buildListCard(_filteredProducts[index]),
                               ),
                       ),
           ),
@@ -208,15 +219,23 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.search_off_rounded, size: 80, color: kNavy.withOpacity(0.2)),
+          Icon(Icons.search_off_rounded,
+              size: 80, color: kNavy.withOpacity(0.2)),
           const SizedBox(height: 16),
-          Text('No products found', style: GoogleFonts.baloo2(fontSize: 22, fontWeight: FontWeight.w700, color: kNavy.withOpacity(0.4))),
+          Text('No products found',
+              style: GoogleFonts.baloo2(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: kNavy.withOpacity(0.4))),
         ],
       ),
     );
   }
 
-  Widget _buildFilterChip({required IconData icon, required String label, required VoidCallback onTap}) {
+  Widget _buildFilterChip(
+      {required IconData icon,
+      required String label,
+      required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -230,7 +249,9 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
           children: [
             Icon(icon, size: 16, color: kCoral),
             const SizedBox(width: 6),
-            Text(label, style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600, color: kNavy)),
+            Text(label,
+                style: GoogleFonts.poppins(
+                    fontSize: 12, fontWeight: FontWeight.w600, color: kNavy)),
           ],
         ),
       ),
@@ -240,14 +261,17 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
   void _showCategoryFilter() {
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (_) => Container(
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Shop by Age', style: GoogleFonts.baloo2(fontSize: 22, fontWeight: FontWeight.w800)),
+            Text('Shop by Age',
+                style: GoogleFonts.baloo2(
+                    fontSize: 22, fontWeight: FontWeight.w800)),
             const SizedBox(height: 16),
             Wrap(
               spacing: 10,
@@ -264,7 +288,8 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
                     }
                   },
                   selectedColor: kCoral,
-                  labelStyle: GoogleFonts.poppins(color: sel ? Colors.white : kNavy, fontSize: 13),
+                  labelStyle: GoogleFonts.poppins(
+                      color: sel ? Colors.white : kNavy, fontSize: 13),
                 );
               }).toList(),
             ),
@@ -283,24 +308,30 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
     };
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (_) => Container(
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Sort By', style: GoogleFonts.baloo2(fontSize: 22, fontWeight: FontWeight.w800)),
+            Text('Sort By',
+                style: GoogleFonts.baloo2(
+                    fontSize: 22, fontWeight: FontWeight.w800)),
             const SizedBox(height: 12),
             ...options.entries.map((e) => ListTile(
-              title: Text(e.value, style: GoogleFonts.poppins(fontSize: 15)),
-              trailing: _sortBy == e.key ? const Icon(Icons.check, color: kCoral) : null,
-              onTap: () {
-                setState(() => _sortBy = e.key);
-                Navigator.pop(context);
-                _load();
-              },
-            )),
+                  title:
+                      Text(e.value, style: GoogleFonts.poppins(fontSize: 15)),
+                  trailing: _sortBy == e.key
+                      ? const Icon(Icons.check, color: kCoral)
+                      : null,
+                  onTap: () {
+                    setState(() => _sortBy = e.key);
+                    Navigator.pop(context);
+                    _load();
+                  },
+                )),
           ],
         ),
       ),
@@ -309,10 +340,14 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
 
   String _getSortLabel() {
     switch (_sortBy) {
-      case 'newest': return 'Newest';
-      case 'price_asc': return 'Price ↑';
-      case 'price_desc': return 'Price ↓';
-      default: return 'Popular';
+      case 'newest':
+        return 'Newest';
+      case 'price_asc':
+        return 'Price ↑';
+      case 'price_desc':
+        return 'Price ↓';
+      default:
+        return 'Popular';
     }
   }
 
@@ -323,13 +358,19 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
 
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => ProductDetailScreenRedesign(productId: product.id)),
+        MaterialPageRoute(
+            builder: (_) => ProductDetailScreenRedesign(productId: product.id)),
       ),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [BoxShadow(color: kNavy.withOpacity(0.04), blurRadius: 10, offset: const Offset(0, 4))],
+          boxShadow: [
+            BoxShadow(
+                color: kNavy.withOpacity(0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 4))
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -338,7 +379,8 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
               child: Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(20)),
                     child: CachedNetworkImage(
                       imageUrl: product.imageUrl ?? '',
                       fit: BoxFit.cover,
@@ -354,7 +396,10 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
                       child: CircleAvatar(
                         radius: 16,
                         backgroundColor: Colors.white,
-                        child: Icon(isWished ? Icons.favorite : Icons.favorite_border, color: kCoral, size: 18),
+                        child: Icon(
+                            isWished ? Icons.favorite : Icons.favorite_border,
+                            color: kCoral,
+                            size: 18),
                       ),
                     ),
                   ),
@@ -366,21 +411,37 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(product.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w700, color: kNavy)),
+                  Text(product.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: kNavy)),
                   const SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('₹${product.effectivePrice.toStringAsFixed(0)}', style: GoogleFonts.baloo2(fontSize: 18, fontWeight: FontWeight.w800, color: kCoral)),
+                      Text('₹${product.effectivePrice.toStringAsFixed(0)}',
+                          style: GoogleFonts.baloo2(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                              color: kCoral)),
                       GestureDetector(
                         onTap: () {
                           cart.addItem(product.id, 1);
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Added to cart'), duration: Duration(seconds: 1)));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Added to cart'),
+                                  duration: Duration(seconds: 1)));
                         },
                         child: Container(
                           padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(color: kCoral.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
-                          child: const Icon(Icons.add_shopping_cart_rounded, color: kCoral, size: 18),
+                          decoration: BoxDecoration(
+                              color: kCoral.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8)),
+                          child: const Icon(Icons.add_shopping_cart_rounded,
+                              color: kCoral, size: 18),
                         ),
                       ),
                     ],
@@ -401,7 +462,8 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
 
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => ProductDetailScreenRedesign(productId: product.id)),
+        MaterialPageRoute(
+            builder: (_) => ProductDetailScreenRedesign(productId: product.id)),
       ),
       child: Container(
         height: 110,
@@ -413,7 +475,8 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.horizontal(left: Radius.circular(15)),
+              borderRadius:
+                  const BorderRadius.horizontal(left: Radius.circular(15)),
               child: SizedBox(
                 width: 110,
                 height: 110,
@@ -431,25 +494,47 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(product.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w700, color: kNavy)),
+                    Text(product.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: kNavy)),
                     const SizedBox(height: 4),
-                    Text(product.ageGroup ?? '', style: GoogleFonts.poppins(fontSize: 11, color: kNavy.withOpacity(0.5))),
+                    Text(product.ageGroup ?? '',
+                        style: GoogleFonts.poppins(
+                            fontSize: 11, color: kNavy.withOpacity(0.5))),
                     const Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('₹${product.effectivePrice.toStringAsFixed(0)}', style: GoogleFonts.baloo2(fontSize: 18, fontWeight: FontWeight.w800, color: kCoral)),
+                        Text('₹${product.effectivePrice.toStringAsFixed(0)}',
+                            style: GoogleFonts.baloo2(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                                color: kCoral)),
                         Row(
                           children: [
                             IconButton(
-                              icon: Icon(isWished ? Icons.favorite : Icons.favorite_border, color: kCoral, size: 20),
-                              onPressed: () => wishlist.toggleWishlist(product.id),
+                              icon: Icon(
+                                  isWished
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: kCoral,
+                                  size: 20),
+                              onPressed: () =>
+                                  wishlist.toggleWishlist(product.id),
                             ),
                             IconButton(
-                              icon: const Icon(Icons.add_shopping_cart_rounded, color: kMint, size: 20),
+                              icon: const Icon(Icons.add_shopping_cart_rounded,
+                                  color: kMint, size: 20),
                               onPressed: () {
                                 cart.addItem(product.id, 1);
-                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Added to cart'), duration: Duration(seconds: 1)));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Added to cart'),
+                                        duration: Duration(seconds: 1)));
                               },
                             ),
                           ],

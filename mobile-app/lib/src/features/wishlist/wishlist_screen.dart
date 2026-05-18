@@ -8,6 +8,7 @@ import '../../core/wishlist_provider.dart';
 import '../../shared/theme/colors.dart';
 import '../../shared/widgets/empty_state.dart';
 import '../../shared/widgets/loading_indicator.dart';
+import '../../app.dart';
 import '../auth/auth_gate.dart';
 import '../cart/cart_provider.dart';
 import '../shop/product_detail_screen_redesign.dart';
@@ -66,6 +67,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
   @override
   Widget build(BuildContext context) {
     final wishlistProvider = context.watch<WishlistProvider>();
+    final cartCount = context.watch<CartProvider>().cart.itemCount;
 
     // Filter _fullItems based on what's still in the global provider (optimistic sync)
     final items = _fullItems
@@ -98,8 +100,14 @@ class _WishlistScreenState extends State<WishlistScreen> {
                         final item = items[i];
                         return _WishTile(
                           item: item,
-                          onRemove: () =>
-                              wishlistProvider.toggleWishlist(item.productId),
+                          onRemove: () async {
+                            await wishlistProvider
+                                .toggleWishlist(item.productId);
+                            // Reload to ensure UI is in sync
+                            if (mounted) {
+                              await _loadFullDetails();
+                            }
+                          },
                           onAddToCart: () {
                             context
                                 .read<CartProvider>()
@@ -120,6 +128,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
                       },
                     ),
                   ),
+      ),
+      bottomNavigationBar: AppBottomNav(
+        currentIndex: -1,
+        cartCount: cartCount,
+        onTap: (index) => switchToShellTab(context, index),
       ),
     );
   }
@@ -162,7 +175,7 @@ class _WishTile extends StatelessWidget {
       required this.onAddToCart,
       this.onTap});
   final _WishItem item;
-  final VoidCallback onRemove;
+  final Future<void> Function() onRemove;
   final VoidCallback onAddToCart;
   final VoidCallback? onTap;
 

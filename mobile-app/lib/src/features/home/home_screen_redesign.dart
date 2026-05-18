@@ -621,13 +621,17 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                     child: ClipRRect(
                       borderRadius:
                           const BorderRadius.vertical(top: Radius.circular(24)),
-                      child: CachedNetworkImage(
-                        imageUrl: product.imageUrl ?? '',
-                        fit: BoxFit.cover,
+                      child: SizedBox(
                         width: double.infinity,
-                        errorWidget: (_, __, ___) => Container(
-                            color: kCream,
-                            child: const Icon(Icons.image, color: Colors.grey)),
+                        height: double.infinity,
+                        child: CachedNetworkImage(
+                          imageUrl: product.imageUrl ?? '',
+                          fit: BoxFit.cover,
+                          errorWidget: (_, __, ___) => Container(
+                              color: kCream,
+                              child:
+                                  const Icon(Icons.image, color: Colors.grey)),
+                        ),
                       ),
                     ),
                   ),

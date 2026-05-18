@@ -467,13 +467,6 @@ class _SubscriptionCheckoutScreenState
                 subtitle: 'Credit/Debit Card, UPI, Netbanking',
                 icon: Icons.payment,
               ),
-              const SizedBox(height: 8),
-              _buildPaymentOption(
-                value: 'cod',
-                title: 'Cash on Delivery',
-                subtitle: 'Pay when you receive your first order',
-                icon: Icons.money,
-              ),
 
               if (_error != null) ...[
                 const SizedBox(height: 16),
