@@ -470,20 +470,17 @@
 
                 fetch('{{ route('
                     admin.media.json ') }}?' + params.toString())
+                document.getElementById('mediaStats').textContent = '';
+                return;
+            }
 
-                if (!response.data || response.data.length === 0) {
-                    document.getElementById('mediaEmpty').style.display = 'block';
-                    document.getElementById('mediaStats').textContent = '';
-                    return;
-                }
+            document.getElementById('mediaEmpty').style.display = 'none';
+            document.getElementById('mediaStats').textContent =
+                `Showing ${response.meta.from}-${response.meta.to} of ${response.meta.total} files`;
 
-                document.getElementById('mediaEmpty').style.display = 'none';
-                document.getElementById('mediaStats').textContent =
-                    `Showing ${response.meta.from}-${response.meta.to} of ${response.meta.total} files`;
-
-                renderMediaGrid(response.data);
-                renderPagination(response.meta);
-            })
+            renderMediaGrid(response.data);
+            renderPagination(response.meta);
+        })
         .catch(err => {
             console.error('Load error:', err);
             document.getElementById('mediaLoader').style.display = 'none';
@@ -556,15 +553,17 @@
     // Load Folders
     function loadFolders() {
         fetch('{{ route('
-            admin.media.json.folders ') }}')
-        const select = document.getElementById('folderFilter');
-        response.data.forEach(folder => {
-            const option = document.createElement('option');
-            option.value = folder.name;
-            option.textContent = `${folder.name} (${folder.count})`;
-            select.appendChild(option);
-        });
-    });
+                admin.media.json.folders ') }}')
+            .then(res => res.json())
+            .then(response => {
+                const select = document.getElementById('folderFilter');
+                response.data.forEach(folder => {
+                    const option = document.createElement('option');
+                    option.value = folder.name;
+                    option.textContent = `${folder.name} (${folder.count})`;
+                    select.appendChild(option);
+                });
+            });
     }
 
     // Preview Modal
