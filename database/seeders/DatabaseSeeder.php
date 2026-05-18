@@ -50,8 +50,8 @@ class DatabaseSeeder extends Seeder
                 'is_featured' => true,
                 'badges'      => ['Bestseller'],
                 'nutrition_facts' => ['fiber' => 'High', 'sugar_added' => 'No', 'texture' => 'Smooth', 'net_weight' => '100g'],
-                'image' => $appUrl . '/assets/images/Purees/berry%20swush%201.png',
-                'gallery' => [$appUrl . '/assets/images/Purees/berry%20swush%202.png', $appUrl . '/assets/images/Purees/berry%20swush%203.png'],
+                'image' => 'cms-media/products/berry-swush-1.png',
+                'gallery' => [],  // Gallery images can be uploaded via admin panel
             ],
             [
                 'category_id' => $fruitie->id,
@@ -68,8 +68,8 @@ class DatabaseSeeder extends Seeder
                 'is_featured' => true,
                 'badges'      => ['Bestseller'],
                 'nutrition_facts' => ['fiber' => 'Moderate', 'sugar_added' => 'No', 'texture' => 'Smooth', 'net_weight' => '100g'],
-                'image' => $appUrl . '/assets/images/Purees/appi%20pooch%201.png',
-                'gallery' => [$appUrl . '/assets/images/Purees/appi%20pooch%202.png', $appUrl . '/assets/images/Purees/appi%20pooch%203.png'],
+                'image' => 'cms-media/products/appi-pooch-1.png',
+                'gallery' => [],  // Gallery images can be uploaded via admin panel
             ],
             [
                 'category_id' => $fruitie->id,
@@ -86,8 +86,8 @@ class DatabaseSeeder extends Seeder
                 'is_featured' => true,
                 'badges'      => ['New'],
                 'nutrition_facts' => ['fiber' => 'High', 'sugar_added' => 'No', 'texture' => 'Smooth'],
-                'image' => $appUrl . '/assets/images/Purees/brocco%20pop%201.png',
-                'gallery' => [$appUrl . '/assets/images/Purees/brocco%20pop%202.png', $appUrl . '/assets/images/Purees/brocco%20pop%203.png'],
+                'image' => 'cms-media/products/brocco-pop-1.png',
+                'gallery' => [],  // Gallery images can be uploaded via admin panel
             ],
             [
                 'category_id' => $fruitie->id,
@@ -104,8 +104,8 @@ class DatabaseSeeder extends Seeder
                 'is_featured' => true,
                 'badges'      => [],
                 'nutrition_facts' => ['fiber' => 'Moderate', 'sugar_added' => 'No', 'texture' => 'Smooth'],
-                'image' => $appUrl . '/assets/images/Purees/mangy%20chewy%201.png',
-                'gallery' => [$appUrl . '/assets/images/Purees/mangy%20chewy%202.png', $appUrl . '/assets/images/Purees/mangy%20chewy%203.png'],
+                'image' => 'cms-media/products/VGkgT8IEDdDdpkUcOHcYQLk3a9hR6F7LCCdHndG1.png',
+                'gallery' => [],  // Gallery images can be uploaded via admin panel
             ],
             [
                 'category_id' => $puffs8->id,
@@ -122,8 +122,8 @@ class DatabaseSeeder extends Seeder
                 'is_featured' => true,
                 'badges' => ['New'],
                 'nutrition_facts' => ['protein' => '13g per 100g', 'calories' => '70-80 per 20g', 'sugar_added' => 'No', 'baked' => 'Yes', 'net_weight' => '20g'],
-                'image' => $appUrl . '/assets/images/Puffs/Cheezy%20Bubbles/front.jpg',
-                'gallery' => [$appUrl . '/assets/images/Puffs/Cheezy%20Bubbles/1.jpg', $appUrl . '/assets/images/Puffs/Cheezy%20Bubbles/2.jpg', $appUrl . '/assets/images/Puffs/Cheezy%20Bubbles/3.jpg'],
+                'image' => 'cms-media/products/cheezy-bubbles-front.jpg',
+                'gallery' => [],  // Gallery images can be uploaded via admin panel
             ],
             [
                 'category_id' => $puffs8->id,
@@ -140,8 +140,8 @@ class DatabaseSeeder extends Seeder
                 'is_featured' => true,
                 'badges' => [],
                 'nutrition_facts' => ['protein' => '13g per 100g', 'calories' => '70-80 per 20g', 'sugar_added' => 'No', 'baked' => 'Yes', 'net_weight' => '20g'],
-                'image' => $appUrl . '/assets/images/Puffs/Tomaty%20Pumpos/front.jpg',
-                'gallery' => [$appUrl . '/assets/images/Puffs/Tomaty%20Pumpos/3.png', $appUrl . '/assets/images/Puffs/Tomaty%20Pumpos/4.png', $appUrl . '/assets/images/Puffs/Tomaty%20Pumpos/6.jpg'],
+                'image' => 'cms-media/products/tomaty-pumpos-front.jpg',
+                'gallery' => [],  // Gallery images can be uploaded via admin panel
             ],
             [
                 'category_id' => $puffs8->id,
@@ -158,8 +158,8 @@ class DatabaseSeeder extends Seeder
                 'is_featured' => true,
                 'badges' => [],
                 'nutrition_facts' => ['protein' => '13g per 100g', 'calories' => '70-80 per 20g', 'sugar_added' => 'No', 'baked' => 'Yes', 'net_weight' => '20g'],
-                'image' => $appUrl . '/assets/images/Puffs/Manchurian%20Munchos/front.jpg',
-                'gallery' => [$appUrl . '/assets/images/Puffs/Manchurian%20Munchos/1.jpg', $appUrl . '/assets/images/Puffs/Manchurian%20Munchos/2.jpg', $appUrl . '/assets/images/Puffs/Manchurian%20Munchos/3.jpg'],
+                'image' => 'cms-media/products/manchurian-munchos-front.jpg',
+                'gallery' => [],  // Gallery images can be uploaded via admin panel
             ],
             [
                 'category_id' => $puffs8->id,
@@ -176,8 +176,8 @@ class DatabaseSeeder extends Seeder
                 'is_featured' => true,
                 'badges' => [],
                 'nutrition_facts' => ['protein' => '13g per 100g', 'calories' => '70-80 per 20g', 'sugar_added' => 'No', 'baked' => 'Yes', 'net_weight' => '20g'],
-                'image' => $appUrl . '/assets/images/Puffs/Tikka%20Puffies/front.jpg',
-                'gallery' => [$appUrl . '/assets/images/Puffs/Tikka%20Puffies/1.png', $appUrl . '/assets/images/Puffs/Tikka%20Puffies/2.png', $appUrl . '/assets/images/Puffs/Tikka%20Puffies/3.png'],
+                'image' => 'cms-media/products/SWnvmSKM8pyv4e8gNvkcxoDDDOoqlriCJk2d8Zol.png',
+                'gallery' => [],  // Gallery images can be uploaded via admin panel
             ],
         ];
 
