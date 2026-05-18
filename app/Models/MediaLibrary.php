@@ -26,12 +26,12 @@ class MediaLibrary extends Model
         'caption',
         'uploaded_by',
         'metadata',
-        'is_public',
+        // 'is_public', // Column may not exist in production - added via migration
     ];
 
     protected $casts = [
         'metadata' => 'array',
-        'is_public' => 'boolean',
+        // 'is_public' => 'boolean', // Column may not exist in production
     ];
 
     public function uploader(): BelongsTo

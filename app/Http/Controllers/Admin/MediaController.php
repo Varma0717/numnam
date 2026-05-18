@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 
 class MediaController extends Controller
 {
@@ -153,7 +152,8 @@ class MediaController extends Controller
             }
         }
 
-        $media = MediaLibrary::create([
+        // Prepare data for creation
+        $mediaData = [
             'disk' => 'public',
             'folder' => $folder,
             'collection' => $collection,
@@ -165,12 +165,18 @@ class MediaController extends Controller
             'alt_text' => $request->input('alt_text'),
             'caption' => $request->input('caption'),
             'uploaded_by' => Auth::id(),
-            'is_public' => true,
             'metadata' => [
                 'extension' => $file->getClientOriginalExtension(),
                 'dimensions' => $dimensions,
             ],
-        ]);
+        ];
+
+        // Only add is_public if the column exists
+        if (Schema::hasColumn('media_library', 'is_public')) {
+            $mediaData['is_public'] = true;
+        }
+
+        $media = MediaLibrary::create($mediaData);
 
         $fileUrl = url('storage/' . str_replace('public/', '', $media->file_path));
 
