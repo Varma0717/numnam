@@ -50,11 +50,22 @@ class CartProvider extends ChangeNotifier {
   }
 
   Future<void> updateQty(int productId, int qty) async {
-    final resp = await _api.dio.patch('${ApiEndpoints.cart}/$productId', data: {
-      'qty': qty,
-    });
-    _cart = CartResponse.fromJson(resp.data['data'] as Map<String, dynamic>);
-    notifyListeners();
+    try {
+      debugPrint(
+          '🛒 Updating cart quantity: Product ID=$productId, New Qty=$qty');
+      final resp =
+          await _api.dio.patch('${ApiEndpoints.cart}/$productId', data: {
+        'qty': qty,
+      });
+      debugPrint('✅ Update quantity response: ${resp.data}');
+      _cart = CartResponse.fromJson(resp.data['data'] as Map<String, dynamic>);
+      debugPrint('✅ Cart updated successfully');
+      notifyListeners();
+    } catch (e) {
+      debugPrint('❌ Update quantity error: $e');
+      // Re-throw to allow UI to handle the error
+      rethrow;
+    }
   }
 
   Future<void> removeItem(int productId) async {

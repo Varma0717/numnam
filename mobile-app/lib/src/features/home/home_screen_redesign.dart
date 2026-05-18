@@ -450,30 +450,55 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(24),
-        image: DecorationImage(
-            image: CachedNetworkImageProvider(imageUrl),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.3), BlendMode.darken)),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(title,
-                style: GoogleFonts.baloo2(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white)),
-            Text(subtitle,
-                style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    color: Colors.white.withOpacity(0.9),
-                    fontWeight: FontWeight.w500)),
-          ],
-        ),
+      child: Stack(
+        children: [
+          // Background Image with error handling
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.cover,
+                color: Colors.black.withOpacity(0.3),
+                colorBlendMode: BlendMode.darken,
+                placeholder: (context, url) => Container(
+                  color: color,
+                ),
+                errorWidget: (context, url, error) => Container(
+                  color: color,
+                  child: const Center(
+                    child: Icon(
+                      Icons.image_outlined,
+                      color: Colors.white38,
+                      size: 40,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // Text Content
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(title,
+                    style: GoogleFonts.baloo2(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white)),
+                Text(subtitle,
+                    style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: Colors.white.withOpacity(0.9),
+                        fontWeight: FontWeight.w500)),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -206,11 +206,23 @@ class CartScreenRedesign extends StatelessWidget {
                     children: [
                       _buildQuantityButton(
                         Icons.remove,
-                        () {
-                          if (quantity > 1) {
-                            cartProvider.updateQty(item.productId, quantity - 1);
-                          } else {
-                            cartProvider.removeItem(item.productId);
+                        () async {
+                          try {
+                            if (quantity > 1) {
+                              await cartProvider.updateQty(
+                                  item.productId, quantity - 1);
+                            } else {
+                              await cartProvider.removeItem(item.productId);
+                            }
+                          } catch (e) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Failed to update quantity'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
                           }
                         },
                       ),
@@ -228,13 +240,26 @@ class CartScreenRedesign extends StatelessWidget {
                       ),
                       _buildQuantityButton(
                         Icons.add,
-                        () {
-                          cartProvider.updateQty(item.productId, quantity + 1);
+                        () async {
+                          try {
+                            await cartProvider.updateQty(
+                                item.productId, quantity + 1);
+                          } catch (e) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Failed to update quantity'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          }
                         },
                       ),
                       const Spacer(),
                       IconButton(
-                        onPressed: () => cartProvider.removeItem(item.productId),
+                        onPressed: () =>
+                            cartProvider.removeItem(item.productId),
                         icon: const Icon(Icons.delete_outline),
                         color: Colors.red,
                       ),
@@ -249,7 +274,7 @@ class CartScreenRedesign extends StatelessWidget {
     );
   }
 
-  Widget _buildQuantityButton(IconData icon, VoidCallback onTap) {
+  Widget _buildQuantityButton(IconData icon, Future<void> Function() onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -265,7 +290,8 @@ class CartScreenRedesign extends StatelessWidget {
     );
   }
 
-  Widget _buildCheckoutSection(BuildContext context, CartProvider cartProvider) {
+  Widget _buildCheckoutSection(
+      BuildContext context, CartProvider cartProvider) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
