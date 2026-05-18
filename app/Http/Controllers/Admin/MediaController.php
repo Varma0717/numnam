@@ -18,7 +18,12 @@ class MediaController extends Controller
             return response()->json(['data' => [], 'meta' => ['total' => 0]]);
         }
 
-        $query = MediaLibrary::query()->with('uploader:id,name');
+        $query = MediaLibrary::query();
+
+        // Only load uploader relationship if column exists
+        if (Schema::hasColumn('media_library', 'uploaded_by')) {
+            $query->with('uploader:id,name');
+        }
 
         // Search functionality
         if ($request->filled('search')) {

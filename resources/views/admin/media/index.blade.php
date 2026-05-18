@@ -357,156 +357,153 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let currentPage = 1;
-        let selectedFiles = new Set();
-        let bulkMode = false;
+            let currentPage = 1;
+            let selectedFiles = new Set();
+            let bulkMode = false;
 
-        // Load media on page load
-        loadMedia();
-        loadFolders();
+            // Load media on page load
+            loadMedia();
+            loadFolders();
 
-        // Drag and Drop
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
+            // Drag and Drop
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
 
-        dropZone.addEventListener('click', () => fileInput.click());
+            dropZone.addEventListener('click', () => fileInput.click());
 
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('drag-over');
-        });
-
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('drag-over');
-        });
-
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('drag-over');
-            const files = e.dataTransfer.files;
-            if (files.length) handleFileUpload(files);
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length) handleFileUpload(e.target.files);
-        });
-
-        // File Upload Handler
-        function handleFileUpload(files) {
-            const formData = new FormData();
-            const folder = document.getElementById('uploadFolder').value || 'general';
-            const collection = document.getElementById('uploadCollection').value || 'uploads';
-            const title = document.getElementById('uploadTitle').value;
-
-            let uploaded = 0;
-            const total = files.length;
-
-            document.getElementById('uploadProgress').style.display = 'block';
-            document.getElementById('uploadStatus').textContent = `Uploading 0/${total} files...`;
-
-            Array.from(files).forEach((file, index) => {
-                const fileFormData = new FormData();
-                fileFormData.append('file', file);
-                fileFormData.append('folder', folder);
-                fileFormData.append('collection', collection);
-                if (title) fileFormData.append('title', title);
-
-                fetch('{{ route('
-                        admin.media.json.upload ') }}', {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: fileFormData
-                        })
-                    .then(res => res.json())
-                    .then(data => {
-                        uploaded++;
-                        const percent = (uploaded / total) * 100;
-                        document.getElementById('progressBar').style.width = percent + '%';
-                        document.getElementById('uploadStatus').textContent = `Uploaded ${uploaded}/${total} files`;
-
-                        if (uploaded === total) {
-                            setTimeout(() => {
-                                document.getElementById('uploadProgress').style.display = 'none';
-                                document.getElementById('progressBar').style.width = '0';
-                                loadMedia();
-                            }, 1000);
-                        }
-                    })
-                    .catch(err => {
-                        console.error('Upload error:', err);
-                        alert('Upload failed for: ' + file.name);
-                    });
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('drag-over');
             });
-        }
 
-        // Load Media
-        function loadMedia(page = 1) {
-            const params = new URLSearchParams();
-            params.append('page', page);
-            params.append('per_page', 60);
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('drag-over');
+            });
 
-            const search = document.getElementById('searchInput').value;
-            const folder = document.getElementById('folderFilter').value;
-            const type = document.getElementById('typeFilter').value;
-            const sortBy = document.getElementById('sortBy').value;
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('drag-over');
+                const files = e.dataTransfer.files;
+                if (files.length) handleFileUpload(files);
+            });
 
-            if (search) params.append('search', search);
-            if (folder) params.append('folder', folder);
-            if (type) params.append('type', type);
-            if (sortBy) {
-                if (sortBy === 'created_at_asc') {
-                    params.append('sort_by', 'created_at');
-                    params.append('sort_order', 'asc');
-                } else {
-                    params.append('sort_by', sortBy);
-                    params.append('sort_order', 'desc');
-                }
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) handleFileUpload(e.target.files);
+            });
+
+            // File Upload Handler
+            function handleFileUpload(files) {
+                const formData = new FormData();
+                const folder = document.getElementById('uploadFolder').value || 'general';
+                const collection = document.getElementById('uploadCollection').value || 'uploads';
+                const title = document.getElementById('uploadTitle').value;
+
+                let uploaded = 0;
+                const total = files.length;
+
+                document.getElementById('uploadProgress').style.display = 'block';
+                document.getElementById('uploadStatus').textContent = `Uploading 0/${total} files...`;
+
+                Array.from(files).forEach((file, index) => {
+                    const fileFormData = new FormData();
+                    fileFormData.append('file', file);
+                    fileFormData.append('folder', folder);
+                    fileFormData.append('collection', collection);
+                    if (title) fileFormData.append('title', title);
+
+                    fetch('{{ route('
+                            admin.media.json.upload ') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: fileFormData
+                            })
+                        .then(res => res.json())
+                        .then(data => {
+                            uploaded++;
+                            const percent = (uploaded / total) * 100;
+                            document.getElementById('progressBar').style.width = percent + '%';
+                            document.getElementById('uploadStatus').textContent = `Uploaded ${uploaded}/${total} files`;
+
+                            if (uploaded === total) {
+                                setTimeout(() => {
+                                    document.getElementById('uploadProgress').style.display = 'none';
+                                    document.getElementById('progressBar').style.width = '0';
+                                    loadMedia();
+                                }, 1000);
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Upload error:', err);
+                            alert('Upload failed for: ' + file.name);
+                        });
+                });
             }
 
-            document.getElementById('mediaLoader').style.display = 'block';
-            document.getElementById('mediaGrid').innerHTML = '';
+            // Load Media
+            function loadMedia(page = 1) {
+                const params = new URLSearchParams();
+                params.append('page', page);
+                params.append('per_page', 60);
 
-            fetch('{{ route('
-                    admin.media.json ') }}?' + params.toString())
-                .then(res => res.json())
-                .then(response => {
-                    document.getElementById('mediaLoader').style.display = 'none';
+                const search = document.getElementById('searchInput').value;
+                const folder = document.getElementById('folderFilter').value;
+                const type = document.getElementById('typeFilter').value;
+                const sortBy = document.getElementById('sortBy').value;
 
-                    if (!response.data || response.data.length === 0) {
-                        document.getElementById('mediaEmpty').style.display = 'block';
-                        document.getElementById('mediaStats').textContent = '';
-                        return;
+                if (search) params.append('search', search);
+                if (folder) params.append('folder', folder);
+                if (type) params.append('type', type);
+                if (sortBy) {
+                    if (sortBy === 'created_at_asc') {
+                        params.append('sort_by', 'created_at');
+                        params.append('sort_order', 'asc');
+                    } else {
+                        params.append('sort_by', sortBy);
+                        params.append('sort_order', 'desc');
                     }
+                }
 
-                    document.getElementById('mediaEmpty').style.display = 'none';
-                    document.getElementById('mediaStats').textContent =
-                        `Showing ${response.meta.from}-${response.meta.to} of ${response.meta.total} files`;
+                document.getElementById('mediaLoader').style.display = 'block';
+                document.getElementById('mediaGrid').innerHTML = '';
 
-                    renderMediaGrid(response.data);
-                    renderPagination(response.meta);
-                })
-                .catch(err => {
-                    console.error('Load error:', err);
-                    document.getElementById('mediaLoader').style.display = 'none';
-                });
-        }
+                fetch('{{ route('
+                    admin.media.json ') }}?' + params.toString())
 
-        // Render Media Grid
-        function renderMediaGrid(items) {
-            const grid = document.getElementById('mediaGrid');
-            grid.innerHTML = '';
+                if (!response.data || response.data.length === 0) {
+                    document.getElementById('mediaEmpty').style.display = 'block';
+                    document.getElementById('mediaStats').textContent = '';
+                    return;
+                }
 
-            items.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'media-item';
-                div.dataset.id = item.id;
+                document.getElementById('mediaEmpty').style.display = 'none';
+                document.getElementById('mediaStats').textContent =
+                    `Showing ${response.meta.from}-${response.meta.to} of ${response.meta.total} files`;
 
-                const isImage = item.mime_type.startsWith('image/');
-                const preview = isImage ? item.url : '/assets/images/file-icon.png';
+                renderMediaGrid(response.data);
+                renderPagination(response.meta);
+            })
+        .catch(err => {
+            console.error('Load error:', err);
+            document.getElementById('mediaLoader').style.display = 'none';
+        });
+    }
 
-                div.innerHTML = `
+    // Render Media Grid
+    function renderMediaGrid(items) {
+        const grid = document.getElementById('mediaGrid');
+        grid.innerHTML = '';
+
+        items.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'media-item';
+            div.dataset.id = item.id;
+
+            const isImage = item.mime_type.startsWith('image/');
+            const preview = isImage ? item.url : '/assets/images/file-icon.png';
+
+            div.innerHTML = `
                 ${bulkMode ? `<input type="checkbox" class="media-item-checkbox" data-id="${item.id}">` : ''}
                 <img src="${preview}" alt="${item.title || item.file_name}" class="media-item-preview">
                 <div class="media-item-info">
@@ -515,204 +512,202 @@
                 </div>
             `;
 
-                div.addEventListener('click', (e) => {
-                    if (!e.target.classList.contains('media-item-checkbox')) {
-                        showPreviewModal(item);
-                    }
-                });
-
-                grid.appendChild(div);
+            div.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('media-item-checkbox')) {
+                    showPreviewModal(item);
+                }
             });
 
-            // Bulk selection
-            document.querySelectorAll('.media-item-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', (e) => {
-                    e.stopPropagation();
-                    const id = parseInt(checkbox.dataset.id);
-                    if (checkbox.checked) {
-                        selectedFiles.add(id);
-                        checkbox.closest('.media-item').classList.add('selected');
-                    } else {
-                        selectedFiles.delete(id);
-                        checkbox.closest('.media-item').classList.remove('selected');
-                    }
-                });
+            grid.appendChild(div);
+        });
+
+        // Bulk selection
+        document.querySelectorAll('.media-item-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                e.stopPropagation();
+                const id = parseInt(checkbox.dataset.id);
+                if (checkbox.checked) {
+                    selectedFiles.add(id);
+                    checkbox.closest('.media-item').classList.add('selected');
+                } else {
+                    selectedFiles.delete(id);
+                    checkbox.closest('.media-item').classList.remove('selected');
+                }
             });
-        }
-
-        // Render Pagination
-        function renderPagination(meta) {
-            const pagination = document.getElementById('pagination');
-            pagination.innerHTML = '';
-
-            if (meta.last_page <= 1) return;
-
-            for (let i = 1; i <= meta.last_page; i++) {
-                const btn = document.createElement('button');
-                btn.textContent = i;
-                btn.className = i === meta.current_page ? 'admin-btn' : 'admin-btn-secondary';
-                btn.addEventListener('click', () => loadMedia(i));
-                pagination.appendChild(btn);
-            }
-        }
-
-        // Load Folders
-        function loadFolders() {
-            fetch('{{ route('
-                    admin.media.json.folders ') }}')
-                .then(res => res.json())
-                .then(response => {
-                    const select = document.getElementById('folderFilter');
-                    response.data.forEach(folder => {
-                        const option = document.createElement('option');
-                        option.value = folder.name;
-                        option.textContent = `${folder.name} (${folder.count})`;
-                        select.appendChild(option);
-                    });
-                });
-        }
-
-        // Preview Modal
-        function showPreviewModal(item) {
-            document.getElementById('previewModal').style.display = 'block';
-            document.getElementById('previewImage').src = item.url;
-            document.getElementById('detailMediaId').value = item.id;
-            document.getElementById('detailFileName').textContent = item.file_name;
-            document.getElementById('detailTitle').value = item.title || '';
-            document.getElementById('detailAlt').value = item.alt_text || '';
-            document.getElementById('detailCaption').value = item.caption || '';
-            document.getElementById('detailFolder').value = item.folder || '';
-            document.getElementById('detailUrl').textContent = item.url;
-            document.getElementById('detailSize').textContent = item.size_formatted;
-            document.getElementById('detailDimensions').textContent = item.dimensions ?
-                `${item.dimensions.width}x${item.dimensions.height}` : 'N/A';
-            document.getElementById('detailDate').textContent = item.created_at;
-            document.getElementById('detailUploader').textContent = item.uploaded_by;
-        }
-
-        document.getElementById('closeModal').addEventListener('click', () => {
-            document.getElementById('previewModal').style.display = 'none';
         });
+    }
 
-        document.querySelector('.media-modal-overlay').addEventListener('click', () => {
-            document.getElementById('previewModal').style.display = 'none';
+    // Render Pagination
+    function renderPagination(meta) {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+
+        if (meta.last_page <= 1) return;
+
+        for (let i = 1; i <= meta.last_page; i++) {
+            const btn = document.createElement('button');
+            btn.textContent = i;
+            btn.className = i === meta.current_page ? 'admin-btn' : 'admin-btn-secondary';
+            btn.addEventListener('click', () => loadMedia(i));
+            pagination.appendChild(btn);
+        }
+    }
+
+    // Load Folders
+    function loadFolders() {
+        fetch('{{ route('
+            admin.media.json.folders ') }}')
+        const select = document.getElementById('folderFilter');
+        response.data.forEach(folder => {
+            const option = document.createElement('option');
+            option.value = folder.name;
+            option.textContent = `${folder.name} (${folder.count})`;
+            select.appendChild(option);
         });
+    });
+    }
 
-        // Save Details
-        document.getElementById('detailsForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const id = document.getElementById('detailMediaId').value;
-            const formData = new FormData(e.target);
+    // Preview Modal
+    function showPreviewModal(item) {
+        document.getElementById('previewModal').style.display = 'block';
+        document.getElementById('previewImage').src = item.url;
+        document.getElementById('detailMediaId').value = item.id;
+        document.getElementById('detailFileName').textContent = item.file_name;
+        document.getElementById('detailTitle').value = item.title || '';
+        document.getElementById('detailAlt').value = item.alt_text || '';
+        document.getElementById('detailCaption').value = item.caption || '';
+        document.getElementById('detailFolder').value = item.folder || '';
+        document.getElementById('detailUrl').textContent = item.url;
+        document.getElementById('detailSize').textContent = item.size_formatted;
+        document.getElementById('detailDimensions').textContent = item.dimensions ?
+            `${item.dimensions.width}x${item.dimensions.height}` : 'N/A';
+        document.getElementById('detailDate').textContent = item.created_at;
+        document.getElementById('detailUploader').textContent = item.uploaded_by;
+    }
 
-            fetch(`/admin/media/json/${id}`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        _method: 'PUT',
-                        title: document.getElementById('detailTitle').value,
-                        alt_text: document.getElementById('detailAlt').value,
-                        caption: document.getElementById('detailCaption').value,
-                        folder: document.getElementById('detailFolder').value,
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
+    document.getElementById('closeModal').addEventListener('click', () => {
+        document.getElementById('previewModal').style.display = 'none';
+    });
+
+    document.querySelector('.media-modal-overlay').addEventListener('click', () => {
+        document.getElementById('previewModal').style.display = 'none';
+    });
+
+    // Save Details
+    document.getElementById('detailsForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('detailMediaId').value;
+        const formData = new FormData(e.target);
+
+        fetch(`/admin/media/json/${id}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    _method: 'PUT',
+                    title: document.getElementById('detailTitle').value,
+                    alt_text: document.getElementById('detailAlt').value,
+                    caption: document.getElementById('detailCaption').value,
+                    folder: document.getElementById('detailFolder').value,
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert('Media updated successfully!');
+                loadMedia();
+            });
+    });
+
+    // Delete Media
+    document.getElementById('deleteMediaBtn').addEventListener('click', () => {
+        if (!confirm('Are you sure you want to delete this file?')) return;
+
+        const id = document.getElementById('detailMediaId').value;
+        fetch(`/admin/media/json/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('previewModal').style.display = 'none';
+                loadMedia();
+            });
+    });
+
+    // Copy URL
+    document.getElementById('copyUrlBtn').addEventListener('click', () => {
+        const url = document.getElementById('detailUrl').textContent;
+        navigator.clipboard.writeText(url).then(() => {
+            alert('URL copied to clipboard!');
+        });
+    });
+
+    // Filters
+    document.getElementById('applyFiltersBtn').addEventListener('click', () => loadMedia());
+    document.getElementById('resetFiltersBtn').addEventListener('click', () => {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('folderFilter').value = '';
+        document.getElementById('typeFilter').value = '';
+        document.getElementById('sortBy').value = 'created_at';
+        loadMedia();
+    });
+
+    // Bulk Mode
+    document.getElementById('bulkModeBtn').addEventListener('click', () => {
+        bulkMode = !bulkMode;
+        document.getElementById('bulkActions').style.display = bulkMode ? 'flex' : 'none';
+        selectedFiles.clear();
+        loadMedia();
+    });
+
+    document.getElementById('selectAllBtn').addEventListener('click', () => {
+        document.querySelectorAll('.media-item-checkbox').forEach(cb => {
+            cb.checked = true;
+            selectedFiles.add(parseInt(cb.dataset.id));
+            cb.closest('.media-item').classList.add('selected');
+        });
+    });
+
+    document.getElementById('deselectAllBtn').addEventListener('click', () => {
+        document.querySelectorAll('.media-item-checkbox').forEach(cb => {
+            cb.checked = false;
+            cb.closest('.media-item').classList.remove('selected');
+        });
+        selectedFiles.clear();
+    });
+
+    document.getElementById('bulkDeleteBtn').addEventListener('click', () => {
+    if (selectedFiles.size === 0) {
+        alert('Please select files to delete');
+        return;
+    }
+
+    if (!confirm(`Delete ${selectedFiles.size} selected files?`)) return;
+
+    fetch('{{ route('
+            admin.media.json.bulk - delete ') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    ids: Array.from(selectedFiles)
                 })
-                .then(res => res.json())
-                .then(data => {
-                    alert('Media updated successfully!');
-                    loadMedia();
-                });
-        });
-
-        // Delete Media
-        document.getElementById('deleteMediaBtn').addEventListener('click', () => {
-            if (!confirm('Are you sure you want to delete this file?')) return;
-
-            const id = document.getElementById('detailMediaId').value;
-            fetch(`/admin/media/json/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
-                .then(res => res.json())
-                .then(data => {
-                    document.getElementById('previewModal').style.display = 'none';
-                    loadMedia();
-                });
-        });
-
-        // Copy URL
-        document.getElementById('copyUrlBtn').addEventListener('click', () => {
-            const url = document.getElementById('detailUrl').textContent;
-            navigator.clipboard.writeText(url).then(() => {
-                alert('URL copied to clipboard!');
-            });
-        });
-
-        // Filters
-        document.getElementById('applyFiltersBtn').addEventListener('click', () => loadMedia());
-        document.getElementById('resetFiltersBtn').addEventListener('click', () => {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('folderFilter').value = '';
-            document.getElementById('typeFilter').value = '';
-            document.getElementById('sortBy').value = 'created_at';
-            loadMedia();
-        });
-
-        // Bulk Mode
-        document.getElementById('bulkModeBtn').addEventListener('click', () => {
-            bulkMode = !bulkMode;
-            document.getElementById('bulkActions').style.display = bulkMode ? 'flex' : 'none';
+            })
+        .then(res => res.json())
+        .then(data => {
             selectedFiles.clear();
             loadMedia();
         });
-
-        document.getElementById('selectAllBtn').addEventListener('click', () => {
-            document.querySelectorAll('.media-item-checkbox').forEach(cb => {
-                cb.checked = true;
-                selectedFiles.add(parseInt(cb.dataset.id));
-                cb.closest('.media-item').classList.add('selected');
-            });
-        });
-
-        document.getElementById('deselectAllBtn').addEventListener('click', () => {
-            document.querySelectorAll('.media-item-checkbox').forEach(cb => {
-                cb.checked = false;
-                cb.closest('.media-item').classList.remove('selected');
-            });
-            selectedFiles.clear();
-        });
-
-        document.getElementById('bulkDeleteBtn').addEventListener('click', () => {
-            if (selectedFiles.size === 0) {
-                alert('Please select files to delete');
-                return;
-            }
-
-            if (!confirm(`Delete ${selectedFiles.size} selected files?`)) return;
-
-            fetch('{{ route('
-                    admin.media.json.bulk - delete ') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            ids: Array.from(selectedFiles)
-                        })
-                    })
-                .then(res => res.json())
-                .then(data => {
-                    selectedFiles.clear();
-                    loadMedia();
-                });
-        });
+    });
     });
 </script>
 @endsection
