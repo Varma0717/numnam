@@ -66,7 +66,7 @@ $safetyItems = [
 
 @section('title', 'NumNam - ' . $product->name)
 @section('meta_description', Str::limit($product->short_description ?: $product->description, 160))
-@section('og_image', $mainPlaceholder)
+@section('og_image', $mainImage)
 
 @section('structured_data')
 <script type="application/ld+json">
@@ -75,7 +75,7 @@ $safetyItems = [
         "@type": "Product",
         "name": "{{ $product->name }}",
         "description": "{{ Str::limit($product->description, 300) }}",
-        "image": "{{ $mainPlaceholder }}",
+        "image": "{{ $mainImage }}",
         "brand": {
             "@type": "Brand",
             "name": "NumNam"
