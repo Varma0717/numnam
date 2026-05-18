@@ -492,18 +492,21 @@
                     document.getElementById('mediaLoader').style.display = 'none';
                 });
         }
-        const grid = document.getElementById('mediaGrid');
-        grid.innerHTML = '';
 
-        items.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'media-item';
-            div.dataset.id = item.id;
+        // Render Media Grid
+        function renderMediaGrid(items) {
+            const grid = document.getElementById('mediaGrid');
+            grid.innerHTML = '';
 
-            const isImage = item.mime_type.startsWith('image/');
-            const preview = isImage ? item.url : '/assets/images/file-icon.png';
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'media-item';
+                div.dataset.id = item.id;
 
-            div.innerHTML = `
+                const isImage = item.mime_type.startsWith('image/');
+                const preview = isImage ? item.url : '/assets/images/file-icon.png';
+
+                div.innerHTML = `
                 ${bulkMode ? `<input type="checkbox" class="media-item-checkbox" data-id="${item.id}">` : ''}
                 <img src="${preview}" alt="${item.title || item.file_name}" class="media-item-preview">
                 <div class="media-item-info">
@@ -512,203 +515,204 @@
                 </div>
             `;
 
-            div.addEventListener('click', (e) => {
-                if (!e.target.classList.contains('media-item-checkbox')) {
-                    showPreviewModal(item);
-                }
+                div.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('media-item-checkbox')) {
+                        showPreviewModal(item);
+                    }
+                });
+
+                grid.appendChild(div);
             });
 
-            grid.appendChild(div);
-        });
-
-        // Bulk selection
-        document.querySelectorAll('.media-item-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', (e) => {
-                e.stopPropagation();
-                const id = parseInt(checkbox.dataset.id);
-                if (checkbox.checked) {
-                    selectedFiles.add(id);
-                    checkbox.closest('.media-item').classList.add('selected');
-                } else {
-                    selectedFiles.delete(id);
-                    checkbox.closest('.media-item').classList.remove('selected');
-                }
-            });
-        });
-    }
-
-    // Render Pagination
-    function renderPagination(meta) {
-        const pagination = document.getElementById('pagination');
-        pagination.innerHTML = '';
-
-        if (meta.last_page <= 1) return;
-
-        for (let i = 1; i <= meta.last_page; i++) {
-            const btn = document.createElement('button');
-            btn.textContent = i;
-            btn.className = i === meta.current_page ? 'admin-btn' : 'admin-btn-secondary';
-            btn.addEventListener('click', () => loadMedia(i));
-            pagination.appendChild(btn);
-        }
-    }
-
-    // Load Folders
-    function loadFolders() {
-        const foldersUrl = '{{ route("admin.media.json.folders") }}';
-        fetch(foldersUrl)
-            .then(res => res.json())
-            .then(response => {
-                const select = document.getElementById('folderFilter');
-                response.data.forEach(folder => {
-                    const option = document.createElement('option');
-                    option.value = folder.name;
-                    option.textContent = `${folder.name} (${folder.count})`;
-                    select.appendChild(option);
+            // Bulk selection
+            document.querySelectorAll('.media-item-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    e.stopPropagation();
+                    const id = parseInt(checkbox.dataset.id);
+                    if (checkbox.checked) {
+                        selectedFiles.add(id);
+                        checkbox.closest('.media-item').classList.add('selected');
+                    } else {
+                        selectedFiles.delete(id);
+                        checkbox.closest('.media-item').classList.remove('selected');
+                    }
                 });
             });
-    }
-
-    // Preview Modal
-    function showPreviewModal(item) {
-        document.getElementById('previewModal').style.display = 'block';
-        document.getElementById('previewImage').src = item.url;
-        document.getElementById('detailMediaId').value = item.id;
-        document.getElementById('detailFileName').textContent = item.file_name;
-        document.getElementById('detailTitle').value = item.title || '';
-        document.getElementById('detailAlt').value = item.alt_text || '';
-        document.getElementById('detailCaption').value = item.caption || '';
-        document.getElementById('detailFolder').value = item.folder || '';
-        document.getElementById('detailUrl').textContent = item.url;
-        document.getElementById('detailSize').textContent = item.size_formatted;
-        document.getElementById('detailDimensions').textContent = item.dimensions ?
-            `${item.dimensions.width}x${item.dimensions.height}` : 'N/A';
-        document.getElementById('detailDate').textContent = item.created_at;
-        document.getElementById('detailUploader').textContent = item.uploaded_by;
-    }
-
-    document.getElementById('closeModal').addEventListener('click', () => {
-        document.getElementById('previewModal').style.display = 'none';
-    });
-
-    document.querySelector('.media-modal-overlay').addEventListener('click', () => {
-        document.getElementById('previewModal').style.display = 'none';
-    });
-
-    // Save Details
-    document.getElementById('detailsForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const id = document.getElementById('detailMediaId').value;
-        const formData = new FormData(e.target);
-
-        fetch(`/admin/media/json/${id}`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    _method: 'PUT',
-                    title: document.getElementById('detailTitle').value,
-                    alt_text: document.getElementById('detailAlt').value,
-                    caption: document.getElementById('detailCaption').value,
-                    folder: document.getElementById('detailFolder').value,
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert('Media updated successfully!');
-                loadMedia();
-            });
-    });
-
-    // Delete Media
-    document.getElementById('deleteMediaBtn').addEventListener('click', () => {
-        if (!confirm('Are you sure you want to delete this file?')) return;
-
-        const id = document.getElementById('detailMediaId').value;
-        fetch(`/admin/media/json/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            })
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('previewModal').style.display = 'none';
-                loadMedia();
-            });
-    });
-
-    // Copy URL
-    document.getElementById('copyUrlBtn').addEventListener('click', () => {
-        const url = document.getElementById('detailUrl').textContent;
-        navigator.clipboard.writeText(url).then(() => {
-            alert('URL copied to clipboard!');
-        });
-    });
-
-    // Filters
-    document.getElementById('applyFiltersBtn').addEventListener('click', () => loadMedia()); document.getElementById('resetFiltersBtn').addEventListener('click', () => {
-        document.getElementById('searchInput').value = '';
-        document.getElementById('folderFilter').value = '';
-        document.getElementById('typeFilter').value = '';
-        document.getElementById('sortBy').value = 'created_at';
-        loadMedia();
-    });
-
-    // Bulk Mode
-    document.getElementById('bulkModeBtn').addEventListener('click', () => {
-        bulkMode = !bulkMode;
-        document.getElementById('bulkActions').style.display = bulkMode ? 'flex' : 'none';
-        selectedFiles.clear();
-        loadMedia();
-    });
-
-    document.getElementById('selectAllBtn').addEventListener('click', () => {
-        document.querySelectorAll('.media-item-checkbox').forEach(cb => {
-            cb.checked = true;
-            selectedFiles.add(parseInt(cb.dataset.id));
-            cb.closest('.media-item').classList.add('selected');
-        });
-    });
-
-    document.getElementById('deselectAllBtn').addEventListener('click', () => {
-        document.querySelectorAll('.media-item-checkbox').forEach(cb => {
-            cb.checked = false;
-            cb.closest('.media-item').classList.remove('selected');
-        });
-        selectedFiles.clear();
-    });
-
-    document.getElementById('bulkDeleteBtn').addEventListener('click', () => {
-        if (selectedFiles.size === 0) {
-            alert('Please select files to delete');
-            return;
         }
 
-        if (!confirm(`Delete ${selectedFiles.size} selected files?`)) return;
+        // Render Pagination
+        function renderPagination(meta) {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
 
-        const bulkDeleteUrl = '{{ route("admin.media.json.bulk-delete") }}';
-        fetch(bulkDeleteUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    ids: Array.from(selectedFiles)
+            if (meta.last_page <= 1) return;
+
+            for (let i = 1; i <= meta.last_page; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = i === meta.current_page ? 'admin-btn' : 'admin-btn-secondary';
+                btn.addEventListener('click', () => loadMedia(i));
+                pagination.appendChild(btn);
+            }
+        }
+
+        // Load Folders
+        function loadFolders() {
+            const foldersUrl = '{{ route("admin.media.json.folders") }}';
+            fetch(foldersUrl)
+                .then(res => res.json())
+                .then(response => {
+                    const select = document.getElementById('folderFilter');
+                    response.data.forEach(folder => {
+                        const option = document.createElement('option');
+                        option.value = folder.name;
+                        option.textContent = `${folder.name} (${folder.count})`;
+                        select.appendChild(option);
+                    });
+                });
+        }
+
+        // Preview Modal
+        function showPreviewModal(item) {
+            document.getElementById('previewModal').style.display = 'block';
+            document.getElementById('previewImage').src = item.url;
+            document.getElementById('detailMediaId').value = item.id;
+            document.getElementById('detailFileName').textContent = item.file_name;
+            document.getElementById('detailTitle').value = item.title || '';
+            document.getElementById('detailAlt').value = item.alt_text || '';
+            document.getElementById('detailCaption').value = item.caption || '';
+            document.getElementById('detailFolder').value = item.folder || '';
+            document.getElementById('detailUrl').textContent = item.url;
+            document.getElementById('detailSize').textContent = item.size_formatted;
+            document.getElementById('detailDimensions').textContent = item.dimensions ?
+                `${item.dimensions.width}x${item.dimensions.height}` : 'N/A';
+            document.getElementById('detailDate').textContent = item.created_at;
+            document.getElementById('detailUploader').textContent = item.uploaded_by;
+        }
+
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('previewModal').style.display = 'none';
+        });
+
+        document.querySelector('.media-modal-overlay').addEventListener('click', () => {
+            document.getElementById('previewModal').style.display = 'none';
+        });
+
+        // Save Details
+        document.getElementById('detailsForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('detailMediaId').value;
+            const formData = new FormData(e.target);
+
+            fetch(`/admin/media/json/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        _method: 'PUT',
+                        title: document.getElementById('detailTitle').value,
+                        alt_text: document.getElementById('detailAlt').value,
+                        caption: document.getElementById('detailCaption').value,
+                        folder: document.getElementById('detailFolder').value,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
                 })
-            })
-            .then(res => res.json())
-            .then(data => {
-                selectedFiles.clear();
-                loadMedia();
+                .then(res => res.json())
+                .then(data => {
+                    alert('Media updated successfully!');
+                    loadMedia();
+                });
+        });
+
+        // Delete Media
+        document.getElementById('deleteMediaBtn').addEventListener('click', () => {
+            if (!confirm('Are you sure you want to delete this file?')) return;
+
+            const id = document.getElementById('detailMediaId').value;
+            fetch(`/admin/media/json/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('previewModal').style.display = 'none';
+                    loadMedia();
+                });
+        });
+
+        // Copy URL
+        document.getElementById('copyUrlBtn').addEventListener('click', () => {
+            const url = document.getElementById('detailUrl').textContent;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('URL copied to clipboard!');
             });
-    });
+        });
+
+        // Filters
+        document.getElementById('applyFiltersBtn').addEventListener('click', () => loadMedia());
+        document.getElementById('resetFiltersBtn').addEventListener('click', () => {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('folderFilter').value = '';
+            document.getElementById('typeFilter').value = '';
+            document.getElementById('sortBy').value = 'created_at';
+            loadMedia();
+        });
+
+        // Bulk Mode
+        document.getElementById('bulkModeBtn').addEventListener('click', () => {
+            bulkMode = !bulkMode;
+            document.getElementById('bulkActions').style.display = bulkMode ? 'flex' : 'none';
+            selectedFiles.clear();
+            loadMedia();
+        });
+
+        document.getElementById('selectAllBtn').addEventListener('click', () => {
+            document.querySelectorAll('.media-item-checkbox').forEach(cb => {
+                cb.checked = true;
+                selectedFiles.add(parseInt(cb.dataset.id));
+                cb.closest('.media-item').classList.add('selected');
+            });
+        });
+
+        document.getElementById('deselectAllBtn').addEventListener('click', () => {
+            document.querySelectorAll('.media-item-checkbox').forEach(cb => {
+                cb.checked = false;
+                cb.closest('.media-item').classList.remove('selected');
+            });
+            selectedFiles.clear();
+        });
+
+        document.getElementById('bulkDeleteBtn').addEventListener('click', () => {
+            if (selectedFiles.size === 0) {
+                alert('Please select files to delete');
+                return;
+            }
+
+            if (!confirm(`Delete ${selectedFiles.size} selected files?`)) return;
+
+            const bulkDeleteUrl = '{{ route("admin.media.json.bulk-delete") }}';
+            fetch(bulkDeleteUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        ids: Array.from(selectedFiles)
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    selectedFiles.clear();
+                    loadMedia();
+                });
+        });
     });
 </script>
 @endsection
