@@ -357,116 +357,116 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-            let currentPage = 1;
-            let selectedFiles = new Set();
-            let bulkMode = false;
+        let currentPage = 1;
+        let selectedFiles = new Set();
+        let bulkMode = false;
 
-            // Load media on page load
-            loadMedia();
-            loadFolders();
+        // Load media on page load
+        loadMedia();
+        loadFolders();
 
-            // Drag and Drop
-            const dropZone = document.getElementById('dropZone');
-            const fileInput = document.getElementById('fileInput');
+        // Drag and Drop
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
 
-            dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('click', () => fileInput.click());
 
-            dropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropZone.classList.add('drag-over');
-            });
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
 
-            dropZone.addEventListener('dragleave', () => {
-                dropZone.classList.remove('drag-over');
-            });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
 
-            dropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropZone.classList.remove('drag-over');
-                const files = e.dataTransfer.files;
-                if (files.length) handleFileUpload(files);
-            });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            if (files.length) handleFileUpload(files);
+        });
 
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files.length) handleFileUpload(e.target.files);
-            });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) handleFileUpload(e.target.files);
+        });
 
-            // File Upload Handler
-            function handleFileUpload(files) {
-                const formData = new FormData();
-                const folder = document.getElementById('uploadFolder').value || 'general';
-                const collection = document.getElementById('uploadCollection').value || 'uploads';
-                const title = document.getElementById('uploadTitle').value;
+        // File Upload Handler
+        function handleFileUpload(files) {
+            const formData = new FormData();
+            const folder = document.getElementById('uploadFolder').value || 'general';
+            const collection = document.getElementById('uploadCollection').value || 'uploads';
+            const title = document.getElementById('uploadTitle').value;
 
-                let uploaded = 0;
-                const total = files.length;
+            let uploaded = 0;
+            const total = files.length;
 
-                document.getElementById('uploadProgress').style.display = 'block';
-                document.getElementById('uploadStatus').textContent = `Uploading 0/${total} files...`;
+            document.getElementById('uploadProgress').style.display = 'block';
+            document.getElementById('uploadStatus').textContent = `Uploading 0/${total} files...`;
 
-                Array.from(files).forEach((file, index) => {
-                    const fileFormData = new FormData();
-                    fileFormData.append('file', file);
-                    fileFormData.append('folder', folder);
-                    fileFormData.append('collection', collection);
-                    if (title) fileFormData.append('title', title);
+            Array.from(files).forEach((file, index) => {
+                const fileFormData = new FormData();
+                fileFormData.append('file', file);
+                fileFormData.append('folder', folder);
+                fileFormData.append('collection', collection);
+                if (title) fileFormData.append('title', title);
 
-                    const uploadUrl = '{{ route("admin.media.json.upload") }}';
-                    fetch(uploadUrl, {
+                const uploadUrl = '{{ route("admin.media.json.upload") }}';
+                fetch(uploadUrl, {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         body: fileFormData
                     })
-                        .then(res => res.json())
-                        .then(data => {
-                            uploaded++;
-                            const percent = (uploaded / total) * 100;
-                            document.getElementById('progressBar').style.width = percent + '%';
-                            document.getElementById('uploadStatus').textContent = `Uploaded ${uploaded}/${total} files`;
+                    .then(res => res.json())
+                    .then(data => {
+                        uploaded++;
+                        const percent = (uploaded / total) * 100;
+                        document.getElementById('progressBar').style.width = percent + '%';
+                        document.getElementById('uploadStatus').textContent = `Uploaded ${uploaded}/${total} files`;
 
-                            if (uploaded === total) {
-                                setTimeout(() => {
-                                    document.getElementById('uploadProgress').style.display = 'none';
-                                    document.getElementById('progressBar').style.width = '0';
-                                    loadMedia();
-                                }, 1000);
-                            }
-                        })
-                        .catch(err => {
-                            console.error('Upload error:', err);
-                            alert('Upload failed for: ' + file.name);
-                        });
-                });
+                        if (uploaded === total) {
+                            setTimeout(() => {
+                                document.getElementById('uploadProgress').style.display = 'none';
+                                document.getElementById('progressBar').style.width = '0';
+                                loadMedia();
+                            }, 1000);
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Upload error:', err);
+                        alert('Upload failed for: ' + file.name);
+                    });
+            });
+        }
+
+        // Load Media
+        function loadMedia(page = 1) {
+            const params = new URLSearchParams();
+            params.append('page', page);
+            params.append('per_page', 60);
+
+            const search = document.getElementById('searchInput').value;
+            const folder = document.getElementById('folderFilter').value;
+            const type = document.getElementById('typeFilter').value;
+            const sortBy = document.getElementById('sortBy').value;
+
+            if (search) params.append('search', search);
+            if (folder) params.append('folder', folder);
+            if (type) params.append('type', type);
+            if (sortBy) {
+                if (sortBy === 'created_at_asc') {
+                    params.append('sort_by', 'created_at');
+                    params.append('sort_order', 'asc');
+                } else {
+                    params.append('sort_by', sortBy);
+                    params.append('sort_order', 'desc');
+                }
             }
 
-            // Load Media
-            function loadMedia(page = 1) {
-                const params = new URLSearchParams();
-                params.append('page', page);
-                params.append('per_page', 60);
-
-                const search = document.getElementById('searchInput').value;
-                const folder = document.getElementById('folderFilter').value;
-                const type = document.getElementById('typeFilter').value;
-                const sortBy = document.getElementById('sortBy').value;
-
-                if (search) params.append('search', search);
-                if (folder) params.append('folder', folder);
-                if (type) params.append('type', type);
-                if (sortBy) {
-                    if (sortBy === 'created_at_asc') {
-                        params.append('sort_by', 'created_at');
-                        params.append('sort_order', 'asc');
-                    } else {
-                        params.append('sort_by', sortBy);
-                        params.append('sort_order', 'desc');
-                    }
-                }
-
-                document.getElementById('mediaLoader').style.display = 'block';
-                document.getElementById('mediaGrid').innerHTML = '';
+            document.getElementById('mediaLoader').style.display = 'block';
+            document.getElementById('mediaGrid').innerHTML = '';
 
             const mediaUrl = '{{ route("admin.media.json") }}';
             fetch(mediaUrl + '?' + params.toString())
@@ -652,8 +652,7 @@
     });
 
     // Filters
-    document.getElementById('applyFiltersBtn').addEventListener('click', () => loadMedia());
-    document.getElementById('resetFiltersBtn').addEventListener('click', () => {
+    document.getElementById('applyFiltersBtn').addEventListener('click', () => loadMedia()); document.getElementById('resetFiltersBtn').addEventListener('click', () => {
         document.getElementById('searchInput').value = '';
         document.getElementById('folderFilter').value = '';
         document.getElementById('typeFilter').value = '';
@@ -686,29 +685,29 @@
     });
 
     document.getElementById('bulkDeleteBtn').addEventListener('click', () => {
-    if (selectedFiles.size === 0) {
-        alert('Please select files to delete');
-        return;
-    }
+        if (selectedFiles.size === 0) {
+            alert('Please select files to delete');
+            return;
+        }
 
         if (!confirm(`Delete ${selectedFiles.size} selected files?`)) return;
 
         const bulkDeleteUrl = '{{ route("admin.media.json.bulk-delete") }}';
         fetch(bulkDeleteUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({
-                ids: Array.from(selectedFiles)
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    ids: Array.from(selectedFiles)
+                })
             })
-        })
-        .then(res => res.json())
-        .then(data => {
-            selectedFiles.clear();
-            loadMedia();
-        });
+            .then(res => res.json())
+            .then(data => {
+                selectedFiles.clear();
+                loadMedia();
+            });
     });
     });
 </script>
