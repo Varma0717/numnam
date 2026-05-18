@@ -194,8 +194,14 @@ class Product extends Model
             return asset($path);
         }
 
-        if (str_starts_with($path, '/storage/')) {
+        // Handle both /storage/ and storage/ paths
+        if (str_starts_with($path, '/storage/') || str_starts_with($path, 'storage/')) {
             return asset(ltrim($path, '/'));
+        }
+
+        // Handle cms-media paths stored in database
+        if (str_starts_with($path, 'cms-media/')) {
+            return asset('storage/' . $path);
         }
 
         /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
