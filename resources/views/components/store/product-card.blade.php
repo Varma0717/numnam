@@ -12,7 +12,7 @@ asset('assets/images/Purees/appi%20pooch%201.png'),
 asset('assets/images/Purees/berry%20swush%201.png'),
 ];
 
-$resolvedImage = $image ?: ($product->image ?: $fallbackImages[$product->id % count($fallbackImages)]);
+$resolvedImage = $image ?: ($product->image_url ?: $fallbackImages[$product->id % count($fallbackImages)]);
 $displayRating = number_format((float) ($product->approved_reviews_avg_rating ?? 4.8), 1);
 $displayReviewCount = (int) ($product->approved_reviews_count ?? 0);
 @endphp
