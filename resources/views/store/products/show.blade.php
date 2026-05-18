@@ -8,9 +8,8 @@ asset('assets/images/Purees/brocco%20pop%203.png'),
 asset('assets/images/Purees/mangy%20chewy%203.png'),
 ];
 
-$mainPlaceholder = $gallery->isNotEmpty()
-? $gallery->first()
-: $fallbackPlaceholders[$product->id % count($fallbackPlaceholders)];
+// Use product image_url as primary source, fallback to gallery, then placeholders
+$mainImage = $product->image_url ?: ($gallery->isNotEmpty() ? $gallery->first() : $fallbackPlaceholders[$product->id % count($fallbackPlaceholders)]);
 
 $recentlyViewed = $recentlyViewedProducts ?? collect();
 $reviews = $reviews ?? collect();
@@ -99,7 +98,7 @@ $safetyItems = [
         <div>
             <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm" id="mainImageWrap">
                 <img
-                    src="{{ $mainPlaceholder }}"
+                    src="{{ $mainImage }}"
                     alt="{{ $product->name }}"
                     loading="eager"
                     id="mainProductImage"
