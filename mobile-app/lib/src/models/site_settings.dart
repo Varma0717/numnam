@@ -42,7 +42,9 @@ class SiteSettings {
     if (codMinOrder > 0 && orderTotal < codMinOrder) return false;
     if (codMaxOrder > 0 && orderTotal > codMaxOrder) return false;
     if (codAllowedPincodes.isNotEmpty &&
-        !codAllowedPincodes.contains(pincode.trim())) return false;
+        !codAllowedPincodes.contains(pincode.trim())) {
+      return false;
+    }
     return true;
   }
 }

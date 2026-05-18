@@ -151,15 +151,30 @@ class MobileContentController extends BaseMobileController
             return $this->error('Products table is not migrated yet.', 503);
         }
 
-        $product = Product::query()
-            ->with(['productCategory:id,name,slug'])
-            ->where('slug', $slug)
-            ->when(Schema::hasColumn('products', 'is_active'), fn($q) => $q->where('is_active', true))
-            ->when(Schema::hasColumn('products', 'status'), fn($q) => $q->where('status', 'published'))
-            ->first();
+        // Support both ID and slug for mobile app compatibility
+        $query = Product::query()->with(['productCategory:id,name,slug', 'approvedReviews']);
+
+        // Check if slug is numeric (ID) or string (slug)
+        if (is_numeric($slug)) {
+            $product = $query->where('id', (int) $slug)->first();
+        } else {
+            $product = $query->where('slug', $slug)->first();
+        }
 
         if (! $product) {
             return $this->error('Product not found.', 404);
+        }
+
+        // Check if product is accessible (active and published)
+        $hasIsActive = Schema::hasColumn('products', 'is_active');
+        $hasStatus = Schema::hasColumn('products', 'status');
+
+        if ($hasIsActive && !$product->is_active) {
+            return $this->error('Product is not available.', 404);
+        }
+
+        if ($hasStatus && $product->status !== 'published') {
+            return $this->error('Product is not available.', 404);
         }
 
         return $this->success($product, 'Product details fetched successfully.');

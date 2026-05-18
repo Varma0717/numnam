@@ -6,7 +6,6 @@ import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../core/wishlist_provider.dart';
 import '../../models/product.dart';
-import '../../models/review.dart';
 import '../../shared/theme/colors.dart';
 import '../cart/cart_provider.dart';
 
@@ -24,7 +23,6 @@ class ProductDetailScreenRedesign extends StatefulWidget {
 class _ProductDetailScreenRedesignState
     extends State<ProductDetailScreenRedesign> {
   Product? _product;
-  List<Review> _reviews = [];
   bool _loading = true;
   bool _addingToCart = false;
   int _quantity = 1;
@@ -44,42 +42,16 @@ class _ProductDetailScreenRedesignState
       final productResp =
           await api.dio.get('${ApiEndpoints.products}/${widget.productId}');
 
-      try {
-        final reviewsResp = await api.dio.get(
-          '${ApiEndpoints.products}/${widget.productId}/reviews',
-        );
-        if (mounted) {
-          setState(() {
-            _product =
-                Product.fromJson(productResp.data['data'] ?? productResp.data);
-            _reviews = _parseReviews(reviewsResp.data);
-            _loading = false;
-          });
-        }
-      } catch (e) {
-        if (mounted) {
-          setState(() {
-            _product =
-                Product.fromJson(productResp.data['data'] ?? productResp.data);
-            _loading = false;
-          });
-        }
+      if (mounted) {
+        setState(() {
+          _product =
+              Product.fromJson(productResp.data['data'] ?? productResp.data);
+          _loading = false;
+        });
       }
     } catch (e) {
       if (mounted) setState(() => _loading = false);
     }
-  }
-
-  List<Review> _parseReviews(dynamic data) {
-    List<dynamic> list;
-    if (data is Map && data['data'] != null) {
-      list = data['data'] as List? ?? [];
-    } else if (data is List) {
-      list = data;
-    } else {
-      list = [];
-    }
-    return list.map((e) => Review.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   Future<void> _addToCart() async {
@@ -100,7 +72,8 @@ class _ProductDetailScreenRedesignState
             backgroundColor: kMint,
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(20),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
         setState(() => _addingToCart = false);
@@ -167,7 +140,9 @@ class _ProductDetailScreenRedesignState
                 child: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: IconButton(
-                    icon: Icon(isWished ? Icons.favorite : Icons.favorite_border, color: kCoral),
+                    icon: Icon(
+                        isWished ? Icons.favorite : Icons.favorite_border,
+                        color: kCoral),
                     onPressed: () => wishlist.toggleWishlist(_product!.id),
                   ),
                 ),
@@ -180,17 +155,24 @@ class _ProductDetailScreenRedesignState
                   if (images.isNotEmpty)
                     PageView.builder(
                       itemCount: images.length,
-                      onPageChanged: (i) => setState(() => _selectedImageIndex = i),
+                      onPageChanged: (i) =>
+                          setState(() => _selectedImageIndex = i),
                       itemBuilder: (context, i) => CachedNetworkImage(
                         imageUrl: images[i],
                         fit: BoxFit.cover,
-                        placeholder: (_, __) => const Center(child: CircularProgressIndicator(color: kCoral)),
-                        errorWidget: (_, __, ___) => Container(color: kCream, child: const Icon(Icons.image, size: 50, color: Colors.grey)),
+                        placeholder: (_, __) => const Center(
+                            child: CircularProgressIndicator(color: kCoral)),
+                        errorWidget: (_, __, ___) => Container(
+                            color: kCream,
+                            child: const Icon(Icons.image,
+                                size: 50, color: Colors.grey)),
                       ),
                     )
                   else
-                    Container(color: kCream, child: const Icon(Icons.image, size: 50, color: Colors.grey)),
-
+                    Container(
+                        color: kCream,
+                        child: const Icon(Icons.image,
+                            size: 50, color: Colors.grey)),
                   if (images.length > 1)
                     Positioned(
                       bottom: 20,
@@ -198,15 +180,20 @@ class _ProductDetailScreenRedesignState
                       right: 0,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(images.length, (index) => Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          width: _selectedImageIndex == index ? 20 : 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: _selectedImageIndex == index ? kCoral : Colors.white.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        )),
+                        children: List.generate(
+                            images.length,
+                            (index) => Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  width: _selectedImageIndex == index ? 20 : 8,
+                                  height: 8,
+                                  decoration: BoxDecoration(
+                                    color: _selectedImageIndex == index
+                                        ? kCoral
+                                        : Colors.white.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                )),
                       ),
                     ),
                 ],
@@ -228,50 +215,76 @@ class _ProductDetailScreenRedesignState
                     children: [
                       if (_product!.ageGroup != null)
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
                             color: kMint.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
                             _product!.ageGroup!,
-                            style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w700, color: kMint),
+                            style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: kMint),
                           ),
                         ),
                       Text(
                         '₹${_product!.effectivePrice.toStringAsFixed(0)}',
-                        style: GoogleFonts.baloo2(fontSize: 32, fontWeight: FontWeight.w900, color: kCoral),
+                        style: GoogleFonts.baloo2(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w900,
+                            color: kCoral),
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
                   Text(
                     _product!.name,
-                    style: GoogleFonts.baloo2(fontSize: 26, fontWeight: FontWeight.w800, color: kNavy, height: 1.2),
+                    style: GoogleFonts.baloo2(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w800,
+                        color: kNavy,
+                        height: 1.2),
                   ),
                   const SizedBox(height: 16),
                   Text(
                     _product!.description ?? 'No description available.',
-                    style: GoogleFonts.poppins(fontSize: 14, color: kNavy.withOpacity(0.6), height: 1.6),
+                    style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: kNavy.withOpacity(0.6),
+                        height: 1.6),
                   ),
                   const SizedBox(height: 32),
 
                   // Nutrition Info
                   if (_product!.nutritionInfo != null) ...[
-                    Text('Nutrition Info', style: GoogleFonts.baloo2(fontSize: 20, fontWeight: FontWeight.w800, color: kNavy)),
+                    Text('Nutrition Info',
+                        style: GoogleFonts.baloo2(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: kNavy)),
                     const SizedBox(height: 16),
                     _buildNutritionRow(_product!.nutritionInfo!),
                     const SizedBox(height: 32),
                   ],
 
                   // Quantity
-                  Text('Quantity', style: GoogleFonts.baloo2(fontSize: 20, fontWeight: FontWeight.w800, color: kNavy)),
+                  Text('Quantity',
+                      style: GoogleFonts.baloo2(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          color: kNavy)),
                   const SizedBox(height: 16),
                   Row(
                     children: [
-                      _qtyBtn(Icons.remove, () { if (_quantity > 1) setState(() => _quantity--); }),
+                      _qtyBtn(Icons.remove, () {
+                        if (_quantity > 1) setState(() => _quantity--);
+                      }),
                       const SizedBox(width: 24),
-                      Text('$_quantity', style: GoogleFonts.baloo2(fontSize: 24, fontWeight: FontWeight.w800)),
+                      Text('$_quantity',
+                          style: GoogleFonts.baloo2(
+                              fontSize: 24, fontWeight: FontWeight.w800)),
                       const SizedBox(width: 24),
                       _qtyBtn(Icons.add, () => setState(() => _quantity++)),
                     ],
@@ -287,7 +300,12 @@ class _ProductDetailScreenRedesignState
         padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
         decoration: BoxDecoration(
           color: Colors.white,
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -5))],
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, -5))
+          ],
         ),
         child: SizedBox(
           width: double.infinity,
@@ -297,13 +315,16 @@ class _ProductDetailScreenRedesignState
             style: ElevatedButton.styleFrom(
               backgroundColor: kCoral,
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
               elevation: 0,
             ),
             child: _addingToCart
-              ? const CircularProgressIndicator(color: Colors.white)
-              : Text('Add to Cart • ₹${(_product!.effectivePrice * _quantity).toStringAsFixed(0)}',
-                  style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700)),
+                ? const CircularProgressIndicator(color: Colors.white)
+                : Text(
+                    'Add to Cart • ₹${(_product!.effectivePrice * _quantity).toStringAsFixed(0)}',
+                    style: GoogleFonts.poppins(
+                        fontSize: 16, fontWeight: FontWeight.w700)),
           ),
         ),
       ),
@@ -329,21 +350,29 @@ class _ProductDetailScreenRedesignState
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: info.entries.map((e) => Container(
-          margin: const EdgeInsets.only(right: 12),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: kCream,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFFFD6E5)),
-          ),
-          child: Column(
-            children: [
-              Text(e.value.toString(), style: GoogleFonts.baloo2(fontSize: 18, fontWeight: FontWeight.w800, color: kCoral)),
-              Text(e.key, style: GoogleFonts.poppins(fontSize: 11, color: kNavy.withOpacity(0.5))),
-            ],
-          ),
-        )).toList(),
+        children: info.entries
+            .map((e) => Container(
+                  margin: const EdgeInsets.only(right: 12),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: kCream,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0xFFFFD6E5)),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(e.value.toString(),
+                          style: GoogleFonts.baloo2(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                              color: kCoral)),
+                      Text(e.key,
+                          style: GoogleFonts.poppins(
+                              fontSize: 11, color: kNavy.withOpacity(0.5))),
+                    ],
+                  ),
+                ))
+            .toList(),
       ),
     );
   }

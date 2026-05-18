@@ -7,7 +7,6 @@ import '../../core/constants.dart';
 import '../../core/wishlist_provider.dart';
 import '../../shared/theme/colors.dart';
 import '../../shared/widgets/empty_state.dart';
-import '../../shared/widgets/error_view.dart';
 import '../../shared/widgets/loading_indicator.dart';
 import '../auth/auth_gate.dart';
 import '../cart/cart_provider.dart';
@@ -24,7 +23,6 @@ class WishlistScreen extends StatefulWidget {
 class _WishlistScreenState extends State<WishlistScreen> {
   List<_WishItem> _fullItems = [];
   bool _loading = true;
-  String? _error;
 
   @override
   void initState() {
@@ -36,7 +34,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
   Future<void> _loadFullDetails() async {
     setState(() {
       _loading = true;
-      _error = null;
     });
     try {
       final api = context.read<ApiClient>();
@@ -60,7 +57,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
     } catch (e) {
       if (mounted) {
         setState(() {
-          _error = 'Failed to load wishlist items';
           _loading = false;
         });
       }
@@ -72,7 +68,9 @@ class _WishlistScreenState extends State<WishlistScreen> {
     final wishlistProvider = context.watch<WishlistProvider>();
 
     // Filter _fullItems based on what's still in the global provider (optimistic sync)
-    final items = _fullItems.where((item) => wishlistProvider.isWished(item.productId)).toList();
+    final items = _fullItems
+        .where((item) => wishlistProvider.isWished(item.productId))
+        .toList();
 
     return Scaffold(
       backgroundColor: kCream,
@@ -100,16 +98,22 @@ class _WishlistScreenState extends State<WishlistScreen> {
                         final item = items[i];
                         return _WishTile(
                           item: item,
-                          onRemove: () => wishlistProvider.toggleWishlist(item.productId),
+                          onRemove: () =>
+                              wishlistProvider.toggleWishlist(item.productId),
                           onAddToCart: () {
-                            context.read<CartProvider>().addItem(item.productId, 1);
+                            context
+                                .read<CartProvider>()
+                                .addItem(item.productId, 1);
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Added to cart'), duration: Duration(seconds: 1)),
+                              const SnackBar(
+                                  content: Text('Added to cart'),
+                                  duration: Duration(seconds: 1)),
                             );
                           },
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => ProductDetailScreenRedesign(productId: item.productId),
+                              builder: (_) => ProductDetailScreenRedesign(
+                                  productId: item.productId),
                             ),
                           ),
                         );
@@ -138,19 +142,25 @@ class _WishItem {
 
   factory _WishItem.fromJson(Map<String, dynamic> json) {
     final product = json['product'] as Map<String, dynamic>?;
-    double toD(dynamic v) => (v is num ? v.toDouble() : double.tryParse('$v') ?? 0);
+    double toD(dynamic v) =>
+        (v is num ? v.toDouble() : double.tryParse('$v') ?? 0);
     return _WishItem(
       productId: (json['product_id'] ?? product?['id'] ?? 0) as int,
       name: product?['name'] ?? json['name'] ?? '',
       imageUrl: product?['image_url'] as String?,
       price: toD(product?['price'] ?? json['price']),
-      salePrice: product?['sale_price'] != null ? toD(product!['sale_price']) : null,
+      salePrice:
+          product?['sale_price'] != null ? toD(product!['sale_price']) : null,
     );
   }
 }
 
 class _WishTile extends StatelessWidget {
-  const _WishTile({required this.item, required this.onRemove, required this.onAddToCart, this.onTap});
+  const _WishTile(
+      {required this.item,
+      required this.onRemove,
+      required this.onAddToCart,
+      this.onTap});
   final _WishItem item;
   final VoidCallback onRemove;
   final VoidCallback onAddToCart;
@@ -175,8 +185,11 @@ class _WishTile extends StatelessWidget {
                 width: 80,
                 height: 80,
                 child: item.imageUrl != null
-                    ? CachedNetworkImage(imageUrl: item.imageUrl!, fit: BoxFit.cover)
-                    : Container(color: kCream, child: const Icon(Icons.image, color: kCoral)),
+                    ? CachedNetworkImage(
+                        imageUrl: item.imageUrl!, fit: BoxFit.cover)
+                    : Container(
+                        color: kCream,
+                        child: const Icon(Icons.image, color: kCoral)),
               ),
             ),
             const SizedBox(width: 16),
@@ -187,17 +200,26 @@ class _WishTile extends StatelessWidget {
                   Text(item.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600, color: kNavy)),
+                      style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: kNavy)),
                   const SizedBox(height: 6),
                   Row(
                     children: [
-                      Text('₹${(item.salePrice ?? item.price).toStringAsFixed(0)}',
-                          style: GoogleFonts.baloo2(fontSize: 18, fontWeight: FontWeight.w800, color: kCoral)),
+                      Text(
+                          '₹${(item.salePrice ?? item.price).toStringAsFixed(0)}',
+                          style: GoogleFonts.baloo2(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                              color: kCoral)),
                       if (item.salePrice != null) ...[
                         const SizedBox(width: 8),
                         Text('₹${item.price.toStringAsFixed(0)}',
                             style: GoogleFonts.poppins(
-                                fontSize: 12, color: kNavy.withOpacity(0.4), decoration: TextDecoration.lineThrough)),
+                                fontSize: 12,
+                                color: kNavy.withOpacity(0.4),
+                                decoration: TextDecoration.lineThrough)),
                       ],
                     ],
                   ),
@@ -207,7 +229,8 @@ class _WishTile extends StatelessWidget {
             Column(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.add_shopping_cart_rounded, color: kMint),
+                  icon:
+                      const Icon(Icons.add_shopping_cart_rounded, color: kMint),
                   onPressed: onAddToCart,
                 ),
                 IconButton(

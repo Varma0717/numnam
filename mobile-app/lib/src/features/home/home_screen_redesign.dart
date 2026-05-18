@@ -11,11 +11,9 @@ import '../cart/cart_provider.dart';
 import '../../models/product.dart';
 import '../../models/pricing_plan.dart';
 import '../../shared/theme/colors.dart';
+import '../../config/app_config.dart';
 import '../shop/product_detail_screen_redesign.dart';
-import '../shop/shop_screen_redesign.dart';
 import '../subscriptions/subscriptions_screen_redesign.dart';
-import '../blog/blog_list_screen.dart';
-import '../../app.dart';
 
 class HomeScreenRedesign extends StatefulWidget {
   const HomeScreenRedesign({super.key});
@@ -65,7 +63,8 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
 
       // Parallel fetching for better performance
       final results = await Future.wait([
-        api.dio.get(ApiEndpoints.products, queryParameters: {'per_page': 8, 'featured': 1}),
+        api.dio.get(ApiEndpoints.products,
+            queryParameters: {'per_page': 8, 'featured': 1}),
         api.dio.get(ApiEndpoints.pricingPlans),
       ]);
 
@@ -97,7 +96,9 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
     } else {
       list = [];
     }
-    return list.map((e) => Product.fromJson(e as Map<String, dynamic>)).toList();
+    return list
+        .map((e) => Product.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   List<PricingPlan> _parsePlans(dynamic data) {
@@ -109,7 +110,9 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
     } else {
       list = [];
     }
-    return list.map((e) => PricingPlan.fromJson(e as Map<String, dynamic>)).toList();
+    return list
+        .map((e) => PricingPlan.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   @override
@@ -138,11 +141,17 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                           children: [
                             Text(
                               'Hello, ${user?.name.split(' ').first ?? 'Parent'} 👋',
-                              style: GoogleFonts.baloo2(fontSize: 28, fontWeight: FontWeight.w800, color: kNavy),
+                              style: GoogleFonts.baloo2(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w800,
+                                  color: kNavy),
                             ),
                             Text(
                               'What would you like for your baby today?',
-                              style: GoogleFonts.poppins(fontSize: 14, color: kNavy.withOpacity(0.5), fontWeight: FontWeight.w500),
+                              style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: kNavy.withOpacity(0.5),
+                                  fontWeight: FontWeight.w500),
                             ),
                           ],
                         ),
@@ -150,8 +159,12 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                       CircleAvatar(
                         radius: 24,
                         backgroundColor: kCoral.withOpacity(0.1),
-                        backgroundImage: user?.avatar != null ? CachedNetworkImageProvider(user!.avatar!) : null,
-                        child: user?.avatar == null ? const Icon(Icons.person, color: kCoral) : null,
+                        backgroundImage: user?.avatar != null
+                            ? CachedNetworkImageProvider(user!.avatar!)
+                            : null,
+                        child: user?.avatar == null
+                            ? const Icon(Icons.person, color: kCoral)
+                            : null,
                       ),
                     ],
                   ),
@@ -170,29 +183,44 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShopScreenRedesign()));
+                      // Switch to Shop tab (index 1)
+                      final shellState = context
+                          .findAncestorStateOfType<State<StatefulWidget>>();
+                      if (shellState != null && shellState.mounted) {
+                        // Find the root navigator and switch tab
+                        Navigator.of(context, rootNavigator: true)
+                            .popUntil((route) => route.isFirst);
+                      }
                     },
                     borderRadius: BorderRadius.circular(16),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 14),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFFFFD6E5), width: 1.5),
+                        border: Border.all(
+                            color: const Color(0xFFFFD6E5), width: 1.5),
                         boxShadow: [
-                          BoxShadow(color: kCoral.withOpacity(0.06), blurRadius: 15, offset: const Offset(0, 5)),
+                          BoxShadow(
+                              color: kCoral.withOpacity(0.06),
+                              blurRadius: 15,
+                              offset: const Offset(0, 5)),
                         ],
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.search_rounded, color: kCoral, size: 22),
+                          const Icon(Icons.search_rounded,
+                              color: kCoral, size: 22),
                           const SizedBox(width: 12),
                           Text(
                             'Search fresh food, cereals, tips...',
-                            style: GoogleFonts.poppins(color: Colors.grey.shade400, fontSize: 14),
+                            style: GoogleFonts.poppins(
+                                color: Colors.grey.shade400, fontSize: 14),
                           ),
                           const Spacer(),
-                          const Icon(Icons.tune_rounded, color: kCoral, size: 20),
+                          const Icon(Icons.tune_rounded,
+                              color: kCoral, size: 20),
                         ],
                       ),
                     ),
@@ -215,19 +243,19 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                     '20% OFF FIRST BOX',
                     'Start your subscription today!',
                     kCoral,
-                    'https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=800&q=80',
+                    '${AppConfig.siteBaseUrl}/storage/banners/banner1.jpg',
                   ),
                   _buildBannerCard(
                     'PURE & ORGANIC',
                     'Zero preservatives, 100% love.',
                     kMint,
-                    'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&q=80',
+                    '${AppConfig.siteBaseUrl}/storage/banners/banner2.jpg',
                   ),
                   _buildBannerCard(
                     'EXPERT NUTRITION',
                     'Tailored for every growth stage.',
                     kYellow,
-                    'https://images.unsplash.com/photo-1544126592-807daa215a75?w=800&q=80',
+                    '${AppConfig.siteBaseUrl}/storage/banners/banner3.jpg',
                   ),
                 ],
               ),
@@ -246,10 +274,14 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     scrollDirection: Axis.horizontal,
                     children: [
-                      _buildCategoryItem('4-6 Months', FontAwesomeIcons.baby, kCoral),
-                      _buildCategoryItem('6-9 Months', FontAwesomeIcons.babyCarriage, kYellow),
-                      _buildCategoryItem('9-12 Months', FontAwesomeIcons.utensils, kMint),
-                      _buildCategoryItem('12+ Months', FontAwesomeIcons.plateWheat, kLavender),
+                      _buildCategoryItem(
+                          '4-6 Months', FontAwesomeIcons.baby, kCoral),
+                      _buildCategoryItem(
+                          '6-9 Months', FontAwesomeIcons.babyCarriage, kYellow),
+                      _buildCategoryItem(
+                          '9-12 Months', FontAwesomeIcons.utensils, kMint),
+                      _buildCategoryItem(
+                          '12+ Months', FontAwesomeIcons.plateWheat, kLavender),
                     ],
                   ),
                 ),
@@ -272,7 +304,10 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                     ),
                     borderRadius: BorderRadius.circular(28),
                     boxShadow: [
-                      BoxShadow(color: kCoral.withOpacity(0.3), blurRadius: 20, offset: const Offset(0, 10)),
+                      BoxShadow(
+                          color: kCoral.withOpacity(0.3),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10)),
                     ],
                   ),
                   child: ClipRRect(
@@ -282,7 +317,8 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                         Positioned(
                           right: -20,
                           top: -20,
-                          child: Icon(Icons.star, size: 120, color: Colors.white.withOpacity(0.1)),
+                          child: Icon(Icons.star,
+                              size: 120, color: Colors.white.withOpacity(0.1)),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(24),
@@ -290,13 +326,29 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(10)),
-                                child: Text('MOST POPULAR', style: GoogleFonts.poppins(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.white)),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 6),
+                                decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Text('MOST POPULAR',
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.white)),
                               ),
                               const SizedBox(height: 12),
-                              Text('The NumNam Way', style: GoogleFonts.baloo2(fontSize: 26, fontWeight: FontWeight.w900, color: Colors.white, height: 1.1)),
-                              Text('Fresh organic purees, delivered to your door every month.', style: GoogleFonts.poppins(fontSize: 13, color: Colors.white.withOpacity(0.9))),
+                              Text('The NumNam Way',
+                                  style: GoogleFonts.baloo2(
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.white,
+                                      height: 1.1)),
+                              Text(
+                                  'Fresh organic purees, delivered to your door every month.',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 13,
+                                      color: Colors.white.withOpacity(0.9))),
                               const SizedBox(height: 20),
 
                               // Horizontal plans layout that doesn't overflow
@@ -304,7 +356,10 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                                 scrollDirection: Axis.horizontal,
                                 physics: const BouncingScrollPhysics(),
                                 child: Row(
-                                  children: _plans.take(3).map((plan) => _buildPlanMiniCard(plan)).toList(),
+                                  children: _plans
+                                      .take(3)
+                                      .map((plan) => _buildPlanMiniCard(plan))
+                                      .toList(),
                                 ),
                               ),
 
@@ -312,15 +367,29 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                               SizedBox(
                                 width: double.infinity,
                                 child: ElevatedButton(
-                                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const SubscriptionsScreenRedesign())),
+                                  onPressed: () {
+                                    // Navigate to subscriptions screen
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            const SubscriptionsScreenRedesign(),
+                                      ),
+                                    );
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
                                     foregroundColor: kCoral,
-                                    padding: const EdgeInsets.symmetric(vertical: 14),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(14)),
                                     elevation: 0,
                                   ),
-                                  child: Text('EXPLORE ALL PLANS', style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w800)),
+                                  child: Text('EXPLORE ALL PLANS',
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w800)),
                                 ),
                               ),
                             ],
@@ -336,15 +405,20 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
           // Featured Products Header
           SliverToBoxAdapter(
             child: _buildSectionHeader('Best Sellers', () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShopScreenRedesign()));
+              // Products are shown below, no need to navigate
             }),
           ),
 
           // Product Grid
           if (_loading)
-            const SliverToBoxAdapter(child: Center(child: Padding(padding: EdgeInsets.all(40), child: CircularProgressIndicator(color: kCoral))))
+            const SliverToBoxAdapter(
+                child: Center(
+                    child: Padding(
+                        padding: EdgeInsets.all(40),
+                        child: CircularProgressIndicator(color: kCoral))))
           else if (_featured.isEmpty)
-            const SliverToBoxAdapter(child: Center(child: Text('No featured products')))
+            const SliverToBoxAdapter(
+                child: Center(child: Text('No featured products')))
           else
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -369,13 +443,18 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
     );
   }
 
-  Widget _buildBannerCard(String title, String subtitle, Color color, String imageUrl) {
+  Widget _buildBannerCard(
+      String title, String subtitle, Color color, String imageUrl) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(24),
-        image: DecorationImage(image: CachedNetworkImageProvider(imageUrl), fit: BoxFit.cover, colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.3), BlendMode.darken)),
+        image: DecorationImage(
+            image: CachedNetworkImageProvider(imageUrl),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.3), BlendMode.darken)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -383,8 +462,16 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text(title, style: GoogleFonts.baloo2(fontSize: 24, fontWeight: FontWeight.w900, color: Colors.white)),
-            Text(subtitle, style: GoogleFonts.poppins(fontSize: 14, color: Colors.white.withOpacity(0.9), fontWeight: FontWeight.w500)),
+            Text(title,
+                style: GoogleFonts.baloo2(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white)),
+            Text(subtitle,
+                style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: Colors.white.withOpacity(0.9),
+                    fontWeight: FontWeight.w500)),
           ],
         ),
       ),
@@ -397,10 +484,14 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: GoogleFonts.baloo2(fontSize: 22, fontWeight: FontWeight.w800, color: kNavy)),
+          Text(title,
+              style: GoogleFonts.baloo2(
+                  fontSize: 22, fontWeight: FontWeight.w800, color: kNavy)),
           TextButton(
             onPressed: onSeeAll,
-            child: Text('See All', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w700, color: kCoral)),
+            child: Text('See All',
+                style: GoogleFonts.poppins(
+                    fontSize: 13, fontWeight: FontWeight.w700, color: kCoral)),
           ),
         ],
       ),
@@ -415,34 +506,60 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
         children: [
           Container(
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(color: color.withOpacity(0.12), shape: BoxShape.circle),
+            decoration: BoxDecoration(
+                color: color.withOpacity(0.12), shape: BoxShape.circle),
             child: FaIcon(icon, color: color, size: 24),
           ),
           const SizedBox(height: 8),
-          Text(label, textAlign: TextAlign.center, style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w600, color: kNavy)),
+          Text(label,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(
+                  fontSize: 11, fontWeight: FontWeight.w600, color: kNavy)),
         ],
       ),
     );
   }
 
   Widget _buildPlanMiniCard(PricingPlan plan) {
-    return Container(
-      width: 130,
-      margin: const EdgeInsets.only(right: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white.withOpacity(0.3)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(plan.name, style: GoogleFonts.baloo2(fontSize: 15, fontWeight: FontWeight.w800, color: Colors.white), maxLines: 1, overflow: TextOverflow.ellipsis),
-          const SizedBox(height: 2),
-          Text('₹${plan.price.toStringAsFixed(0)}', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w900, color: Colors.white)),
-          Text('/ ${plan.billingCycle ?? 'mo'}', style: GoogleFonts.poppins(fontSize: 10, color: Colors.white.withOpacity(0.7))),
-        ],
+    return GestureDetector(
+      onTap: () {
+        // Navigate to subscription detail
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const SubscriptionsScreenRedesign(),
+          ),
+        );
+      },
+      child: Container(
+        width: 130,
+        margin: const EdgeInsets.only(right: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: Colors.white.withOpacity(0.3)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(plan.name,
+                style: GoogleFonts.baloo2(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis),
+            const SizedBox(height: 2),
+            Text('₹${plan.price.toStringAsFixed(0)}',
+                style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white)),
+            Text('/ ${plan.billingCycle ?? 'mo'}',
+                style: GoogleFonts.poppins(
+                    fontSize: 10, color: Colors.white.withOpacity(0.7))),
+          ],
+        ),
       ),
     );
   }
@@ -454,13 +571,19 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
 
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => ProductDetailScreenRedesign(productId: product.id)),
+        MaterialPageRoute(
+            builder: (_) => ProductDetailScreenRedesign(productId: product.id)),
       ),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(24),
-          boxShadow: [BoxShadow(color: kNavy.withOpacity(0.04), blurRadius: 10, offset: const Offset(0, 4))],
+          boxShadow: [
+            BoxShadow(
+                color: kNavy.withOpacity(0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 4))
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -471,12 +594,15 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                   Hero(
                     tag: 'prod_${product.id}',
                     child: ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(24)),
                       child: CachedNetworkImage(
                         imageUrl: product.imageUrl ?? '',
                         fit: BoxFit.cover,
                         width: double.infinity,
-                        errorWidget: (_, __, ___) => Container(color: kCream, child: const Icon(Icons.image, color: Colors.grey)),
+                        errorWidget: (_, __, ___) => Container(
+                            color: kCream,
+                            child: const Icon(Icons.image, color: Colors.grey)),
                       ),
                     ),
                   ),
@@ -487,8 +613,12 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                       onTap: () => wishlist.toggleWishlist(product.id),
                       child: Container(
                         padding: const EdgeInsets.all(8),
-                        decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                        child: Icon(isWished ? Icons.favorite : Icons.favorite_border, color: kCoral, size: 18),
+                        decoration: const BoxDecoration(
+                            color: Colors.white, shape: BoxShape.circle),
+                        child: Icon(
+                            isWished ? Icons.favorite : Icons.favorite_border,
+                            color: kCoral,
+                            size: 18),
                       ),
                     ),
                   ),
@@ -497,9 +627,16 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                       top: 10,
                       left: 10,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(color: kCoral, borderRadius: BorderRadius.circular(8)),
-                        child: Text('SALE', style: GoogleFonts.poppins(fontSize: 9, fontWeight: FontWeight.w800, color: Colors.white)),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                            color: kCoral,
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Text('SALE',
+                            style: GoogleFonts.poppins(
+                                fontSize: 9,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white)),
                       ),
                     ),
                 ],
@@ -510,7 +647,13 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(product.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w700, color: kNavy)),
+                  Text(product.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: kNavy)),
                   const SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -518,28 +661,38 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('₹${product.effectivePrice.toStringAsFixed(0)}', style: GoogleFonts.baloo2(fontSize: 18, fontWeight: FontWeight.w800, color: kCoral)),
+                          Text('₹${product.effectivePrice.toStringAsFixed(0)}',
+                              style: GoogleFonts.baloo2(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  color: kCoral)),
                           if (product.isOnSale)
-                            Text('₹${product.price.toStringAsFixed(0)}', style: GoogleFonts.poppins(fontSize: 11, color: kNavy.withOpacity(0.3), decoration: TextDecoration.lineThrough)),
+                            Text('₹${product.price.toStringAsFixed(0)}',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 11,
+                                    color: kNavy.withOpacity(0.3),
+                                    decoration: TextDecoration.lineThrough)),
                         ],
                       ),
                       GestureDetector(
                         onTap: () {
                           cart.addItem(product.id, 1);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('${product.name} added to cart'),
+                            const SnackBar(
+                              content: Text('Added to cart'),
                               behavior: SnackBarBehavior.floating,
                               backgroundColor: kNavy,
-                              duration: const Duration(seconds: 1),
-                              action: SnackBarAction(label: 'CART', textColor: kCoral, onPressed: () => switchToShellTab(context, 2)),
+                              duration: Duration(seconds: 1),
                             ),
                           );
                         },
                         child: Container(
                           padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(color: kCoral.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
-                          child: const Icon(Icons.add_shopping_cart_rounded, color: kCoral, size: 18),
+                          decoration: BoxDecoration(
+                              color: kCoral.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: const Icon(Icons.add_shopping_cart_rounded,
+                              color: kCoral, size: 18),
                         ),
                       ),
                     ],

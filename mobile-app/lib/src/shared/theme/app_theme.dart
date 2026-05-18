@@ -11,12 +11,10 @@ class AppTheme {
         secondary: kMint,
         tertiary: kYellow,
         surface: Colors.white,
-        background: Colors.grey.shade50,
         error: Colors.red.shade600,
         onPrimary: Colors.white,
         onSecondary: kNavy,
         onSurface: kNavy,
-        onBackground: kNavy,
       ),
 
       // App Bar Theme

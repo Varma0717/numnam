@@ -158,7 +158,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/media/json', [MediaController::class, 'index'])->name('media.json');
         Route::get('/media/json/folders', [MediaController::class, 'folders'])->name('media.json.folders');
         Route::post('/media/json/upload', [MediaController::class, 'store'])->name('media.json.upload');
+        Route::get('/media/json/{media}', [MediaController::class, 'show'])->name('media.json.show');
+        Route::put('/media/json/{media}', [MediaController::class, 'update'])->name('media.json.update');
         Route::delete('/media/json/{media}', [MediaController::class, 'destroy'])->name('media.json.destroy');
+        Route::post('/media/json/bulk-update', [MediaController::class, 'bulkUpdate'])->name('media.json.bulk-update');
+        Route::post('/media/json/bulk-delete', [MediaController::class, 'bulkDelete'])->name('media.json.bulk-delete');
 
         // Customers
         Route::get('/customers', [CustomerManagementController::class, 'index'])->name('customers.index');
