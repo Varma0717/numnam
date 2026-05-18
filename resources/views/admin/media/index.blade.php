@@ -411,14 +411,14 @@
                     fileFormData.append('collection', collection);
                     if (title) fileFormData.append('title', title);
 
-                    fetch('{{ route('
-                            admin.media.json.upload ') }}', {
-                                method: 'POST',
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                },
-                                body: fileFormData
-                            })
+                    const uploadUrl = '{{ route("admin.media.json.upload") }}';
+                    fetch(uploadUrl, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: fileFormData
+                    })
                         .then(res => res.json())
                         .then(data => {
                             uploaded++;
@@ -468,27 +468,30 @@
                 document.getElementById('mediaLoader').style.display = 'block';
                 document.getElementById('mediaGrid').innerHTML = '';
 
-                fetch('{{ route('
-                    admin.media.json ') }}?' + params.toString())
-                document.getElementById('mediaStats').textContent = '';
-                return;
-            }
+            const mediaUrl = '{{ route("admin.media.json") }}';
+            fetch(mediaUrl + '?' + params.toString())
+                .then(res => res.json())
+                .then(response => {
+                    document.getElementById('mediaLoader').style.display = 'none';
 
-            document.getElementById('mediaEmpty').style.display = 'none';
-            document.getElementById('mediaStats').textContent =
-                `Showing ${response.meta.from}-${response.meta.to} of ${response.meta.total} files`;
+                    if (!response.data || response.data.length === 0) {
+                        document.getElementById('mediaEmpty').style.display = 'block';
+                        document.getElementById('mediaStats').textContent = '';
+                        return;
+                    }
 
-            renderMediaGrid(response.data);
-            renderPagination(response.meta);
-        })
-        .catch(err => {
-            console.error('Load error:', err);
-            document.getElementById('mediaLoader').style.display = 'none';
-        });
-    }
+                    document.getElementById('mediaEmpty').style.display = 'none';
+                    document.getElementById('mediaStats').textContent =
+                        `Showing ${response.meta.from}-${response.meta.to} of ${response.meta.total} files`;
 
-    // Render Media Grid
-    function renderMediaGrid(items) {
+                    renderMediaGrid(response.data);
+                    renderPagination(response.meta);
+                })
+                .catch(err => {
+                    console.error('Load error:', err);
+                    document.getElementById('mediaLoader').style.display = 'none';
+                });
+        }
         const grid = document.getElementById('mediaGrid');
         grid.innerHTML = '';
 
@@ -552,8 +555,8 @@
 
     // Load Folders
     function loadFolders() {
-        fetch('{{ route('
-                admin.media.json.folders ') }}')
+        const foldersUrl = '{{ route("admin.media.json.folders") }}';
+        fetch(foldersUrl)
             .then(res => res.json())
             .then(response => {
                 const select = document.getElementById('folderFilter');
@@ -688,19 +691,19 @@
         return;
     }
 
-    if (!confirm(`Delete ${selectedFiles.size} selected files?`)) return;
+        if (!confirm(`Delete ${selectedFiles.size} selected files?`)) return;
 
-    fetch('{{ route('
-            admin.media.json.bulk - delete ') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    ids: Array.from(selectedFiles)
-                })
+        const bulkDeleteUrl = '{{ route("admin.media.json.bulk-delete") }}';
+        fetch(bulkDeleteUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                ids: Array.from(selectedFiles)
             })
+        })
         .then(res => res.json())
         .then(data => {
             selectedFiles.clear();
