@@ -120,25 +120,50 @@ window.MediaPicker = (function () {
             uploadForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const status = document.getElementById('mpUploadStatus');
-                status.textContent = 'Uploading...';
+                const fileInput = document.getElementById('mpFileInput');
+                const files = Array.from(fileInput?.files || []);
+
+                if (!files.length) {
+                    status.textContent = 'Choose at least one file first.';
+                    return;
+                }
+
+                status.textContent = `Uploading 0/${files.length} files...`;
                 try {
-                    const fd = new FormData(uploadForm);
-                    fd.set('_token', csrfToken());
-                    const resp = await fetch(`${ADMIN_BASE}/media/json/upload`, {
-                        method: 'POST',
-                        headers: { Accept: 'application/json', 'X-CSRF-TOKEN': csrfToken() },
-                        body: fd,
-                    });
-                    const data = await resp.json();
-                    if (data.success || resp.ok) {
-                        status.textContent = 'Uploaded!';
-                        uploadForm.reset();
-                        document.getElementById('mpUploadFields').style.display = 'none';
-                        _overlay.querySelector('.mp-tab[data-tab="library"]').click();
-                        await loadMedia();
-                    } else {
-                        status.textContent = data.message || 'Upload failed';
+                    const uploadUrl = `${ADMIN_BASE}/media/json/upload`;
+                    const meta = new FormData(uploadForm);
+                    meta.delete('file');
+
+                    let uploaded = 0;
+
+                    for (const file of files) {
+                        const fd = new FormData();
+                        fd.set('_token', csrfToken());
+                        fd.append('file', file);
+
+                        for (const [key, value] of meta.entries()) {
+                            fd.append(key, value);
+                        }
+
+                        const resp = await fetch(uploadUrl, {
+                            method: 'POST',
+                            headers: { Accept: 'application/json', 'X-CSRF-TOKEN': csrfToken() },
+                            body: fd,
+                        });
+                        const data = await resp.json();
+                        if (!data.success && !resp.ok) {
+                            throw new Error(data.message || `Upload failed for ${file.name}`);
+                        }
+
+                        uploaded += 1;
+                        status.textContent = `Uploading ${uploaded}/${files.length} files...`;
                     }
+
+                    status.textContent = 'Uploaded!';
+                    uploadForm.reset();
+                    document.getElementById('mpUploadFields').style.display = 'none';
+                    _overlay.querySelector('.mp-tab[data-tab="library"]').click();
+                    await loadMedia();
                 } catch (err) {
                     status.textContent = 'Error: ' + err.message;
                 }
