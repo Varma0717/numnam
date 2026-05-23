@@ -31,117 +31,68 @@ $nutrients[] = ['name' => $name, 'value' => $value];
 }
 @endphp
 
-<x-admin.form-section title="Nutrition Facts" icon="chart-bar">
-    <p class="admin-field-desc" style="margin-bottom: var(--space-lg);">
-        Add nutritional information per serving. Data will be stored as structured JSON.
-    </p>
+<x-admin.form-builder
+    :rows="$nutrients"
+    fieldName="nutrition_facts"
+    label="🍎 Add Nutrients"
+    addButtonText="Add Nutrient"
+    description="Track nutritional content per serving for your products">
+    @foreach($nutrients as $index => $nutrient)
+    <div class="admin-form-row" style="margin-bottom: 0;">
+        <label class="admin-input-label" style="margin-bottom: var(--space-sm);">Nutrient Name</label>
+        <input
+            type="text"
+            name="nutrition_facts_name[]"
+            class="admin-input"
+            value="{{ $nutrient['name'] }}"
+            placeholder="e.g., Protein, Carbs, Fat, Fiber" />
+    </div>
 
-    <x-admin.form-builder
-        :rows="$nutrients"
-        fieldName="nutrition_facts"
-        label="Add Nutrients"
-        addButtonText="Add Nutrient">
-        @foreach($nutrients as $index => $nutrient)
-        <div class="admin-form-builder-row" data-index="{{ $index }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-lg); align-items: flex-end; padding: var(--space-lg); background: #fafbfc; border: 1px solid var(--wp-border); border-radius: 6px; margin-bottom: var(--space-lg);">
-            <div class="admin-form-row" style="margin-bottom: 0;">
-                <label class="admin-input-label" style="margin-bottom: var(--space-sm);">Nutrient Name</label>
-                <input
-                    type="text"
-                    name="nutrition_facts_name[]"
-                    class="admin-input"
-                    value="{{ $nutrient['name'] }}"
-                    placeholder="e.g., Protein, Carbs, Fat, Fiber" />
-            </div>
+    <div class="admin-form-row" style="margin-bottom: 0;">
+        <label class="admin-input-label" style="margin-bottom: var(--space-sm);">Value with Unit</label>
+        <input
+            type="text"
+            name="nutrition_facts_value[]"
+            class="admin-input"
+            value="{{ $nutrient['value'] }}"
+            placeholder="e.g., 13g, 20g, 15%" />
+    </div>
+    @endforeach
 
-            <div class="admin-form-row" style="margin-bottom: 0;">
-                <label class="admin-input-label" style="margin-bottom: var(--space-sm);">Value with Unit</label>
-                <input
-                    type="text"
-                    name="nutrition_facts_value[]"
-                    class="admin-input"
-                    value="{{ $nutrient['value'] }}"
-                    placeholder="e.g., 13g, 20g, 15%" />
-            </div>
+    @if(empty($nutrients))
+    <div class="admin-form-row" style="margin-bottom: 0;">
+        <label class="admin-input-label" style="margin-bottom: var(--space-sm);">Nutrient Name</label>
+        <input
+            type="text"
+            name="nutrition_facts_name[]"
+            class="admin-input"
+            placeholder="e.g., Protein, Carbs, Fat, Fiber" />
+    </div>
 
-            <button
-                type="button"
-                class="admin-form-builder-row-remove"
-                onclick="removeNutrientRow(this)"
-                style="margin-bottom: 0;">
-                × Remove
-            </button>
-        </div>
-        @endforeach
+    <div class="admin-form-row" style="margin-bottom: 0;">
+        <label class="admin-input-label" style="margin-bottom: var(--space-sm);">Value with Unit</label>
+        <input
+            type="text"
+            name="nutrition_facts_value[]"
+            class="admin-input"
+            placeholder="e.g., 13g, 20g, 15%" />
+    </div>
+    @endif
+</x-admin.form-builder>
 
-        @if(empty($nutrients))
-        <div class="admin-form-builder-empty">
-            <p>No nutrients added yet. Click "Add Nutrient" to get started.</p>
-        </div>
-        @endif
-    </x-admin.form-builder>
-
-    <input
-        type="hidden"
-        id="nutrition_facts_json"
-        name="nutrition_facts"
-        value="{{ $nutritionData ?? '{}' }}" />
-
-    <p class="admin-field-desc" style="margin-top: var(--space-lg); font-style: italic;">
+<div class="admin-form-section-wrapper" style="margin-top: var(--space-lg);">
+    <p class="admin-field-desc" style="font-style: italic;">
         💡 Tip: Common nutrients include Protein, Carbohydrates, Fat, Fiber, Sugars, Sodium. Add values with units (g for grams, mg for milligrams, % for percentage).
     </p>
-</x-admin.form-section>
+</div>
+
+<input
+    type="hidden"
+    id="nutrition_facts_json"
+    name="nutrition_facts"
+    value="{{ $nutritionData ?? '{}' }}" />
 
 <script>
-    function removeNutrientRow(button) {
-        button.closest('.admin-form-builder-row').remove();
-        updateNutritionJSON();
-    }
-
-    function addNutrientRow() {
-        const container = document.querySelector('[data-field="nutrition_facts"]');
-        const rows = container.querySelectorAll('.admin-form-builder-row');
-        const newIndex = rows.length;
-
-        const newRow = document.createElement('div');
-        newRow.className = 'admin-form-builder-row';
-        newRow.setAttribute('data-index', newIndex);
-        newRow.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-lg); align-items: flex-end; padding: var(--space-lg); background: #fafbfc; border: 1px solid var(--wp-border); border-radius: 6px; margin-bottom: var(--space-lg);';
-
-        newRow.innerHTML = `
-        <div class="admin-form-row" style="margin-bottom: 0;">
-            <label class="admin-input-label" style="margin-bottom: var(--space-sm);">Nutrient Name</label>
-            <input 
-                type="text" 
-                name="nutrition_facts_name[]" 
-                class="admin-input"
-                placeholder="e.g., Protein, Carbs, Fat, Fiber"
-            />
-        </div>
-        
-        <div class="admin-form-row" style="margin-bottom: 0;">
-            <label class="admin-input-label" style="margin-bottom: var(--space-sm);">Value with Unit</label>
-            <input 
-                type="text" 
-                name="nutrition_facts_value[]" 
-                class="admin-input"
-                placeholder="e.g., 13g, 20g, 15%"
-            />
-        </div>
-        
-        <button 
-            type="button" 
-            class="admin-form-builder-row-remove"
-            onclick="removeNutrientRow(this)"
-            style="margin-bottom: 0;"
-        >
-            × Remove
-        </button>
-    `;
-
-        container.appendChild(newRow);
-        updateNutritionJSON();
-    }
-
     function updateNutritionJSON() {
         const names = document.querySelectorAll('input[name="nutrition_facts_name[]"]');
         const values = document.querySelectorAll('input[name="nutrition_facts_value[]"]');
@@ -150,13 +101,21 @@ $nutrients[] = ['name' => $name, 'value' => $value];
         const nutritionData = {};
         names.forEach((nameInput, index) => {
             const name = nameInput.value.trim();
-            const value = values[index].value.trim();
+            const value = values[index] ? values[index].value.trim() : '';
             if (name && value) {
                 nutritionData[name] = value;
             }
         });
 
         jsonInput.value = Object.keys(nutritionData).length > 0 ? JSON.stringify(nutritionData) : '{}';
+    }
+
+    // Update JSON when form-builder rows are added
+    const addButton = document.querySelector('[data-field="nutrition_facts"]').closest('.admin-form-builder').querySelector('.admin-btn-add-row');
+    if (addButton) {
+        addButton.addEventListener('click', () => {
+            setTimeout(updateNutritionJSON, 100);
+        });
     }
 
     // Update JSON whenever inputs change
@@ -171,18 +130,29 @@ $nutrients[] = ['name' => $name, 'value' => $value];
             updateNutritionJSON();
         }
     });
+
+    // Update JSON when rows are deleted
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.admin-form-builder-row-delete')) {
+            setTimeout(updateNutritionJSON, 100);
+        }
+    });
+
+    // Initialize JSON on page load
+    updateNutritionJSON();
 </script>
 
 <style scoped>
     .admin-form-row {
-        margin-bottom: var(--space-xl);
+        margin-bottom: 0;
     }
 
     .admin-input-label {
         display: block;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 600;
         color: var(--wp-text);
         line-height: 1.4;
+        margin-bottom: var(--space-sm);
     }
 </style>
