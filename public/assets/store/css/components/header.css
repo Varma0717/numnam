@@ -332,8 +332,9 @@
   height: min(90svh, 860px);
   padding: var(--nn-board-top-safe) var(--nn-board-side-safe) var(--nn-board-bottom-safe);
   display: grid;
-  grid-template-columns: minmax(100px, 150px) 1fr minmax(100px, 150px);
+  grid-template-columns: 1fr 1fr 1fr;
   align-items: start;
+  justify-items: center;
   gap: 0;
   transform: translateY(24px);
   opacity: 0;
@@ -388,12 +389,14 @@
   justify-content: flex-start;
   gap: clamp(0.05rem, 0.9vh, 0.45rem);
   padding-top: clamp(1.5rem, 4vh, 2.5rem);
+  width: 100%;
+  grid-column: 2;
 }
 
 .nn-menu-link {
   display: block;
   font-family: 'Poppins', sans-serif;
-  font-size: clamp(1.55rem, 3.4vw, 3rem);
+  font-size: clamp(1.35rem, 2.9vw, 2.7rem);
   font-weight: 800;
   line-height: 1.03;
   letter-spacing: -0.03em;
@@ -403,6 +406,7 @@
   text-transform: uppercase;
   transition: color 0.2s, transform 0.2s;
   position: relative;
+  white-space: nowrap;
 }
 
 .nn-menu-link::after {
@@ -437,11 +441,12 @@
 .nn-menu-social {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   gap: 0.85rem;
   min-width: 0;
   padding-top: clamp(1.5rem, 4vh, 2.5rem);
-  justify-self: end;
+  justify-self: center;
+  grid-column: 3;
 }
 
 .nn-social-link {

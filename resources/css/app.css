@@ -1074,7 +1074,7 @@
         width: 72px;
         height: 72px;
         pointer-events: none;
-        will-change: left, top;
+        will-change: transform;
         -webkit-user-select: none;
         user-select: none;
     }

@@ -65,14 +65,22 @@
     </script>
     @yield('structured_data')
 
-    {{-- Preconnect for performance --}}
+    {{-- Fonts - defer non-critical weights, preload critical --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap">
+    {{-- Load only critical font weights, defer others --}}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap">
+    </noscript>
 
     <meta name="asset-base" content="{{ rtrim(url(''), '/') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link rel="stylesheet" href="{{ asset('assets/store/css/components/header.css') }}?v={{ filemtime(public_path('assets/store/css/components/header.css')) }}">
+    {{-- Defer header CSS as it's non-critical for initial paint --}}
+    <link rel="stylesheet" href="{{ asset('assets/store/css/components/header.css') }}?v={{ filemtime(public_path('assets/store/css/components/header.css')) }}" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="{{ asset('assets/store/css/components/header.css') }}?v={{ filemtime(public_path('assets/store/css/components/header.css')) }}">
+    </noscript>
     @yield('head')
 </head>
 
@@ -160,6 +168,9 @@
 
     {{-- Toast notifications container --}}
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    {{-- Bird animation - defer to not block rendering --}}
+    <script src="{{ asset('resources/js/bird.js') }}?v={{ filemtime(public_path('../resources/js/bird.js')) }}" defer async></script>
 
     <script src="{{ asset('assets/store/js/components/header.js') }}?v={{ filemtime(public_path('assets/store/js/components/header.js')) }}" defer></script>
     <script src="{{ asset('assets/store/js/store.js') }}?v={{ filemtime(public_path('assets/store/js/store.js')) }}" defer></script>

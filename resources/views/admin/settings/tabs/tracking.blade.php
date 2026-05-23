@@ -62,34 +62,63 @@
         hint="Include full &lt;script&gt; or &lt;meta&gt; tags as needed. This code will be placed before &lt;/head&gt;." />
 </x-admin.form-section>
 
+{{-- Tracking Code Status --}}
 <x-admin.form-section title="Tracking Code Status" icon="circle-check">
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-lg);">
-        <div style="padding: var(--space-lg); background: {{ (!empty($settings['tracking_google_pixel']->value ?? null)) ? '#ecfdf5' : '#f3f4f6' }}; border-radius: 8px; border-left: 3px solid {{ (!empty($settings['tracking_google_pixel']->value ?? null)) ? 'var(--wp-success)' : 'var(--wp-border)' }};">
-            <div style="font-size: 13px; font-weight: 600; color: var(--wp-text); margin-bottom: 4px;">Google Pixel</div>
-            <div style="font-size: 12px; color: var(--wp-muted);">
-                {{ (!empty($settings['tracking_google_pixel']->value ?? null)) ? '✓ Configured' : 'Not configured' }}
-            </div>
+    <style>
+        .tracking-status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .tracking-status-card {
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid;
+        }
+
+        .tracking-status-card.configured {
+            background: #ecfdf5;
+            border-left-color: #10b981;
+        }
+
+        .tracking-status-card.not-configured {
+            background: #f3f4f6;
+            border-left-color: #d1d5db;
+        }
+
+        .tracking-status-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--wp-text);
+            margin-bottom: 4px;
+        }
+
+        .tracking-status-text {
+            font-size: 12px;
+            color: var(--wp-muted);
+        }
+    </style>
+
+    <div class="tracking-status-grid">
+        <div class="tracking-status-card {{ !empty($settings['tracking_google_pixel']->value ?? null) ? 'configured' : 'not-configured' }}">
+            <div class="tracking-status-title">Google Pixel</div>
+            <div class="tracking-status-text">{{ !empty($settings['tracking_google_pixel']->value ?? null) ? '✓ Configured' : 'Not configured' }}</div>
         </div>
 
-        <div style="padding: var(--space-lg); background: {{ (!empty($settings['tracking_google_analytics']->value ?? null)) ? '#ecfdf5' : '#f3f4f6' }}; border-radius: 8px; border-left: 3px solid {{ (!empty($settings['tracking_google_analytics']->value ?? null)) ? 'var(--wp-success)' : 'var(--wp-border)' }};">
-            <div style="font-size: 13px; font-weight: 600; color: var(--wp-text); margin-bottom: 4px;">Google Analytics</div>
-            <div style="font-size: 12px; color: var(--wp-muted);">
-                {{ (!empty($settings['tracking_google_analytics']->value ?? null)) ? '✓ Configured' : 'Not configured' }}
-            </div>
+        <div class="tracking-status-card {{ !empty($settings['tracking_google_analytics']->value ?? null) ? 'configured' : 'not-configured' }}">
+            <div class="tracking-status-title">Google Analytics</div>
+            <div class="tracking-status-text">{{ !empty($settings['tracking_google_analytics']->value ?? null) ? '✓ Configured' : 'Not configured' }}</div>
         </div>
 
-        <div style="padding: var(--space-lg); background: {{ (!empty($settings['tracking_facebook_pixel']->value ?? null)) ? '#ecfdf5' : '#f3f4f6' }}; border-radius: 8px; border-left: 3px solid {{ (!empty($settings['tracking_facebook_pixel']->value ?? null)) ? 'var(--wp-success)' : 'var(--wp-border)' }};">
-            <div style="font-size: 13px; font-weight: 600; color: var(--wp-text); margin-bottom: 4px;">Facebook Pixel</div>
-            <div style="font-size: 12px; color: var(--wp-muted);">
-                {{ (!empty($settings['tracking_facebook_pixel']->value ?? null)) ? '✓ Configured' : 'Not configured' }}
-            </div>
+        <div class="tracking-status-card {{ !empty($settings['tracking_facebook_pixel']->value ?? null) ? 'configured' : 'not-configured' }}">
+            <div class="tracking-status-title">Facebook Pixel</div>
+            <div class="tracking-status-text">{{ !empty($settings['tracking_facebook_pixel']->value ?? null) ? '✓ Configured' : 'Not configured' }}</div>
         </div>
 
-        <div style="padding: var(--space-lg); background: {{ (!empty($settings['tracking_custom_head']->value ?? null)) ? '#ecfdf5' : '#f3f4f6' }}; border-radius: 8px; border-left: 3px solid {{ (!empty($settings['tracking_custom_head']->value ?? null)) ? 'var(--wp-success)' : 'var(--wp-border)' }};">
-            <div style="font-size: 13px; font-weight: 600; color: var(--wp-text); margin-bottom: 4px;">Custom Head Code</div>
-            <div style="font-size: 12px; color: var(--wp-muted);">
-                {{ (!empty($settings['tracking_custom_head']->value ?? null)) ? '✓ Configured' : 'Not configured' }}
-            </div>
+        <div class="tracking-status-card {{ !empty($settings['tracking_custom_head']->value ?? null) ? 'configured' : 'not-configured' }}">
+            <div class="tracking-status-title">Custom Head Code</div>
+            <div class="tracking-status-text">{{ !empty($settings['tracking_custom_head']->value ?? null) ? '✓ Configured' : 'Not configured' }}</div>
         </div>
     </div>
 

@@ -98,46 +98,52 @@
             }, 800);
         });
 
-        /* ── Spring physics tick ─────────────────────────────────────── */
+        /* ── Spring physics tick with throttling for performance ─────────────────────────────────────── */
+        var frameCount = 0;
+        var throttleRate = 2; // Update every 2 frames (30fps instead of 60fps)
+
         function tick() {
-            if (idle) {
-                idleAngle += 0.007;
-                tx = window.innerWidth * 0.5 + Math.sin(idleAngle) * (window.innerWidth * 0.31);
-                ty = window.innerHeight * 0.38 + Math.sin(idleAngle * 1.9) * (window.innerHeight * 0.13);
+            frameCount++;
+
+            /* Throttle updates for better performance */
+            if (frameCount % throttleRate === 0) {
+                if (idle) {
+                    idleAngle += 0.007;
+                    tx = window.innerWidth * 0.5 + Math.sin(idleAngle) * (window.innerWidth * 0.31);
+                    ty = window.innerHeight * 0.38 + Math.sin(idleAngle * 1.9) * (window.innerHeight * 0.13);
+                }
+
+                /* Spring toward target */
+                var ax = (tx - bx) * 0.042;
+                var ay = (ty - by) * 0.042;
+                vx = (vx + ax) * 0.80;
+                vy = (vy + ay) * 0.80;
+                bx += vx;
+                by += vy;
+
+                /* Clamp inside viewport */
+                bx = Math.max(0, Math.min(window.innerWidth - 72, bx));
+                by = Math.max(0, Math.min(window.innerHeight - 72, by));
+
+                var absX = Math.abs(vx);
+                var absY = Math.abs(vy);
+                var view = 'front';
+                var mirror = false;
+
+                /* Pick one of the 5 supplied mascot views from motion vector */
+                if (absX > 1.1 && absY > 1.1) {
+                    view = 'threeQuarter';
+                    mirror = vx < 0;
+                } else if (absX >= absY) {
+                    view = vx < 0 ? 'sideLeft' : 'sideRight';
+                } else {
+                    view = vy < 0 ? 'back' : 'front';
+                }
+
+                setBirdView(birdImg, view);
+
+                bird.style.transform = 'translate(' + Math.round(bx) + 'px, ' + Math.round(by) + 'px)' + (mirror ? ' scaleX(-1)' : '');
             }
-
-            /* Spring toward target */
-            var ax = (tx - bx) * 0.042;
-            var ay = (ty - by) * 0.042;
-            vx = (vx + ax) * 0.80;
-            vy = (vy + ay) * 0.80;
-            bx += vx;
-            by += vy;
-
-            /* Clamp inside viewport */
-            bx = Math.max(0, Math.min(window.innerWidth - 72, bx));
-            by = Math.max(0, Math.min(window.innerHeight - 72, by));
-
-            var absX = Math.abs(vx);
-            var absY = Math.abs(vy);
-            var view = 'front';
-            var mirror = false;
-
-            /* Pick one of the 5 supplied mascot views from motion vector */
-            if (absX > 1.1 && absY > 1.1) {
-                view = 'threeQuarter';
-                mirror = vx < 0;
-            } else if (absX >= absY) {
-                view = vx < 0 ? 'sideLeft' : 'sideRight';
-            } else {
-                view = vy < 0 ? 'back' : 'front';
-            }
-
-            setBirdView(birdImg, view);
-
-            bird.style.left = Math.round(bx) + 'px';
-            bird.style.top = Math.round(by) + 'px';
-            bird.style.transform = mirror ? 'scaleX(-1)' : 'none';
 
             requestAnimationFrame(tick);
         }
