@@ -37,29 +37,7 @@ $nutrients[] = ['name' => $name, 'value' => $value];
     label="🍎 Add Nutrients"
     addButtonText="Add Nutrient"
     description="Track nutritional content per serving for your products">
-    @foreach($nutrients as $index => $nutrient)
-    <div class="admin-form-row" style="margin-bottom: 0;">
-        <label class="admin-input-label" style="margin-bottom: var(--space-sm);">Nutrient Name</label>
-        <input
-            type="text"
-            name="nutrition_facts_name[]"
-            class="admin-input"
-            value="{{ $nutrient['name'] }}"
-            placeholder="e.g., Protein, Carbs, Fat, Fiber" />
-    </div>
-
-    <div class="admin-form-row" style="margin-bottom: 0;">
-        <label class="admin-input-label" style="margin-bottom: var(--space-sm);">Value with Unit</label>
-        <input
-            type="text"
-            name="nutrition_facts_value[]"
-            class="admin-input"
-            value="{{ $nutrient['value'] }}"
-            placeholder="e.g., 13g, 20g, 15%" />
-    </div>
-    @endforeach
-
-    @if(empty($nutrients))
+    <!-- Template for a single nutrient row - no @foreach needed -->
     <div class="admin-form-row" style="margin-bottom: 0;">
         <label class="admin-input-label" style="margin-bottom: var(--space-sm);">Nutrient Name</label>
         <input
@@ -77,7 +55,6 @@ $nutrients[] = ['name' => $name, 'value' => $value];
             class="admin-input"
             placeholder="e.g., 13g, 20g, 15%" />
     </div>
-    @endif
 </x-admin.form-builder>
 
 <div class="admin-form-section-wrapper" style="margin-top: var(--space-lg);">
@@ -93,6 +70,33 @@ $nutrients[] = ['name' => $name, 'value' => $value];
     value="{{ $nutritionData ?? '{}' }}" />
 
 <script>
+    // Store nutrient data for populating existing rows
+    const existingNutrients = @json($nutrients ?? []);
+
+    // Initialize form with existing data on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        populateNutrientInputs();
+        updateNutritionJSON();
+    });
+
+    function populateNutrientInputs() {
+        const rows = document.querySelectorAll('[data-field="nutrition_facts"] .admin-form-builder-row');
+
+        rows.forEach((row, index) => {
+            const nameInputs = row.querySelectorAll('input[name="nutrition_facts_name[]"]');
+            const valueInputs = row.querySelectorAll('input[name="nutrition_facts_value[]"]');
+
+            if (existingNutrients[index]) {
+                nameInputs.forEach(input => {
+                    input.value = existingNutrients[index].name || '';
+                });
+                valueInputs.forEach(input => {
+                    input.value = existingNutrients[index].value || '';
+                });
+            }
+        });
+    }
+
     function updateNutritionJSON() {
         const names = document.querySelectorAll('input[name="nutrition_facts_name[]"]');
         const values = document.querySelectorAll('input[name="nutrition_facts_value[]"]');
@@ -110,11 +114,14 @@ $nutrients[] = ['name' => $name, 'value' => $value];
         jsonInput.value = Object.keys(nutritionData).length > 0 ? JSON.stringify(nutritionData) : '{}';
     }
 
-    // Update JSON when form-builder rows are added
-    const addButton = document.querySelector('[data-field="nutrition_facts"]').closest('.admin-form-builder').querySelector('.admin-btn-add-row');
+    // Watch for add/delete button clicks and repopulate
+    const addButton = document.querySelector('[data-field="nutrition_facts"]')?.closest('.admin-form-builder')?.querySelector('.admin-btn-add-row');
     if (addButton) {
         addButton.addEventListener('click', () => {
-            setTimeout(updateNutritionJSON, 100);
+            setTimeout(() => {
+                populateNutrientInputs();
+                updateNutritionJSON();
+            }, 100);
         });
     }
 
@@ -137,9 +144,6 @@ $nutrients[] = ['name' => $name, 'value' => $value];
             setTimeout(updateNutritionJSON, 100);
         }
     });
-
-    // Initialize JSON on page load
-    updateNutritionJSON();
 </script>
 
 <style scoped>
