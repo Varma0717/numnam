@@ -607,6 +607,7 @@
             fetch(`/admin/media/json/${id}`, {
                     method: 'POST',
                     headers: {
+                        'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
                     body: JSON.stringify({
@@ -615,11 +616,7 @@
                         alt_text: document.getElementById('detailAlt').value,
                         caption: document.getElementById('detailCaption').value,
                         folder: document.getElementById('detailFolder').value,
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
+                    })
                 })
                 .then(res => res.json())
                 .then(data => {
