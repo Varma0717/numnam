@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
-    private array $tabs = ['general', 'payment', 'shipping', 'tax', 'email'];
+    private array $tabs = ['general', 'payment', 'shipping', 'tax', 'email', 'tracking'];
 
     public function index(Request $request)
     {

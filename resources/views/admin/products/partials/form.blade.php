@@ -69,16 +69,8 @@
             </div>
         </section>
 
-        {{-- Nutrition Facts --}}
-        <section class="postbox">
-            <div class="postbox-header">
-                <h3>Nutrition Facts</h3>
-            </div>
-            <div class="inside">
-                <p class="admin-field-desc">Enter as JSON, e.g. {"protein":"13g","carbs":"20g"}</p>
-                <textarea name="nutrition_facts" style="width:100%; min-height:80px; font-family:monospace; font-size:12px;" placeholder='{"protein":"13g"}'>{{ old('nutrition_facts', isset($product) ? json_encode($product->nutrition_facts ?? [], JSON_PRETTY_PRINT) : '') }}</textarea>
-            </div>
-        </section>
+        {{-- Nutrition Facts - Enhanced Form Builder --}}
+        <x-admin.nutrition-facts :nutritionData="old('nutrition_facts', isset($product) ? json_encode($product->nutrition_facts ?? [], JSON_PRETTY_PRINT) : '{}')" />
     </div>
 
     {{-- Sidebar --}}

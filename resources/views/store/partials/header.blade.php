@@ -56,24 +56,6 @@
     </button>
     <div class="nn-fullscreen-menu__inner">
 
-        {{-- Left: utility / footer links --}}
-        <div class="nn-menu-foot">
-            <a href="{{ route('store.blog.index') }}">Blog</a>
-            <a href="{{ route('store.recipes') }}">Recipes</a>
-            <a href="{{ route('store.faq') }}">FAQ</a>
-            <a href="{{ route('store.contact') }}">Contact</a>
-            <a href="{{ route('store.refer-friends') }}">Refer Friends</a>
-            <a href="{{ route('store.legal.terms') }}">Terms</a>
-            <a href="{{ route('store.legal.privacy') }}">Privacy</a>
-            @auth
-            <a href="{{ route('store.account') }}">My Account</a>
-            @else
-            <a href="{{ route('store.login') }}">Login</a>
-            <a href="{{ route('store.register') }}">Register</a>
-            @endauth
-            <span class="nn-menu-copyright">Copyright&copy; 2025 NumNam.</span>
-        </div>
-
         {{-- Center: main nav links --}}
         <nav class="nn-menu-main" role="navigation" aria-label="Main menu">
             <a href="{{ route('store.home') }}" class="nn-menu-link {{ request()->routeIs('store.home') ? 'active' : '' }}">Home</a>

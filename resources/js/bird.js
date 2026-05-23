@@ -86,25 +86,9 @@
         var vx = 0;
         var vy = 0;
 
-        /* Idle wander state */
+        /* Always in free float/wander mode - no mouse tracking */
         var idle = true;
         var idleAngle = 0;
-        var idleTimer = null;
-
-        /* ── Idle wander ────────────────────────────────────────────── */
-        function startIdle() {
-            idle = true;
-        }
-
-        /* ── Mouse tracking ─────────────────────────────────────────── */
-        document.addEventListener('mousemove', function (e) {
-            /* Offset: beak tip is the cursor point (bird is 72 px wide) */
-            tx = e.clientX - 68;
-            ty = e.clientY - 38;
-            idle = false;
-            clearTimeout(idleTimer);
-            idleTimer = setTimeout(startIdle, 5000);
-        });
 
         /* ── Click = excited flutter ─────────────────────────────────── */
         document.addEventListener('click', function () {

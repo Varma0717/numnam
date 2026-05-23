@@ -139,6 +139,8 @@ class StorefrontController extends Controller
 
             $products = Product::query()
                 ->with('category')
+                ->withCount('approvedReviews')
+                ->withAvg('approvedReviews', 'rating')
                 ->where('is_active', true)
                 ->when($request->filled('category'), function ($query) use ($request) {
                     $query->whereHas('category', function ($categoryQuery) use ($request) {

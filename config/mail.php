@@ -92,12 +92,12 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'smikudoo@gmail.com'),
+        'name' => env('MAIL_FROM_NAME', 'NumNam Admin'),
     ],
 
-    'contact_recipient' => env('MAIL_CONTACT_RECIPIENT', env('MAIL_FROM_ADDRESS', 'hello@example.com')),
-    'order_recipient' => env('MAIL_ORDER_RECIPIENT', env('MAIL_FROM_ADDRESS', 'hello@example.com')),
+    'contact_recipient' => env('MAIL_CONTACT_RECIPIENT', 'smikudoo@gmail.com'),
+    'order_recipient' => env('MAIL_ORDER_RECIPIENT', 'smikudoo@gmail.com'),
 
     /*
     |--------------------------------------------------------------------------

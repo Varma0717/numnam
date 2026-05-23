@@ -1481,6 +1481,396 @@ body.sidebar-collapsed .admin-content-wrap {
   }
 }
 
+/* ======== Enhanced Form Input Components ======== */
+
+/* Input component styling from input.blade.php */
+.admin-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid var(--wp-border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--wp-text);
+  background: var(--wp-white);
+  transition: all var(--transition-base);
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.admin-input:hover {
+  border-color: var(--wp-link);
+  background: linear-gradient(90deg, rgba(15, 118, 110, 0.02) 0%, transparent 100%);
+}
+
+.admin-input:focus {
+  border-color: var(--wp-link);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+  outline: none;
+  background: linear-gradient(90deg, rgba(15, 118, 110, 0.03) 0%, transparent 100%);
+}
+
+.admin-input:disabled {
+  background: #f3f4f6;
+  color: var(--wp-muted);
+  cursor: not-allowed;
+}
+
+.admin-input-error {
+  border-color: var(--wp-error);
+  background: rgba(239, 68, 68, 0.02);
+}
+
+.admin-input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Select component styling */
+.admin-select {
+  width: 100%;
+  padding: 10px 12px;
+  padding-right: 32px;
+  border: 2px solid var(--wp-border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--wp-text);
+  background: var(--wp-white);
+  appearance: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  font-family: inherit;
+}
+
+.admin-select:hover {
+  border-color: var(--wp-link);
+  background: linear-gradient(90deg, rgba(15, 118, 110, 0.02) 0%, transparent 100%);
+}
+
+.admin-select:focus {
+  border-color: var(--wp-link);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+  outline: none;
+  background: linear-gradient(90deg, rgba(15, 118, 110, 0.03) 0%, transparent 100%);
+}
+
+.admin-select:disabled {
+  background: #f3f4f6;
+  color: var(--wp-muted);
+  cursor: not-allowed;
+}
+
+.admin-select-wrapper {
+  position: relative;
+}
+
+.admin-select-arrow {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--wp-muted);
+  pointer-events: none;
+}
+
+.admin-select:focus~.admin-select-arrow {
+  color: var(--wp-link);
+}
+
+/* Textarea component styling */
+.admin-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid var(--wp-border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--wp-text);
+  background: var(--wp-white);
+  font-family: inherit;
+  resize: vertical;
+  transition: all var(--transition-base);
+  line-height: 1.5;
+  min-height: 100px;
+}
+
+.admin-textarea:hover {
+  border-color: var(--wp-link);
+  background: linear-gradient(90deg, rgba(15, 118, 110, 0.02) 0%, transparent 100%);
+}
+
+.admin-textarea:focus {
+  border-color: var(--wp-link);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+  outline: none;
+  background: linear-gradient(90deg, rgba(15, 118, 110, 0.03) 0%, transparent 100%);
+}
+
+.admin-textarea:disabled {
+  background: #f3f4f6;
+  color: var(--wp-muted);
+  cursor: not-allowed;
+}
+
+/* Input labels - enhanced styling */
+.admin-input-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wp-text);
+  margin-bottom: var(--space-sm);
+  line-height: 1.4;
+}
+
+.admin-required-indicator {
+  color: var(--wp-error);
+  margin-left: 2px;
+  font-weight: 700;
+}
+
+/* Input wrapper for icons */
+.admin-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.admin-input-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--wp-muted);
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.admin-input-icon-left {
+  left: 0;
+  padding-left: var(--space-sm);
+}
+
+.admin-input-icon-right {
+  right: 0;
+  padding-right: var(--space-sm);
+}
+
+/* Input counter display */
+.admin-input-counter,
+.admin-textarea-counter {
+  font-size: 12px;
+  color: var(--wp-muted);
+  margin-top: 4px;
+  text-align: right;
+}
+
+.admin-counter-current {
+  font-weight: 600;
+  color: var(--wp-text);
+}
+
+/* Error message component */
+.admin-error-message {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+  padding: 8px 10px;
+  background: rgba(239, 68, 68, 0.05);
+  border-left: 3px solid var(--wp-error);
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--wp-error);
+  animation: slideInDown var(--transition-fast) ease-out;
+}
+
+.admin-error-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.admin-error-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Form builder styling */
+.admin-form-builder {
+  background: var(--wp-white);
+  border: 1px solid var(--wp-border);
+  border-radius: 8px;
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-form-builder-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--wp-border);
+}
+
+.admin-form-builder-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--wp-text);
+}
+
+.admin-btn-small {
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: linear-gradient(135deg, var(--wp-link) 0%, #0d5d61 100%);
+  color: white;
+}
+
+.admin-btn-small:hover {
+  background: linear-gradient(135deg, #0d5d61 0%, #094d4a 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(15, 118, 110, 0.2);
+}
+
+.admin-form-builder-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.admin-form-builder-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-lg);
+  align-items: flex-end;
+  padding: var(--space-lg);
+  background: #fafbfc;
+  border: 1px solid var(--wp-border);
+  border-radius: 6px;
+  transition: all var(--transition-base);
+}
+
+.admin-form-builder-row:hover {
+  background: #f3f4f6;
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-form-builder-row-remove {
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--wp-error);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.admin-form-builder-row-remove:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.2);
+}
+
+.admin-form-builder-empty {
+  padding: var(--space-2xl);
+  text-align: center;
+  background: #f9fafb;
+  border: 2px dashed var(--wp-border);
+  border-radius: 6px;
+}
+
+.admin-form-builder-empty p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--wp-muted);
+}
+
+.admin-form-builder-row-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-md);
+  width: 100%;
+}
+
+/* Field description/hint text */
+.admin-field-desc {
+  font-size: 12px;
+  color: var(--wp-muted);
+  margin-top: 4px;
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+/* Responsive form adjustments */
+@media (max-width: 782px) {
+  .admin-form-builder {
+    padding: var(--space-md);
+  }
+
+  .admin-form-builder-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-md);
+  }
+
+  .admin-form-builder-row {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-form-builder-row-remove {
+    width: 100%;
+  }
+
+  .admin-form-builder-row-content {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-input-wrapper {
+    flex-direction: column;
+  }
+
+  .admin-input-icon-left,
+  .admin-input-icon-right {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+  }
+}
+
 /* ======== Bulk Actions Bar ======== */
 .admin-bulk-bar {
   display: flex;

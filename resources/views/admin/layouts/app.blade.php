@@ -289,6 +289,9 @@
         </div>
     </div>
     <script src="{{ url('assets/admin/js/admin.js') }}"></script>
+    <script src="{{ url('assets/admin/js/form-builder.js') }}"></script>
+    <script src="{{ url('assets/admin/js/form-inputs.js') }}"></script>
+    <script src="{{ url('assets/admin/js/code-input.js') }}"></script>
     @include('admin.partials.media-picker')
     @stack('scripts')
 </body>

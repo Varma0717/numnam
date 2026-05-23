@@ -39,8 +39,11 @@ use Illuminate\Support\Facades\Storage;
 
 Route::get('/', [StorefrontController::class, 'home'])->name('store.home');
 
-Route::get('/products', [StorefrontController::class, 'products'])->name('store.products');
-Route::get('/products/{product:slug}', [StorefrontController::class, 'product'])->name('store.product.show');
+Route::get('/shop', [StorefrontController::class, 'products'])->name('store.products');
+Route::get('/shop/{product:slug}', [StorefrontController::class, 'product'])->name('store.product.show');
+// Legacy redirect from /products to /shop for SEO
+Route::redirect('/products', '/shop', 301);
+Route::redirect('/products/{slug}', '/shop/{slug}', 301);
 Route::get('/search/suggestions', [StorefrontController::class, 'searchSuggestions'])->name('store.search.suggestions');
 Route::get('/categories/{category:slug}', [StorefrontController::class, 'category'])->name('store.category.show');
 Route::get('/category/{slug}', function (string $slug) {
