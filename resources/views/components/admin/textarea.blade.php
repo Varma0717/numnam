@@ -43,7 +43,7 @@
         @if($required) required @endif
         @if($maxlength) maxlength="{{ $maxlength }}" @endif
         @if($disabled) disabled @endif
-        @if($readonly) readonly @endif>{{ old($name, $value) }}</textarea>
+        @if($readonly) readonly @endif>{!! old($name, $value) !!}</textarea>
 
     @if($maxlength)
     <div class="admin-textarea-counter">

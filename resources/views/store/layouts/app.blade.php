@@ -81,6 +81,32 @@
     <noscript>
         <link rel="stylesheet" href="{{ asset('assets/store/css/components/header.css') }}?v={{ filemtime(public_path('assets/store/css/components/header.css')) }}">
     </noscript>
+
+    {{-- Tracking & Analytics Codes --}}
+    @php
+    try {
+    $settings = \App\Models\SiteSetting::all()->keyBy('key');
+    $googlePixel = $settings['tracking_google_pixel']->value ?? null;
+    $googleAnalytics = $settings['tracking_google_analytics']->value ?? null;
+    $facebookPixel = $settings['tracking_facebook_pixel']->value ?? null;
+    $customHead = $settings['tracking_custom_head']->value ?? null;
+    } catch (\Throwable $e) {
+    $googlePixel = $googleAnalytics = $facebookPixel = $customHead = null;
+    }
+    @endphp
+    @if($googlePixel)
+    {!! $googlePixel !!}
+    @endif
+    @if($googleAnalytics)
+    {!! $googleAnalytics !!}
+    @endif
+    @if($facebookPixel)
+    {!! $facebookPixel !!}
+    @endif
+    @if($customHead)
+    {!! $customHead !!}
+    @endif
+
     @yield('head')
 </head>
 

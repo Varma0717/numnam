@@ -19,8 +19,22 @@
     };
 
     function preloadViews() {
+        /* Defer preloading to after page load to avoid cancellations */
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function () {
+                preloadViewsAsync();
+            });
+        } else {
+            preloadViewsAsync();
+        }
+    }
+
+    function preloadViewsAsync() {
         Object.keys(VIEW_SRC).forEach(function (key) {
             var img = new Image();
+            img.onerror = function () {
+                console.warn('Failed to preload mascot view: ' + VIEW_SRC[key]);
+            };
             img.src = VIEW_SRC[key];
         });
     }
@@ -40,6 +54,11 @@
         img.src = VIEW_SRC.sideRight;
         img.setAttribute('data-bird-view', 'sideRight');
         img.style.transformOrigin = 'center center';
+        img.onerror = function () {
+            console.warn('Failed to load mascot SVG: ' + VIEW_SRC.sideRight);
+            /* Fallback: hide bird if SVG fails */
+            el.style.display = 'none';
+        };
 
         el.appendChild(img);
         document.body.appendChild(el);

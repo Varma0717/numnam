@@ -92,16 +92,6 @@ $hasShippingRoutes = Route::has('admin.shipping.zones.create');
                 @endif
             </div>
         </div>
-        <td>
-            <span class="status-badge status-badge--{{ $method->is_active ? 'active' : 'paused' }}">
-                {{ $method->is_active ? 'Active' : 'Disabled' }}
-            </span>
-        </td>
-        </tr>
-        @endforeach
-        </tbody>
-        </table>
-        @endif
     </div>
 </section>
 @endforeach
