@@ -27,13 +27,10 @@
 'readonly' => false,
 ])
 
-<div class="admin-form-row">
+<div class="admin-form-row @error($name) has-error @endError">
     @if($label)
-    <label for="{{ $name }}" class="admin-input-label">
+    <label for="{{ $name }}" class="@if($required) required @endif">
         {{ $label }}
-        @if($required)
-        <span class="admin-required-indicator">*</span>
-        @endif
     </label>
     @endif
 
@@ -56,11 +53,14 @@
     @endif
 
     @error($name)
-    <x-admin.error-message :message="$message" />
+    <div class="form-error">
+        <i class="icon-alert-circle"></i>
+        <span>{{ $message }}</span>
+    </div>
     @enderror
 
     @if($hint)
-    <p class="admin-field-desc">{{ $hint }}</p>
+    <p class="form-helper">{{ $hint }}</p>
     @endif
 </div>
 

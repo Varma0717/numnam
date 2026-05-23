@@ -1,6 +1,6 @@
 /**
  * NumNam Bird Mascot
- * Cute animated bird that follows the cursor across the page.
+ * Free-floating animated bird that wanders across the page independently.
  * Uses spring physics so movement feels organic and alive.
  */
 (function () {
@@ -148,8 +148,7 @@
             requestAnimationFrame(tick);
         }
 
-        /* Kick off idle wander after 1 s then start the loop */
-        setTimeout(startIdle, 1000);
+        /* Start animation loop - bird always in free wander mode */
         tick();
     }
 
