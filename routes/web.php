@@ -235,4 +235,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
-Route::get('/{slug}', [StorefrontController::class, 'showPage'])->name('store.page.show');
+// Catch-all route for dynamic pages (must be last)
+// Exclude static asset paths from matching this route
+Route::get('/{slug}', [StorefrontController::class, 'showPage'])
+    ->where('slug', '^(?!assets|storage|admin|api).*')
+    ->name('store.page.show');
