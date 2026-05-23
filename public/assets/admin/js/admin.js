@@ -185,7 +185,13 @@ window.MediaPicker = (function () {
             const folders = data.data || [];
             if (_folderFilter && folders.length) {
                 _folderFilter.innerHTML = '<option value="">All Folders</option>' +
-                    folders.map(f => `<option value="${escapeHtml(f)}">${escapeHtml(f)}</option>`).join('');
+                    folders.map(f => {
+                        const folderName = typeof f === 'string' ? f : (f.name || f.folder || '');
+                        const label = typeof f === 'string'
+                            ? f
+                            : `${f.name || f.folder || ''}${f.count ? ` (${f.count})` : ''}`;
+                        return `<option value="${escapeHtml(folderName)}">${escapeHtml(label)}</option>`;
+                    }).join('');
             }
         } catch (_) { /* ignore */ }
     }
@@ -200,12 +206,22 @@ window.MediaPicker = (function () {
 
         try {
             const data = await adminFetch(`media/json?${params.toString()}`);
-            _mediaItems = (data.data?.data || data.data || []).map(item => ({
-                id: item.id,
-                url: item.metadata?.url || (item.file_path ? `${window.location.origin}/storage/${item.file_path}` : ''),
-                title: item.title || item.file_name || '',
-                folder: item.folder || '',
-            }));
+            const items = Array.isArray(data.data?.data) ? data.data.data : (Array.isArray(data.data) ? data.data : []);
+            _mediaItems = items.map(item => {
+                const rawUrl = item.url || item.metadata?.url || item.path || item.file_path || item.fileUrl || '';
+                const normalizedUrl = rawUrl
+                    ? /^https?:\/\//i.test(rawUrl)
+                        ? rawUrl
+                        : `${window.location.origin}/${rawUrl.replace(/^\/+/, '').replace(/^storage\//, 'storage/')}`
+                    : '';
+
+                return {
+                    id: item.id,
+                    url: normalizedUrl,
+                    title: item.title || item.file_name || item.fileName || '',
+                    folder: item.folder || '',
+                };
+            });
             renderGrid();
         } catch (err) {
             _grid.innerHTML = '<p style="color:var(--wp-error);padding:20px;">Failed to load media.</p>';
