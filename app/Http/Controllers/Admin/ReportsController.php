@@ -37,7 +37,7 @@ class ReportsController extends Controller
             ->join('products', 'products.id', '=', 'order_items.product_id')
             ->whereBetween('orders.created_at', [$from, $to . ' 23:59:59'])
             ->whereIn('orders.status', ['processing', 'shipped', 'delivered'])
-            ->select('products.name', DB::raw('SUM(order_items.quantity) as qty'), DB::raw('SUM(order_items.subtotal) as revenue'))
+            ->select('products.name', DB::raw('SUM(order_items.quantity) as qty'), DB::raw('SUM(order_items.line_total) as revenue'))
             ->groupBy('products.name')
             ->orderByDesc('revenue')
             ->limit(10)
