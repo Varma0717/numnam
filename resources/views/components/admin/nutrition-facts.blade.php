@@ -69,9 +69,11 @@ $nutrients[] = ['name' => $name, 'value' => $value];
     name="nutrition_facts"
     value="{{ $nutritionData ?? '{}' }}" />
 
+<div id="existing-nutrients-data" data-nutrients="{{ json_encode($nutrients ?? []) }}" style="display: none;"></div>
+
 <script>
     // Store nutrient data for populating existing rows
-    const existingNutrients = @json($nutrients ?? []);
+    const existingNutrients = JSON.parse(document.getElementById('existing-nutrients-data').dataset.nutrients);
 
     // Initialize form with existing data on page load
     document.addEventListener('DOMContentLoaded', function() {
