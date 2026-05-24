@@ -312,6 +312,23 @@ body.sidebar-collapsed .admin-menu li a span:not(.menu-icon) {
 body.sidebar-collapsed .admin-menu li a {
   justify-content: center;
   padding: var(--space-lg) var(--space-md);
+  font-size: 0;
+  line-height: 0;
+  gap: 0;
+}
+
+body.sidebar-collapsed .admin-menu li a:hover {
+  padding-left: var(--space-md);
+}
+
+body.sidebar-collapsed .admin-menu li a .menu-icon {
+  opacity: 1;
+  transform: none;
+}
+
+body.sidebar-collapsed .admin-menu li a .menu-icon svg {
+  width: 20px;
+  height: 20px;
 }
 
 body.sidebar-collapsed .admin-sidebar-footer {
