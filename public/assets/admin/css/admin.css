@@ -1486,6 +1486,101 @@ body.sidebar-collapsed .admin-content-wrap {
   margin-top: 2px;
 }
 
+/* ======== Order Detail Page ======== */
+.order-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.order-meta {
+  margin: 6px 0 0;
+  color: var(--wp-muted);
+  font-size: 13px;
+}
+
+.order-head-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.order-head-delete {
+  margin-bottom: var(--space-lg);
+}
+
+.order-kpis {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.order-kpi-card {
+  border: 1px solid var(--wp-border);
+  border-radius: 10px;
+  padding: var(--space-md);
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
+}
+
+.order-kpi-card .label {
+  display: block;
+  color: var(--wp-muted);
+  font-size: 12px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.order-kpi-card strong {
+  font-size: 16px;
+  color: var(--wp-text);
+}
+
+.order-kpi-card--total {
+  border-color: rgba(15, 118, 110, 0.32);
+  background: linear-gradient(180deg, rgba(15, 118, 110, 0.06) 0%, rgba(15, 118, 110, 0.02) 100%);
+}
+
+.order-info-grid .order-info-card {
+  border: 1px solid var(--wp-border);
+  border-radius: 10px;
+  padding: var(--space-md);
+  background: #fff;
+}
+
+.order-info-grid .order-info-card strong {
+  display: block;
+  font-size: 12px;
+  color: var(--wp-muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+@media (max-width: 1024px) {
+  .order-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .order-head {
+    flex-direction: column;
+  }
+
+  .order-head-actions {
+    justify-content: flex-start;
+  }
+
+  .order-kpis {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ======== Admin Table Row Actions ======== */
 .admin-table td .row-actions {
   visibility: hidden;
