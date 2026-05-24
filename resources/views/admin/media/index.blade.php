@@ -26,6 +26,21 @@
         <input id="fileInput" type="file" multiple accept="image/*,application/pdf" style="display:none;">
     </div>
 
+    <!-- Selected Files Display -->
+    <div id="selectedFilesInfo" style="display:none; margin-top:1rem; padding:1rem; background:#f0f7ff; border:1px solid #b3d9ff; border-radius:6px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <h4 style="margin:0; font-size:0.95rem; color:#0066cc;">📁 Selected Files</h4>
+            <button id="clearFilesBtn" type="button" style="background:none; border:none; color:#0066cc; cursor:pointer; text-decoration:underline; font-size:0.85rem;">Clear</button>
+        </div>
+        <div id="selectedFilesList" style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:0.75rem; max-height:150px; overflow-y:auto;">
+            <!-- Files will be listed here -->
+        </div>
+        <div style="display:flex; gap:2rem; font-size:0.85rem; color:#333;">
+            <span><strong id="fileCountDisplay">0</strong> file(s)</span>
+            <span>Total size: <strong id="fileSizeDisplay">0 MB</strong></span>
+        </div>
+    </div>
+
     <div id="uploadProgress" style="display:none; margin-top:1rem;">
         <div class="upload-progress-bar">
             <div id="progressBar" class="progress-fill"></div>
@@ -384,11 +399,63 @@
             e.preventDefault();
             dropZone.classList.remove('drag-over');
             const files = e.dataTransfer.files;
-            if (files.length) handleFileUpload(files);
+            if (files.length) {
+                displaySelectedFiles(files);
+                handleFileUpload(files);
+            }
         });
 
         fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length) handleFileUpload(e.target.files);
+            if (e.target.files.length) {
+                displaySelectedFiles(e.target.files);
+                handleFileUpload(e.target.files);
+            }
+        });
+
+        // Display selected files before upload
+        function displaySelectedFiles(files) {
+            const selectedFilesInfo = document.getElementById('selectedFilesInfo');
+            const selectedFilesList = document.getElementById('selectedFilesList');
+            const fileCountDisplay = document.getElementById('fileCountDisplay');
+            const fileSizeDisplay = document.getElementById('fileSizeDisplay');
+
+            selectedFilesList.innerHTML = '';
+            let totalSize = 0;
+
+            Array.from(files).forEach(file => {
+                totalSize += file.size;
+                const fileItem = document.createElement('div');
+                fileItem.style.cssText = 'display:flex; align-items:center; padding:0.5rem; background:white; border-radius:4px; font-size:0.85rem;';
+
+                const fileIcon = getFileIcon(file.type);
+                fileItem.innerHTML = `
+                    <span style="margin-right:0.5rem; font-size:1rem;">${fileIcon}</span>
+                    <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${file.name}">${file.name}</span>
+                    <span style="margin-left:0.5rem; color:#666; font-size:0.8rem;">${formatFileSize(file.size)}</span>
+                `;
+                selectedFilesList.appendChild(fileItem);
+            });
+
+            fileCountDisplay.textContent = files.length;
+            fileSizeDisplay.textContent = formatFileSize(totalSize);
+            selectedFilesInfo.style.display = 'block';
+        }
+
+        function getFileIcon(mimeType) {
+            if (mimeType.startsWith('image/')) return '🖼️';
+            if (mimeType === 'application/pdf') return '📄';
+            return '📎';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 MB';
+            const mb = bytes / (1024 * 1024);
+            return mb < 1 ? (bytes / 1024).toFixed(1) + ' KB' : mb.toFixed(2) + ' MB';
+        }
+
+        document.getElementById('clearFilesBtn').addEventListener('click', () => {
+            fileInput.value = '';
+            document.getElementById('selectedFilesInfo').style.display = 'none';
         });
 
         // File Upload Handler
@@ -430,6 +497,8 @@
                             setTimeout(() => {
                                 document.getElementById('uploadProgress').style.display = 'none';
                                 document.getElementById('progressBar').style.width = '0';
+                                document.getElementById('selectedFilesInfo').style.display = 'none';
+                                fileInput.value = '';
                                 loadMedia();
                             }, 1000);
                         }
