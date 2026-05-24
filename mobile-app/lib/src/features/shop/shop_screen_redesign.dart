@@ -8,7 +8,6 @@ import '../../core/wishlist_provider.dart';
 import '../cart/cart_provider.dart';
 import '../../models/product.dart';
 import '../../shared/theme/colors.dart';
-import '../../app.dart';
 import 'product_detail_screen_redesign.dart';
 
 class ShopScreenRedesign extends StatefulWidget {

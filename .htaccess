@@ -1,6 +1,12 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Force HTTPS (supports direct HTTPS and proxy headers)
+    RewriteCond %{REQUEST_URI} !^/\.well-known/ [NC]
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
+
     # Allow certificate challenge files to pass through untouched.
     RewriteCond %{REQUEST_URI} !^/\.well-known/
 
