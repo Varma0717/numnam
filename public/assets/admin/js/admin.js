@@ -64,6 +64,46 @@ window.MediaPicker = (function () {
         return input ? input.value : '';
     }
 
+    function getMpFileIcon(mimeType) {
+        if (mimeType.startsWith('image/')) return '🖼️';
+        if (mimeType === 'application/pdf') return '📄';
+        return '📎';
+    }
+
+    function formatMpFileSize(bytes) {
+        if (bytes === 0) return '0 MB';
+        const mb = bytes / (1024 * 1024);
+        return mb < 1 ? (bytes / 1024).toFixed(1) + ' KB' : mb.toFixed(2) + ' MB';
+    }
+
+    function displayMpSelectedFiles(files) {
+        const selectedFilesInfo = document.getElementById('mpSelectedFilesInfo');
+        const selectedFilesList = document.getElementById('mpSelectedFilesList');
+        const fileCountDisplay = document.getElementById('mpFileCountDisplay');
+        const fileSizeDisplay = document.getElementById('mpFileSizeDisplay');
+
+        selectedFilesList.innerHTML = '';
+        let totalSize = 0;
+
+        Array.from(files).forEach(file => {
+            totalSize += file.size;
+            const fileItem = document.createElement('div');
+            fileItem.style.cssText = 'display:flex; align-items:center; padding:0.5rem; background:white; border-radius:4px; font-size:0.85rem;';
+
+            const fileIcon = getMpFileIcon(file.type);
+            fileItem.innerHTML = `
+                <span style="margin-right:0.5rem; font-size:1rem;">${fileIcon}</span>
+                <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${file.name}">${file.name}</span>
+                <span style="margin-left:0.5rem; color:#666; font-size:0.8rem;">${formatMpFileSize(file.size)}</span>
+            `;
+            selectedFilesList.appendChild(fileItem);
+        });
+
+        fileCountDisplay.textContent = files.length;
+        fileSizeDisplay.textContent = formatMpFileSize(totalSize);
+        selectedFilesInfo.style.display = 'block';
+    }
+
     let _overlay, _grid, _insertBtn, _selectedInfo, _folderFilter, _searchInput;
     let _mediaItems = [];
     let _selected = null;
@@ -110,7 +150,18 @@ window.MediaPicker = (function () {
             fileInput.addEventListener('change', () => {
                 if (fileInput.files.length) {
                     document.getElementById('mpUploadFields').style.display = '';
+                    displayMpSelectedFiles(fileInput.files);
                 }
+            });
+        }
+
+        // Clear files button
+        const clearFilesBtn = document.getElementById('mpClearFilesBtn');
+        if (clearFilesBtn) {
+            clearFilesBtn.addEventListener('click', () => {
+                const fileInput = document.getElementById('mpFileInput');
+                fileInput.value = '';
+                document.getElementById('mpSelectedFilesInfo').style.display = 'none';
             });
         }
 
@@ -162,6 +213,7 @@ window.MediaPicker = (function () {
                     status.textContent = 'Uploaded!';
                     uploadForm.reset();
                     document.getElementById('mpUploadFields').style.display = 'none';
+                    document.getElementById('mpSelectedFilesInfo').style.display = 'none';
                     _overlay.querySelector('.mp-tab[data-tab="library"]').click();
                     await loadMedia();
                 } catch (err) {

@@ -24,6 +24,20 @@
                         <p>Drop files here or <label for="mpFileInput" style="color:var(--wp-link);cursor:pointer;text-decoration:underline;">browse</label></p>
                         <input type="file" id="mpFileInput" name="file" accept="image/*" multiple style="display:none;">
                     </div>
+                    <!-- Selected Files Display -->
+                    <div id="mpSelectedFilesInfo" style="display:none; margin-top:1rem; padding:1rem; background:#f0f7ff; border:1px solid #b3d9ff; border-radius:6px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                            <h4 style="margin:0; font-size:0.95rem; color:#0066cc;">📁 Selected Files</h4>
+                            <button type="button" id="mpClearFilesBtn" style="background:none; border:none; color:#0066cc; cursor:pointer; text-decoration:underline; font-size:0.85rem;">Clear</button>
+                        </div>
+                        <div id="mpSelectedFilesList" style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:0.75rem; max-height:150px; overflow-y:auto;">
+                            <!-- Files will be listed here -->
+                        </div>
+                        <div style="display:flex; gap:2rem; font-size:0.85rem; color:#333;">
+                            <span><strong id="mpFileCountDisplay">0</strong> file(s)</span>
+                            <span>Total size: <strong id="mpFileSizeDisplay">0 MB</strong></span>
+                        </div>
+                    </div>
                     <div class="mp-upload-fields" style="display:none;" id="mpUploadFields">
                         <div class="admin-form-grid-2" style="gap:10px;">
                             <div class="admin-form-row"><label>Title</label><input type="text" name="title" placeholder="Image title"></div>
