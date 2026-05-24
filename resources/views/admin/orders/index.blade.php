@@ -4,7 +4,10 @@
 
 @section('content')
 <section class="admin-panel">
-    <h3>Order Management</h3>
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px;">
+        <h3 style="margin:0;">Order Management</h3>
+        <a class="admin-btn" href="{{ route('admin.orders.create') }}">Create Order</a>
+    </div>
     <form method="GET" class="admin-grid" style="grid-template-columns:repeat(3,minmax(0,1fr)); margin-bottom:.7rem;">
         <select name="status">
             <option value="">All status</option>

@@ -140,8 +140,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::match(['get', 'post'], '/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
         Route::get('/orders', [OrderManagementController::class, 'index'])->name('orders.index');
+        Route::get('/orders/create', [OrderManagementController::class, 'create'])->name('orders.create');
+        Route::post('/orders', [OrderManagementController::class, 'store'])->name('orders.store');
         Route::get('/orders/{order}', [OrderManagementController::class, 'show'])->name('orders.show');
+        Route::get('/orders/{order}/edit', [OrderManagementController::class, 'edit'])->name('orders.edit');
         Route::put('/orders/{order}', [OrderManagementController::class, 'update'])->name('orders.update');
+        Route::delete('/orders/{order}', [OrderManagementController::class, 'destroy'])->name('orders.destroy');
         Route::post('/orders/{order}/timeline-note', [OrderManagementController::class, 'addTimelineNote'])
             ->name('orders.timeline-note');
 

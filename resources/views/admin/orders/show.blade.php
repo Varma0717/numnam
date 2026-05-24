@@ -4,7 +4,14 @@
 
 @section('content')
 <section class="admin-panel">
-    <h3>Order {{ $order->order_number }}</h3>
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:8px;">
+        <h3 style="margin:0;">Order {{ $order->order_number }}</h3>
+        <form method="POST" action="{{ route('admin.orders.destroy', $order) }}" onsubmit="return confirm('Delete this order and its items? This cannot be undone.');">
+            @csrf
+            @method('DELETE')
+            <button class="admin-btn" type="submit" style="background:#b42318;">Delete Order</button>
+        </form>
+    </div>
     <p class="meta">Placed on {{ $order->created_at->format('d M Y H:i') }}</p>
 
     <form method="POST" action="{{ route('admin.orders.update', $order) }}" class="admin-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));">
