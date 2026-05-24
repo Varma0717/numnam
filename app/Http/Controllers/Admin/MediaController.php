@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\MediaLibrary;
+use App\Services\ResponsiveImageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
+    public function __construct(private ResponsiveImageService $responsiveImageService) {}
+
     public function index(Request $request): JsonResponse
     {
         if (!Schema::hasTable('media_library')) {
@@ -86,6 +89,7 @@ class MediaController extends Controller
                 'size' => $item->size,
                 'size_formatted' => $this->formatBytes($item->size),
                 'url' => $fileUrl,
+                'responsive_urls' => $item->metadata['responsive'] ?? [],
                 'path' => $item->file_path,
                 'dimensions' => $item->metadata['dimensions'] ?? null,
                 'uploaded_by' => $item->uploader?->name ?? 'Unknown',
@@ -145,13 +149,16 @@ class MediaController extends Controller
 
         // Get image dimensions if it's an image
         $dimensions = null;
+        $responsive = [];
         if (str_starts_with($file->getClientMimeType(), 'image/')) {
             try {
-                $fullPath = storage_path('app/public/' . str_replace('cms-media/', '', $path));
+                $fullPath = storage_path('app/public/' . $path);
                 if (file_exists($fullPath)) {
                     [$width, $height] = getimagesize($fullPath);
                     $dimensions = ['width' => $width, 'height' => $height];
                 }
+
+                $responsive = $this->responsiveImageService->generateForPublicDisk($path, $file->getClientMimeType());
             } catch (\Exception $e) {
                 // Ignore dimension extraction errors
             }
@@ -173,6 +180,7 @@ class MediaController extends Controller
             'metadata' => [
                 'extension' => $file->getClientOriginalExtension(),
                 'dimensions' => $dimensions,
+                'responsive' => $responsive,
             ],
         ];
 
@@ -193,6 +201,7 @@ class MediaController extends Controller
                 'file_name' => $media->file_name,
                 'title' => $media->title,
                 'url' => $fileUrl,
+                'responsive_urls' => $responsive,
                 'size' => $media->size,
                 'size_formatted' => $this->formatBytes($media->size),
                 'mime_type' => $media->mime_type,
@@ -294,6 +303,7 @@ class MediaController extends Controller
                 'size' => $media->size,
                 'size_formatted' => $this->formatBytes($media->size),
                 'url' => $fileUrl,
+                'responsive_urls' => $media->metadata['responsive'] ?? [],
                 'path' => $media->file_path,
                 'dimensions' => $media->metadata['dimensions'] ?? null,
                 'uploaded_by' => $media->uploader?->name ?? 'Unknown',

@@ -43,10 +43,12 @@
     var slidesActive = true;
     var fixedHideTimer = null;
     var transitionToNormal = false;
+    var lastNavAt = 0;
 
     if (WRAPPER && SECTIONS.length) {
 
         function goTo(index) {
+            SECTIONS = getSections();
             if (index < 0 || index >= SECTIONS.length) return;
             if (isAnimating) return;
 
@@ -74,7 +76,7 @@
             // Keep slide 5 visible until section 6 has fully snapped in.
             if (fixedHideTimer) window.clearTimeout(fixedHideTimer);
             fixedHideTimer = window.setTimeout(function () {
-                window.scrollTo({ top: getNormalTop(), behavior: 'instant' });
+                window.scrollTo({ top: getNormalTop(), behavior: 'auto' });
                 if (FIXED && !slidesActive) FIXED.style.visibility = 'hidden';
                 transitionToNormal = false;
             }, 720);
@@ -89,9 +91,16 @@
             }
             if (FIXED) FIXED.style.visibility = '';
             document.documentElement.classList.add('nn-slides-active');
-            window.scrollTo({ top: 0, behavior: 'instant' });
+            window.scrollTo({ top: 0, behavior: 'auto' });
             slidesActive = true;
             goTo(SECTIONS.length - 1);
+        }
+
+        function canNavigate() {
+            var now = Date.now();
+            if (now - lastNavAt < 520) return false;
+            lastNavAt = now;
+            return true;
         }
 
         /* ===== WHEEL ===== */
@@ -118,6 +127,7 @@
                     exitSlides();
                     return;
                 }
+                if (!canNavigate()) return;
                 e.preventDefault();
                 goTo(current + 1);
             } else {
@@ -125,6 +135,7 @@
                     e.preventDefault();
                     return;
                 }
+                if (!canNavigate()) return;
                 e.preventDefault();
                 goTo(current - 1);
             }
@@ -138,6 +149,12 @@
         window.addEventListener('touchstart', function (e) {
             startY = e.touches[0].clientY;
         }, { passive: true });
+
+        window.addEventListener('touchmove', function (e) {
+            if (slidesActive || transitionToNormal) {
+                e.preventDefault();
+            }
+        }, { passive: false });
 
         window.addEventListener('touchend', function (e) {
             var diff = startY - e.changedTouches[0].clientY;
@@ -161,11 +178,15 @@
                 if (isLast) {
                     exitSlides();
                 } else {
+                    if (!canNavigate()) return;
                     goTo(current + 1);
                 }
             } else {
                 // Swipe down = scroll up
-                if (current > 0) goTo(current - 1);
+                if (current > 0) {
+                    if (!canNavigate()) return;
+                    goTo(current - 1);
+                }
             }
         });
 

@@ -58,12 +58,38 @@ $blockCards = [
 'copy' => 'Explore practical feeding support, ingredient transparency, and stage-wise guidance that helps parents feel more confident.',
 ],
 ];
+
+$assetUrlEncoded = function (string $path): string {
+$segments = array_map('rawurlencode', explode('/', ltrim($path, '/')));
+return asset(implode('/', $segments));
+};
+
+$responsiveSrcset = function (string $imageUrl) use ($assetUrlEncoded): string {
+$parsedPath = parse_url($imageUrl, PHP_URL_PATH) ?? '';
+$decodedPath = rawurldecode(ltrim($parsedPath, '/'));
+
+if (!str_starts_with($decodedPath, 'assets/images/')) {
+return '';
+}
+
+$relative = substr($decodedPath, strlen('assets/images/'));
+$base = preg_replace('/\.[^.]+$/', '', $relative);
+
+$widths = [480, 768, 1200, 1600];
+$entries = [];
+
+foreach ($widths as $width) {
+$entries[] = $assetUrlEncoded('assets/images/responsive/' . $base . '-' . $width . 'w.webp') . ' ' . $width . 'w';
+}
+
+return implode(', ', $entries);
+};
 @endphp
 
 <div id="nn-fp-fixed">
     <div id="nn-fp-wrapper">
         <section class="nn-home-hero-v2 nn-fp-section">
-            <img src="{{ asset('assets/images/bg_with_child.jpeg') }}" alt="" aria-hidden="true" class="nn-home-hero-v2__bg">
+            <img src="{{ asset('assets/images/bg_with_child.jpeg') }}" srcset="{{ $responsiveSrcset(asset('assets/images/bg_with_child.jpeg')) }}" sizes="100vw" alt="" aria-hidden="true" class="nn-home-hero-v2__bg" fetchpriority="high">
             <div class="nn-home-hero-v2__veil"></div>
             <div class="nn-home-hero-v2__glow nn-home-hero-v2__glow--left"></div>
             <div class="nn-home-hero-v2__glow nn-home-hero-v2__glow--right"></div>
@@ -176,7 +202,7 @@ $blockCards = [
                             @foreach($pureeItems as $i => $item)
                             <div class="nn-puree-slide" data-idx="{{ $i }}" @if($i !==0) style="display:none;" @endif>
                                 <a href="{{ route('store.product.show', $item['slug']) }}">
-                                    <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:220px;width:100%;object-fit:contain;display:block;">
+                                    <img src="{{ $item['img'] }}" srcset="{{ $responsiveSrcset($item['img']) }}" sizes="(max-width: 767px) 82vw, (max-width: 1200px) 38vw, 320px" alt="{{ $item['name'] }}" loading="lazy" decoding="async" style="height:220px;width:100%;object-fit:contain;display:block;">
                                 </a>
                                 <p>{{ $item['name'] }}</p>
                             </div>
@@ -222,7 +248,7 @@ $blockCards = [
                             @foreach($puffItems as $i => $item)
                             <div class="nn-puff-slide" data-idx="{{ $i }}" @if($i !==0) style="display:none;" @endif>
                                 <a href="{{ route('store.product.show', $item['slug']) }}">
-                                    <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:220px;width:100%;object-fit:contain;display:block;">
+                                    <img src="{{ $item['img'] }}" srcset="{{ $responsiveSrcset($item['img']) }}" sizes="(max-width: 767px) 82vw, (max-width: 1200px) 38vw, 320px" alt="{{ $item['name'] }}" loading="lazy" decoding="async" style="height:220px;width:100%;object-fit:contain;display:block;">
                                 </a>
                                 <p>{{ $item['name'] }}</p>
                             </div>
@@ -259,7 +285,7 @@ $blockCards = [
                         <div class="nn-home-block5__products">
                             @foreach($favItems as $fav)
                             <div class="nn-home-mini-product">
-                                <img src="{{ $fav['img'] }}" alt="{{ $fav['name'] }}" loading="lazy">
+                                <img src="{{ $fav['img'] }}" srcset="{{ $responsiveSrcset($fav['img']) }}" sizes="(max-width: 767px) 28vw, 120px" alt="{{ $fav['name'] }}" loading="lazy" decoding="async">
                                 <span>{{ $fav['name'] }}</span>
                                 <a href="{{ route('store.product.show', $fav['slug']) }}">Add to Cart</a>
                             </div>
@@ -340,7 +366,7 @@ $blockCards = [
             <div id="tabpanel-purees" class="grid grid-cols-2 gap-5 md:grid-cols-4 nn-tab-panel-grid" style="display:none;">
                 @foreach($pureeGalleryItems as $item)
                 <a href="{{ route('store.product.show', $item['slug']) }}" style="display:block;text-decoration:none;">
-                    <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:180px;width:100%;object-fit:contain;display:block;">
+                    <img src="{{ $item['img'] }}" srcset="{{ $responsiveSrcset($item['img']) }}" sizes="(max-width: 767px) 44vw, (max-width: 1200px) 22vw, 220px" alt="{{ $item['name'] }}" loading="lazy" decoding="async" style="height:180px;width:100%;object-fit:contain;display:block;">
                 </a>
                 @endforeach
             </div>
@@ -348,7 +374,7 @@ $blockCards = [
             <div id="tabpanel-puffs" class="grid grid-cols-2 gap-5 md:grid-cols-4 nn-tab-panel-grid" style="display:none;">
                 @foreach($puffGalleryItems as $item)
                 <a href="{{ route('store.product.show', $item['slug']) }}" style="display:block;text-decoration:none;">
-                    <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:180px;width:100%;object-fit:contain;display:block;">
+                    <img src="{{ $item['img'] }}" srcset="{{ $responsiveSrcset($item['img']) }}" sizes="(max-width: 767px) 44vw, (max-width: 1200px) 22vw, 220px" alt="{{ $item['name'] }}" loading="lazy" decoding="async" style="height:180px;width:100%;object-fit:contain;display:block;">
                 </a>
                 @endforeach
             </div>
@@ -356,7 +382,7 @@ $blockCards = [
             <div id="tabpanel-all" class="grid grid-cols-2 gap-5 md:grid-cols-4 nn-tab-panel-grid">
                 @foreach(array_merge($pureeGalleryItems, $puffGalleryItems) as $item)
                 <a href="{{ route('store.product.show', $item['slug']) }}" style="display:block;text-decoration:none;">
-                    <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" loading="lazy" style="height:180px;width:100%;object-fit:contain;display:block;">
+                    <img src="{{ $item['img'] }}" srcset="{{ $responsiveSrcset($item['img']) }}" sizes="(max-width: 767px) 44vw, (max-width: 1200px) 22vw, 220px" alt="{{ $item['name'] }}" loading="lazy" decoding="async" style="height:180px;width:100%;object-fit:contain;display:block;">
                 </a>
                 @endforeach
             </div>
