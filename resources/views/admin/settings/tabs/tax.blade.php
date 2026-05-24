@@ -21,7 +21,7 @@
                 <p style="font-size: 12px; color: var(--wp-muted); margin-top: 8px; margin-left: 28px;">Enables GST calculation and display on product prices</p>
             </div>
 
-            <div style="margin-top: var(--space-2xl); padding: var(--space-lg); background: linear-gradient(90deg, rgba(15, 118, 110, 0.02) 0%, transparent 100%); border-radius: 8px; border: 1px solid var(--wp-border); opacity: {{ ($settings['tax_gst_enabled']->value ?? '0') === '1' ? '1' : '0.5' }}; transition: all var(--transition-fast);" class="gst-conditions">
+            <div style="margin-top: var(--space-2xl); padding: var(--space-lg); background: linear-gradient(90deg, rgba(15, 118, 110, 0.02) 0%, transparent 100%); border-radius: 8px; border: 1px solid var(--wp-border); opacity: 1; transition: all var(--transition-fast);" class="gst-conditions" data-gst-enabled="{{ ($settings['tax_gst_enabled']->value ?? '0') === '1' ? 'true' : 'false' }}">
                 <h4 style="font-size: 14px; font-weight: 600; color: var(--wp-text); margin: 0 0 var(--space-lg);">GST Settings</h4>
 
                 <div class="admin-form-grid-2">
@@ -67,6 +67,8 @@
         function updateGSTState() {
             if (gstConditions) {
                 gstConditions.style.opacity = gstToggle.checked ? '1' : '0.5';
+                gstConditions.style.pointerEvents = gstToggle.checked ? 'auto' : 'none';
+                gstConditions.setAttribute('data-gst-enabled', gstToggle.checked ? 'true' : 'false');
             }
         }
 
