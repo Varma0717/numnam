@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\SubscriptionManagementController;
 use App\Http\Controllers\Web\CustomerAuthController;
 use App\Http\Controllers\Web\Payments\CheckoutPaymentController;
 use App\Http\Controllers\Web\PasswordResetController;
+use App\Http\Controllers\Web\StorageController;
 use App\Http\Controllers\Web\StorefrontController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -126,13 +127,7 @@ Route::post('/logout', [CustomerAuthController::class, 'logout'])
     ->middleware('auth')
     ->name('store.logout');
 
-Route::get('/storage/{path}', function (string $path) {
-    $disk = Storage::disk('public');
-
-    abort_unless($disk->exists($path), 404);
-
-    return response()->file($disk->path($path));
-})->where('path', '.*');
+Route::get('/storage/{path}', [StorageController::class, 'serve'])->where('path', '.+')->name('storage');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
