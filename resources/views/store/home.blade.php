@@ -202,7 +202,7 @@ return implode(', ', $entries);
                                 <p>{{ $item['name'] }}</p>
                             </div>
                             @endforeach
-                            @if($pureeItems->isEmpty())
+                            @if(empty($pureeItems))
                             <div style="padding: 40px 20px; text-align: center;">
                                 <p style="color: #94a3b8; font-size: 14px;">No purees available. Upload products with images in the admin panel.</p>
                             </div>
@@ -263,7 +263,7 @@ return implode(', ', $entries);
                                 <p>{{ $item['name'] }}</p>
                             </div>
                             @endforeach
-                            @if($puffItems->isEmpty())
+                            @if(empty($puffItems))
                             <div style="padding: 40px 20px; text-align: center;">
                                 <p style="color: #94a3b8; font-size: 14px;">No puffs available. Upload products with images in the admin panel.</p>
                             </div>
