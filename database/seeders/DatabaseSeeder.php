@@ -182,6 +182,9 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($products as $data) {
+            // Ensure $data is an array (handle Collection edge case)
+            $data = is_array($data) ? $data : $data->toArray();
+
             Product::updateOrCreate(['slug' => $data['slug']], array_merge($data, [
                 'is_active' => true,
                 'status' => 'published',

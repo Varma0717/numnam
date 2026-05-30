@@ -5,10 +5,10 @@
 
 @section('content')
 @php
-// Use dynamic showcase products from controller, fallback to empty arrays
-$pureeItems = $showcasePurees ?? collect([]);
-$puffItems = $showcasePuffs ?? collect([]);
-$favItems = $showcaseFavorites ?? collect([]);
+// Use dynamic showcase products from controller, convert to arrays
+$pureeItems = $showcasePurees ? $showcasePurees->toArray() : [];
+$puffItems = $showcasePuffs ? $showcasePuffs->toArray() : [];
+$favItems = $showcaseFavorites ? $showcaseFavorites->toArray() : [];
 
 // Front-image-only lists for homepage products section
 $pureeGalleryItems = $pureeItems;
