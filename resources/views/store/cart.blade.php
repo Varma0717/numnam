@@ -3,14 +3,6 @@
 @section('title', 'NumNam - Cart')
 
 @section('content')
-@php
-$productPlaceholders = [
-asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'),
-asset('assets/images/Puffs/Manchurian%20Munchos/front.jpg'),
-asset('assets/images/Purees/appi%20pooch%201.png'),
-asset('assets/images/Purees/berry%20swush%201.png'),
-];
-@endphp
 
 <section class="hero section in-view">
     <div class="relative overflow-hidden rounded-[2rem] border-3 bg-[#FFF0F5] px-6 py-10 sm:px-10 lg:px-12" style="border-color:#FFD6E5;">
@@ -38,13 +30,17 @@ asset('assets/images/Purees/berry%20swush%201.png'),
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-start">
         <div class="rounded-3xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
             @foreach($items as $item)
-            @php
-            $placeholderImage = $productPlaceholders[$item['product']->id % count($productPlaceholders)];
-            $lineImage = $item['product']->image_url ?: $placeholderImage;
-            @endphp
             <article class="flex flex-col gap-4 border-b border-slate-200 px-2 py-4 last:border-b-0 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex items-start gap-4">
-                    <div class="h-20 w-20 shrink-0 rounded-2xl bg-slate-100" style="background-image:url('{{ $lineImage }}'); background-size:cover; background-position:center;"></div>
+                    <div class="h-20 w-20 shrink-0 rounded-2xl bg-slate-100" @if($item['product']->image_url) style="background-image:url('{{ $item['product']->image_url }}'); background-size:cover; background-position:center;" @else style="display: flex; align-items: center; justify-content: center;" @endif>
+                        @if(!$item['product']->image_url)
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="text-slate-300">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        @endif
+                    </div>
                     <div>
                         <h4 class="text-base font-semibold text-slate-900"><a href="{{ route('store.product.show', $item['product']) }}">{{ $item['product']->name }}</a></h4>
                         <p class="mt-1 text-sm text-slate-600">Rs {{ number_format($item['unit_price'], 0) }} each</p>

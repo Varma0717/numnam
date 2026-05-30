@@ -99,18 +99,27 @@ asset('assets/images/Purees/berry%20swush%202.png'),
 
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         @forelse($products as $product)
-        @php($productImage = $product->image_url ?: $productPlaceholders[$loop->index % count($productPlaceholders)])
         <article class="group overflow-hidden rounded-[2rem] border-3 bg-white transition-transform duration-200 hover:-translate-y-1" style="border-color:#FFD6E5;">
             <a href="{{ route('store.product.show', $product) }}" class="block">
                 <div class="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                    @if($product->image_url)
                     <img
-                        src="{{ $productImage }}"
+                        src="{{ $product->image_url }}"
                         alt="{{ $product->name }}"
                         loading="lazy"
                         decoding="async"
                         class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         width="400"
                         height="300" />
+                    @else
+                    <div class="flex h-full w-full items-center justify-center bg-slate-200">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-slate-400">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                    </div>
+                    @endif
                     @if($product->sale_price)
                     <span class="absolute left-3 top-3 inline-flex rounded-full bg-rose-500 px-2.5 py-1 text-xs font-semibold text-white">-{{ round((1 - $product->sale_price / $product->price) * 100) }}%</span>
                     @endif

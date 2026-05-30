@@ -1,15 +1,8 @@
 @extends('store.layouts.app')
 
 @php
-$fallbackPlaceholders = [
-asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'),
-asset('assets/images/Puffs/Tomaty%20Pumpos/front.jpg'),
-asset('assets/images/Purees/brocco%20pop%203.png'),
-asset('assets/images/Purees/mangy%20chewy%203.png'),
-];
-
-// Use product image_url as primary source, fallback to gallery, then placeholders
-$mainImage = $product->image_url ?: ($gallery->isNotEmpty() ? $gallery->first() : $fallbackPlaceholders[$product->id % count($fallbackPlaceholders)]);
+// Use product image_url as primary source, fallback to gallery first item, no placeholders
+$mainImage = $product->image_url ?: ($gallery->isNotEmpty() ? $gallery->first() : null);
 
 $recentlyViewed = $recentlyViewedProducts ?? collect();
 $reviews = $reviews ?? collect();
@@ -97,12 +90,22 @@ $safetyItems = [
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
             <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm" id="mainImageWrap">
+                @if($mainImage)
                 <img
                     src="{{ $mainImage }}"
                     alt="{{ $product->name }}"
                     loading="eager"
                     id="mainProductImage"
                     style="width:100%;aspect-ratio:1/1;object-fit:contain;padding:1rem;transition:opacity 0.25s ease;">
+                @else
+                <div class="flex h-full w-full items-center justify-center" style="aspect-ratio:1/1;background:#f1f5f9;">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="text-slate-300">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                </div>
+                @endif
             </div>
 
             @if($gallery->count() > 1)
@@ -413,9 +416,18 @@ $safetyItems = [
     <h2 class="text-2xl font-semibold tracking-tight text-slate-900">You May Also Like</h2>
     <div class="mt-5 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         @foreach($related as $item)
-        @php($relatedPlaceholder = $item->image_url ?: $fallbackPlaceholders[$loop->index % count($fallbackPlaceholders)])
         <article class="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-            <div class="aspect-[4/3] bg-slate-100" style="background-image:url('{{ $relatedPlaceholder }}'); background-size:cover; background-position:center;"></div>
+            @if($item->image_url)
+            <div class="aspect-[4/3] bg-slate-100" style="background-image:url('{{ $item->image_url }}'); background-size:cover; background-position:center;"></div>
+            @else
+            <div class="flex aspect-[4/3] items-center justify-center bg-slate-100">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="text-slate-300">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+            </div>
+            @endif
             <div class="p-5 sm:p-6">
                 <h4 class="text-lg font-semibold text-slate-900 transition-colors duration-200 group-hover:text-numnam-700">
                     <a href="{{ route('store.product.show', $item) }}">{{ $item->name }}</a>

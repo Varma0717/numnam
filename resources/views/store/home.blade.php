@@ -5,29 +5,14 @@
 
 @section('content')
 @php
-$pureeItems = [
-['img' => asset('assets/images/Purees/brocco%20pop%201.png'), 'name' => 'Brocco Pop', 'slug' => 'brocco-pop'],
-['img' => asset('assets/images/Purees/berry%20swush%201.png'), 'name' => 'Berry Swush', 'slug' => 'berry-swush'],
-['img' => asset('assets/images/Purees/mangy%20chewy%201.png'), 'name' => 'Mangy Chewy', 'slug' => 'mangy-chewy'],
-['img' => asset('assets/images/Purees/appi%20pooch%201.png'), 'name' => 'Appi Pooch', 'slug' => 'appi-pooch'],
-];
-
-$puffItems = [
-['img' => asset('assets/images/Puffs/Manchurian%20Munchos/front.jpg'), 'name' => 'Manchurian Munchos', 'slug' => 'manchurian-munchos'],
-['img' => asset('assets/images/Puffs/Tikka%20Puffies/front.jpg'), 'name' => 'Tikka Puffies', 'slug' => 'tikka-puffies'],
-['img' => asset('assets/images/Puffs/Tomaty%20Pumpos/front.jpg'), 'name' => 'Tomaty Pumpos', 'slug' => 'tomaty-pumpos'],
-['img' => asset('assets/images/Puffs/Cheezy%20Bubbles/front.jpg'), 'name' => 'Cheezy Bubbles', 'slug' => 'cheezy-bubbles'],
-];
+// Use dynamic showcase products from controller, fallback to empty arrays
+$pureeItems = $showcasePurees ?? collect([]);
+$puffItems = $showcasePuffs ?? collect([]);
+$favItems = $showcaseFavorites ?? collect([]);
 
 // Front-image-only lists for homepage products section
 $pureeGalleryItems = $pureeItems;
 $puffGalleryItems = $puffItems;
-
-$favItems = [
-$pureeItems[1],
-$puffItems[0],
-$puffItems[3],
-];
 
 $trustItems = [
 ['title' => 'Doctor-Founded', 'caption' => 'Built by doctor-parents for real family feeding journeys.', 'icon' => 'doctor'],
@@ -202,11 +187,26 @@ return implode(', ', $entries);
                             @foreach($pureeItems as $i => $item)
                             <div class="nn-puree-slide" data-idx="{{ $i }}" @if($i !==0) style="display:none;" @endif>
                                 <a href="{{ route('store.product.show', $item['slug']) }}">
+                                    @if($item['img'])
                                     <img src="{{ $item['img'] }}" srcset="{{ $responsiveSrcset($item['img']) }}" sizes="(max-width: 767px) 82vw, (max-width: 1200px) 38vw, 320px" alt="{{ $item['name'] }}" loading="lazy" decoding="async" style="height:220px;width:100%;object-fit:contain;display:block;">
+                                    @else
+                                    <div style="height:220px;width:100%;display:flex;align-items:center;justify-content:center;background:#f1f5f9;">
+                                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color:#cbd5e1;">
+                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                            <polyline points="21 15 16 10 5 21"></polyline>
+                                        </svg>
+                                    </div>
+                                    @endif
                                 </a>
                                 <p>{{ $item['name'] }}</p>
                             </div>
                             @endforeach
+                            @if($pureeItems->isEmpty())
+                            <div style="padding: 40px 20px; text-align: center;">
+                                <p style="color: #94a3b8; font-size: 14px;">No purees available. Upload products with images in the admin panel.</p>
+                            </div>
+                            @endif
                             <a href="{{ route('store.products') }}" class="nn-home-inline-link">Explore All Purees &rarr;</a>
                         </div>
 
@@ -248,11 +248,26 @@ return implode(', ', $entries);
                             @foreach($puffItems as $i => $item)
                             <div class="nn-puff-slide" data-idx="{{ $i }}" @if($i !==0) style="display:none;" @endif>
                                 <a href="{{ route('store.product.show', $item['slug']) }}">
+                                    @if($item['img'])
                                     <img src="{{ $item['img'] }}" srcset="{{ $responsiveSrcset($item['img']) }}" sizes="(max-width: 767px) 82vw, (max-width: 1200px) 38vw, 320px" alt="{{ $item['name'] }}" loading="lazy" decoding="async" style="height:220px;width:100%;object-fit:contain;display:block;">
+                                    @else
+                                    <div style="height:220px;width:100%;display:flex;align-items:center;justify-content:center;background:#f1f5f9;">
+                                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color:#cbd5e1;">
+                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                            <polyline points="21 15 16 10 5 21"></polyline>
+                                        </svg>
+                                    </div>
+                                    @endif
                                 </a>
                                 <p>{{ $item['name'] }}</p>
                             </div>
                             @endforeach
+                            @if($puffItems->isEmpty())
+                            <div style="padding: 40px 20px; text-align: center;">
+                                <p style="color: #94a3b8; font-size: 14px;">No puffs available. Upload products with images in the admin panel.</p>
+                            </div>
+                            @endif
                             <a href="{{ route('store.products') }}" class="nn-home-inline-link">Explore All Puffs &rarr;</a>
                         </div>
 
@@ -283,13 +298,25 @@ return implode(', ', $entries);
                         <h3>{{ $blockCards[0]['title'] }}</h3>
                         <p>{{ $blockCards[0]['copy'] }}</p>
                         <div class="nn-home-block5__products">
-                            @foreach($favItems as $fav)
+                            @forelse($favItems as $fav)
                             <div class="nn-home-mini-product">
+                                @if($fav['img'])
                                 <img src="{{ $fav['img'] }}" srcset="{{ $responsiveSrcset($fav['img']) }}" sizes="(max-width: 767px) 28vw, 120px" alt="{{ $fav['name'] }}" loading="lazy" decoding="async">
+                                @else
+                                <div style="width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:#f1f5f9;border-radius:8px;margin-bottom:8px;">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color:#cbd5e1;">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                    </svg>
+                                </div>
+                                @endif
                                 <span>{{ $fav['name'] }}</span>
                                 <a href="{{ route('store.product.show', $fav['slug']) }}">Add to Cart</a>
                             </div>
-                            @endforeach
+                            @empty
+                            <p style="color: #94a3b8; font-size: 14px; padding: 20px 0;">Featured products with images will appear here.</p>
+                            @endforelse
                         </div>
                     </article>
 

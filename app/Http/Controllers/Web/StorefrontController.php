@@ -105,7 +105,42 @@ class StorefrontController extends Controller
                 ['name' => 'Meera K.', 'quote' => 'Ingredients and nutrition information are very transparent.'],
             ];
 
-            return view('store.home', compact('featuredProducts', 'bestSellerProducts', 'recentlyViewedProducts', 'plans', 'latestBlogs', 'topCategories', 'homepageSections', 'trustHighlights', 'testimonials'));
+            // Fetch showcase products by type (purees, puffs) for homepage carousel
+            $showcasePurees = Product::query()
+                ->where('is_active', true)
+                ->where('type', 'puree')
+                ->latest('id')
+                ->take(4)
+                ->get()
+                ->map(fn($p) => [
+                    'img' => $p->image_url,
+                    'name' => $p->name,
+                    'slug' => $p->slug,
+                ]);
+
+            $showcasePuffs = Product::query()
+                ->where('is_active', true)
+                ->where('type', 'puffs')
+                ->latest('id')
+                ->take(4)
+                ->get()
+                ->map(fn($p) => [
+                    'img' => $p->image_url,
+                    'name' => $p->name,
+                    'slug' => $p->slug,
+                ]);
+
+            $showcaseFavorites = $productCardQuery()
+                ->latest('id')
+                ->take(3)
+                ->get()
+                ->map(fn($p) => [
+                    'img' => $p->image_url,
+                    'name' => $p->name,
+                    'slug' => $p->slug,
+                ]);
+
+            return view('store.home', compact('featuredProducts', 'bestSellerProducts', 'recentlyViewedProducts', 'plans', 'latestBlogs', 'topCategories', 'homepageSections', 'trustHighlights', 'testimonials', 'showcasePurees', 'showcasePuffs', 'showcaseFavorites'));
         } catch (\Exception $e) {
             Log::error('Home page error: ' . $e->getMessage());
             // Return view with minimal data on error
