@@ -220,7 +220,7 @@ class CartScreenRedesign extends StatelessWidget {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Failed: ${e.toString()}'),
+                                  content: Text(_formatErrorMessage(e)),
                                   backgroundColor: Colors.red,
                                   duration: const Duration(seconds: 2),
                                 ),
@@ -252,7 +252,7 @@ class CartScreenRedesign extends StatelessWidget {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Failed: ${e.toString()}'),
+                                  content: Text(_formatErrorMessage(e)),
                                   backgroundColor: Colors.red,
                                   duration: const Duration(seconds: 2),
                                 ),
@@ -279,8 +279,7 @@ class CartScreenRedesign extends StatelessWidget {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content:
-                                      Text('Failed to remove: ${e.toString()}'),
+                                  content: Text(_formatErrorMessage(e)),
                                   backgroundColor: Colors.red,
                                   duration: const Duration(seconds: 2),
                                 ),
@@ -316,6 +315,21 @@ class CartScreenRedesign extends StatelessWidget {
         child: Icon(icon, color: kCoral, size: 18),
       ),
     );
+  }
+
+  String _formatErrorMessage(dynamic error) {
+    final errorString = error.toString();
+    if (errorString.contains('404')) {
+      return 'Product not found. Please refresh your cart.';
+    } else if (errorString.contains('422')) {
+      return 'Cannot update this product. It may no longer be available.';
+    } else if (errorString.contains('Connection refused')) {
+      return 'Connection error. Please check your internet.';
+    } else if (errorString.contains('timeout')) {
+      return 'Request timed out. Please try again.';
+    } else {
+      return 'Unable to update. Please try again.';
+    }
   }
 
   Widget _buildCheckoutSection(

@@ -57,9 +57,9 @@
                 "email": "info@numnam.com"
             },
             "sameAs": [
-                "https://www.instagram.com/numnam_baby",
-                "https://www.facebook.com/numnam",
-                "https://twitter.com/numnam_baby"
+                "https://www.instagram.com/numnameats",
+                "https://www.facebook.com/numnamofficial",
+                "https://www.linkedin.com/company/numnam"
             ]
         }
     </script>
