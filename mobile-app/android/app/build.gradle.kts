@@ -50,6 +50,7 @@ android {
             // Disable minification - not needed with our optimizations
             // and avoids R8/ProGuard issues with Play Core libraries
             isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }
