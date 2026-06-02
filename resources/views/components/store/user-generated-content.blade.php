@@ -16,7 +16,7 @@ $galleryItems = collect($items)->take(6);
                 <h2 class="mt-4 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">{{ $title }}</h2>
                 <p class="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">{{ $subtitle }}</p>
             </div>
-            <a href="https://www.instagram.com/numnam_baby" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-400 hover:text-slate-900">Follow on Instagram</a>
+            <a href=\"https://www.instagram.com/numnameats\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-400 hover:text-slate-900\">Follow on Instagram</a>
         </div>
 
         <div class="grid auto-rows-[180px] gap-4 sm:grid-cols-2 lg:grid-cols-4">

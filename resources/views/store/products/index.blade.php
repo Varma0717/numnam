@@ -22,30 +22,7 @@ asset('assets/images/Purees/berry%20swush%202.png'),
     </div>
 </section>
 
-{{-- Age-stage quick filter chips --}}
-<section class="section py-6">
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p class="text-sm font-semibold uppercase tracking-[0.14em] text-slate-500">Filter by age</p>
-    </div>
-    <div class="mt-3 flex flex-wrap gap-2.5">
-        <a href="{{ route('store.products', array_merge(request()->except('age','page'), request('age') === '4-6' ? [] : ['age' => '4-6'])) }}"
-            class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 {{ request('age') === '4-6' ? 'border-numnam-200 bg-numnam-50 text-numnam-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:text-slate-900' }}">
-            <span aria-hidden="true">&#x1F34C;</span> 4-6 months
-        </a>
-        <a href="{{ route('store.products', array_merge(request()->except('age','page'), request('age') === '6-8' ? [] : ['age' => '6-8'])) }}"
-            class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 {{ request('age') === '6-8' ? 'border-numnam-200 bg-numnam-50 text-numnam-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:text-slate-900' }}">
-            <span aria-hidden="true">&#x1F955;</span> 6-8 months
-        </a>
-        <a href="{{ route('store.products', array_merge(request()->except('age','page'), request('age') === '8-12' ? [] : ['age' => '8-12'])) }}"
-            class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 {{ request('age') === '8-12' ? 'border-numnam-200 bg-numnam-50 text-numnam-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:text-slate-900' }}">
-            <span aria-hidden="true">&#x1F966;</span> 8-12 months
-        </a>
-        <a href="{{ route('store.products', array_merge(request()->except('age','page'), request('age') === '12+' ? [] : ['age' => '12+'])) }}"
-            class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 {{ request('age') === '12+' ? 'border-numnam-200 bg-numnam-50 text-numnam-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:text-slate-900' }}">
-            <span aria-hidden="true">&#x1F34E;</span> 12+ months
-        </a>
-    </div>
-</section>
+
 
 <section class="section py-6">
     <form method="GET" class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
@@ -54,10 +31,6 @@ asset('assets/images/Purees/berry%20swush%202.png'),
                 <label for="catalog-q" class="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Search</label>
                 <input id="catalog-q" class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400" type="text" name="q" value="{{ request('q') }}" placeholder="Search products...">
             </div>
-
-            @if(request('age'))
-            <input type="hidden" name="age" value="{{ request('age') }}">
-            @endif
 
             <div class="lg:col-span-3">
                 <label for="catalog-category" class="mb-1 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Category</label>
