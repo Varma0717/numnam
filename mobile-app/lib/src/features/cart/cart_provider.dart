@@ -38,15 +38,23 @@ class CartProvider extends ChangeNotifier {
   }
 
   Future<void> addItem(int productId, [int qty = 1]) async {
-    debugPrint('🛒 Adding to cart: Product ID=$productId, Qty=$qty');
-    final resp = await _api.dio.post(ApiEndpoints.cart, data: {
-      'product_id': productId,
-      'qty': qty,
-    });
-    debugPrint('✅ Add to cart response: ${resp.data}');
-    _cart = CartResponse.fromJson(resp.data['data'] as Map<String, dynamic>);
-    debugPrint('✅ Cart updated: ${_cart.items.length} items');
-    notifyListeners();
+    try {
+      debugPrint('🛒 Adding to cart: Product ID=$productId, Qty=$qty');
+      final resp = await _api.dio.post(ApiEndpoints.cart, data: {
+        'product_id': productId,
+        'qty': qty,
+      });
+      debugPrint('✅ Add to cart response: ${resp.data}');
+      if (resp.data != null && resp.data['data'] != null) {
+        _cart =
+            CartResponse.fromJson(resp.data['data'] as Map<String, dynamic>);
+        debugPrint('✅ Cart updated: ${_cart.items.length} items');
+      }
+      notifyListeners();
+    } catch (e) {
+      debugPrint('❌ Add item error: $e');
+      rethrow;
+    }
   }
 
   Future<void> updateQty(int productId, int qty) async {
@@ -58,26 +66,52 @@ class CartProvider extends ChangeNotifier {
         'qty': qty,
       });
       debugPrint('✅ Update quantity response: ${resp.data}');
-      _cart = CartResponse.fromJson(resp.data['data'] as Map<String, dynamic>);
-      debugPrint('✅ Cart updated successfully');
+      if (resp.data != null && resp.data['data'] != null) {
+        _cart =
+            CartResponse.fromJson(resp.data['data'] as Map<String, dynamic>);
+        debugPrint('✅ Cart updated successfully: ${_cart.items.length} items');
+      } else {
+        // If response doesn't contain updated cart, reload it
+        await loadCart();
+      }
       notifyListeners();
     } catch (e) {
       debugPrint('❌ Update quantity error: $e');
-      // Re-throw to allow UI to handle the error
       rethrow;
     }
   }
 
   Future<void> removeItem(int productId) async {
-    final resp = await _api.dio.delete('${ApiEndpoints.cart}/$productId');
-    _cart = CartResponse.fromJson(resp.data['data'] as Map<String, dynamic>);
-    notifyListeners();
+    try {
+      debugPrint('🛒 Removing item: Product ID=$productId');
+      final resp = await _api.dio.delete('${ApiEndpoints.cart}/$productId');
+      debugPrint('✅ Remove item response: ${resp.data}');
+      if (resp.data != null && resp.data['data'] != null) {
+        _cart =
+            CartResponse.fromJson(resp.data['data'] as Map<String, dynamic>);
+      } else {
+        // If response doesn't contain updated cart, reload it
+        await loadCart();
+      }
+      debugPrint('✅ Item removed successfully');
+      notifyListeners();
+    } catch (e) {
+      debugPrint('❌ Remove item error: $e');
+      rethrow;
+    }
   }
 
   Future<void> clearCart() async {
-    await _api.dio.delete(ApiEndpoints.cart);
-    _cart = CartResponse.empty;
-    notifyListeners();
+    try {
+      debugPrint('🛒 Clearing cart');
+      await _api.dio.delete(ApiEndpoints.cart);
+      _cart = CartResponse.empty;
+      debugPrint('✅ Cart cleared successfully');
+      notifyListeners();
+    } catch (e) {
+      debugPrint('❌ Clear cart error: $e');
+      rethrow;
+    }
   }
 
   void reset() {
