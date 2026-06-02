@@ -38,13 +38,14 @@ class MobileCartController extends BaseMobileController
         return $this->success($this->buildCartPayload($request), 'Item added to cart.', 201);
     }
 
-    public function update(Request $request, Product $product): JsonResponse
+    public function update(Request $request, $productId): JsonResponse
     {
         $validated = $request->validate([
             'qty' => 'required|integer|min:1|max:99',
         ]);
 
-        if (! $product->is_active) {
+        $product = Product::query()->where('id', $productId)->first();
+        if (! $product || ! $product->is_active) {
             return $this->error('Product is not available for purchase.', 422);
         }
 
@@ -57,8 +58,13 @@ class MobileCartController extends BaseMobileController
         return $this->success($this->buildCartPayload($request), 'Cart updated successfully.');
     }
 
-    public function destroy(Request $request, Product $product): JsonResponse
+    public function destroy(Request $request, $productId): JsonResponse
     {
+        $product = Product::query()->where('id', $productId)->first();
+        if (! $product) {
+            return $this->error('Product not found.', 422);
+        }
+
         CartItem::query()
             ->where('user_id', $request->user()->id)
             ->where('product_id', $product->id)

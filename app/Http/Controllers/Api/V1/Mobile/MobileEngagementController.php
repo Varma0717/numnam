@@ -59,8 +59,13 @@ class MobileEngagementController extends BaseMobileController
         return $this->success([], 'Added to wishlist.', 201);
     }
 
-    public function removeFromWishlist(Request $request, Product $product): JsonResponse
+    public function removeFromWishlist(Request $request, $productId): JsonResponse
     {
+        $product = Product::query()->where('id', $productId)->first();
+        if (! $product) {
+            return $this->error('Product not found.', 422);
+        }
+
         Wishlist::query()
             ->where('user_id', $request->user()->id)
             ->where('product_id', $product->id)
