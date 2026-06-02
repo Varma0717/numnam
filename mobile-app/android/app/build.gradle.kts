@@ -47,17 +47,10 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            // Disable minification - not needed with our optimizations
+            // and avoids R8/ProGuard issues with Play Core libraries
+            isMinifyEnabled = false
         }
-    }
-
-    buildFeatures {
-        viewBinding = false
-        aidl = false
-        renderScript = false
-        resValues = false
-        shaders = false
     }
 }
 
