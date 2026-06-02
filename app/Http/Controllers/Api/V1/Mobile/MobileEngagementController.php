@@ -28,6 +28,7 @@ class MobileEngagementController extends BaseMobileController
                     'name' => $product->name,
                     'slug' => $product->slug,
                     'image' => $product->image,
+                    'image_url' => $product->image_url,
                     'price' => (float) $product->price,
                     'sale_price' => $product->sale_price !== null ? (float) $product->sale_price : null,
                     'in_stock' => (int) $product->stock > 0,

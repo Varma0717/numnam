@@ -22,17 +22,8 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
   List<Product> _filteredProducts = [];
   bool _loading = true;
   bool _gridView = true;
-  String _selectedCategory = 'All';
   String _sortBy = 'popular';
   final TextEditingController _searchController = TextEditingController();
-
-  final List<String> _categories = [
-    'All',
-    '4-6 Months',
-    '6-9 Months',
-    '9-12 Months',
-    '12+ Months',
-  ];
 
   @override
   void initState() {
@@ -91,9 +82,6 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
   void _applyFilters() {
     setState(() {
       _filteredProducts = _products.where((product) {
-        if (_selectedCategory != 'All') {
-          if (product.ageGroup != _selectedCategory) return false;
-        }
         if (_searchController.text.isNotEmpty) {
           final query = _searchController.text.toLowerCase();
           if (!product.name.toLowerCase().contains(query)) return false;
@@ -152,12 +140,6 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    _buildFilterChip(
-                      icon: Icons.tune,
-                      label: _selectedCategory,
-                      onTap: _showCategoryFilter,
-                    ),
-                    const SizedBox(width: 8),
                     _buildFilterChip(
                       icon: Icons.sort,
                       label: _getSortLabel(),
@@ -251,47 +233,6 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
             Text(label,
                 style: GoogleFonts.poppins(
                     fontSize: 12, fontWeight: FontWeight.w600, color: kNavy)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showCategoryFilter() {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-      builder: (_) => Container(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Shop by Age',
-                style: GoogleFonts.baloo2(
-                    fontSize: 22, fontWeight: FontWeight.w800)),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 10,
-              children: _categories.map((c) {
-                final sel = _selectedCategory == c;
-                return ChoiceChip(
-                  label: Text(c),
-                  selected: sel,
-                  onSelected: (s) {
-                    if (s) {
-                      setState(() => _selectedCategory = c);
-                      _applyFilters();
-                      Navigator.pop(context);
-                    }
-                  },
-                  selectedColor: kCoral,
-                  labelStyle: GoogleFonts.poppins(
-                      color: sel ? Colors.white : kNavy, fontSize: 13),
-                );
-              }).toList(),
-            ),
           ],
         ),
       ),

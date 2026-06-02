@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -215,11 +216,13 @@ class CartScreenRedesign extends StatelessWidget {
                               await cartProvider.removeItem(item.productId);
                             }
                           } catch (e) {
+                            debugPrint('❌ Quantity error: $e');
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Failed to update quantity'),
+                                SnackBar(
+                                  content: Text('Failed: ${e.toString()}'),
                                   backgroundColor: Colors.red,
+                                  duration: const Duration(seconds: 2),
                                 ),
                               );
                             }
@@ -245,11 +248,13 @@ class CartScreenRedesign extends StatelessWidget {
                             await cartProvider.updateQty(
                                 item.productId, quantity + 1);
                           } catch (e) {
+                            debugPrint('❌ Quantity error: $e');
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Failed to update quantity'),
+                                SnackBar(
+                                  content: Text('Failed: ${e.toString()}'),
                                   backgroundColor: Colors.red,
+                                  duration: const Duration(seconds: 2),
                                 ),
                               );
                             }
@@ -258,8 +263,31 @@ class CartScreenRedesign extends StatelessWidget {
                       ),
                       const Spacer(),
                       IconButton(
-                        onPressed: () =>
-                            cartProvider.removeItem(item.productId),
+                        onPressed: () async {
+                          try {
+                            await cartProvider.removeItem(item.productId);
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Removed from cart'),
+                                  duration: Duration(seconds: 1),
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            debugPrint('❌ Delete error: $e');
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text('Failed to remove: ${e.toString()}'),
+                                  backgroundColor: Colors.red,
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                            }
+                          }
+                        },
                         icon: const Icon(Icons.delete_outline),
                         color: Colors.red,
                       ),
