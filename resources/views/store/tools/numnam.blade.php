@@ -414,6 +414,12 @@
         font-family: 'DM Sans', sans-serif;
         min-height: 100vh;
         padding-bottom: 40px;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
     }
 
     .numnam-header {
@@ -496,14 +502,14 @@
     }
 
     .page {
-        display: none;
+        display: none !important;
         padding: 20px;
         max-width: 700px;
         margin: 0 auto;
     }
 
     .page.active {
-        display: block;
+        display: block !important;
     }
 
     .card {
