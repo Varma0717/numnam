@@ -1141,13 +1141,16 @@ class StorefrontController extends Controller
             $subtotal += $lineTotal;
         }
 
-        $shippingFee = $subtotal > 0 && $subtotal < 999 ? 99.0 : 0.0;
+        // Get dynamic shipping settings
+        $shippingSettings = \App\Models\ShippingSettings::getInstance();
+        $shippingFee = $shippingSettings->enabled ? $shippingSettings->calculateShipping($subtotal) : 0;
 
         return [
             'items' => $items,
             'totals' => [
                 'subtotal' => $subtotal,
                 'shipping_fee' => $shippingFee,
+                'shipping_enabled' => $shippingSettings->enabled,
                 'total' => $subtotal + $shippingFee,
             ],
         ];
@@ -1156,16 +1159,28 @@ class StorefrontController extends Controller
     private function buildCheckoutSummary(array $totals, array $discounts): array
     {
         $subtotal = (float) ($totals['subtotal'] ?? 0);
-        $shippingFee = (float) ($totals['shipping_fee'] ?? 0);
         $totalDiscount = min($subtotal, (float) ($discounts['total_discount'] ?? 0));
+
+        // Get dynamic shipping & tax settings
+        $shippingSettings = \App\Models\ShippingSettings::getInstance();
+        $taxSettings = \App\Models\TaxSettings::getInstance();
+
+        // Calculate shipping only if enabled
+        $shippingFee = $shippingSettings->enabled ? $shippingSettings->calculateShipping($subtotal) : 0;
+
+        // Calculate tax only if enabled
+        $taxAmount = $taxSettings->enabled ? $taxSettings->calculateTax($subtotal, $shippingFee) : 0;
 
         return [
             'subtotal' => $subtotal,
             'shipping_fee' => $shippingFee,
+            'shipping_enabled' => $shippingSettings->enabled,
+            'tax_amount' => $taxAmount,
+            'tax_enabled' => $taxSettings->enabled,
             'coupon_discount' => (float) ($discounts['coupon_discount'] ?? 0),
             'referral_discount' => (float) ($discounts['referral_discount'] ?? 0),
             'total_discount' => $totalDiscount,
-            'total' => max(0, $subtotal - $totalDiscount + $shippingFee),
+            'total' => max(0, $subtotal - $totalDiscount + $shippingFee + $taxAmount),
         ];
     }
 

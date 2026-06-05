@@ -50,6 +50,6 @@ $displayReviewCount = (int) ($product->approved_reviews_count ?? 0);
             <button class="btn btn-primary w-full" type="submit">Add to Cart</button>
         </form>
 
-        <x-store.social-proof customers="10,000+" rating="{{ $displayRating }}" :compact="$compact" />
+
     </div>
 </article>

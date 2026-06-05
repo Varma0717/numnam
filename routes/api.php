@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Admin\MediaLibraryController;
 use App\Http\Controllers\Api\Admin\MenuManagerController;
 use App\Http\Controllers\Api\Admin\PageController;
 use App\Http\Controllers\Api\Admin\PricingPlanController;
+use App\Http\Controllers\Api\Admin\ShippingTaxSettingsController;
 use App\Http\Controllers\Api\Admin\SiteSettingController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CategoryController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\Api\V1\Payments\PaymentWebhookController;
 use App\Http\Controllers\Api\V1\PricingPlanModuleController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\ProductModuleController;
+use App\Http\Controllers\Api\V1\SettingsController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
@@ -150,6 +152,15 @@ Route::prefix('v1')->group(function () {
 
         Route::get('site-settings', [SiteSettingController::class, 'index']);
         Route::post('site-settings', [SiteSettingController::class, 'upsert']);
+
+        // Shipping & Tax Settings
+        Route::prefix('settings/shipping-tax')->group(function () {
+            Route::get('/', [ShippingTaxSettingsController::class, 'getAll']);
+            Route::get('shipping', [ShippingTaxSettingsController::class, 'getShipping']);
+            Route::put('shipping', [ShippingTaxSettingsController::class, 'updateShipping']);
+            Route::get('tax', [ShippingTaxSettingsController::class, 'getTax']);
+            Route::put('tax', [ShippingTaxSettingsController::class, 'updateTax']);
+        });
     });
 
     // ── Auth ────────────────────────────────────────────────────────────
@@ -184,6 +195,14 @@ Route::prefix('v1')->group(function () {
 
     // ── Public: Homepage Sections ────────────────────────────────────────
     Route::get('homepage/sections', [HomepageController::class, 'sections']);
+
+    // ── Public: Checkout Settings (Shipping & Tax) ───────────────────────
+    Route::prefix('settings')->group(function () {
+        Route::get('shipping', [SettingsController::class, 'shippingSettings']);
+        Route::get('tax', [SettingsController::class, 'taxSettings']);
+        Route::get('checkout', [SettingsController::class, 'checkoutSettings']);
+        Route::post('calculate-totals', [SettingsController::class, 'calculateTotals']);
+    });
 
     // ── Frontend Dynamic Rendering APIs (no Blade required) ─────────────
     Route::prefix('frontend')->group(function () {

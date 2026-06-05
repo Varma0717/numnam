@@ -80,7 +80,7 @@ $categoryImage = $category->image ?: $productPlaceholders[$category->id % count(
                         @csrf
                         <button class="btn btn-primary" type="submit">Add to Cart</button>
                     </form>
-                    <x-store.social-proof customers="10,000+" rating="4.8" compact="true" />
+
                 </div>
             </article>
             @empty

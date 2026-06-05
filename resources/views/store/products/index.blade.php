@@ -124,7 +124,7 @@ asset('assets/images/Purees/berry%20swush%202.png'),
                     <button class="inline-flex h-10 w-full items-center justify-center rounded-full bg-numnam-600 px-5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-numnam-700" type="submit">Add to Cart</button>
                 </form>
 
-                <x-store.social-proof customers="10,000+" rating="4.8" compact="true" />
+
             </div>
         </article>
         @empty

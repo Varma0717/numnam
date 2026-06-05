@@ -163,7 +163,15 @@
             </div>
             @endforeach
             <div class="mt-4 flex items-center justify-between border-t border-slate-200 pt-4 text-sm text-slate-600"><span>Subtotal</span><strong id="summary-subtotal" class="text-slate-900">Rs {{ number_format($summary['subtotal'], 0) }}</strong></div>
+
+            @if($summary['shipping_enabled'])
             <div class="mt-2 flex items-center justify-between text-sm text-slate-600"><span>Shipping</span><strong id="summary-shipping" class="text-slate-900">{{ $summary['shipping_fee'] > 0 ? 'Rs ' . number_format($summary['shipping_fee'], 0) : 'Free' }}</strong></div>
+            @endif
+
+            @if($summary['tax_enabled'])
+            <div class="mt-2 flex items-center justify-between text-sm text-slate-600"><span>Tax</span><strong id="summary-tax" class="text-slate-900">Rs {{ number_format($summary['tax_amount'], 0) }}</strong></div>
+            @endif
+
             <div id="summary-coupon-row" class="mt-2 flex items-center justify-between text-sm text-emerald-700 {{ $summary['coupon_discount'] > 0 ? '' : 'hidden' }}"><span>Coupon Discount</span><strong id="summary-coupon-discount">- Rs {{ number_format($summary['coupon_discount'], 0) }}</strong></div>
             <div id="summary-referral-row" class="mt-2 flex items-center justify-between text-sm text-emerald-700 {{ $summary['referral_discount'] > 0 ? '' : 'hidden' }}"><span>Referral Discount</span><strong id="summary-referral-discount">- Rs {{ number_format($summary['referral_discount'], 0) }}</strong></div>
             <div class="mt-4 flex items-center justify-between border-t border-slate-200 pt-4"><span class="text-base font-semibold text-slate-900">Total</span><strong id="summary-total" class="text-xl text-slate-900">Rs {{ number_format($summary['total'], 0) }}</strong></div>

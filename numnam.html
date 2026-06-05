@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NumNam — Baby Weaning Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,800;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FFF8F0;
+    --warm: #FDF3E3;
+    --peach: #F7C59F;
+    --coral: #E8835A;
+    --rust: #C0502A;
+    --sage: #7AAF85;
+    --mint: #B5D9BE;
+    --sky: #A8CDD9;
+    --lavender: #C5B8D9;
+    --text: #2D2016;
+    --muted: #8B7355;
+    --card: #FFFCF7;
+    --border: #EAD9C4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--rust);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--cream);
+    letter-spacing: -1px;
+  }
+  .logo span { color: var(--peach); }
+  .baby-age-pill {
+    background: rgba(255,255,255,0.15);
+    color: var(--cream);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    transition: background 0.2s;
+  }
+  .baby-age-pill:hover { background: rgba(255,255,255,0.25); }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    background: var(--warm);
+    border-bottom: 2px solid var(--border);
+    overflow-x: auto;
+    gap: 0;
+  }
+  .tab {
+    padding: 14px 22px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .tab.active { color: var(--rust); border-bottom-color: var(--rust); }
+  .tab:hover:not(.active) { color: var(--text); }
+
+  /* CONTENT */
+  .page { display: none; padding: 20px; max-width: 700px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--rust);
+    margin-bottom: 4px;
+  }
+  .card-sub {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  /* BUTTONS */
+  .btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: all 0.18s;
+  }
+  .btn-primary { background: var(--rust); color: white; }
+  .btn-primary:hover { background: var(--coral); transform: translateY(-1px); }
+  .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
+  .btn-outline:hover { background: var(--warm); }
+  .btn-sage { background: var(--sage); color: white; }
+  .btn-sage:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* DASHBOARD */
+  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .dash-stat {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+  }
+  .dash-stat .num {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .dash-stat .lbl { font-size: 0.75rem; color: var(--muted); }
+  .dash-stat.milk .num { color: var(--sky); filter: saturate(1.5); }
+  .dash-stat.solid .num { color: var(--coral); }
+  .dash-stat.water .num { color: #5AAECC; }
+  .dash-stat.poop .num { color: var(--sage); }
+
+  /* WEANING BAR */
+  .weaning-bar-wrap { margin: 4px 0 18px; }
+  .weaning-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .weaning-bar {
+    height: 18px;
+    border-radius: 9px;
+    background: var(--border);
+    overflow: hidden;
+    display: flex;
+  }
+  .bar-milk { background: var(--sky); transition: width 0.5s ease; }
+  .bar-solid { background: var(--coral); transition: width 0.5s ease; }
+  .bar-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 7px;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  /* INSIGHT ALERT */
+  .insight {
+    border-left: 4px solid var(--coral);
+    background: linear-gradient(to right, rgba(232,131,90,0.08), transparent);
+    padding: 14px 16px;
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 16px;
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+  .insight .ins-title {
+    font-weight: 600;
+    color: var(--rust);
+    margin-bottom: 4px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .insight.green { border-left-color: var(--sage); background: linear-gradient(to right, rgba(122,175,133,0.08), transparent); }
+  .insight.green .ins-title { color: #4a8a56; }
+  .insight.blue { border-left-color: var(--sky); background: linear-gradient(to right, rgba(168,205,217,0.12), transparent); }
+  .insight.blue .ins-title { color: #3a7d8a; }
+
+  /* LOG FORM */
+  .form-row { margin-bottom: 14px; }
+  .form-row label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .form-row input, .form-row select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    background: var(--cream);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-row input:focus, .form-row select:focus { border-color: var(--coral); }
+  .slider-wrap { display: flex; align-items: center; gap: 12px; }
+  .slider-wrap input[type=range] {
+    flex: 1;
+    height: 6px;
+    accent-color: var(--rust);
+    padding: 0;
+    border: none;
+    background: transparent;
+  }
+  .slider-val {
+    min-width: 52px;
+    text-align: right;
+    font-weight: 600;
+    color: var(--rust);
+    font-size: 0.95rem;
+  }
+
+  /* POOP CHART */
+  .poop-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .poop-btn {
+    padding: 10px 4px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.18s;
+    background: var(--cream);
+  }
+  .poop-btn .poop-icon { font-size: 1.5rem; display: block; margin-bottom: 4px; }
+  .poop-btn .poop-label { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
+  .poop-btn:hover { border-color: var(--coral); background: rgba(232,131,90,0.06); }
+  .poop-btn.selected { border-color: var(--rust); background: rgba(192,80,42,0.1); }
+  .poop-btn.selected .poop-label { color: var(--rust); }
+
+  /* LOG LIST */
+  .log-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .log-entry:last-child { border-bottom: none; }
+  .log-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .log-icon.milk { background: rgba(168,205,217,0.25); }
+  .log-icon.solid { background: rgba(247,197,159,0.3); }
+  .log-icon.poop { background: rgba(122,175,133,0.2); }
+  .log-icon.water { background: rgba(90,174,204,0.15); }
+  .log-info { flex: 1; }
+  .log-info strong { font-size: 0.88rem; font-weight: 500; }
+  .log-info .log-time { font-size: 0.75rem; color: var(--muted); }
+  .log-detail { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+  /* POOP TABLE */
+  .poop-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .poop-table th {
+    background: var(--warm);
+    padding: 9px 10px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--muted);
+    border-bottom: 2px solid var(--border);
+  }
+  .poop-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.4; }
+  .poop-table tr:hover td { background: var(--warm); }
+  .poop-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 500;
+  }
+  .badge-red { background: rgba(192,80,42,0.12); color: var(--rust); }
+  .badge-orange { background: rgba(247,197,159,0.4); color: #9b5a20; }
+  .badge-green { background: rgba(122,175,133,0.2); color: #3e7a4a; }
+  .badge-yellow { background: rgba(255,218,100,0.3); color: #7a6000; }
+
+  /* GUIDE */
+  .guide-stage {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .guide-stage:last-child { border-bottom: none; }
+  .stage-dot {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    color: white;
+  }
+  .stage-dot.s1 { background: var(--peach); color: var(--rust); }
+  .stage-dot.s2 { background: var(--coral); }
+  .stage-dot.s3 { background: var(--rust); }
+  .stage-info h4 { font-size: 0.92rem; font-weight: 600; margin-bottom: 3px; }
+  .stage-info p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+  .tip-badge {
+    display: inline-block;
+    background: var(--mint);
+    color: #2a6e3c;
+    border-radius: 8px;
+    padding: 3px 10px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-top: 6px;
+  }
+
+  /* MILESTONE ALERT */
+  .milestone-banner {
+    background: linear-gradient(135deg, var(--rust) 0%, var(--coral) 100%);
+    color: white;
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .milestone-banner::before {
+    content: '🎉';
+    position: absolute;
+    right: 16px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.5rem;
+    opacity: 0.3;
+  }
+  .milestone-banner .mb-label { font-size: 0.75rem; font-weight: 500; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px; }
+  .milestone-banner .mb-text { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; margin-top: 3px; line-height: 1.35; }
+
+  /* RECIPE SECTION */
+  .recipe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .recipe-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .recipe-card:hover { border-color: var(--coral); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(192,80,42,0.1); }
+  .recipe-card .r-emoji { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+  .recipe-card .r-name { font-size: 0.88rem; font-weight: 600; }
+  .recipe-card .r-meta { font-size: 0.75rem; color: var(--muted); margin-top: 3px; }
+  .recipe-card .r-hearts { font-size: 0.78rem; color: #e87a7a; margin-top: 5px; }
+  .heart-btn { cursor: pointer; transition: transform 0.15s; display: inline-block; }
+  .heart-btn:hover { transform: scale(1.3); }
+
+  .empty-log {
+    text-align: center;
+    padding: 32px 20px;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  .empty-log .empty-icon { font-size: 2.5rem; margin-bottom: 8px; }
+
+  .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .tag {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: var(--warm);
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tag:hover, .tag.active { background: var(--rust); color: white; border-color: var(--rust); }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .section-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 16px; }
+
+  .btn-row { display: flex; gap: 10px; margin-top: 16px; }
+
+  @media (max-width: 480px) {
+    .dash-grid { grid-template-columns: 1fr 1fr; }
+    .recipe-grid { grid-template-columns: 1fr 1fr; }
+    .poop-grid { grid-template-columns: repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Num<span>Nam</span></div>
+  <button class="baby-age-pill" onclick="showAgeModal()">👶 Baby: <span id="age-display">8 months</span></button>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="showPage('dashboard', this)">📊 Dashboard</div>
+  <div class="tab" onclick="showPage('log', this)">➕ Log</div>
+  <div class="tab" onclick="showPage('poop', this)">💩 Poop Guide</div>
+  <div class="tab" onclick="showPage('recipes', this)">🍽️ Recipes</div>
+  <div class="tab" onclick="showPage('guide', this)">📖 Guide</div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="page-dashboard" class="page active">
+  <div id="milestone-area"></div>
+
+  <div id="insight-area"></div>
+
+  <div class="card">
+    <div class="card-title">Today's Intake</div>
+    <div class="card-sub" id="dash-date"></div>
+    <div class="dash-grid">
+      <div class="dash-stat milk">
+        <div class="num" id="dash-milk">0</div>
+        <div class="lbl">ml Milk</div>
+      </div>
+      <div class="dash-stat solid">
+        <div class="num" id="dash-solid">0</div>
+        <div class="lbl">ml Solids</div>
+      </div>
+      <div class="dash-stat water">
+        <div class="num" id="dash-water">0</div>
+        <div class="lbl">ml Water</div>
+      </div>
+      <div class="dash-stat poop">
+        <div class="num" id="dash-poop">—</div>
+        <div class="lbl">Last Stool</div>
+      </div>
+    </div>
+
+    <div class="weaning-bar-wrap">
+      <div class="weaning-bar-label">
+        <span>Milk vs Solids balance</span>
+        <span id="balance-pct">—</span>
+      </div>
+      <div class="weaning-bar">
+        <div class="bar-milk" id="bar-milk" style="width:100%"></div>
+        <div class="bar-solid" id="bar-solid" style="width:0%"></div>
+      </div>
+      <div class="bar-legend">
+        <span><span class="legend-dot" style="background:var(--sky)"></span>Milk</span>
+        <span><span class="legend-dot" style="background:var(--coral)"></span>Solids</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Today's Log</div>
+    <div id="today-log-list"><div class="empty-log"><div class="empty-icon">🍼</div>No entries yet. Tap <strong>Log</strong> to add!</div></div>
+  </div>
+</div>
+
+<!-- LOG PAGE -->
+<div id="page-log" class="page">
+  <div class="section-title">Log a Feed</div>
+  <div class="section-sub">Track milk, solids, water, or poop output</div>
+
+  <div class="card">
+    <div class="card-title">What are you logging?</div>
+    <div class="tag-row" id="log-type-row">
+      <div class="tag active" onclick="selectLogType('milk', this)">🍼 Milk Feed</div>
+      <div class="tag" onclick="selectLogType('solid', this)">🥣 Solid Food</div>
+      <div class="tag" onclick="selectLogType('water', this)">💧 Water</div>
+      <div class="tag" onclick="selectLogType('poop', this)">💩 Poop</div>
+    </div>
+  </div>
+
+  <!-- MILK FORM -->
+  <div id="form-milk" class="card">
+    <div class="card-title">🍼 Milk Feed</div>
+    <div class="card-sub">Formula or breast milk</div>
+    <div class="form-row">
+      <label>Volume</label>
+      <div class="slider-wrap">
+        <input type="range" min="30" max="300" step="10" value="150" oninput="document.getElementById('milk-val').textContent=this.value+'ml'" id="milk-slider">
+        <span class="slider-val" id="milk-val">150ml</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Type</label>
+      <select id="milk-type">
+        <option>Breast milk</option>
+        <option>Formula</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Time</label>
+      <input type="time" id="milk-time" value="08:00">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="logEntry('milk')">Save Feed</button>
+    </div>
+  </div>
+
+  <!-- SOLID FORM -->
+  <div id="form-solid" class="card" style="display:none">
+    <div class="card-title">🥣 Solid Food</div>
+    <div class="card-sub">Purees, mashed, or finger food</div>
+    <div class="form-row">
+      <label>Volume eaten (ml)</label>
+      <div class="slider-wrap">
+        <input type="range" min="5" max="250" step="5" value="50" oninput="document.getElementById('solid-val').textContent=this.value+'ml'" id="solid-slider">
+        <span class="slider-val" id="solid-val">50ml</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Food item</label>
+      <input type="text" id="solid-food" placeholder="e.g. Carrot purée, banana mash">
+    </div>
+    <div class="form-row">
+      <label>Texture</label>
+      <select id="solid-texture">
+        <option>Smooth purée</option>
+        <option>Thick purée</option>
+        <option>Mashed</option>
+        <option>Soft lumps</option>
+        <option>Chopped / finger food</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>How much was finished?</label>
+      <select id="solid-finish">
+        <option>Ate it all 🎉</option>
+        <option>More than half</option>
+        <option>About half</option>
+        <option>A few spoonfuls</option>
+        <option>Messy floor 😅</option>
+        <option>Not a fan today 😔</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Time</label>
+      <input type="time" id="solid-time" value="12:00">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="logEntry('solid')">Save Meal</button>
+    </div>
+  </div>
+
+  <!-- WATER FORM -->
+  <div id="form-water" class="card" style="display:none">
+    <div class="card-title">💧 Water</div>
+    <div class="form-row">
+      <label>Sips / Volume (ml)</label>
+      <div class="slider-wrap">
+        <input type="range" min="5" max="120" step="5" value="20" oninput="document.getElementById('water-val').textContent=this.value+'ml'" id="water-slider">
+        <span class="slider-val" id="water-val">20ml</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Time</label>
+      <input type="time" id="water-time" value="13:00">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="logEntry('water')">Save Water</button>
+    </div>
+  </div>
+
+  <!-- POOP FORM -->
+  <div id="form-poop" class="card" style="display:none">
+    <div class="card-title">💩 Poop Log</div>
+    <div class="card-sub">Select the closest match (Bristol Stool Chart – infant adapted)</div>
+    <div class="poop-grid" id="poop-selector">
+      <div class="poop-btn" onclick="selectPoop('Type 1', this)"><span class="poop-icon">🪨</span><span class="poop-label">Hard pellets</span></div>
+      <div class="poop-btn" onclick="selectPoop('Type 2', this)"><span class="poop-icon">🌰</span><span class="poop-label">Lumpy</span></div>
+      <div class="poop-btn" onclick="selectPoop('Type 3', this)"><span class="poop-icon">🌭</span><span class="poop-label">Cracked</span></div>
+      <div class="poop-btn" onclick="selectPoop('Type 4', this)"><span class="poop-icon">🍌</span><span class="poop-label">Smooth ✅</span></div>
+      <div class="poop-btn" onclick="selectPoop('Type 5', this)"><span class="poop-icon">💛</span><span class="poop-label">Soft blobs</span></div>
+      <div class="poop-btn" onclick="selectPoop('Type 6', this)"><span class="poop-icon">💦</span><span class="poop-label">Mushy</span></div>
+      <div class="poop-btn" onclick="selectPoop('Red/Undigested', this)"><span class="poop-icon">🍅</span><span class="poop-label">Red bits</span></div>
+      <div class="poop-btn" onclick="selectPoop('Green/Mucous', this)"><span class="poop-icon">💚</span><span class="poop-label">Green</span></div>
+    </div>
+    <div id="poop-insight" style="margin-top:14px;display:none"></div>
+    <div class="form-row" style="margin-top:12px">
+      <label>Time</label>
+      <input type="time" id="poop-time" value="10:00">
+    </div>
+    <input type="hidden" id="poop-selected" value="">
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="logEntry('poop')">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- POOP GUIDE -->
+<div id="page-poop" class="page">
+  <div class="section-title">💩 Poop Diagnostics</div>
+  <div class="section-sub">What your baby's output is telling you</div>
+
+  <div class="card">
+    <table class="poop-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>What It Means</th>
+          <th>NumNam Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="poop-badge badge-red">🪨 Type 1 — Hard pellets</span></td>
+          <td>Constipation / Low fluid intake</td>
+          <td>Add 1 tsp ghee or coconut oil to next purée. Offer 20ml extra water.</td>
+        </tr>
+        <tr>
+          <td><span class="poop-badge badge-orange">🌰 Type 2 — Lumpy</span></td>
+          <td>Mild dehydration</td>
+          <td>Offer sips of water after solids. Focus on high-moisture fruits (melon, pear).</td>
+        </tr>
+        <tr>
+          <td><span class="poop-badge badge-orange">🌭 Type 3 — Cracked</span></td>
+          <td>Borderline normal</td>
+          <td>Increase fluid-rich foods. Add cucumber or courgette to meals.</td>
+        </tr>
+        <tr>
+          <td><span class="poop-badge badge-green">🍌 Type 4 — Smooth ✅</span></td>
+          <td>Optimal digestion!</td>
+          <td>Great job! Your current fibre/fluid balance is perfect.</td>
+        </tr>
+        <tr>
+          <td><span class="poop-badge badge-yellow">💛 Type 5 — Soft blobs</span></td>
+          <td>Normal variation</td>
+          <td>Monitor; likely fine. Check for any new foods introduced.</td>
+        </tr>
+        <tr>
+          <td><span class="poop-badge badge-yellow">💦 Type 6 — Mushy</span></td>
+          <td>Possible sensitivity or fibre spike</td>
+          <td>Slow down on new high-fibre veggies. Monitor for allergies. Pause any new foods.</td>
+        </tr>
+        <tr>
+          <td><span class="poop-badge badge-red">🍅 Red / Undigested</span></td>
+          <td>Undigested fibre — common with carrots</td>
+          <td>Mash food more thoroughly for 2 days. Normal if after red/orange foods.</td>
+        </tr>
+        <tr>
+          <td><span class="poop-badge badge-yellow">💚 Green / Mucous</span></td>
+          <td>Possible foremilk/hindmilk imbalance or teething</td>
+          <td>Check milk balance. If persistent, consult your health visitor.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🧠 Smart Rescue Logic</div>
+    <div class="card-sub">If-this-then-that interventions</div>
+
+    <div class="insight">
+      <div class="ins-title">🪨 Dry/Hard Poop Rescue</div>
+      "Ouch! Looks like baby is a bit backed up. Try adding 1 tsp of cold-pressed rapeseed or coconut oil to today's purée, or offer 20ml of extra water after the next solid meal."
+    </div>
+    <div class="insight blue">
+      <div class="ins-title">💧 Hydration Alert</div>
+      "Milk is down and solids are up — time for more fluids! Offer a few sips of water after every solid meal. In warm climates like India, hydration needs spike as milk reduces."
+    </div>
+    <div class="insight green">
+      <div class="ins-title">💚 Fibre Bridge</div>
+      "Stool looks too loose. Try natural binders: banana, cooked rice, or plain yoghurt. Hold off on high-fibre veggies (prunes, peas) for the next 2 days."
+    </div>
+  </div>
+</div>
+
+<!-- RECIPES -->
+<div id="page-recipes" class="page">
+  <div class="section-title">🍽️ Recipe Swaps</div>
+  <div class="section-sub">Mom-to-Mom favourites — filtered for your baby's age</div>
+
+  <div id="recipes-insight" style="margin-bottom:14px"></div>
+
+  <div class="recipe-grid" id="recipe-grid">
+  </div>
+</div>
+
+<!-- GUIDE -->
+<div id="page-guide" class="page">
+  <div class="section-title">📖 Weaning Guide</div>
+  <div class="section-sub">Stage-by-stage advice tailored to your baby</div>
+
+  <div class="card" style="background:linear-gradient(135deg,#fff8f0 0%,#fdf0e0 100%)">
+    <div class="card-title">Age & Stage Reference</div>
+    <div class="card-sub">Target volumes and texture goals</div>
+    <div style="overflow-x:auto">
+      <table class="poop-table">
+        <thead>
+          <tr>
+            <th>Age</th>
+            <th>Milk (ml)</th>
+            <th>Meals/day</th>
+            <th>Portion</th>
+            <th>Texture</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>6 mo — Wk 1–2</strong></td>
+            <td>800–950</td>
+            <td>1×</td>
+            <td>1–2 tsp</td>
+            <td>Watery/smooth</td>
+          </tr>
+          <tr>
+            <td><strong>6 mo — Wk 3–4</strong></td>
+            <td>800–900</td>
+            <td>1×</td>
+            <td>¼–½ bowl</td>
+            <td>Smooth purée</td>
+          </tr>
+          <tr>
+            <td><strong>7–8 months</strong></td>
+            <td>700–800</td>
+            <td>2×</td>
+            <td>½ bowl</td>
+            <td>Thick purée</td>
+          </tr>
+          <tr>
+            <td><strong>9–10 months</strong></td>
+            <td>600–700</td>
+            <td>3×</td>
+            <td>¾ bowl</td>
+            <td>Lumpy/mashed</td>
+          </tr>
+          <tr>
+            <td><strong>11–12 months</strong></td>
+            <td>400–500</td>
+            <td>3 + snack</td>
+            <td>Full bowl</td>
+            <td>Chopped/soft</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Milestone Tips</div>
+    <div id="guide-stages"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠️ Safety Rules</div>
+    <div class="card-sub">Always keep these in mind</div>
+    <div class="guide-stage">
+      <div class="stage-dot s1" style="font-size:1.1rem">🚫</div>
+      <div class="stage-info">
+        <h4>Avoid these under 12 months</h4>
+        <p>Salt, added sugar, honey, whole nuts, raw hard vegetables (choking hazard), cow's milk as a main drink, undercooked eggs.</p>
+      </div>
+    </div>
+    <div class="guide-stage">
+      <div class="stage-dot s2" style="font-size:1.1rem">🥚</div>
+      <div class="stage-info">
+        <h4>Introduce allergens early</h4>
+        <p>Eggs, peanut butter (thinned), dairy, wheat, and fish — one at a time from 6 months. Watch for reactions for 3 days after each new allergen.</p>
+      </div>
+    </div>
+    <div class="guide-stage" style="border-bottom:none">
+      <div class="stage-dot s3" style="font-size:1.1rem">😮</div>
+      <div class="stage-info">
+        <h4>Gagging vs choking</h4>
+        <p>Gagging is a normal safety reflex — stay calm and let baby work it out. Only intervene if baby is silent and turning red/blue.</p>
+        <span class="tip-badge">Know the difference — it will save you stress!</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AGE MODAL -->
+<div id="age-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:20px;padding:28px;max-width:340px;width:90%;margin:auto;position:relative;top:50%;transform:translateY(-50%)">
+    <div style="font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;margin-bottom:14px;color:var(--rust)">How old is your baby?</div>
+    <div class="form-row">
+      <label>Baby's age in months</label>
+      <input type="number" id="age-input" min="4" max="24" value="8" style="font-size:1.2rem;text-align:center">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" style="flex:1" onclick="saveAge()">Save</button>
+      <button class="btn btn-outline" onclick="document.getElementById('age-modal').style.display='none'">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+let state = {
+  babyAge: 8, // months
+  logs: [],
+  heartedRecipes: new Set()
+};
+
+try {
+  const saved = localStorage.getItem('numnam_state');
+  if (saved) {
+    const p = JSON.parse(saved);
+    state.babyAge = p.babyAge || 8;
+    state.logs = p.logs || [];
+    state.heartedRecipes = new Set(p.heartedRecipes || []);
+  }
+} catch(e) {}
+
+function saveState() {
+  try {
+    localStorage.setItem('numnam_state', JSON.stringify({
+      babyAge: state.babyAge,
+      logs: state.logs,
+      heartedRecipes: [...state.heartedRecipes]
+    }));
+  } catch(e) {}
+}
+
+// ===== INIT =====
+let currentLogType = 'milk';
+let selectedPoopType = '';
+
+function init() {
+  // Set time defaults
+  const now = new Date();
+  const hhmm = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  ['milk-time','solid-time','water-time','poop-time'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = hhmm;
+  });
+
+  document.getElementById('age-display').textContent = state.babyAge + ' months';
+  document.getElementById('dash-date').textContent = new Date().toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long' });
+
+  renderDashboard();
+  renderRecipes();
+  renderGuide();
+}
+
+// ===== TABS =====
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  el.classList.add('active');
+  if (id === 'dashboard') renderDashboard();
+}
+
+// ===== AGE MODAL =====
+function showAgeModal() {
+  document.getElementById('age-input').value = state.babyAge;
+  document.getElementById('age-modal').style.display = 'flex';
+}
+function saveAge() {
+  state.babyAge = parseInt(document.getElementById('age-input').value) || 8;
+  document.getElementById('age-display').textContent = state.babyAge + ' months';
+  document.getElementById('age-modal').style.display = 'none';
+  saveState();
+  renderDashboard();
+  renderRecipes();
+  renderGuide();
+}
+
+// ===== LOG TYPE =====
+function selectLogType(type, el) {
+  currentLogType = type;
+  document.querySelectorAll('#log-type-row .tag').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['milk','solid','water','poop'].forEach(t => {
+    document.getElementById('form-' + t).style.display = (t === type) ? 'block' : 'none';
+  });
+}
+
+// ===== POOP SELECTOR =====
+function selectPoop(type, el) {
+  selectedPoopType = type;
+  document.querySelectorAll('#poop-selector .poop-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('poop-selected').value = type;
+
+  // show instant insight
+  const insightEl = document.getElementById('poop-insight');
+  const advice = getPoopAdvice(type);
+  insightEl.innerHTML = `<div class="insight ${advice.cls}"><div class="ins-title">${advice.title}</div>${advice.text}</div>`;
+  insightEl.style.display = 'block';
+}
+
+function getPoopAdvice(type) {
+  if (type === 'Type 1') return { cls: '', title: '🪨 Hydration Rescue!', text: 'Baby seems a bit backed up. Add 1 tsp of ghee or coconut oil to the next meal. Offer 20ml of extra water after solids.' };
+  if (type === 'Type 2') return { cls: '', title: '💧 More fluids needed', text: 'Offer water sips after solids. Focus on high-moisture fruits like melon or pear today.' };
+  if (type === 'Type 4') return { cls: 'green', title: '✅ Perfect!', text: 'Fibre and fluid balance is just right. Keep up what you\'re doing!' };
+  if (type === 'Type 6') return { cls: 'blue', title: '⚡ Slow down on new foods', text: 'Possible sensitivity or fibre spike. Pause new high-fibre veggies for 2 days and monitor.' };
+  if (type === 'Red/Undigested') return { cls: '', title: '🍅 Digestion Check', text: 'Bits of carrot or tomato? Totally normal! The gut is still learning to break down fibre. Try mashing more thoroughly for the next 2 days.' };
+  return { cls: 'blue', title: 'ℹ️ Normal variation', text: 'Nothing to worry about. Keep an eye on it over the next day or two.' };
+}
+
+// ===== LOG ENTRY =====
+function logEntry(type) {
+  const now = new Date();
+  let entry = { id: Date.now(), type, timestamp: now.toISOString() };
+
+  if (type === 'milk') {
+    entry.volume = parseInt(document.getElementById('milk-slider').value);
+    entry.milkType = document.getElementById('milk-type').value;
+    entry.time = document.getElementById('milk-time').value;
+    entry.label = `${entry.volume}ml ${entry.milkType}`;
+  } else if (type === 'solid') {
+    entry.volume = parseInt(document.getElementById('solid-slider').value);
+    entry.food = document.getElementById('solid-food').value || 'Solids';
+    entry.texture = document.getElementById('solid-texture').value;
+    entry.finish = document.getElementById('solid-finish').value;
+    entry.time = document.getElementById('solid-time').value;
+    entry.label = `${entry.food} (${entry.volume}ml, ${entry.finish})`;
+  } else if (type === 'water') {
+    entry.volume = parseInt(document.getElementById('water-slider').value);
+    entry.time = document.getElementById('water-time').value;
+    entry.label = `${entry.volume}ml water`;
+  } else if (type === 'poop') {
+    if (!selectedPoopType) { alert('Please select a poop type!'); return; }
+    entry.poopType = selectedPoopType;
+    entry.time = document.getElementById('poop-time').value;
+    entry.label = selectedPoopType;
+  }
+
+  state.logs.push(entry);
+  saveState();
+  renderDashboard();
+
+  // brief confirm
+  const btn = document.querySelector(`#form-${type} .btn-primary`);
+  const orig = btn.textContent;
+  btn.textContent = '✓ Saved!';
+  btn.style.background = 'var(--sage)';
+  setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 1500);
+}
+
+// ===== DASHBOARD =====
+function renderDashboard() {
+  const today = new Date().toDateString();
+  const todayLogs = state.logs.filter(l => new Date(l.timestamp).toDateString() === today);
+
+  let totalMilk = 0, totalSolid = 0, totalWater = 0, lastPoop = '—';
+
+  todayLogs.forEach(l => {
+    if (l.type === 'milk') totalMilk += l.volume || 0;
+    if (l.type === 'solid') totalSolid += l.volume || 0;
+    if (l.type === 'water') totalWater += l.volume || 0;
+    if (l.type === 'poop') lastPoop = l.poopType?.replace('Type ','T') || '—';
+  });
+
+  document.getElementById('dash-milk').textContent = totalMilk;
+  document.getElementById('dash-solid').textContent = totalSolid;
+  document.getElementById('dash-water').textContent = totalWater;
+  document.getElementById('dash-poop').textContent = lastPoop;
+
+  // weaning bar
+  const total = totalMilk + totalSolid;
+  if (total > 0) {
+    const milkPct = Math.round(totalMilk / total * 100);
+    const solidPct = 100 - milkPct;
+    document.getElementById('bar-milk').style.width = milkPct + '%';
+    document.getElementById('bar-solid').style.width = solidPct + '%';
+    document.getElementById('balance-pct').textContent = `${milkPct}% milk / ${solidPct}% solids`;
+  } else {
+    document.getElementById('bar-milk').style.width = '100%';
+    document.getElementById('bar-solid').style.width = '0%';
+    document.getElementById('balance-pct').textContent = '—';
+  }
+
+  // insights
+  renderInsights(todayLogs, totalMilk, totalSolid, lastPoop);
+
+  // milestone
+  renderMilestone();
+
+  // log list
+  const logList = document.getElementById('today-log-list');
+  if (todayLogs.length === 0) {
+    logList.innerHTML = '<div class="empty-log"><div class="empty-icon">🍼</div>No entries yet. Tap <strong>Log</strong> to add!</div>';
+  } else {
+    const icons = { milk: { icon: '🍼', cls: 'milk' }, solid: { icon: '🥣', cls: 'solid' }, poop: { icon: '💩', cls: 'poop' }, water: { icon: '💧', cls: 'water' } };
+    logList.innerHTML = [...todayLogs].reverse().map(l => {
+      const ic = icons[l.type] || { icon: '📝', cls: '' };
+      return `<div class="log-entry">
+        <div class="log-icon ${ic.cls}">${ic.icon}</div>
+        <div class="log-info">
+          <strong>${l.label || l.type}</strong>
+          <div class="log-time">${l.time || ''}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+function renderInsights(todayLogs, totalMilk, totalSolid, lastPoop) {
+  const area = document.getElementById('insight-area');
+  let insights = [];
+
+  // Poop insight
+  const poopLog = todayLogs.filter(l => l.type === 'poop').pop();
+  if (poopLog) {
+    if (poopLog.poopType === 'Type 1') {
+      insights.push({ cls: '', title: '🪨 Hydration Rescue!', text: 'Output looks dry. For the next meal, add 1 tsp of healthy fat (ghee, coconut oil, or rapeseed oil). This acts as a natural gut lubricant. Also offer 2–3 extra sips of water after solids.' });
+    } else if (poopLog.poopType === 'Type 4') {
+      insights.push({ cls: 'green', title: '✅ Perfect Output!', text: 'Fibre and fluid balance is exactly right. Keep doing what you\'re doing — baby is digesting beautifully.' });
+    } else if (poopLog.poopType === 'Type 6') {
+      insights.push({ cls: 'blue', title: '⚡ Fibre Bridge', text: 'Stool looks a bit loose. Try natural binders: banana, cooked rice, or plain yoghurt. Hold off on high-fibre veggies for 2 days.' });
+    }
+  }
+
+  // Milk-heavy alert
+  if (state.babyAge >= 10 && totalSolid < 50 && totalMilk > 400) {
+    insights.push({ cls: 'blue', title: '🥛 Milk-Heavy Alert', text: `Baby is loving their milk, but at ${state.babyAge} months we're in the golden window for palate tuning! Try introducing a bitter green today to help with the transition to family foods.` });
+  }
+
+  // Water alert
+  if (totalSolid > 100 && totalWater === 0) {
+    insights.push({ cls: '', title: '💧 Water Time!', text: 'Baby is eating more solids! Time to offer a few sips of water to keep digestion happy and the poop-o-meter in the green zone.' });
+  }
+
+  // Texture tip
+  if (state.babyAge >= 8) {
+    const solidLogs = todayLogs.filter(l => l.type === 'solid');
+    const allSmooth = solidLogs.length > 0 && solidLogs.every(l => l.texture === 'Smooth purée');
+    if (allSmooth) {
+      insights.push({ cls: 'blue', title: '🦷 Texture Step-Up!', text: `Baby is ${state.babyAge} months old! Time to try mashed or soft lumps instead of smooth purée — it helps develop the jaw muscles needed for speech later.` });
+    }
+  }
+
+  if (insights.length === 0) {
+    area.innerHTML = '';
+    return;
+  }
+
+  area.innerHTML = insights.map(i => `
+    <div class="insight ${i.cls}">
+      <div class="ins-title">${i.title}</div>
+      ${i.text}
+    </div>
+  `).join('');
+}
+
+function renderMilestone() {
+  const area = document.getElementById('milestone-area');
+  const age = state.babyAge;
+  let msg = null;
+
+  if (age === 6) msg = { title: '🎉 First Spoon!', text: 'Today is about the tongue, not the tummy! If baby pushes food out — that\'s the extrusion reflex, not rejection. Start with 1–2 spoons of a single veggie.' };
+  else if (age === 8) msg = { title: '🌟 Bridge to Texture!', text: 'Baby is getting ~30% of energy from solids. If they seem less interested in milk, that\'s okay! Make every bite nutrient-dense.' };
+  else if (age === 10) msg = { title: '🍽️ Texture Challenge Time!', text: 'Stop the blender! Moving to mashed and soft lumps now helps develop jaw muscles needed for speech. If baby gags slightly, stay calm — it\'s a safety reflex.' };
+
+  if (msg) {
+    area.innerHTML = `<div class="milestone-banner"><div class="mb-label">Milestone at ${age} months</div><div class="mb-text">${msg.text}</div></div>`;
+  } else {
+    area.innerHTML = '';
+  }
+}
+
+// ===== RECIPES =====
+const RECIPES = [
+  { id: 1, emoji: '🥕', name: 'Carrot & Ginger Purée', age: 6, texture: 'Smooth purée', hearts: 42, notes: 'Rich in beta-carotene. Good first food.' },
+  { id: 2, emoji: '🥦', name: 'Broccoli & Apple Mash', age: 7, texture: 'Thick purée', hearts: 38, notes: 'Bitter-sweet combo for palate tuning.' },
+  { id: 3, emoji: '🍠', name: 'Sweet Potato & Coconut', age: 6, texture: 'Smooth purée', hearts: 61, notes: 'Healthy fat + iron-rich combo.' },
+  { id: 4, emoji: '🍌', name: 'Banana & Oat Porridge', age: 7, texture: 'Mashed', hearts: 55, notes: 'Natural binder — great for Type 6 poop!' },
+  { id: 5, emoji: '🥚', name: 'Scrambled Egg Fingers', age: 8, texture: 'Soft lumps', hearts: 29, notes: 'Allergen intro. Serve soft.' },
+  { id: 6, emoji: '🐠', name: 'Salmon & Sweet Pea Mash', age: 9, texture: 'Mashed', hearts: 47, notes: 'Omega-3 for brain development.' },
+  { id: 7, emoji: '🫘', name: 'Lentil & Spinach Dhal', age: 7, texture: 'Thick purée', hearts: 66, notes: 'Iron-rich. Perfect for Indian weaning.' },
+  { id: 8, emoji: '🍐', name: 'Pear & Prune Purée', age: 6, texture: 'Smooth purée', hearts: 33, notes: 'Natural gut mover — great for Type 1/2 poop.' },
+];
+
+function renderRecipes() {
+  const grid = document.getElementById('recipe-grid');
+  const age = state.babyAge;
+  const filtered = RECIPES.filter(r => r.age <= age);
+
+  const insightEl = document.getElementById('recipes-insight');
+
+  // Age-based recipe nudge
+  if (age >= 6) {
+    const today = new Date().toDateString();
+    const todayLogs = state.logs.filter(l => new Date(l.timestamp).toDateString() === today);
+    const fruitOnly = todayLogs.filter(l => l.type === 'solid').length > 0 &&
+      todayLogs.filter(l => l.type === 'solid').every(l => ['banana','pear','apple','fruit'].some(f => (l.food||'').toLowerCase().includes(f)));
+
+    if (fruitOnly) {
+      insightEl.innerHTML = `<div class="insight"><div class="ins-title">🥦 Try a Veggie Today!</div>We noticed a lot of fruit lately. To help with palate tuning, try a green veggie purée for the next meal.</div>`;
+    } else {
+      insightEl.innerHTML = '';
+    }
+  }
+
+  grid.innerHTML = filtered.map(r => `
+    <div class="recipe-card">
+      <span class="r-emoji">${r.emoji}</span>
+      <div class="r-name">${r.name}</div>
+      <div class="r-meta">${r.texture} · ${r.age}+ mo</div>
+      <div class="r-meta" style="margin-top:4px;font-size:0.73rem;color:var(--muted)">${r.notes}</div>
+      <div class="r-hearts">
+        <span class="heart-btn" onclick="heartRecipe(${r.id}, this)">${state.heartedRecipes.has(r.id) ? '❤️' : '🤍'}</span>
+        <span id="hearts-${r.id}">${r.hearts + (state.heartedRecipes.has(r.id) ? 1 : 0)}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function heartRecipe(id, el) {
+  const rec = RECIPES.find(r => r.id === id);
+  if (!rec) return;
+  if (state.heartedRecipes.has(id)) {
+    state.heartedRecipes.delete(id);
+    el.textContent = '🤍';
+    document.getElementById('hearts-' + id).textContent = rec.hearts;
+  } else {
+    state.heartedRecipes.add(id);
+    el.textContent = '❤️';
+    document.getElementById('hearts-' + id).textContent = rec.hearts + 1;
+    el.style.transform = 'scale(1.4)';
+    setTimeout(() => el.style.transform = '', 200);
+  }
+  saveState();
+}
+
+// ===== GUIDE =====
+function renderGuide() {
+  const stages = [
+    { dot: 's1', age: '6 months', title: '🥄 The First Spoon', text: 'Start with iron-rich single ingredients: carrot, sweet potato, pumpkin. Just 1–2 teaspoons once daily. Taste recognition is the only goal.' },
+    { dot: 's2', age: '7–8 months', title: '🌈 Variety Phase', text: 'Introduce 2 meals a day and expand variety rapidly. Now is the prime window for palate tuning — the more diverse the better! Include bitter greens early.' },
+    { dot: 's3', age: '9–10 months', title: '🦷 Texture Challenge', text: 'Stop smooth puréeing! Move to mashed and soft lumps. Jaw muscle development now directly supports speech. Offer soft finger foods too.' },
+    { dot: 's1', age: '11–12 months', title: '👨‍👩‍👧 Family Foods', text: 'Baby is ready for (unsalted, soft) family meals. 3 meals + 2 snacks. Milk drops to 400–500ml. Self-feeding skills blossom.' },
+  ];
+
+  const currentAge = state.babyAge;
+  document.getElementById('guide-stages').innerHTML = stages.map((s, i) => {
+    const isActive = (i === 0 && currentAge <= 6) || (i === 1 && currentAge >= 7 && currentAge <= 8) || (i === 2 && currentAge >= 9 && currentAge <= 10) || (i === 3 && currentAge >= 11);
+    return `<div class="guide-stage">
+      <div class="stage-dot ${s.dot}" style="${isActive ? 'box-shadow:0 0 0 3px var(--coral)' : ''}">${isActive ? '📍' : (i+1)}</div>
+      <div class="stage-info">
+        <h4>${s.title} <span style="font-weight:400;color:var(--muted);font-size:0.8rem">${s.age}</span></h4>
+        <p>${s.text}</p>
+        ${isActive ? `<span class="tip-badge">📍 You are here!</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+init();
+</script>
+</body>
+</html>

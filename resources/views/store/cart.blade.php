@@ -79,6 +79,8 @@
         <aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm lg:sticky lg:top-24">
             <h3 class="text-lg font-semibold text-slate-900">Order Summary</h3>
             <div class="mt-4 flex items-center justify-between text-sm text-slate-600"><span>Subtotal ({{ count($items) }} item{{ count($items) > 1 ? 's' : '' }})</span><strong class="text-slate-900">Rs {{ number_format($totals['subtotal'], 0) }}</strong></div>
+
+            @if($totals['shipping_enabled'] ?? false)
             <div class="mt-2 flex items-center justify-between text-sm text-slate-600"><span>Shipping</span><strong class="text-slate-900">{{ $totals['shipping_fee'] > 0 ? 'Rs ' . number_format($totals['shipping_fee'], 0) : 'Free' }}</strong></div>
             @if($totals['shipping_fee'] == 0)
             <p class="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700">
@@ -87,6 +89,7 @@
                 </svg>
                 Free shipping on this order!
             </p>
+            @endif
             @endif
             <div class="mt-4 flex items-center justify-between border-t border-slate-200 pt-4"><span class="text-base font-semibold text-slate-900">Total</span><strong class="text-xl text-slate-900">Rs {{ number_format($totals['total'], 0) }}</strong></div>
             <a class="mt-4 inline-flex h-11 w-full items-center justify-center rounded-full bg-numnam-600 px-5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-numnam-700" href="{{ route('store.checkout') }}">Proceed to Checkout</a>

@@ -342,5 +342,8 @@ class DatabaseSeeder extends Seeder
             'usage_limit' => 10000,
             'is_active' => true,
         ]);
+
+        // Initialize shipping and tax settings
+        $this->call(ShippingTaxSettingsSeeder::class);
     }
 }

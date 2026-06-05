@@ -180,9 +180,7 @@ $safetyItems = [
                 </a>
             </form>
 
-            @if($reviewCount > 0)
-            <x-store.social-proof customers="10,000+" rating="{{ $avgRating }}" />
-            @endif
+
 
             @auth
             @php
@@ -483,9 +481,7 @@ $safetyItems = [
                         Add to Cart
                     </button>
                 </form>
-                @if($item->approved_reviews_count > 0)
-                <x-store.social-proof customers=\"10,000+\" rating=\"{{ round((float) ($item->approved_reviews_avg_rating ?? 0), 1) }}\" compact=\"true\" />
-                @endif
+
             </div>
         </article>
         @endforeach

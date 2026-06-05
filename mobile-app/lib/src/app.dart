@@ -27,6 +27,7 @@ import 'features/blog/blog_list_screen.dart';
 import 'features/blog/blog_detail_screen.dart';
 import 'features/static/about_screen.dart';
 import 'features/static/faq_screen.dart';
+import 'features/tools/tools_list_screen.dart';
 import 'shared/theme/colors.dart';
 
 class NumNamApp extends StatelessWidget {
@@ -299,6 +300,8 @@ class _ShellState extends State<_Shell> {
       case 3:
         return const SubscriptionsScreenRedesign();
       case 4:
+        return const ToolsListScreen();
+      case 5:
         return const AccountScreen();
       default:
         return const HomeScreenRedesign();
@@ -320,7 +323,8 @@ class _ShellState extends State<_Shell> {
         actions: [
           IconButton(
             icon: const Icon(Icons.favorite_outline_rounded),
-            onPressed: () => Navigator.of(context).pushNamed(WishlistScreen.routeName),
+            onPressed: () =>
+                Navigator.of(context).pushNamed(WishlistScreen.routeName),
           ),
           const SizedBox(width: 8),
         ],
@@ -409,6 +413,11 @@ class AppBottomNav extends StatelessWidget {
             icon: Icon(Icons.card_membership_outlined),
             selectedIcon: Icon(Icons.card_membership_rounded),
             label: 'Subscribe',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.construction_outlined),
+            selectedIcon: Icon(Icons.construction_rounded),
+            label: 'Tools',
           ),
           const NavigationDestination(
             icon: Icon(Icons.person_outline_rounded),

@@ -24,6 +24,7 @@ use App\Http\Controllers\Web\Payments\CheckoutPaymentController;
 use App\Http\Controllers\Web\PasswordResetController;
 use App\Http\Controllers\Web\StorageController;
 use App\Http\Controllers\Web\StorefrontController;
+use App\Http\Controllers\Web\ToolsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -54,6 +55,12 @@ Route::get('/aboutus', [StorefrontController::class, 'about'])->name('store.abou
 Route::get('/recipes', [StorefrontController::class, 'recipes'])->name('store.recipes');
 Route::get('/faq', [StorefrontController::class, 'faq'])->name('store.faq');
 Route::get('/refer-friends', [StorefrontController::class, 'referFriends'])->name('store.refer-friends');
+
+// Tools routes
+Route::prefix('tools')->name('store.tools.')->group(function () {
+    Route::get('/', [ToolsController::class, 'index'])->name('index');
+    Route::get('/numnam-tracker', [ToolsController::class, 'numnam'])->name('numnam');
+});
 
 Route::get('/pricing', [StorefrontController::class, 'pricing'])->name('store.pricing');
 Route::post('/pricing/{plan}/subscribe', [StorefrontController::class, 'subscribe'])
