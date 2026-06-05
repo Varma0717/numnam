@@ -15,10 +15,14 @@
     main#main-content {
         padding: 0 !important;
         max-width: 100% !important;
+        margin-top: 100px;
     }
 
     main#main-content>.page {
         display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
     }
 
     /* Tracker wrapper - match website style */
@@ -34,6 +38,7 @@
         width: 100% !important;
         position: relative;
         z-index: 1;
+        overflow: visible;
     }
 
     /* Tracker header - match site header */
@@ -46,7 +51,7 @@
         justify-content: center;
         position: sticky;
         top: 100px;
-        z-index: 99;
+        z-index: 50;
         width: 100%;
         margin: 0;
         box-sizing: border-box;
@@ -101,9 +106,11 @@
         overflow-x: auto;
         gap: 0;
         width: 100%;
-        margin: 0;
+        margin: 0 !important;
         box-sizing: border-box;
         justify-content: center;
+        position: relative;
+        z-index: 40;
     }
 
     .tab {
@@ -1091,1142 +1098,377 @@
 </div>
 
 <script>
-    .numnam - tracker - wrapper * {
-            box - sizing: border - box;
-        }
 
-        .numnam - tracker - wrapper {
-            background: var (--cream);
-            color: var (--text);
-            font - family: 'DM Sans',
-            sans - serif;
-            padding - bottom: 40 px;
-            display: block!important;
-            visibility: visible!important;
-            opacity: 1!important;
-            width: 100 % !important;
-            margin: 0!important;
-            border: none!important;
-        }
-
-        .numnam - header {
-            background: var (--rust);
-            padding: 18 px 24 px;
-            display: flex!important;
-            align - items: center;
-            justify - content: space - between;
-            position: sticky;
-            top: 0;
-            z - index: 100;
-            width: 100 % ;
-            margin: 0;
-            box - sizing: border - box;
-        }
-
-        .logo - container {
-            display: flex;
-            align - items: center;
-            justify - content: space - between;
-            width: 100 % ;
-            gap: 20 px;
-        }
-
-        .tracker - logo {
-            font - family: 'Fraunces', serif;
-            font - size: 1.8 rem;
-            font - weight: 800;
-            color: var (--cream);
-            letter - spacing: -1 px;
-        }
-
-        .tracker - logo span {
-            color: var (--peach);
-        }
-
-        .baby - age - pill {
-            background: rgba(255, 255, 255, 0.15);
-            color: var (--cream);
-            border - radius: 20 px;
-            padding: 6 px 16 px;
-            font - size: 0.85 rem;
-            font - weight: 500;
-            cursor: pointer;
-            border: 1.5 px solid rgba(255, 255, 255, 0.3);
-            transition: background 0.2 s;
-            white - space: nowrap;
-        }
-
-        .baby - age - pill: hover {
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        .tabs {
-            display: flex!important;
-            background: var (--warm);
-            border - bottom: 2 px solid
-            var (--border);
-            overflow - x: auto;
-            gap: 0;
-            width: 100 % ;
-            margin: 0;
-            box - sizing: border - box;
-        }
-
-        .tab {
-            padding: 14 px 22 px;
-            font - size: 0.88 rem;
-            font - weight: 500;
-            color: var (--muted);
-            cursor: pointer;
-            border - bottom: 3 px solid transparent;
-            white - space: nowrap;
-            transition: all 0.2 s;
-            flex - shrink: 0;
-            background: none;
-            border: none;
-        }
-
-        .tab.active {
-            color: var (--rust);
-            border - bottom - color: var (--rust);
-        }
-
-        .tab: hover: not(.active) {
-            color: var (--text);
-        }
-
-        .tracker - page {
-            display: none!important;
-            padding: 20 px;
-            max - width: 700 px;
-            margin: 0 auto;
-        }
-
-        .tracker - page.active {
-            display: block!important;
-        }
-
-        .card {
-            background: var (--card);
-            border: 1.5 px solid
-            var (--border);
-            border - radius: 16 px;
-            padding: 20 px;
-            margin - bottom: 16 px;
-        }
-
-        .card - title {
-            font - family: 'Fraunces', serif;
-            font - size: 1.1 rem;
-            font - weight: 600;
-            color: var (--rust);
-            margin - bottom: 4 px;
-        }
-
-        .card - sub {
-            font - size: 0.8 rem;
-            color: var (--muted);
-            margin - bottom: 16 px;
-        }
-
-        .btn {
-            padding: 10 px 20 px;
-            border - radius: 10 px;
-            border: none;
-            cursor: pointer;
-            font - family: 'DM Sans',
-            sans - serif;
-            font - size: 0.88 rem;
-            font - weight: 500;
-            transition: all 0.18 s;
-        }
-
-        .btn - primary {
-            background: var (--rust);
-            color: white;
-        }
-
-        .btn - primary: hover {
-            background: var (--coral);
-            transform: translateY(-1 px);
-        }
-
-        .btn - outline {
-            background: transparent;
-            border: 1.5 px solid
-            var (--border);
-            color: var (--text);
-        }
-
-        .btn - outline: hover {
-            background: var (--warm);
-        }
-
-        .dash - grid {
-            display: grid;
-            grid - template - columns: 1 fr 1 fr;
-            gap: 12 px;
-            margin - bottom: 16 px;
-        }
-
-        .dash - stat {
-            background: var (--card);
-            border: 1.5 px solid
-            var (--border);
-            border - radius: 14 px;
-            padding: 16 px;
-            text - align: center;
-        }
-
-        .dash - stat.num {
-            font - family: 'Fraunces', serif;
-            font - size: 2 rem;
-            font - weight: 800;
-            line - height: 1;
-            margin - bottom: 4 px;
-        }
-
-        .dash - stat.lbl {
-            font - size: 0.75 rem;
-            color: var (--muted);
-        }
-
-        .dash - stat.milk.num {
-            color: var (--sky);
-        }
-
-        .dash - stat.solid.num {
-            color: var (--coral);
-        }
-
-        .dash - stat.water.num {
-            color: #5AAECC;
-    }
-
-    .dash-stat.poop .num {
-        color: var(--sage);
-    }
-
-    .weaning-bar-wrap {
-        margin: 4px 0 18px;
-    }
-
-    .weaning-bar-label {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.78rem;
-        color: var(--muted);
-        margin-bottom: 6px;
-    }
-
-    .weaning-bar {
-        height: 18px;
-        border-radius: 9px;
-        background: var(--border);
-        overflow: hidden;
-        display: flex;
-    }
-
-    .bar-milk,
-    .bar-solid {
-        transition: width 0.5s ease;
-    }
-
-    .bar-legend {
-        display: flex;
-        gap: 16px;
-        margin-top: 7px;
-        font-size: 0.75rem;
-        color: var(--muted);
-    }
-
-    .legend-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        display: inline-block;
-        margin-right: 5px;
-        vertical-align: middle;
-    }
-
-    .insight {
-        border-left: 4px solid var(--coral);
-        background: linear-gradient(to right, rgba(232, 131, 90, 0.08), transparent);
-        padding: 14px 16px;
-        border-radius: 0 12px 12px 0;
-        margin-bottom: 16px;
-        font-size: 0.875rem;
-        line-height: 1.55;
-    }
-
-    .insight .ins-title {
-        font-weight: 600;
-        color: var(--rust);
-        margin-bottom: 4px;
-        font-size: 0.82rem;
-    }
-
-    .insight.green {
-        border-left-color: var(--sage);
-        background: linear-gradient(to right, rgba(122, 175, 133, 0.08), transparent);
-    }
-
-    .insight.green .ins-title {
-        color: # 4 a8a56;
-        }
-
-        .insight.blue {
-            border - left - color: var (--sky);
-            background: linear - gradient(to right, rgba(168, 205, 217, 0.12), transparent);
-        }
-
-        .insight.blue.ins - title {
-            color: #3a7d8a;
-    }
-
-    .form-row {
-        margin-bottom: 14px;
-    }
-
-    .form-row label {
-        display: block;
-        font-size: 0.8rem;
-        font-weight: 500;
-        color: var(--muted);
-        margin-bottom: 6px;
-    }
-
-    .form-row input,
-    .form-row select {
-        width: 100%;
-        padding: 10px 14px;
-        border: 1.5px solid var(--border);
-        border-radius: 10px;
-        font-family: 'DM Sans', sans-serif;
-        font-size: 0.9rem;
-        background: var(--cream);
-        color: var(--text);
-        outline: none;
-        transition: border-color 0.2s;
-    }
-
-    .form-row input:focus,
-    .form-row select:focus {
-        border-color: var(--coral);
-    }
-
-    .slider-wrap {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .slider-wrap input[type= range] {
-            flex: 1;
-            height: 6 px;
-            accent - color: var (--rust);
-            padding: 0;
-            border: none;
-            background: transparent;
-        }
-
-        .poop - grid {
-            display: grid;
-            grid - template - columns: repeat(4, 1 fr);
-            gap: 8 px;
-            margin - top: 8 px;
-        }
-
-        .poop - btn {
-            padding: 10 px 4 px;
-            border: 2 px solid
-            var (--border);
-            border - radius: 12 px;
-            cursor: pointer;
-            text - align: center;
-            transition: all 0.18 s;
-            background: var (--cream);
-            font - family: 'DM Sans',
-            sans - serif;
-        }
-
-        .poop - btn.poop - icon {
-            font - size: 1.5 rem;
-            display: block;
-            margin - bottom: 4 px;
-        }
-
-        .poop - btn.poop - label {
-            font - size: 0.7 rem;
-            color: var (--muted);
-            font - weight: 500;
-        }
-
-        .poop - btn: hover {
-            border - color: var (--coral);
-            background: rgba(232, 131, 90, 0.06);
-        }
-
-        .poop - btn.selected {
-            border - color: var (--rust);
-            background: rgba(192, 80, 42, 0.1);
-        }
-
-        .poop - btn.selected.poop - label {
-            color: var (--rust);
-        }
-
-        .log - entry {
-            display: flex;
-            align - items: flex - start;
-            gap: 12 px;
-            padding: 12 px 0;
-            border - bottom: 1 px solid
-            var (--border);
-        }
-
-        .log - entry: last - child {
-            border - bottom: none;
-        }
-
-        .log - icon {
-            width: 36 px;
-            height: 36 px;
-            border - radius: 10 px;
-            display: flex;
-            align - items: center;
-            justify - content: center;
-            font - size: 1.1 rem;
-            flex - shrink: 0;
-        }
-
-        .log - icon.milk {
-            background: rgba(168, 205, 217, 0.25);
-        }
-
-        .log - icon.solid {
-            background: rgba(247, 197, 159, 0.3);
-        }
-
-        .log - icon.poop {
-            background: rgba(122, 175, 133, 0.2);
-        }
-
-        .log - icon.water {
-            background: rgba(90, 174, 204, 0.15);
-        }
-
-        .log - info {
-            flex: 1;
-        }
-
-        .log - info strong {
-            font - size: 0.88 rem;
-            font - weight: 500;
-        }
-
-        .log - info.log - time {
-            font - size: 0.75 rem;
-            color: var (--muted);
-        }
-
-        .poop - table {
-            width: 100 % ;
-            border - collapse: collapse;
-            font - size: 0.82 rem;
-        }
-
-        .poop - table th {
-            background: var (--warm);
-            padding: 9 px 10 px;
-            text - align: left;
-            font - weight: 600;
-            color: var (--muted);
-            border - bottom: 2 px solid
-            var (--border);
-        }
-
-        .poop - table td {
-            padding: 9 px 10 px;
-            border - bottom: 1 px solid
-            var (--border);
-            vertical - align: top;
-            line - height: 1.4;
-        }
-
-        .poop - table tr: hover td {
-            background: var (--warm);
-        }
-
-        .poop - badge {
-            display: inline - block;
-            padding: 2 px 8 px;
-            border - radius: 20 px;
-            font - size: 0.72 rem;
-            font - weight: 500;
-        }
-
-        .badge - red {
-            background: rgba(192, 80, 42, 0.12);
-            color: var (--rust);
-        }
-
-        .badge - orange {
-            background: rgba(247, 197, 159, 0.4);
-            color: #9b5a20;
-    }
-
-    .badge-green {
-        background: rgba(122, 175, 133, 0.2);
-        color: # 3e7 a4a;
-        }
-
-        .badge - yellow {
-            background: rgba(255, 218, 100, 0.3);
-            color: #7a6000;
-    }
-
-    .guide-stage {
-        display: flex;
-        gap: 14px;
-        padding: 14px 0;
-        border-bottom: 1px solid var(--border);
-        align-items: flex-start;
-    }
-
-    .guide-stage:last-child {
-        border-bottom: none;
-    }
-
-    .stage-dot {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Fraunces', serif;
-        font-weight: 800;
-        font-size: 0.85rem;
-        flex-shrink: 0;
-        color: white;
-    }
-
-    .stage-dot.s1 {
-        background: var(--peach);
-        color: var(--rust);
-    }
-
-    .stage-dot.s2 {
-        background: var(--coral);
-    }
-
-    .stage-dot.s3 {
-        background: var(--rust);
-    }
-
-    .stage-info h4 {
-        font-size: 0.92rem;
-        font-weight: 600;
-        margin-bottom: 3px;
-    }
-
-    .stage-info p {
-        font-size: 0.8rem;
-        color: var(--muted);
-        line-height: 1.5;
-    }
-
-    .milestone-banner {
-        background: linear-gradient(135deg, var(--rust) 0%, var(--coral) 100%);
-        color: white;
-        border-radius: 14px;
-        padding: 18px 20px;
-        margin-bottom: 16px;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .milestone-banner::before {
-        content: '🎉';
-        position: absolute;
-        right: 16px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 2.5rem;
-        opacity: 0.3;
-    }
-
-    .milestone-banner .mb-label {
-        font-size: 0.75rem;
-        font-weight: 500;
-        opacity: 0.8;
-    }
-
-    .milestone-banner .mb-text {
-        font-family: 'Fraunces', serif;
-        font-size: 1.15rem;
-        font-weight: 600;
-        margin-top: 3px;
-        line-height: 1.35;
-    }
-
-    .recipe-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-    }
-
-    .recipe-card {
-        background: var(--card);
-        border: 1.5px solid var(--border);
-        border-radius: 14px;
-        padding: 14px;
-        cursor: pointer;
-        transition: all 0.18s;
-    }
-
-    .recipe-card:hover {
-        border-color: var(--coral);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(192, 80, 42, 0.1);
-    }
-
-    .recipe-card .r-emoji {
-        font-size: 1.8rem;
-        margin-bottom: 8px;
-        display: block;
-    }
-
-    .recipe-card .r-name {
-        font-size: 0.88rem;
-        font-weight: 600;
-    }
-
-    .recipe-card .r-meta {
-        font-size: 0.75rem;
-        color: var(--muted);
-        margin-top: 3px;
-    }
-
-    .recipe-card .r-hearts {
-        font-size: 0.78rem;
-        color: # e87a7a;
-            margin - top: 5 px;
-        }
-
-        .heart - btn {
-            cursor: pointer;
-            transition: transform 0.15 s;
-            display: inline - block;
-        }
-
-        .heart - btn: hover {
-            transform: scale(1.3);
-        }
-
-        .empty - log {
-            text - align: center;
-            padding: 32 px 20 px;
-            color: var (--muted);
-            font - size: 0.88 rem;
-        }
-
-        .empty - log.empty - icon {
-            font - size: 2.5 rem;
-            margin - bottom: 8 px;
-        }
-
-        .tag - row {
-            display: flex;
-            gap: 8 px;
-            flex - wrap: wrap;
-            margin - top: 10 px;
-        }
-
-        .tag {
-            padding: 4 px 12 px;
-            border - radius: 20 px;
-            font - size: 0.75 rem;
-            font - weight: 500;
-            background: var (--warm);
-            border: 1.5 px solid
-            var (--border);
-            cursor: pointer;
-            transition: all 0.15 s;
-        }
-
-        .tag: hover,
-        .tag.active {
-            background: var (--rust);
-            color: white;
-            border - color: var (--rust);
-        }
-
-        .section - title {
-            font - family: 'Fraunces', serif;
-            font - size: 1.3 rem;
-            font - weight: 600;
-            margin - bottom: 4 px;
-        }
-
-        .section - sub {
-            font - size: 0.82 rem;
-            color: var (--muted);
-            margin - bottom: 16 px;
-        }
-
-        .btn - row {
-            display: flex;
-            gap: 10 px;
-            margin - top: 16 px;
-        }
-
-    @media(max - width: 480 px) {
-            .dash - grid {
-                    grid - template - columns: 1 fr 1 fr;
-                }
-
-                .recipe - grid {
-                    grid - template - columns: 1 fr 1 fr;
-                }
-
-                .poop - grid {
-                    grid - template - columns: repeat(2, 1 fr);
-                }
-
-                .logo - container {
-                    flex - direction: column;
-                    align - items: flex - start;
-                }
-
-                .tabs {
-                    overflow - x: auto;
-                }
-        } <
-        /style>
-
-        <
-        script >
-        let state = {
-            babyAge: 8,
-            logs: [],
-            heartedRecipes: new Set()
-        };
-
-    try {
-        const saved = localStorage.getItem('numnam_state');
-        if (saved) {
-            const p = JSON.parse(saved);
-            state.babyAge = p.babyAge || 8;
-            state.logs = p.logs || [];
-            state.heartedRecipes = new Set(p.heartedRecipes || []);
-        }
-    } catch (e) {}
-
-    function saveState() {
-        try {
-            localStorage.setItem('numnam_state', JSON.stringify({
-                babyAge: state.babyAge,
-                logs: state.logs,
-                heartedRecipes: [...state.heartedRecipes]
-            }));
-        } catch (e) {}
-    }
-
-    let currentLogType = 'milk';
-    let selectedPoopType = '';
-
-    function init() {
-        const now = new Date();
-        const hhmm = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-        ['milk-time', 'solid-time', 'water-time', 'poop-time'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.value = hhmm;
-        });
-
-        document.getElementById('age-display').textContent = state.babyAge + ' months';
-        document.getElementById('dash-date').textContent = new Date().toLocaleDateString('en-GB', {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long'
-        });
-
-        renderDashboard();
-        renderRecipes();
-        renderGuide();
-    }
-
-    function showPage(id, el) {
-        document.querySelectorAll('.tracker-page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.getElementById('page-' + id).classList.add('active');
-        el.classList.add('active');
-        if (id === 'dashboard') renderDashboard();
-    }
-
-    function showAgeModal() {
-        document.getElementById('age-input').value = state.babyAge;
-        document.getElementById('age-modal').style.display = 'flex';
-    }
-
-    function saveAge() {
-        state.babyAge = parseInt(document.getElementById('age-input').value) || 8;
-        document.getElementById('age-display').textContent = state.babyAge + ' months';
-        document.getElementById('age-modal').style.display = 'none';
-        saveState();
-        renderDashboard();
-        renderRecipes();
-        renderGuide();
-    }
-
-    function selectLogType(type, el) {
-        currentLogType = type;
-        document.querySelectorAll('#log-type-row .tag').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-        ['milk', 'solid', 'water', 'poop'].forEach(t => {
-            document.getElementById('form-' + t).style.display = (t === type) ? 'block' : 'none';
-        });
-    }
-
-    function selectPoop(type, el) {
-        selectedPoopType = type;
-        document.querySelectorAll('#poop-selector .poop-btn').forEach(b => b.classList.remove('selected'));
-        el.classList.add('selected');
-        document.getElementById('poop-selected').value = type;
-
-        const insightEl = document.getElementById('poop-insight');
-        const advice = getPoopAdvice(type);
-        insightEl.innerHTML = `<div class="insight ${advice.cls}"><div class="ins-title">${advice.title}</div>${advice.text}</div>`;
-        insightEl.style.display = 'block';
-    }
-
-    function getPoopAdvice(type) {
-        if (type === 'Type 1') return {
-            cls: '',
-            title: '🪨 Hydration Rescue!',
-            text: 'Baby seems a bit backed up. Add 1 tsp of ghee or coconut oil to the next meal. Offer 20ml of extra water after solids.'
-        };
-        if (type === 'Type 2') return {
-            cls: '',
-            title: '💧 More fluids needed',
-            text: 'Offer water sips after solids. Focus on high-moisture fruits like melon or pear today.'
-        };
-        if (type === 'Type 4') return {
-            cls: 'green',
-            title: '✅ Perfect!',
-            text: 'Fibre and fluid balance is just right. Keep up what you\'re doing!'
-        };
-        if (type === 'Type 6') return {
-            cls: 'blue',
-            title: '⚡ Slow down on new foods',
-            text: 'Possible sensitivity or fibre spike. Pause new high-fibre veggies for 2 days and monitor.'
-        };
-        if (type === 'Red/Undigested') return {
-            cls: '',
-            title: '🍅 Digestion Check',
-            text: 'Bits of carrot or tomato? Totally normal! The gut is still learning to break down fibre. Try mashing more thoroughly for the next 2 days.'
-        };
-        return {
-            cls: 'blue',
-            title: 'ℹ️ Normal variation',
-            text: 'Nothing to worry about. Keep an eye on it over the next day or two.'
-        };
-    }
-
-    function updateSlider(el, displayId) {
-        document.getElementById(displayId).textContent = el.value;
-    }
-
-    function logEntry(type) {
-        const now = new Date();
-        let entry = {
-            id: Date.now(),
-            type,
-            timestamp: now.toISOString()
-        };
-
-        if (type === 'milk') {
-            entry.volume = parseInt(document.getElementById('milk-slider').value);
-            entry.milkType = document.getElementById('milk-type').value;
-            entry.time = document.getElementById('milk-time').value;
-            entry.label = `${entry.volume}ml ${entry.milkType}`;
-        } else if (type === 'solid') {
-            entry.volume = parseInt(document.getElementById('solid-slider').value);
-            entry.food = document.getElementById('solid-food').value || 'Solids';
-            entry.texture = document.getElementById('solid-texture').value;
-            entry.finish = document.getElementById('solid-finish').value;
-            entry.time = document.getElementById('solid-time').value;
-            entry.label = `${entry.food} (${entry.volume}ml, ${entry.finish})`;
-        } else if (type === 'water') {
-            entry.volume = parseInt(document.getElementById('water-slider').value);
-            entry.time = document.getElementById('water-time').value;
-            entry.label = `${entry.volume}ml water`;
-        } else if (type === 'poop') {
-            if (!selectedPoopType) {
-                alert('Please select a poop type!');
-                return;
+            function showPage(id, el) {
+                document.querySelectorAll('.tracker-page').forEach(p => p.classList.remove('active'));
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.getElementById('page-' + id).classList.add('active');
+                el.classList.add('active');
+                if (id === 'dashboard') renderDashboard();
             }
-            entry.poopType = selectedPoopType;
-            entry.time = document.getElementById('poop-time').value;
-            entry.label = selectedPoopType;
-        }
 
-        state.logs.push(entry);
-        saveState();
-        renderDashboard();
+            function showAgeModal() {
+                document.getElementById('age-input').value = state.babyAge;
+                document.getElementById('age-modal').style.display = 'flex';
+            }
 
-        const btn = event.target;
-        const orig = btn.textContent;
-        btn.textContent = '✓ Saved!';
-        btn.style.background = 'var(--sage)';
-        setTimeout(() => {
-            btn.textContent = orig;
-            btn.style.background = '';
-        }, 1500);
-    }
+            function saveAge() {
+                state.babyAge = parseInt(document.getElementById('age-input').value) || 8;
+                document.getElementById('age-display').textContent = state.babyAge + ' months';
+                document.getElementById('age-modal').style.display = 'none';
+                saveState();
+                renderDashboard();
+                renderRecipes();
+                renderGuide();
+            }
 
-    function resetForm(type) {
-        if (type === 'milk') {
-            document.getElementById('milk-slider').value = 180;
-            document.getElementById('milk-vol-display').textContent = '180';
-            document.getElementById('milk-type').value = 'Formula';
-        } else if (type === 'solid') {
-            document.getElementById('solid-slider').value = 100;
-            document.getElementById('solid-vol-display').textContent = '100';
-            document.getElementById('solid-food').value = '';
-        } else if (type === 'water') {
-            document.getElementById('water-slider').value = 30;
-            document.getElementById('water-vol-display').textContent = '30';
-        } else if (type === 'poop') {
-            selectedPoopType = '';
-            document.querySelectorAll('#poop-selector .poop-btn').forEach(b => b.classList.remove('selected'));
-            document.getElementById('poop-insight').style.display = 'none';
-        }
-    }
+            function selectLogType(type, el) {
+                currentLogType = type;
+                document.querySelectorAll('#log-type-row .tag').forEach(t => t.classList.remove('active'));
+                el.classList.add('active');
+                ['milk', 'solid', 'water', 'poop'].forEach(t => {
+                    document.getElementById('form-' + t).style.display = (t === type) ? 'block' : 'none';
+                });
+            }
 
-    function renderDashboard() {
-        const today = new Date().toDateString();
-        const todayLogs = state.logs.filter(l => new Date(l.timestamp).toDateString() === today);
+            function selectPoop(type, el) {
+                selectedPoopType = type;
+                document.querySelectorAll('#poop-selector .poop-btn').forEach(b => b.classList.remove('selected'));
+                el.classList.add('selected');
+                document.getElementById('poop-selected').value = type;
 
-        let totalMilk = 0,
-            totalSolid = 0,
-            totalWater = 0,
-            lastPoop = '—';
+                const insightEl = document.getElementById('poop-insight');
+                const advice = getPoopAdvice(type);
+                insightEl.innerHTML = `<div class="insight ${advice.cls}"><div class="ins-title">${advice.title}</div>${advice.text}</div>`;
+                insightEl.style.display = 'block';
+            }
 
-        todayLogs.forEach(l => {
-            if (l.type === 'milk') totalMilk += l.volume || 0;
-            if (l.type === 'solid') totalSolid += l.volume || 0;
-            if (l.type === 'water') totalWater += l.volume || 0;
-            if (l.type === 'poop') lastPoop = l.poopType?.replace('Type ', 'T') || '—';
-        });
-
-        document.getElementById('dash-milk').textContent = totalMilk;
-        document.getElementById('dash-solid').textContent = totalSolid;
-        document.getElementById('dash-water').textContent = totalWater;
-        document.getElementById('dash-poop').textContent = lastPoop;
-
-        const total = totalMilk + totalSolid;
-        if (total > 0) {
-            const milkPct = Math.round(totalMilk / total * 100);
-            const solidPct = 100 - milkPct;
-            document.getElementById('bar-milk').style.width = milkPct + '%';
-            document.getElementById('bar-solid').style.width = solidPct + '%';
-            document.getElementById('balance-pct').textContent = `${milkPct}% milk / ${solidPct}% solids`;
-        } else {
-            document.getElementById('bar-milk').style.width = '100%';
-            document.getElementById('bar-solid').style.width = '0%';
-            document.getElementById('balance-pct').textContent = '—';
-        }
-
-        renderInsights(todayLogs, totalMilk, totalSolid, lastPoop);
-        renderMilestone();
-
-        const logList = document.getElementById('today-log-list');
-        if (todayLogs.length === 0) {
-            logList.innerHTML = '<div class="empty-log"><div class="empty-icon">🍼</div>No entries yet. Tap <strong>Log</strong> to add!</div>';
-        } else {
-            const icons = {
-                milk: {
-                    icon: '🍼',
-                    cls: 'milk'
-                },
-                solid: {
-                    icon: '🥣',
-                    cls: 'solid'
-                },
-                poop: {
-                    icon: '💩',
-                    cls: 'poop'
-                },
-                water: {
-                    icon: '💧',
-                    cls: 'water'
-                }
-            };
-            logList.innerHTML = [...todayLogs].reverse().map(l => {
-                const ic = icons[l.type];
-                return `<div class="log-entry"><div class="log-icon ${ic.cls}">${ic.icon}</div><div class="log-info"><strong>${l.label}</strong><div class="log-time">${l.time}</div></div></div>`;
-            }).join('');
-        }
-    }
-
-    function renderInsights(todayLogs, totalMilk, totalSolid, lastPoop) {
-        const area = document.getElementById('insight-area');
-        let insights = [];
-
-        const poopLog = todayLogs.filter(l => l.type === 'poop').pop();
-        if (poopLog) {
-            if (poopLog.poopType === 'Type 1') {
-                insights.push({
+            function getPoopAdvice(type) {
+                if (type === 'Type 1') return {
                     cls: '',
                     title: '🪨 Hydration Rescue!',
-                    text: 'Output looks dry. For the next meal, add 1 tsp of healthy fat (ghee, coconut oil, or rapeseed oil). This acts as a natural gut lubricant. Also offer 2–3 extra sips of water after solids.'
-                });
-            } else if (poopLog.poopType === 'Type 4') {
-                insights.push({
+                    text: 'Baby seems a bit backed up. Add 1 tsp of ghee or coconut oil to the next meal. Offer 20ml of extra water after solids.'
+                };
+                if (type === 'Type 2') return {
+                    cls: '',
+                    title: '💧 More fluids needed',
+                    text: 'Offer water sips after solids. Focus on high-moisture fruits like melon or pear today.'
+                };
+                if (type === 'Type 4') return {
                     cls: 'green',
-                    title: '✅ Perfect Output!',
-                    text: 'Fibre and fluid balance is exactly right. Keep doing what you\'re doing — baby is digesting beautifully.'
-                });
+                    title: '✅ Perfect!',
+                    text: 'Fibre and fluid balance is just right. Keep up what you\'re doing!'
+                };
+                if (type === 'Type 6') return {
+                    cls: 'blue',
+                    title: '⚡ Slow down on new foods',
+                    text: 'Possible sensitivity or fibre spike. Pause new high-fibre veggies for 2 days and monitor.'
+                };
+                if (type === 'Red/Undigested') return {
+                    cls: '',
+                    title: '🍅 Digestion Check',
+                    text: 'Bits of carrot or tomato? Totally normal! The gut is still learning to break down fibre. Try mashing more thoroughly for the next 2 days.'
+                };
+                return {
+                    cls: 'blue',
+                    title: 'ℹ️ Normal variation',
+                    text: 'Nothing to worry about. Keep an eye on it over the next day or two.'
+                };
             }
-        }
 
-        if (state.babyAge >= 10 && totalSolid < 50 && totalMilk > 400) {
-            insights.push({
-                cls: 'blue',
-                title: '🥛 Milk-Heavy Alert',
-                text: `Baby is loving their milk, but at ${state.babyAge} months we're in the golden window for palate tuning! Try introducing a bitter green today to help with the transition to family foods.`
-            });
-        }
+            function updateSlider(el, displayId) {
+                document.getElementById(displayId).textContent = el.value;
+            }
 
-        if (totalSolid > 100 && totalWater === 0) {
-            insights.push({
-                cls: '',
-                title: '💧 Water Time!',
-                text: 'Baby is eating more solids! Time to offer a few sips of water to keep digestion happy and the poop-o-meter in the green zone.'
-            });
-        }
+            function logEntry(type) {
+                const now = new Date();
+                let entry = {
+                    id: Date.now(),
+                    type,
+                    timestamp: now.toISOString()
+                };
 
-        if (insights.length === 0) {
-            area.innerHTML = '';
-        } else {
-            area.innerHTML = insights.map(i => `<div class="insight ${i.cls}"><div class="ins-title">${i.title}</div>${i.text}</div>`).join('');
-        }
-    }
+                if (type === 'milk') {
+                    entry.volume = parseInt(document.getElementById('milk-slider').value);
+                    entry.milkType = document.getElementById('milk-type').value;
+                    entry.time = document.getElementById('milk-time').value;
+                    entry.label = `${entry.volume}ml ${entry.milkType}`;
+                } else if (type === 'solid') {
+                    entry.volume = parseInt(document.getElementById('solid-slider').value);
+                    entry.food = document.getElementById('solid-food').value || 'Solids';
+                    entry.texture = document.getElementById('solid-texture').value;
+                    entry.finish = document.getElementById('solid-finish').value;
+                    entry.time = document.getElementById('solid-time').value;
+                    entry.label = `${entry.food} (${entry.volume}ml, ${entry.finish})`;
+                } else if (type === 'water') {
+                    entry.volume = parseInt(document.getElementById('water-slider').value);
+                    entry.time = document.getElementById('water-time').value;
+                    entry.label = `${entry.volume}ml water`;
+                } else if (type === 'poop') {
+                    if (!selectedPoopType) {
+                        alert('Please select a poop type!');
+                        return;
+                    }
+                    entry.poopType = selectedPoopType;
+                    entry.time = document.getElementById('poop-time').value;
+                    entry.label = selectedPoopType;
+                }
 
-    function renderMilestone() {
-        const area = document.getElementById('milestone-area');
-        const age = state.babyAge;
-        let msg = null;
+                state.logs.push(entry);
+                saveState();
+                renderDashboard();
 
-        if (age === 6) msg = {
-            title: '🎉 First Spoon!',
-            text: 'Today is about the tongue, not the tummy! If baby pushes food out — that\'s the extrusion reflex, not rejection. Start with 1–2 spoons of a single veggie.'
-        };
-        else if (age === 8) msg = {
-            title: '🌟 Bridge to Texture!',
-            text: 'Baby is getting ~30% of energy from solids. If they seem less interested in milk, that\'s okay! Make every bite nutrient-dense.'
-        };
-        else if (age === 10) msg = {
-            title: '🍽️ Texture Challenge Time!',
-            text: 'Stop the blender! Moving to mashed and soft lumps now helps develop jaw muscles needed for speech. If baby gags slightly, stay calm — it\'s a safety reflex.'
-        };
+                const btn = event.target;
+                const orig = btn.textContent;
+                btn.textContent = '✓ Saved!';
+                btn.style.background = 'var(--sage)';
+                setTimeout(() => {
+                    btn.textContent = orig;
+                    btn.style.background = '';
+                }, 1500);
+            }
 
-        if (msg) {
-            area.innerHTML = `<div class="milestone-banner"><div class="mb-label">Milestone at ${age} months</div><div class="mb-text">${msg.text}</div></div>`;
-        } else {
-            area.innerHTML = '';
-        }
-    }
+            function resetForm(type) {
+                if (type === 'milk') {
+                    document.getElementById('milk-slider').value = 180;
+                    document.getElementById('milk-vol-display').textContent = '180';
+                    document.getElementById('milk-type').value = 'Formula';
+                } else if (type === 'solid') {
+                    document.getElementById('solid-slider').value = 100;
+                    document.getElementById('solid-vol-display').textContent = '100';
+                    document.getElementById('solid-food').value = '';
+                } else if (type === 'water') {
+                    document.getElementById('water-slider').value = 30;
+                    document.getElementById('water-vol-display').textContent = '30';
+                } else if (type === 'poop') {
+                    selectedPoopType = '';
+                    document.querySelectorAll('#poop-selector .poop-btn').forEach(b => b.classList.remove('selected'));
+                    document.getElementById('poop-insight').style.display = 'none';
+                }
+            }
 
-    const RECIPES = [{
-            id: 1,
-            emoji: '🥕',
-            name: 'Carrot & Ginger Purée',
-            age: 6,
-            texture: 'Smooth purée',
-            hearts: 42,
-            notes: 'Rich in beta-carotene. Good first food.'
-        },
-        {
-            id: 2,
-            emoji: '🥦',
-            name: 'Broccoli & Apple Mash',
-            age: 7,
-            texture: 'Thick purée',
-            hearts: 38,
-            notes: 'Bitter-sweet combo for palate tuning.'
-        },
-        {
-            id: 3,
-            emoji: '🍠',
-            name: 'Sweet Potato & Coconut',
-            age: 6,
-            texture: 'Smooth purée',
-            hearts: 61,
-            notes: 'Healthy fat + iron-rich combo.'
-        },
-        {
-            id: 4,
-            emoji: '🍌',
-            name: 'Banana & Oat Porridge',
-            age: 7,
-            texture: 'Mashed',
-            hearts: 55,
-            notes: 'Natural binder — great for Type 6 poop!'
-        },
-        {
-            id: 5,
-            emoji: '🥚',
-            name: 'Scrambled Egg Fingers',
-            age: 8,
-            texture: 'Soft lumps',
-            hearts: 29,
-            notes: 'Allergen intro. Serve soft.'
-        },
-        {
-            id: 6,
-            emoji: '🐠',
-            name: 'Salmon & Sweet Pea Mash',
-            age: 9,
-            texture: 'Mashed',
-            hearts: 47,
-            notes: 'Omega-3 for brain development.'
-        },
-        {
-            id: 7,
-            emoji: '🫘',
-            name: 'Lentil & Spinach Dhal',
-            age: 7,
-            texture: 'Thick purée',
-            hearts: 66,
-            notes: 'Iron-rich. Perfect for Indian weaning.'
-        },
-        {
-            id: 8,
-            emoji: '🍐',
-            name: 'Pear & Prune Purée',
-            age: 6,
-            texture: 'Smooth purée',
-            hearts: 33,
-            notes: 'Natural gut mover — great for Type 1/2 poop.'
-        },
-    ];
+            function renderDashboard() {
+                const today = new Date().toDateString();
+                const todayLogs = state.logs.filter(l => new Date(l.timestamp).toDateString() === today);
 
-    function renderRecipes() {
-        const grid = document.getElementById('recipe-grid');
-        const age = state.babyAge;
-        const filtered = RECIPES.filter(r => r.age <= age);
+                let totalMilk = 0,
+                    totalSolid = 0,
+                    totalWater = 0,
+                    lastPoop = '—';
 
-        const insightEl = document.getElementById('recipes-insight');
-        if (age >= 6 && age < 8) {
-            insightEl.innerHTML = `<div class="insight"><div class="ins-title">💡 Stage Tip</div>We're showing recipes for smooth and thick purées. As baby gets older, we'll unlock mashed and finger-food recipes!</div>`;
-        } else if (age >= 8) {
-            insightEl.innerHTML = `<div class="insight green"><div class="ins-title">💡 Stage Tip</div>Baby is ready for lumpy mashes and soft finger foods! These recipes are designed to build chewing skills and independence.</div>`;
-        }
+                todayLogs.forEach(l => {
+                    if (l.type === 'milk') totalMilk += l.volume || 0;
+                    if (l.type === 'solid') totalSolid += l.volume || 0;
+                    if (l.type === 'water') totalWater += l.volume || 0;
+                    if (l.type === 'poop') lastPoop = l.poopType?.replace('Type ', 'T') || '—';
+                });
 
-        grid.innerHTML = filtered.map(r => `
+                document.getElementById('dash-milk').textContent = totalMilk;
+                document.getElementById('dash-solid').textContent = totalSolid;
+                document.getElementById('dash-water').textContent = totalWater;
+                document.getElementById('dash-poop').textContent = lastPoop;
+
+                const total = totalMilk + totalSolid;
+                if (total > 0) {
+                    const milkPct = Math.round(totalMilk / total * 100);
+                    const solidPct = 100 - milkPct;
+                    document.getElementById('bar-milk').style.width = milkPct + '%';
+                    document.getElementById('bar-solid').style.width = solidPct + '%';
+                    document.getElementById('balance-pct').textContent = `${milkPct}% milk / ${solidPct}% solids`;
+                } else {
+                    document.getElementById('bar-milk').style.width = '100%';
+                    document.getElementById('bar-solid').style.width = '0%';
+                    document.getElementById('balance-pct').textContent = '—';
+                }
+
+                renderInsights(todayLogs, totalMilk, totalSolid, lastPoop);
+                renderMilestone();
+
+                const logList = document.getElementById('today-log-list');
+                if (todayLogs.length === 0) {
+                    logList.innerHTML = '<div class="empty-log"><div class="empty-icon">🍼</div>No entries yet. Tap <strong>Log</strong> to add!</div>';
+                } else {
+                    const icons = {
+                        milk: {
+                            icon: '🍼',
+                            cls: 'milk'
+                        },
+                        solid: {
+                            icon: '🥣',
+                            cls: 'solid'
+                        },
+                        poop: {
+                            icon: '💩',
+                            cls: 'poop'
+                        },
+                        water: {
+                            icon: '💧',
+                            cls: 'water'
+                        }
+                    };
+                    logList.innerHTML = [...todayLogs].reverse().map(l => {
+                        const ic = icons[l.type];
+                        return `<div class="log-entry"><div class="log-icon ${ic.cls}">${ic.icon}</div><div class="log-info"><strong>${l.label}</strong><div class="log-time">${l.time}</div></div></div>`;
+                    }).join('');
+                }
+            }
+
+            function renderInsights(todayLogs, totalMilk, totalSolid, lastPoop) {
+                const area = document.getElementById('insight-area');
+                let insights = [];
+
+                const poopLog = todayLogs.filter(l => l.type === 'poop').pop();
+                if (poopLog) {
+                    if (poopLog.poopType === 'Type 1') {
+                        insights.push({
+                            cls: '',
+                            title: '🪨 Hydration Rescue!',
+                            text: 'Output looks dry. For the next meal, add 1 tsp of healthy fat (ghee, coconut oil, or rapeseed oil). This acts as a natural gut lubricant. Also offer 2–3 extra sips of water after solids.'
+                        });
+                    } else if (poopLog.poopType === 'Type 4') {
+                        insights.push({
+                            cls: 'green',
+                            title: '✅ Perfect Output!',
+                            text: 'Fibre and fluid balance is exactly right. Keep doing what you\'re doing — baby is digesting beautifully.'
+                        });
+                    }
+                }
+
+                if (state.babyAge >= 10 && totalSolid < 50 && totalMilk > 400) {
+                    insights.push({
+                        cls: 'blue',
+                        title: '🥛 Milk-Heavy Alert',
+                        text: `Baby is loving their milk, but at ${state.babyAge} months we're in the golden window for palate tuning! Try introducing a bitter green today to help with the transition to family foods.`
+                    });
+                }
+
+                if (totalSolid > 100 && totalWater === 0) {
+                    insights.push({
+                        cls: '',
+                        title: '💧 Water Time!',
+                        text: 'Baby is eating more solids! Time to offer a few sips of water to keep digestion happy and the poop-o-meter in the green zone.'
+                    });
+                }
+
+                if (insights.length === 0) {
+                    area.innerHTML = '';
+                } else {
+                    area.innerHTML = insights.map(i => `<div class="insight ${i.cls}"><div class="ins-title">${i.title}</div>${i.text}</div>`).join('');
+                }
+            }
+
+            function renderMilestone() {
+                const area = document.getElementById('milestone-area');
+                const age = state.babyAge;
+                let msg = null;
+
+                if (age === 6) msg = {
+                    title: '🎉 First Spoon!',
+                    text: 'Today is about the tongue, not the tummy! If baby pushes food out — that\'s the extrusion reflex, not rejection. Start with 1–2 spoons of a single veggie.'
+                };
+                else if (age === 8) msg = {
+                    title: '🌟 Bridge to Texture!',
+                    text: 'Baby is getting ~30% of energy from solids. If they seem less interested in milk, that\'s okay! Make every bite nutrient-dense.'
+                };
+                else if (age === 10) msg = {
+                    title: '🍽️ Texture Challenge Time!',
+                    text: 'Stop the blender! Moving to mashed and soft lumps now helps develop jaw muscles needed for speech. If baby gags slightly, stay calm — it\'s a safety reflex.'
+                };
+
+                if (msg) {
+                    area.innerHTML = `<div class="milestone-banner"><div class="mb-label">Milestone at ${age} months</div><div class="mb-text">${msg.text}</div></div>`;
+                } else {
+                    area.innerHTML = '';
+                }
+            }
+
+            const RECIPES = [{
+                    id: 1,
+                    emoji: '🥕',
+                    name: 'Carrot & Ginger Purée',
+                    age: 6,
+                    texture: 'Smooth purée',
+                    hearts: 42,
+                    notes: 'Rich in beta-carotene. Good first food.'
+                },
+                {
+                    id: 2,
+                    emoji: '🥦',
+                    name: 'Broccoli & Apple Mash',
+                    age: 7,
+                    texture: 'Thick purée',
+                    hearts: 38,
+                    notes: 'Bitter-sweet combo for palate tuning.'
+                },
+                {
+                    id: 3,
+                    emoji: '🍠',
+                    name: 'Sweet Potato & Coconut',
+                    age: 6,
+                    texture: 'Smooth purée',
+                    hearts: 61,
+                    notes: 'Healthy fat + iron-rich combo.'
+                },
+                {
+                    id: 4,
+                    emoji: '🍌',
+                    name: 'Banana & Oat Porridge',
+                    age: 7,
+                    texture: 'Mashed',
+                    hearts: 55,
+                    notes: 'Natural binder — great for Type 6 poop!'
+                },
+                {
+                    id: 5,
+                    emoji: '🥚',
+                    name: 'Scrambled Egg Fingers',
+                    age: 8,
+                    texture: 'Soft lumps',
+                    hearts: 29,
+                    notes: 'Allergen intro. Serve soft.'
+                },
+                {
+                    id: 6,
+                    emoji: '🐠',
+                    name: 'Salmon & Sweet Pea Mash',
+                    age: 9,
+                    texture: 'Mashed',
+                    hearts: 47,
+                    notes: 'Omega-3 for brain development.'
+                },
+                {
+                    id: 7,
+                    emoji: '🫘',
+                    name: 'Lentil & Spinach Dhal',
+                    age: 7,
+                    texture: 'Thick purée',
+                    hearts: 66,
+                    notes: 'Iron-rich. Perfect for Indian weaning.'
+                },
+                {
+                    id: 8,
+                    emoji: '🍐',
+                    name: 'Pear & Prune Purée',
+                    age: 6,
+                    texture: 'Smooth purée',
+                    hearts: 33,
+                    notes: 'Natural gut mover — great for Type 1/2 poop.'
+                },
+            ];
+
+            function renderRecipes() {
+                const grid = document.getElementById('recipe-grid');
+                const age = state.babyAge;
+                const filtered = RECIPES.filter(r => r.age <= age);
+
+                const insightEl = document.getElementById('recipes-insight');
+                if (age >= 6 && age < 8) {
+                    insightEl.innerHTML = `<div class="insight"><div class="ins-title">💡 Stage Tip</div>We're showing recipes for smooth and thick purées. As baby gets older, we'll unlock mashed and finger-food recipes!</div>`;
+                } else if (age >= 8) {
+                    insightEl.innerHTML = `<div class="insight green"><div class="ins-title">💡 Stage Tip</div>Baby is ready for lumpy mashes and soft finger foods! These recipes are designed to build chewing skills and independence.</div>`;
+                }
+
+                grid.innerHTML = filtered.map(r => `
         <div class="recipe-card">
             <div class="r-emoji">${r.emoji}</div>
             <div class="r-name">${r.name}</div>
@@ -2234,48 +1476,48 @@
             <div class="r-hearts"><span class="heart-btn" onclick="heartRecipe(${r.id}, this)">❤️</span> <span id="hearts-${r.id}">${r.hearts}</span></div>
         </div>
     `).join('');
-    }
+            }
 
-    function heartRecipe(id, el) {
-        const rec = RECIPES.find(r => r.id === id);
-        if (!rec) return;
-        if (state.heartedRecipes.has(id)) {
-            state.heartedRecipes.delete(id);
-            document.getElementById('hearts-' + id).textContent = rec.hearts;
-        } else {
-            state.heartedRecipes.add(id);
-            document.getElementById('hearts-' + id).textContent = rec.hearts + 1;
-        }
-        saveState();
-    }
+            function heartRecipe(id, el) {
+                const rec = RECIPES.find(r => r.id === id);
+                if (!rec) return;
+                if (state.heartedRecipes.has(id)) {
+                    state.heartedRecipes.delete(id);
+                    document.getElementById('hearts-' + id).textContent = rec.hearts;
+                } else {
+                    state.heartedRecipes.add(id);
+                    document.getElementById('hearts-' + id).textContent = rec.hearts + 1;
+                }
+                saveState();
+            }
 
-    function renderGuide() {
-        const stages = [{
-                age: '4-6 mo',
-                emoji: '1️⃣',
-                title: 'Spoon Skills',
-                desc: 'Focus on the tongue-thrust reflex & taste exposure, not nutrition yet.'
-            },
-            {
-                age: '6-8 mo',
-                emoji: '2️⃣',
-                title: 'Texture Transition',
-                desc: 'Move from smooth to slightly lumpy. Baby can sit up with support.'
-            },
-            {
-                age: '8-10 mo',
-                emoji: '3️⃣',
-                title: 'Chewing Practice',
-                desc: 'Soft lumps & mashes. Baby begins pincer grasp (thumb + fingers).'
-            },
-        ];
+            function renderGuide() {
+                const stages = [{
+                        age: '4-6 mo',
+                        emoji: '1️⃣',
+                        title: 'Spoon Skills',
+                        desc: 'Focus on the tongue-thrust reflex & taste exposure, not nutrition yet.'
+                    },
+                    {
+                        age: '6-8 mo',
+                        emoji: '2️⃣',
+                        title: 'Texture Transition',
+                        desc: 'Move from smooth to slightly lumpy. Baby can sit up with support.'
+                    },
+                    {
+                        age: '8-10 mo',
+                        emoji: '3️⃣',
+                        title: 'Chewing Practice',
+                        desc: 'Soft lumps & mashes. Baby begins pincer grasp (thumb + fingers).'
+                    },
+                ];
 
-        const currentAge = state.babyAge;
-        document.getElementById('guide-stages').innerHTML = stages.map((s, i) => {
-            return `<div class="guide-stage" style="${i === stages.length - 1 ? 'border-bottom:none' : ''}"><div class="stage-dot s${i+1}">${i+1}</div><div class="stage-info"><h4>${s.emoji} ${s.title} (${s.age})</h4><p>${s.desc}</p></div></div>`;
-        }).join('');
-    }
+                const currentAge = state.babyAge;
+                document.getElementById('guide-stages').innerHTML = stages.map((s, i) => {
+                    return `<div class="guide-stage" style="${i === stages.length - 1 ? 'border-bottom:none' : ''}"><div class="stage-dot s${i+1}">${i+1}</div><div class="stage-info"><h4>${s.emoji} ${s.title} (${s.age})</h4><p>${s.desc}</p></div></div>`;
+                }).join('');
+            }
 
-    init();
+            init();
 </script>
 @endsection
