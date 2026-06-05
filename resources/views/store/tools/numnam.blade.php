@@ -32,6 +32,8 @@
         visibility: visible !important;
         opacity: 1 !important;
         width: 100% !important;
+        position: relative;
+        z-index: 1;
     }
 
     /* Tracker header - match site header */
@@ -43,8 +45,8 @@
         align-items: center;
         justify-content: center;
         position: sticky;
-        top: 0;
-        z-index: 100;
+        top: 100px;
+        z-index: 99;
         width: 100%;
         margin: 0;
         box-sizing: border-box;
