@@ -1095,380 +1095,607 @@
             </div>
         </div>
     </div>
+
+    <!-- GUEST CHECKOUT MODAL -->
+    <div id="guest-checkout-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center;overflow-y:auto;">
+        <div style="background:white;border-radius:20px;padding:28px;max-width:400px;width:90%;margin:auto;position:relative;margin-top:20px;margin-bottom:20px;">
+            <div style="font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;margin-bottom:8px;color:#FF6B8A">Verify Your Details</div>
+            <div style="font-size:13px;color:#999;margin-bottom:20px;">We need your information to save your tracker. Secure payment via Razorpay.</div>
+
+            <div class="form-row">
+                <label>Full Name *</label>
+                <input type="text" id="guest-name" placeholder="Your name" required>
+            </div>
+            <div class="form-row">
+                <label>Email *</label>
+                <input type="email" id="guest-email" placeholder="your@email.com" required>
+            </div>
+            <div class="form-row">
+                <label>Phone Number *</label>
+                <input type="tel" id="guest-phone" placeholder="+91 9876543210" required>
+            </div>
+            <div class="form-row">
+                <label>Address (optional)</label>
+                <input type="text" id="guest-address" placeholder="Your delivery address">
+            </div>
+
+            <div style="background:#FFF0F5;border:1px solid #FFD6E5;border-radius:8px;padding:12px;margin-bottom:16px;font-size:12px;color:#666;line-height:1.5;">
+                <strong style="color:#FF6B8A;">₹1 Verification Fee</strong><br>
+                A small amount will be charged to verify your details. You can use this information for future orders.
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" id="guest-checkout-btn" onclick="proceedWithRazorpay()" style="flex:1;">Pay & Verify (₹1)</button>
+                <button class="btn btn-outline" onclick="closeGuestModal()" style="flex:1;">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
+    // Check if user is authenticated
+    const isAuthenticated = {
+        {
+            auth() - > check() ? 'true' : 'false'
+        }
+    };
+    let pendingLogEntry = null;
 
-            function showPage(id, el) {
-                document.querySelectorAll('.tracker-page').forEach(p => p.classList.remove('active'));
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.getElementById('page-' + id).classList.add('active');
-                el.classList.add('active');
-                if (id === 'dashboard') renderDashboard();
+    function showPage(id, el) {
+        document.querySelectorAll('.tracker-page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('page-' + id).classList.add('active');
+        el.classList.add('active');
+        if (id === 'dashboard') renderDashboard();
+    }
+
+    function showAgeModal() {
+        document.getElementById('age-input').value = state.babyAge;
+        document.getElementById('age-modal').style.display = 'flex';
+    }
+
+    function saveAge() {
+        state.babyAge = parseInt(document.getElementById('age-input').value) || 8;
+        document.getElementById('age-display').textContent = state.babyAge + ' months';
+        document.getElementById('age-modal').style.display = 'none';
+        saveState();
+        renderDashboard();
+        renderRecipes();
+        renderGuide();
+    }
+
+    function selectLogType(type, el) {
+        currentLogType = type;
+        document.querySelectorAll('#log-type-row .tag').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        ['milk', 'solid', 'water', 'poop'].forEach(t => {
+            document.getElementById('form-' + t).style.display = (t === type) ? 'block' : 'none';
+        });
+    }
+
+    function selectPoop(type, el) {
+        selectedPoopType = type;
+        document.querySelectorAll('#poop-selector .poop-btn').forEach(b => b.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('poop-selected').value = type;
+
+        const insightEl = document.getElementById('poop-insight');
+        const advice = getPoopAdvice(type);
+        insightEl.innerHTML = `<div class="insight ${advice.cls}"><div class="ins-title">${advice.title}</div>${advice.text}</div>`;
+        insightEl.style.display = 'block';
+    }
+
+    function getPoopAdvice(type) {
+        if (type === 'Type 1') return {
+            cls: '',
+            title: '🪨 Hydration Rescue!',
+            text: 'Baby seems a bit backed up. Add 1 tsp of ghee or coconut oil to the next meal. Offer 20ml of extra water after solids.'
+        };
+        if (type === 'Type 2') return {
+            cls: '',
+            title: '💧 More fluids needed',
+            text: 'Offer water sips after solids. Focus on high-moisture fruits like melon or pear today.'
+        };
+        if (type === 'Type 4') return {
+            cls: 'green',
+            title: '✅ Perfect!',
+            text: 'Fibre and fluid balance is just right. Keep up what you\'re doing!'
+        };
+        if (type === 'Type 6') return {
+            cls: 'blue',
+            title: '⚡ Slow down on new foods',
+            text: 'Possible sensitivity or fibre spike. Pause new high-fibre veggies for 2 days and monitor.'
+        };
+        if (type === 'Red/Undigested') return {
+            cls: '',
+            title: '🍅 Digestion Check',
+            text: 'Bits of carrot or tomato? Totally normal! The gut is still learning to break down fibre. Try mashing more thoroughly for the next 2 days.'
+        };
+        return {
+            cls: 'blue',
+            title: 'ℹ️ Normal variation',
+            text: 'Nothing to worry about. Keep an eye on it over the next day or two.'
+        };
+    }
+
+    function updateSlider(el, displayId) {
+        document.getElementById(displayId).textContent = el.value;
+    }
+
+    function logEntry(type) {
+        // If guest, show guest checkout modal
+        if (!isAuthenticated) {
+            // Store the entry to log after payment
+            pendingLogEntry = {
+                type
+            };
+
+            if (type === 'milk') {
+                pendingLogEntry.volume = parseInt(document.getElementById('milk-slider').value);
+                pendingLogEntry.milkType = document.getElementById('milk-type').value;
+                pendingLogEntry.time = document.getElementById('milk-time').value;
+                pendingLogEntry.label = `${pendingLogEntry.volume}ml ${pendingLogEntry.milkType}`;
+            } else if (type === 'solid') {
+                pendingLogEntry.volume = parseInt(document.getElementById('solid-slider').value);
+                pendingLogEntry.food = document.getElementById('solid-food').value || 'Solids';
+                pendingLogEntry.texture = document.getElementById('solid-texture').value;
+                pendingLogEntry.finish = document.getElementById('solid-finish').value;
+                pendingLogEntry.time = document.getElementById('solid-time').value;
+                pendingLogEntry.label = `${pendingLogEntry.food} (${pendingLogEntry.volume}ml, ${pendingLogEntry.finish})`;
+            } else if (type === 'water') {
+                pendingLogEntry.volume = parseInt(document.getElementById('water-slider').value);
+                pendingLogEntry.time = document.getElementById('water-time').value;
+                pendingLogEntry.label = `${pendingLogEntry.volume}ml water`;
+            } else if (type === 'poop') {
+                if (!selectedPoopType) {
+                    alert('Please select a poop type!');
+                    return;
+                }
+                pendingLogEntry.poopType = selectedPoopType;
+                pendingLogEntry.time = document.getElementById('poop-time').value;
+                pendingLogEntry.label = selectedPoopType;
             }
 
-            function showAgeModal() {
-                document.getElementById('age-input').value = state.babyAge;
-                document.getElementById('age-modal').style.display = 'flex';
+            // Show guest checkout modal
+            showGuestCheckoutModal();
+            return;
+        }
+
+        // If authenticated, save directly
+        saveLogEntry(type);
+    }
+
+    function saveLogEntry(type) {
+        const now = new Date();
+        let entry = {
+            id: Date.now(),
+            type,
+            timestamp: now.toISOString()
+        };
+
+        if (type === 'milk') {
+            entry.volume = parseInt(document.getElementById('milk-slider').value);
+            entry.milkType = document.getElementById('milk-type').value;
+            entry.time = document.getElementById('milk-time').value;
+            entry.label = `${entry.volume}ml ${entry.milkType}`;
+        } else if (type === 'solid') {
+            entry.volume = parseInt(document.getElementById('solid-slider').value);
+            entry.food = document.getElementById('solid-food').value || 'Solids';
+            entry.texture = document.getElementById('solid-texture').value;
+            entry.finish = document.getElementById('solid-finish').value;
+            entry.time = document.getElementById('solid-time').value;
+            entry.label = `${entry.food} (${entry.volume}ml, ${entry.finish})`;
+        } else if (type === 'water') {
+            entry.volume = parseInt(document.getElementById('water-slider').value);
+            entry.time = document.getElementById('water-time').value;
+            entry.label = `${entry.volume}ml water`;
+        } else if (type === 'poop') {
+            if (!selectedPoopType) {
+                alert('Please select a poop type!');
+                return;
+            }
+            entry.poopType = selectedPoopType;
+            entry.time = document.getElementById('poop-time').value;
+            entry.label = selectedPoopType;
+        }
+
+        state.logs.push(entry);
+        saveState();
+        renderDashboard();
+
+        const btn = event.target;
+        const orig = btn.textContent;
+        btn.textContent = '✓ Saved!';
+        btn.style.background = '#4ECDC4';
+        setTimeout(() => {
+            btn.textContent = orig;
+            btn.style.background = '';
+        }, 1500);
+    }
+
+    function resetForm(type) {
+        if (type === 'milk') {
+            document.getElementById('milk-slider').value = 180;
+            document.getElementById('milk-vol-display').textContent = '180';
+            document.getElementById('milk-type').value = 'Formula';
+        } else if (type === 'solid') {
+            document.getElementById('solid-slider').value = 100;
+            document.getElementById('solid-vol-display').textContent = '100';
+            document.getElementById('solid-food').value = '';
+        } else if (type === 'water') {
+            document.getElementById('water-slider').value = 30;
+            document.getElementById('water-vol-display').textContent = '30';
+        } else if (type === 'poop') {
+            selectedPoopType = '';
+            document.querySelectorAll('#poop-selector .poop-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('poop-insight').style.display = 'none';
+        }
+    }
+
+    function showGuestCheckoutModal() {
+        // Clear previous values
+        document.getElementById('guest-name').value = '';
+        document.getElementById('guest-email').value = '';
+        document.getElementById('guest-phone').value = '';
+        document.getElementById('guest-address').value = '';
+        document.getElementById('guest-checkout-modal').style.display = 'flex';
+    }
+
+    function closeGuestModal() {
+        document.getElementById('guest-checkout-modal').style.display = 'none';
+        pendingLogEntry = null;
+    }
+
+    async function proceedWithRazorpay() {
+        const name = document.getElementById('guest-name').value.trim();
+        const email = document.getElementById('guest-email').value.trim();
+        const phone = document.getElementById('guest-phone').value.trim();
+        const address = document.getElementById('guest-address').value.trim();
+
+        if (!name || !email || !phone) {
+            alert('Please fill in all required fields');
+            return;
+        }
+
+        const btn = document.getElementById('guest-checkout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Processing...';
+
+        try {
+            // Create guest checkout
+            const response = await fetch('{{ route("store.tools.guest-checkout") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    phone,
+                    address
+                })
+            });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                alert(data.message || 'Failed to create checkout');
+                btn.disabled = false;
+                btn.textContent = 'Pay & Verify (₹1)';
+                return;
             }
 
-            function saveAge() {
-                state.babyAge = parseInt(document.getElementById('age-input').value) || 8;
-                document.getElementById('age-display').textContent = state.babyAge + ' months';
-                document.getElementById('age-modal').style.display = 'none';
-                saveState();
-                renderDashboard();
-                renderRecipes();
-                renderGuide();
+            // Open Razorpay modal
+            openRazorpayCheckout(data);
+        } catch (error) {
+            console.error('Checkout error:', error);
+            alert('An error occurred. Please try again.');
+            btn.disabled = false;
+            btn.textContent = 'Pay & Verify (₹1)';
+        }
+    }
+
+    function openRazorpayCheckout(checkoutData) {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.async = true;
+        script.onload = () => {
+            const options = {
+                key: checkoutData.key_id,
+                amount: checkoutData.amount,
+                currency: checkoutData.currency,
+                order_id: checkoutData.razorpay_order_id,
+                handler: async function(response) {
+                    await verifyPayment(checkoutData.guest_checkout_id, response);
+                },
+                prefill: {
+                    name: document.getElementById('guest-name').value,
+                    email: document.getElementById('guest-email').value,
+                    contact: document.getElementById('guest-phone').value
+                },
+                theme: {
+                    color: '#FF6B8A'
+                },
+                modal: {
+                    ondismiss: function() {
+                        const btn = document.getElementById('guest-checkout-btn');
+                        btn.disabled = false;
+                        btn.textContent = 'Pay & Verify (₹1)';
+                    }
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+        };
+        document.body.appendChild(script);
+    }
+
+    async function verifyPayment(guestCheckoutId, response) {
+        const btn = document.getElementById('guest-checkout-btn');
+        btn.textContent = 'Verifying payment...';
+
+        try {
+            const verifyResponse = await fetch('{{ route("store.tools.verify-guest-payment") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                },
+                body: JSON.stringify({
+                    guest_checkout_id: guestCheckoutId,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_signature: response.razorpay_signature
+                })
+            });
+
+            const data = await verifyResponse.json();
+
+            if (data.success) {
+                // Payment successful - save the pending log entry
+                closeGuestModal();
+                if (pendingLogEntry) {
+                    saveLogEntry(pendingLogEntry.type);
+                    pendingLogEntry = null;
+                }
+                alert('✓ Payment verified! Your entry has been saved.');
+            } else {
+                alert(data.message || 'Payment verification failed');
+                btn.disabled = false;
+                btn.textContent = 'Pay & Verify (₹1)';
             }
+        } catch (error) {
+            console.error('Verification error:', error);
+            alert('An error occurred during verification. Please try again.');
+            btn.disabled = false;
+            btn.textContent = 'Pay & Verify (₹1)';
+        }
+    }
 
-            function selectLogType(type, el) {
-                currentLogType = type;
-                document.querySelectorAll('#log-type-row .tag').forEach(t => t.classList.remove('active'));
-                el.classList.add('active');
-                ['milk', 'solid', 'water', 'poop'].forEach(t => {
-                    document.getElementById('form-' + t).style.display = (t === type) ? 'block' : 'none';
-                });
-            }
+    function renderDashboard() {
+        const today = new Date().toDateString();
+        const todayLogs = state.logs.filter(l => new Date(l.timestamp).toDateString() === today);
 
-            function selectPoop(type, el) {
-                selectedPoopType = type;
-                document.querySelectorAll('#poop-selector .poop-btn').forEach(b => b.classList.remove('selected'));
-                el.classList.add('selected');
-                document.getElementById('poop-selected').value = type;
+        let totalMilk = 0,
+            totalSolid = 0,
+            totalWater = 0,
+            lastPoop = '—';
 
-                const insightEl = document.getElementById('poop-insight');
-                const advice = getPoopAdvice(type);
-                insightEl.innerHTML = `<div class="insight ${advice.cls}"><div class="ins-title">${advice.title}</div>${advice.text}</div>`;
-                insightEl.style.display = 'block';
-            }
+        todayLogs.forEach(l => {
+            if (l.type === 'milk') totalMilk += l.volume || 0;
+            if (l.type === 'solid') totalSolid += l.volume || 0;
+            if (l.type === 'water') totalWater += l.volume || 0;
+            if (l.type === 'poop') lastPoop = l.poopType?.replace('Type ', 'T') || '—';
+        });
 
-            function getPoopAdvice(type) {
-                if (type === 'Type 1') return {
+        document.getElementById('dash-milk').textContent = totalMilk;
+        document.getElementById('dash-solid').textContent = totalSolid;
+        document.getElementById('dash-water').textContent = totalWater;
+        document.getElementById('dash-poop').textContent = lastPoop;
+
+        const total = totalMilk + totalSolid;
+        if (total > 0) {
+            const milkPct = Math.round(totalMilk / total * 100);
+            const solidPct = 100 - milkPct;
+            document.getElementById('bar-milk').style.width = milkPct + '%';
+            document.getElementById('bar-solid').style.width = solidPct + '%';
+            document.getElementById('balance-pct').textContent = `${milkPct}% milk / ${solidPct}% solids`;
+        } else {
+            document.getElementById('bar-milk').style.width = '100%';
+            document.getElementById('bar-solid').style.width = '0%';
+            document.getElementById('balance-pct').textContent = '—';
+        }
+
+        renderInsights(todayLogs, totalMilk, totalSolid, lastPoop);
+        renderMilestone();
+
+        const logList = document.getElementById('today-log-list');
+        if (todayLogs.length === 0) {
+            logList.innerHTML = '<div class="empty-log"><div class="empty-icon">🍼</div>No entries yet. Tap <strong>Log</strong> to add!</div>';
+        } else {
+            const icons = {
+                milk: {
+                    icon: '🍼',
+                    cls: 'milk'
+                },
+                solid: {
+                    icon: '🥣',
+                    cls: 'solid'
+                },
+                poop: {
+                    icon: '💩',
+                    cls: 'poop'
+                },
+                water: {
+                    icon: '💧',
+                    cls: 'water'
+                }
+            };
+            logList.innerHTML = [...todayLogs].reverse().map(l => {
+                const ic = icons[l.type];
+                return `<div class="log-entry"><div class="log-icon ${ic.cls}">${ic.icon}</div><div class="log-info"><strong>${l.label}</strong><div class="log-time">${l.time}</div></div></div>`;
+            }).join('');
+        }
+    }
+
+    function renderInsights(todayLogs, totalMilk, totalSolid, lastPoop) {
+        const area = document.getElementById('insight-area');
+        let insights = [];
+
+        const poopLog = todayLogs.filter(l => l.type === 'poop').pop();
+        if (poopLog) {
+            if (poopLog.poopType === 'Type 1') {
+                insights.push({
                     cls: '',
                     title: '🪨 Hydration Rescue!',
-                    text: 'Baby seems a bit backed up. Add 1 tsp of ghee or coconut oil to the next meal. Offer 20ml of extra water after solids.'
-                };
-                if (type === 'Type 2') return {
-                    cls: '',
-                    title: '💧 More fluids needed',
-                    text: 'Offer water sips after solids. Focus on high-moisture fruits like melon or pear today.'
-                };
-                if (type === 'Type 4') return {
-                    cls: 'green',
-                    title: '✅ Perfect!',
-                    text: 'Fibre and fluid balance is just right. Keep up what you\'re doing!'
-                };
-                if (type === 'Type 6') return {
-                    cls: 'blue',
-                    title: '⚡ Slow down on new foods',
-                    text: 'Possible sensitivity or fibre spike. Pause new high-fibre veggies for 2 days and monitor.'
-                };
-                if (type === 'Red/Undigested') return {
-                    cls: '',
-                    title: '🍅 Digestion Check',
-                    text: 'Bits of carrot or tomato? Totally normal! The gut is still learning to break down fibre. Try mashing more thoroughly for the next 2 days.'
-                };
-                return {
-                    cls: 'blue',
-                    title: 'ℹ️ Normal variation',
-                    text: 'Nothing to worry about. Keep an eye on it over the next day or two.'
-                };
-            }
-
-            function updateSlider(el, displayId) {
-                document.getElementById(displayId).textContent = el.value;
-            }
-
-            function logEntry(type) {
-                const now = new Date();
-                let entry = {
-                    id: Date.now(),
-                    type,
-                    timestamp: now.toISOString()
-                };
-
-                if (type === 'milk') {
-                    entry.volume = parseInt(document.getElementById('milk-slider').value);
-                    entry.milkType = document.getElementById('milk-type').value;
-                    entry.time = document.getElementById('milk-time').value;
-                    entry.label = `${entry.volume}ml ${entry.milkType}`;
-                } else if (type === 'solid') {
-                    entry.volume = parseInt(document.getElementById('solid-slider').value);
-                    entry.food = document.getElementById('solid-food').value || 'Solids';
-                    entry.texture = document.getElementById('solid-texture').value;
-                    entry.finish = document.getElementById('solid-finish').value;
-                    entry.time = document.getElementById('solid-time').value;
-                    entry.label = `${entry.food} (${entry.volume}ml, ${entry.finish})`;
-                } else if (type === 'water') {
-                    entry.volume = parseInt(document.getElementById('water-slider').value);
-                    entry.time = document.getElementById('water-time').value;
-                    entry.label = `${entry.volume}ml water`;
-                } else if (type === 'poop') {
-                    if (!selectedPoopType) {
-                        alert('Please select a poop type!');
-                        return;
-                    }
-                    entry.poopType = selectedPoopType;
-                    entry.time = document.getElementById('poop-time').value;
-                    entry.label = selectedPoopType;
-                }
-
-                state.logs.push(entry);
-                saveState();
-                renderDashboard();
-
-                const btn = event.target;
-                const orig = btn.textContent;
-                btn.textContent = '✓ Saved!';
-                btn.style.background = 'var(--sage)';
-                setTimeout(() => {
-                    btn.textContent = orig;
-                    btn.style.background = '';
-                }, 1500);
-            }
-
-            function resetForm(type) {
-                if (type === 'milk') {
-                    document.getElementById('milk-slider').value = 180;
-                    document.getElementById('milk-vol-display').textContent = '180';
-                    document.getElementById('milk-type').value = 'Formula';
-                } else if (type === 'solid') {
-                    document.getElementById('solid-slider').value = 100;
-                    document.getElementById('solid-vol-display').textContent = '100';
-                    document.getElementById('solid-food').value = '';
-                } else if (type === 'water') {
-                    document.getElementById('water-slider').value = 30;
-                    document.getElementById('water-vol-display').textContent = '30';
-                } else if (type === 'poop') {
-                    selectedPoopType = '';
-                    document.querySelectorAll('#poop-selector .poop-btn').forEach(b => b.classList.remove('selected'));
-                    document.getElementById('poop-insight').style.display = 'none';
-                }
-            }
-
-            function renderDashboard() {
-                const today = new Date().toDateString();
-                const todayLogs = state.logs.filter(l => new Date(l.timestamp).toDateString() === today);
-
-                let totalMilk = 0,
-                    totalSolid = 0,
-                    totalWater = 0,
-                    lastPoop = '—';
-
-                todayLogs.forEach(l => {
-                    if (l.type === 'milk') totalMilk += l.volume || 0;
-                    if (l.type === 'solid') totalSolid += l.volume || 0;
-                    if (l.type === 'water') totalWater += l.volume || 0;
-                    if (l.type === 'poop') lastPoop = l.poopType?.replace('Type ', 'T') || '—';
+                    text: 'Output looks dry. For the next meal, add 1 tsp of healthy fat (ghee, coconut oil, or rapeseed oil). This acts as a natural gut lubricant. Also offer 2–3 extra sips of water after solids.'
                 });
-
-                document.getElementById('dash-milk').textContent = totalMilk;
-                document.getElementById('dash-solid').textContent = totalSolid;
-                document.getElementById('dash-water').textContent = totalWater;
-                document.getElementById('dash-poop').textContent = lastPoop;
-
-                const total = totalMilk + totalSolid;
-                if (total > 0) {
-                    const milkPct = Math.round(totalMilk / total * 100);
-                    const solidPct = 100 - milkPct;
-                    document.getElementById('bar-milk').style.width = milkPct + '%';
-                    document.getElementById('bar-solid').style.width = solidPct + '%';
-                    document.getElementById('balance-pct').textContent = `${milkPct}% milk / ${solidPct}% solids`;
-                } else {
-                    document.getElementById('bar-milk').style.width = '100%';
-                    document.getElementById('bar-solid').style.width = '0%';
-                    document.getElementById('balance-pct').textContent = '—';
-                }
-
-                renderInsights(todayLogs, totalMilk, totalSolid, lastPoop);
-                renderMilestone();
-
-                const logList = document.getElementById('today-log-list');
-                if (todayLogs.length === 0) {
-                    logList.innerHTML = '<div class="empty-log"><div class="empty-icon">🍼</div>No entries yet. Tap <strong>Log</strong> to add!</div>';
-                } else {
-                    const icons = {
-                        milk: {
-                            icon: '🍼',
-                            cls: 'milk'
-                        },
-                        solid: {
-                            icon: '🥣',
-                            cls: 'solid'
-                        },
-                        poop: {
-                            icon: '💩',
-                            cls: 'poop'
-                        },
-                        water: {
-                            icon: '💧',
-                            cls: 'water'
-                        }
-                    };
-                    logList.innerHTML = [...todayLogs].reverse().map(l => {
-                        const ic = icons[l.type];
-                        return `<div class="log-entry"><div class="log-icon ${ic.cls}">${ic.icon}</div><div class="log-info"><strong>${l.label}</strong><div class="log-time">${l.time}</div></div></div>`;
-                    }).join('');
-                }
+            } else if (poopLog.poopType === 'Type 4') {
+                insights.push({
+                    cls: 'green',
+                    title: '✅ Perfect Output!',
+                    text: 'Fibre and fluid balance is exactly right. Keep doing what you\'re doing — baby is digesting beautifully.'
+                });
             }
+        }
 
-            function renderInsights(todayLogs, totalMilk, totalSolid, lastPoop) {
-                const area = document.getElementById('insight-area');
-                let insights = [];
+        if (state.babyAge >= 10 && totalSolid < 50 && totalMilk > 400) {
+            insights.push({
+                cls: 'blue',
+                title: '🥛 Milk-Heavy Alert',
+                text: `Baby is loving their milk, but at ${state.babyAge} months we're in the golden window for palate tuning! Try introducing a bitter green today to help with the transition to family foods.`
+            });
+        }
 
-                const poopLog = todayLogs.filter(l => l.type === 'poop').pop();
-                if (poopLog) {
-                    if (poopLog.poopType === 'Type 1') {
-                        insights.push({
-                            cls: '',
-                            title: '🪨 Hydration Rescue!',
-                            text: 'Output looks dry. For the next meal, add 1 tsp of healthy fat (ghee, coconut oil, or rapeseed oil). This acts as a natural gut lubricant. Also offer 2–3 extra sips of water after solids.'
-                        });
-                    } else if (poopLog.poopType === 'Type 4') {
-                        insights.push({
-                            cls: 'green',
-                            title: '✅ Perfect Output!',
-                            text: 'Fibre and fluid balance is exactly right. Keep doing what you\'re doing — baby is digesting beautifully.'
-                        });
-                    }
-                }
+        if (totalSolid > 100 && totalWater === 0) {
+            insights.push({
+                cls: '',
+                title: '💧 Water Time!',
+                text: 'Baby is eating more solids! Time to offer a few sips of water to keep digestion happy and the poop-o-meter in the green zone.'
+            });
+        }
 
-                if (state.babyAge >= 10 && totalSolid < 50 && totalMilk > 400) {
-                    insights.push({
-                        cls: 'blue',
-                        title: '🥛 Milk-Heavy Alert',
-                        text: `Baby is loving their milk, but at ${state.babyAge} months we're in the golden window for palate tuning! Try introducing a bitter green today to help with the transition to family foods.`
-                    });
-                }
+        if (insights.length === 0) {
+            area.innerHTML = '';
+        } else {
+            area.innerHTML = insights.map(i => `<div class="insight ${i.cls}"><div class="ins-title">${i.title}</div>${i.text}</div>`).join('');
+        }
+    }
 
-                if (totalSolid > 100 && totalWater === 0) {
-                    insights.push({
-                        cls: '',
-                        title: '💧 Water Time!',
-                        text: 'Baby is eating more solids! Time to offer a few sips of water to keep digestion happy and the poop-o-meter in the green zone.'
-                    });
-                }
+    function renderMilestone() {
+        const area = document.getElementById('milestone-area');
+        const age = state.babyAge;
+        let msg = null;
 
-                if (insights.length === 0) {
-                    area.innerHTML = '';
-                } else {
-                    area.innerHTML = insights.map(i => `<div class="insight ${i.cls}"><div class="ins-title">${i.title}</div>${i.text}</div>`).join('');
-                }
-            }
+        if (age === 6) msg = {
+            title: '🎉 First Spoon!',
+            text: 'Today is about the tongue, not the tummy! If baby pushes food out — that\'s the extrusion reflex, not rejection. Start with 1–2 spoons of a single veggie.'
+        };
+        else if (age === 8) msg = {
+            title: '🌟 Bridge to Texture!',
+            text: 'Baby is getting ~30% of energy from solids. If they seem less interested in milk, that\'s okay! Make every bite nutrient-dense.'
+        };
+        else if (age === 10) msg = {
+            title: '🍽️ Texture Challenge Time!',
+            text: 'Stop the blender! Moving to mashed and soft lumps now helps develop jaw muscles needed for speech. If baby gags slightly, stay calm — it\'s a safety reflex.'
+        };
 
-            function renderMilestone() {
-                const area = document.getElementById('milestone-area');
-                const age = state.babyAge;
-                let msg = null;
+        if (msg) {
+            area.innerHTML = `<div class="milestone-banner"><div class="mb-label">Milestone at ${age} months</div><div class="mb-text">${msg.text}</div></div>`;
+        } else {
+            area.innerHTML = '';
+        }
+    }
 
-                if (age === 6) msg = {
-                    title: '🎉 First Spoon!',
-                    text: 'Today is about the tongue, not the tummy! If baby pushes food out — that\'s the extrusion reflex, not rejection. Start with 1–2 spoons of a single veggie.'
-                };
-                else if (age === 8) msg = {
-                    title: '🌟 Bridge to Texture!',
-                    text: 'Baby is getting ~30% of energy from solids. If they seem less interested in milk, that\'s okay! Make every bite nutrient-dense.'
-                };
-                else if (age === 10) msg = {
-                    title: '🍽️ Texture Challenge Time!',
-                    text: 'Stop the blender! Moving to mashed and soft lumps now helps develop jaw muscles needed for speech. If baby gags slightly, stay calm — it\'s a safety reflex.'
-                };
+    const RECIPES = [{
+            id: 1,
+            emoji: '🥕',
+            name: 'Carrot & Ginger Purée',
+            age: 6,
+            texture: 'Smooth purée',
+            hearts: 42,
+            notes: 'Rich in beta-carotene. Good first food.'
+        },
+        {
+            id: 2,
+            emoji: '🥦',
+            name: 'Broccoli & Apple Mash',
+            age: 7,
+            texture: 'Thick purée',
+            hearts: 38,
+            notes: 'Bitter-sweet combo for palate tuning.'
+        },
+        {
+            id: 3,
+            emoji: '🍠',
+            name: 'Sweet Potato & Coconut',
+            age: 6,
+            texture: 'Smooth purée',
+            hearts: 61,
+            notes: 'Healthy fat + iron-rich combo.'
+        },
+        {
+            id: 4,
+            emoji: '🍌',
+            name: 'Banana & Oat Porridge',
+            age: 7,
+            texture: 'Mashed',
+            hearts: 55,
+            notes: 'Natural binder — great for Type 6 poop!'
+        },
+        {
+            id: 5,
+            emoji: '🥚',
+            name: 'Scrambled Egg Fingers',
+            age: 8,
+            texture: 'Soft lumps',
+            hearts: 29,
+            notes: 'Allergen intro. Serve soft.'
+        },
+        {
+            id: 6,
+            emoji: '🐠',
+            name: 'Salmon & Sweet Pea Mash',
+            age: 9,
+            texture: 'Mashed',
+            hearts: 47,
+            notes: 'Omega-3 for brain development.'
+        },
+        {
+            id: 7,
+            emoji: '🫘',
+            name: 'Lentil & Spinach Dhal',
+            age: 7,
+            texture: 'Thick purée',
+            hearts: 66,
+            notes: 'Iron-rich. Perfect for Indian weaning.'
+        },
+        {
+            id: 8,
+            emoji: '🍐',
+            name: 'Pear & Prune Purée',
+            age: 6,
+            texture: 'Smooth purée',
+            hearts: 33,
+            notes: 'Natural gut mover — great for Type 1/2 poop.'
+        },
+    ];
 
-                if (msg) {
-                    area.innerHTML = `<div class="milestone-banner"><div class="mb-label">Milestone at ${age} months</div><div class="mb-text">${msg.text}</div></div>`;
-                } else {
-                    area.innerHTML = '';
-                }
-            }
+    function renderRecipes() {
+        const grid = document.getElementById('recipe-grid');
+        const age = state.babyAge;
+        const filtered = RECIPES.filter(r => r.age <= age);
 
-            const RECIPES = [{
-                    id: 1,
-                    emoji: '🥕',
-                    name: 'Carrot & Ginger Purée',
-                    age: 6,
-                    texture: 'Smooth purée',
-                    hearts: 42,
-                    notes: 'Rich in beta-carotene. Good first food.'
-                },
-                {
-                    id: 2,
-                    emoji: '🥦',
-                    name: 'Broccoli & Apple Mash',
-                    age: 7,
-                    texture: 'Thick purée',
-                    hearts: 38,
-                    notes: 'Bitter-sweet combo for palate tuning.'
-                },
-                {
-                    id: 3,
-                    emoji: '🍠',
-                    name: 'Sweet Potato & Coconut',
-                    age: 6,
-                    texture: 'Smooth purée',
-                    hearts: 61,
-                    notes: 'Healthy fat + iron-rich combo.'
-                },
-                {
-                    id: 4,
-                    emoji: '🍌',
-                    name: 'Banana & Oat Porridge',
-                    age: 7,
-                    texture: 'Mashed',
-                    hearts: 55,
-                    notes: 'Natural binder — great for Type 6 poop!'
-                },
-                {
-                    id: 5,
-                    emoji: '🥚',
-                    name: 'Scrambled Egg Fingers',
-                    age: 8,
-                    texture: 'Soft lumps',
-                    hearts: 29,
-                    notes: 'Allergen intro. Serve soft.'
-                },
-                {
-                    id: 6,
-                    emoji: '🐠',
-                    name: 'Salmon & Sweet Pea Mash',
-                    age: 9,
-                    texture: 'Mashed',
-                    hearts: 47,
-                    notes: 'Omega-3 for brain development.'
-                },
-                {
-                    id: 7,
-                    emoji: '🫘',
-                    name: 'Lentil & Spinach Dhal',
-                    age: 7,
-                    texture: 'Thick purée',
-                    hearts: 66,
-                    notes: 'Iron-rich. Perfect for Indian weaning.'
-                },
-                {
-                    id: 8,
-                    emoji: '🍐',
-                    name: 'Pear & Prune Purée',
-                    age: 6,
-                    texture: 'Smooth purée',
-                    hearts: 33,
-                    notes: 'Natural gut mover — great for Type 1/2 poop.'
-                },
-            ];
+        const insightEl = document.getElementById('recipes-insight');
+        if (age >= 6 && age < 8) {
+            insightEl.innerHTML = `<div class="insight"><div class="ins-title">💡 Stage Tip</div>We're showing recipes for smooth and thick purées. As baby gets older, we'll unlock mashed and finger-food recipes!</div>`;
+        } else if (age >= 8) {
+            insightEl.innerHTML = `<div class="insight green"><div class="ins-title">💡 Stage Tip</div>Baby is ready for lumpy mashes and soft finger foods! These recipes are designed to build chewing skills and independence.</div>`;
+        }
 
-            function renderRecipes() {
-                const grid = document.getElementById('recipe-grid');
-                const age = state.babyAge;
-                const filtered = RECIPES.filter(r => r.age <= age);
-
-                const insightEl = document.getElementById('recipes-insight');
-                if (age >= 6 && age < 8) {
-                    insightEl.innerHTML = `<div class="insight"><div class="ins-title">💡 Stage Tip</div>We're showing recipes for smooth and thick purées. As baby gets older, we'll unlock mashed and finger-food recipes!</div>`;
-                } else if (age >= 8) {
-                    insightEl.innerHTML = `<div class="insight green"><div class="ins-title">💡 Stage Tip</div>Baby is ready for lumpy mashes and soft finger foods! These recipes are designed to build chewing skills and independence.</div>`;
-                }
-
-                grid.innerHTML = filtered.map(r => `
+        grid.innerHTML = filtered.map(r => `
         <div class="recipe-card">
             <div class="r-emoji">${r.emoji}</div>
             <div class="r-name">${r.name}</div>
@@ -1476,48 +1703,48 @@
             <div class="r-hearts"><span class="heart-btn" onclick="heartRecipe(${r.id}, this)">❤️</span> <span id="hearts-${r.id}">${r.hearts}</span></div>
         </div>
     `).join('');
-            }
+    }
 
-            function heartRecipe(id, el) {
-                const rec = RECIPES.find(r => r.id === id);
-                if (!rec) return;
-                if (state.heartedRecipes.has(id)) {
-                    state.heartedRecipes.delete(id);
-                    document.getElementById('hearts-' + id).textContent = rec.hearts;
-                } else {
-                    state.heartedRecipes.add(id);
-                    document.getElementById('hearts-' + id).textContent = rec.hearts + 1;
-                }
-                saveState();
-            }
+    function heartRecipe(id, el) {
+        const rec = RECIPES.find(r => r.id === id);
+        if (!rec) return;
+        if (state.heartedRecipes.has(id)) {
+            state.heartedRecipes.delete(id);
+            document.getElementById('hearts-' + id).textContent = rec.hearts;
+        } else {
+            state.heartedRecipes.add(id);
+            document.getElementById('hearts-' + id).textContent = rec.hearts + 1;
+        }
+        saveState();
+    }
 
-            function renderGuide() {
-                const stages = [{
-                        age: '4-6 mo',
-                        emoji: '1️⃣',
-                        title: 'Spoon Skills',
-                        desc: 'Focus on the tongue-thrust reflex & taste exposure, not nutrition yet.'
-                    },
-                    {
-                        age: '6-8 mo',
-                        emoji: '2️⃣',
-                        title: 'Texture Transition',
-                        desc: 'Move from smooth to slightly lumpy. Baby can sit up with support.'
-                    },
-                    {
-                        age: '8-10 mo',
-                        emoji: '3️⃣',
-                        title: 'Chewing Practice',
-                        desc: 'Soft lumps & mashes. Baby begins pincer grasp (thumb + fingers).'
-                    },
-                ];
+    function renderGuide() {
+        const stages = [{
+                age: '4-6 mo',
+                emoji: '1️⃣',
+                title: 'Spoon Skills',
+                desc: 'Focus on the tongue-thrust reflex & taste exposure, not nutrition yet.'
+            },
+            {
+                age: '6-8 mo',
+                emoji: '2️⃣',
+                title: 'Texture Transition',
+                desc: 'Move from smooth to slightly lumpy. Baby can sit up with support.'
+            },
+            {
+                age: '8-10 mo',
+                emoji: '3️⃣',
+                title: 'Chewing Practice',
+                desc: 'Soft lumps & mashes. Baby begins pincer grasp (thumb + fingers).'
+            },
+        ];
 
-                const currentAge = state.babyAge;
-                document.getElementById('guide-stages').innerHTML = stages.map((s, i) => {
-                    return `<div class="guide-stage" style="${i === stages.length - 1 ? 'border-bottom:none' : ''}"><div class="stage-dot s${i+1}">${i+1}</div><div class="stage-info"><h4>${s.emoji} ${s.title} (${s.age})</h4><p>${s.desc}</p></div></div>`;
-                }).join('');
-            }
+        const currentAge = state.babyAge;
+        document.getElementById('guide-stages').innerHTML = stages.map((s, i) => {
+            return `<div class="guide-stage" style="${i === stages.length - 1 ? 'border-bottom:none' : ''}"><div class="stage-dot s${i+1}">${i+1}</div><div class="stage-info"><h4>${s.emoji} ${s.title} (${s.age})</h4><p>${s.desc}</p></div></div>`;
+        }).join('');
+    }
 
-            init();
+    init();
 </script>
 @endsection

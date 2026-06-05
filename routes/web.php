@@ -56,10 +56,14 @@ Route::get('/recipes', [StorefrontController::class, 'recipes'])->name('store.re
 Route::get('/faq', [StorefrontController::class, 'faq'])->name('store.faq');
 Route::get('/refer-friends', [StorefrontController::class, 'referFriends'])->name('store.refer-friends');
 
-// Tools routes - protected by auth
-Route::prefix('tools')->name('store.tools.')->middleware('auth')->group(function () {
+// Tools routes - accessible to guests and authenticated users
+Route::prefix('tools')->name('store.tools.')->group(function () {
     Route::get('/', [ToolsController::class, 'index'])->name('index');
     Route::get('/numnam-tracker', [ToolsController::class, 'numnam'])->name('numnam');
+
+    // Guest checkout for tools
+    Route::post('/guest-checkout', [ToolsController::class, 'createGuestCheckout'])->name('guest-checkout');
+    Route::post('/verify-guest-payment', [ToolsController::class, 'verifyGuestPayment'])->name('verify-guest-payment');
 });
 
 Route::get('/pricing', [StorefrontController::class, 'pricing'])->name('store.pricing');
