@@ -16,6 +16,10 @@
         padding: 0 !important;
         max-width: 100% !important;
     }
+
+    main#main-content>.page {
+        display: block !important;
+    }
 </style>
 @endsection
 
@@ -41,7 +45,7 @@
     </div>
 
     <!-- DASHBOARD -->
-    <div id="page-dashboard" class="page active">
+    <div id="page-dashboard" class="tracker-page active">
         <div id="milestone-area"></div>
         <div id="insight-area"></div>
 
@@ -94,7 +98,7 @@
     </div>
 
     <!-- LOG PAGE -->
-    <div id="page-log" class="page">
+    <div id="page-log" class="tracker-page">
         <div class="section-title">Log a Feed</div>
         <div class="section-sub">Track milk, solids, water, or poop output</div>
 
@@ -224,7 +228,7 @@
     </div>
 
     <!-- POOP GUIDE -->
-    <div id="page-poop" class="page">
+    <div id="page-poop" class="tracker-page">
         <div class="section-title">💩 Poop Diagnostics</div>
         <div class="section-sub">What your baby's output is telling you</div>
 
@@ -293,7 +297,7 @@
     </div>
 
     <!-- RECIPES -->
-    <div id="page-recipes" class="page">
+    <div id="page-recipes" class="tracker-page">
         <div class="section-title">🍽️ Recipe Swaps</div>
         <div class="section-sub">Mom-to-Mom favourites — filtered for your baby's age</div>
 
@@ -304,7 +308,7 @@
     </div>
 
     <!-- GUIDE -->
-    <div id="page-guide" class="page">
+    <div id="page-guide" class="tracker-page">
         <div class="section-title">📖 Weaning Guide</div>
         <div class="section-sub">Stage-by-stage advice tailored to your baby</div>
 
@@ -522,14 +526,14 @@
         color: var(--text);
     }
 
-    .page {
+    .tracker-page {
         display: none !important;
         padding: 20px;
         max-width: 700px;
         margin: 0 auto;
     }
 
-    .page.active {
+    .tracker-page.active {
         display: block !important;
     }
 
@@ -1174,7 +1178,7 @@
     }
 
     function showPage(id, el) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tracker-page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.getElementById('page-' + id).classList.add('active');
         el.classList.add('active');
