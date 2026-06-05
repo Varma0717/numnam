@@ -169,15 +169,15 @@ $safetyItems = [
             </p>
             @endif
 
-            <form method="POST" action="{{ route('store.cart.add', $product) }}" class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <form method="POST" action="{{ route('store.cart.add', $product) }}" class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center" id="add-to-cart-form">
                 @csrf
                 <input class="h-11 w-24 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none transition-colors duration-200 focus:border-numnam-400" type="number" min="1" name="qty" value="1" aria-label="Quantity">
-                <button class="inline-flex h-11 items-center justify-center rounded-full bg-numnam-600 px-5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-numnam-700" type="submit" {{ $product->stock <= 0 ? 'disabled' : '' }}>
+                <button class="inline-flex h-11 items-center justify-center rounded-full bg-numnam-600 px-5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-numnam-700" type="submit" name="action" value="add-to-cart" {{ $product->stock <= 0 ? 'disabled' : '' }}>
                     Add to Cart
                 </button>
-                <a class="inline-flex h-11 items-center justify-center rounded-full border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:bg-slate-50" href="{{ route('store.checkout') }}">
+                <button class="inline-flex h-11 items-center justify-center rounded-full border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:bg-slate-50" type="submit" name="action" value="buy-now" {{ $product->stock <= 0 ? 'disabled' : '' }}>
                     Buy Now
-                </a>
+                </button>
             </form>
 
 

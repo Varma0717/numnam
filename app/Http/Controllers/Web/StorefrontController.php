@@ -662,6 +662,11 @@ class StorefrontController extends Controller
             $request->session()->put('cart', $cart);
         }
 
+        // If "Buy Now" was clicked, redirect to checkout instead of back
+        if ($request->input('action') === 'buy-now') {
+            return redirect()->route('store.checkout');
+        }
+
         return back()->with('status', 'Added to cart.');
     }
 

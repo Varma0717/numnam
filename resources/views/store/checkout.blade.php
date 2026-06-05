@@ -27,7 +27,7 @@
             <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div class="form-group">
                     <label for="ship_name" class="mb-1 block text-sm font-medium text-slate-700">Full Name</label>
-                    <input class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400" id="ship_name" name="ship_name" placeholder="Full name" value="{{ old('ship_name', auth()->user()->name ?? '') }}" required>
+                    <input class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400" id="ship_name" name="ship_name" placeholder="Full name" value="{{ old('ship_name', auth()->user()?->name ?? '') }}" required>
                 </div>
                 <div class="form-group">
                     <label for="ship_phone" class="mb-1 block text-sm font-medium text-slate-700">Phone</label>
