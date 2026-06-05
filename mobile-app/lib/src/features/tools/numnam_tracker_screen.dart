@@ -19,14 +19,14 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   Set<int> heartedRecipes = {};
   int _currentTabIndex = 0;
 
-  // Form controllers
-  late TextEditingController _milkTypeController;
-  late TextEditingController _milkVolumeController;
-  late TextEditingController _solidFoodController;
-  late TextEditingController _waterVolumeController;
-  late TextEditingController _poopTimeController;
-
-  String selectedPoopType = '';
+  // Form state
+  String _selectedLogType = 'milk';
+  String _selectedMilkType = 'Formula';
+  double _milkVolume = 180;
+  String _solidFood = '';
+  double _waterVolume = 30;
+  String _selectedPoopType = '';
+  TextEditingController? _ageController;
 
   @override
   void initState() {
@@ -35,13 +35,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
     _tabController.addListener(() {
       setState(() => _currentTabIndex = _tabController.index);
     });
-
-    _milkTypeController = TextEditingController(text: 'Formula');
-    _milkVolumeController = TextEditingController(text: '180');
-    _solidFoodController = TextEditingController();
-    _waterVolumeController = TextEditingController(text: '30');
-    _poopTimeController = TextEditingController();
-
+    _ageController = TextEditingController(text: '8');
     _loadState();
   }
 
@@ -83,11 +77,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   @override
   void dispose() {
     _tabController.dispose();
-    _milkTypeController.dispose();
-    _milkVolumeController.dispose();
-    _solidFoodController.dispose();
-    _waterVolumeController.dispose();
-    _poopTimeController.dispose();
+    _ageController?.dispose();
     super.dispose();
   }
 
@@ -346,18 +336,23 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
           ),
           const SizedBox(height: 24),
 
-          // Milk form
-          _buildMilkForm(),
+          // Dynamic form based on log type
+          if (_selectedLogType == 'milk') _buildMilkForm(),
+          if (_selectedLogType == 'solid') _buildSolidForm(),
+          if (_selectedLogType == 'water') _buildWaterForm(),
+          if (_selectedLogType == 'poop') _buildPoopForm(),
         ],
       ),
     );
   }
 
   Widget _buildLogTypeButton(String label, String type) {
-    return ActionChip(
+    final isSelected = _selectedLogType == type;
+    return FilterChip(
       label: Text(label),
-      onPressed: () {
-        // Log type switching logic
+      selected: isSelected,
+      onSelected: (selected) {
+        setState(() => _selectedLogType = type);
       },
     );
   }
@@ -379,11 +374,15 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              value: 'Formula',
+              value: _selectedMilkType,
               items: ['Formula', 'Breast Milk', 'Expressed Milk']
                   .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                   .toList(),
-              onChanged: (_) {},
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() => _selectedMilkType = value);
+                }
+              },
               decoration: InputDecoration(
                 labelText: 'Milk Type',
                 border: OutlineInputBorder(
@@ -395,25 +394,196 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Volume: 180 ml'),
+                Text('Volume: ${_milkVolume.toInt()} ml'),
                 Slider(
-                  value: 180,
+                  value: _milkVolume,
                   min: 0,
                   max: 300,
                   divisions: 30,
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    setState(() => _milkVolume = value);
+                  },
                 ),
               ],
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                _addLog(FeedEntry(
+                  type: 'milk',
+                  volume: _milkVolume.toInt(),
+                  time: TimeOfDay.now().format(context),
+                  label: '$_selectedMilkType - ${_milkVolume.toInt()} ml',
+                  timestamp: DateTime.now().toIso8601String(),
+                  milkType: _selectedMilkType,
+                ));
+                // Reset form
+                setState(() {
+                  _selectedMilkType = 'Formula';
+                  _milkVolume = 180;
+                });
+              },
               icon: const Icon(Icons.check),
               label: const Text('Log Milk Feed'),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSolidForm() {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('🥣 Solid Food',
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Text('What food did baby eat?',
+                style: Theme.of(context).textTheme.bodySmall),
+            const SizedBox(height: 16),
+            TextField(
+              onChanged: (value) => _solidFood = value,
+              decoration: InputDecoration(
+                labelText: 'Food name (e.g., Carrot purée)',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: _solidFood.isEmpty
+                  ? null
+                  : () {
+                      _addLog(FeedEntry(
+                        type: 'solid',
+                        volume: 100,
+                        time: TimeOfDay.now().format(context),
+                        label: _solidFood,
+                        timestamp: DateTime.now().toIso8601String(),
+                        food: _solidFood,
+                      ));
+                      setState(() => _solidFood = '');
+                    },
+              icon: const Icon(Icons.check),
+              label: const Text('Log Solid Food'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWaterForm() {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('💧 Water', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Text('Water intake for hydration',
+                style: Theme.of(context).textTheme.bodySmall),
+            const SizedBox(height: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Volume: ${_waterVolume.toInt()} ml'),
+                Slider(
+                  value: _waterVolume,
+                  min: 0,
+                  max: 100,
+                  divisions: 10,
+                  onChanged: (value) {
+                    setState(() => _waterVolume = value);
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () {
+                _addLog(FeedEntry(
+                  type: 'water',
+                  volume: _waterVolume.toInt(),
+                  time: TimeOfDay.now().format(context),
+                  label: 'Water - ${_waterVolume.toInt()} ml',
+                  timestamp: DateTime.now().toIso8601String(),
+                ));
+                setState(() => _waterVolume = 30);
+              },
+              icon: const Icon(Icons.check),
+              label: const Text('Log Water'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPoopForm() {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('💩 Poop Tracking',
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Text('Select the poop type to track',
+                style: Theme.of(context).textTheme.bodySmall),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _buildPoopTypeSelection('Type 1', '🪨'),
+                _buildPoopTypeSelection('Type 2', '🔗'),
+                _buildPoopTypeSelection('Type 4', '✨'),
+                _buildPoopTypeSelection('Type 6', '⚡'),
+              ],
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: _selectedPoopType.isEmpty
+                  ? null
+                  : () {
+                      _addLog(FeedEntry(
+                        type: 'poop',
+                        volume: 0,
+                        time: TimeOfDay.now().format(context),
+                        label: 'Poop: $_selectedPoopType',
+                        timestamp: DateTime.now().toIso8601String(),
+                        poopType: _selectedPoopType,
+                      ));
+                      setState(() => _selectedPoopType = '');
+                    },
+              icon: const Icon(Icons.check),
+              label: const Text('Log Poop Type'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPoopTypeSelection(String label, String emoji) {
+    final isSelected = _selectedPoopType == label;
+    return FilterChip(
+      label: Text('$emoji $label'),
+      selected: isSelected,
+      onSelected: (selected) {
+        setState(() => _selectedPoopType = selected ? label : '');
+      },
     );
   }
 
@@ -747,16 +917,19 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   }
 
   void _showAgeDialog() {
+    int tempAge = babyAge;
+    final ageTextController = TextEditingController(text: babyAge.toString());
+
     showDialog(
       context: context,
       builder: (context) {
-        int tempAge = babyAge;
         return AlertDialog(
           title: const Text('How old is your baby?'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
+                controller: ageTextController,
                 keyboardType: TextInputType.number,
                 onChanged: (value) => tempAge = int.tryParse(value) ?? babyAge,
                 decoration: InputDecoration(
@@ -770,13 +943,17 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                ageTextController.dispose();
+                Navigator.pop(context);
+              },
               child: const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
                 setState(() => babyAge = tempAge);
                 _saveState();
+                ageTextController.dispose();
                 Navigator.pop(context);
               },
               child: const Text('Save'),
