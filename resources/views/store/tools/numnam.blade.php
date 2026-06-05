@@ -3,6 +3,22 @@
 @section('title', 'NumNam Weaning Tracker - NumNam')
 @section('meta_description', 'Track your baby\'s feeding journey with personalized insights, recipes, and developmental guidance using the NumNam Weaning Tracker.')
 
+@section('head')
+<style>
+    /* Hide breadcrumbs and alerts for tracker page */
+    nav.breadcrumbs,
+    .alerts-container,
+    .page-shell>nav:first-of-type {
+        display: none !important;
+    }
+
+    main#main-content {
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+</style>
+@endsection
+
 @section('content')
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,800;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
@@ -412,25 +428,27 @@
         background: var(--cream);
         color: var(--text);
         font-family: 'DM Sans', sans-serif;
-        min-height: 100vh;
         padding-bottom: 40px;
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
         width: 100% !important;
-        height: auto !important;
-        overflow: visible !important;
+        margin: 0 !important;
+        border: none !important;
     }
 
     .numnam-header {
         background: var(--rust);
         padding: 18px 24px;
-        display: flex;
+        display: flex !important;
         align-items: center;
         justify-content: space-between;
         position: sticky;
         top: 0;
         z-index: 100;
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
     }
 
     .logo-container {
@@ -471,11 +489,14 @@
     }
 
     .tabs {
-        display: flex;
+        display: flex !important;
         background: var(--warm);
         border-bottom: 2px solid var(--border);
         overflow-x: auto;
         gap: 0;
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
     }
 
     .tab {
