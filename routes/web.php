@@ -56,8 +56,8 @@ Route::get('/recipes', [StorefrontController::class, 'recipes'])->name('store.re
 Route::get('/faq', [StorefrontController::class, 'faq'])->name('store.faq');
 Route::get('/refer-friends', [StorefrontController::class, 'referFriends'])->name('store.refer-friends');
 
-// Tools routes
-Route::prefix('tools')->name('store.tools.')->group(function () {
+// Tools routes - protected by auth
+Route::prefix('tools')->name('store.tools.')->middleware('auth')->group(function () {
     Route::get('/', [ToolsController::class, 'index'])->name('index');
     Route::get('/numnam-tracker', [ToolsController::class, 'numnam'])->name('numnam');
 });

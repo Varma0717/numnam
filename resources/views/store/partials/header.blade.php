@@ -62,7 +62,9 @@
             <a href="{{ route('store.products') }}" class="nn-menu-link {{ request()->routeIs('store.products*') ? 'active' : '' }}">Shop</a>
             <a href="{{ route('store.pricing') }}" class="nn-menu-link {{ request()->routeIs('store.pricing*') ? 'active' : '' }}">Subscriptions</a>
             <a href="{{ route('store.recipes') }}" class="nn-menu-link {{ request()->routeIs('store.recipes') ? 'active' : '' }}">Recipes</a>
+            @auth
             <a href="{{ route('store.tools.index') }}" class="nn-menu-link {{ request()->routeIs('store.tools.*') ? 'active' : '' }}">Tools</a>
+            @endauth
             <a href="{{ route('store.blog.index') }}" class="nn-menu-link {{ request()->routeIs('store.blog*') ? 'active' : '' }}">Learn</a>
             <a href="{{ route('store.about') }}" class="nn-menu-link {{ request()->routeIs('store.about') ? 'active' : '' }}">About</a>
             <a href="{{ route('store.contact') }}" class="nn-menu-link {{ request()->routeIs('store.contact') ? 'active' : '' }}">Contact</a>
