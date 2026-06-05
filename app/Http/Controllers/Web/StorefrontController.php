@@ -830,7 +830,7 @@ class StorefrontController extends Controller
 
         DB::transaction(function () use ($request, $validated, $cart, &$order, &$gatewayInitError, &$gatewayInitResult) {
             $user = $request->user();
-            $isFirstOrder = $user->orders()->doesntExist();
+            $isFirstOrder = $user ? $user->orders()->doesntExist() : false;
             $discounts = $this->discountService->resolve(
                 $user,
                 (float) $cart['totals']['subtotal'],
@@ -865,7 +865,7 @@ class StorefrontController extends Controller
             $isCod = $validated['payment_method'] === 'cod';
 
             $order = Order::create([
-                'user_id' => $user->id,
+                'user_id' => $user?->id,
                 'status' => $isCod ? 'processing' : 'pending',
                 'subtotal' => $cart['totals']['subtotal'],
                 'discount' => $discounts['total_discount'],
@@ -917,7 +917,8 @@ class StorefrontController extends Controller
                 ],
             ]);
 
-            if ($isFirstOrder && $user->referred_by) {
+            // Only process referral rewards for authenticated users
+            if ($isFirstOrder && $user && $user->referred_by) {
                 RewardLedger::create([
                     'user_id' => $user->referred_by,
                     'order_id' => $order->id,

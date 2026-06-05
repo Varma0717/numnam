@@ -97,10 +97,12 @@ Route::post('/cart/add/{product}', [StorefrontController::class, 'addToCart'])->
 Route::post('/cart/update/{product}', [StorefrontController::class, 'updateCart'])->name('store.cart.update');
 Route::delete('/cart/remove/{product}', [StorefrontController::class, 'removeFromCart'])->name('store.cart.remove');
 
+// Checkout routes - allow guests and authenticated users
+Route::get('/checkout', [StorefrontController::class, 'checkout'])->name('store.checkout');
+Route::post('/checkout/coupon-preview', [StorefrontController::class, 'previewCheckoutCoupon'])->name('store.checkout.coupon-preview');
+Route::post('/checkout', [StorefrontController::class, 'placeOrder'])->name('store.checkout.place-order');
+
 Route::middleware('auth')->group(function () {
-    Route::get('/checkout', [StorefrontController::class, 'checkout'])->name('store.checkout');
-    Route::post('/checkout/coupon-preview', [StorefrontController::class, 'previewCheckoutCoupon'])->name('store.checkout.coupon-preview');
-    Route::post('/checkout', [StorefrontController::class, 'placeOrder'])->name('store.checkout.place-order');
     Route::get('/order-success/{order}', [StorefrontController::class, 'orderSuccess'])->name('store.order.success');
     Route::get('/account', [StorefrontController::class, 'account'])->name('store.account');
     Route::patch('/account/profile', [StorefrontController::class, 'updateProfile'])->name('store.account.update-profile');
