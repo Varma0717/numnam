@@ -1133,12 +1133,7 @@
 </div>
 
 <script>
-    // Check if user is authenticated
-    const isAuthenticated = {
-        {
-            auth() - > check() ? 'true' : 'false'
-        }
-    };
+    // Tool is accessible to everyone - no authentication required
     let pendingLogEntry = null;
 
     function showPage(id, el) {
@@ -1223,45 +1218,7 @@
     }
 
     function logEntry(type) {
-        // If guest, show guest checkout modal
-        if (!isAuthenticated) {
-            // Store the entry to log after payment
-            pendingLogEntry = {
-                type
-            };
-
-            if (type === 'milk') {
-                pendingLogEntry.volume = parseInt(document.getElementById('milk-slider').value);
-                pendingLogEntry.milkType = document.getElementById('milk-type').value;
-                pendingLogEntry.time = document.getElementById('milk-time').value;
-                pendingLogEntry.label = `${pendingLogEntry.volume}ml ${pendingLogEntry.milkType}`;
-            } else if (type === 'solid') {
-                pendingLogEntry.volume = parseInt(document.getElementById('solid-slider').value);
-                pendingLogEntry.food = document.getElementById('solid-food').value || 'Solids';
-                pendingLogEntry.texture = document.getElementById('solid-texture').value;
-                pendingLogEntry.finish = document.getElementById('solid-finish').value;
-                pendingLogEntry.time = document.getElementById('solid-time').value;
-                pendingLogEntry.label = `${pendingLogEntry.food} (${pendingLogEntry.volume}ml, ${pendingLogEntry.finish})`;
-            } else if (type === 'water') {
-                pendingLogEntry.volume = parseInt(document.getElementById('water-slider').value);
-                pendingLogEntry.time = document.getElementById('water-time').value;
-                pendingLogEntry.label = `${pendingLogEntry.volume}ml water`;
-            } else if (type === 'poop') {
-                if (!selectedPoopType) {
-                    alert('Please select a poop type!');
-                    return;
-                }
-                pendingLogEntry.poopType = selectedPoopType;
-                pendingLogEntry.time = document.getElementById('poop-time').value;
-                pendingLogEntry.label = selectedPoopType;
-            }
-
-            // Show guest checkout modal
-            showGuestCheckoutModal();
-            return;
-        }
-
-        // If authenticated, save directly
+        // Tool is free and accessible to everyone - save directly
         saveLogEntry(type);
     }
 
