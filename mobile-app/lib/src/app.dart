@@ -64,10 +64,9 @@ class NumNamApp extends StatelessWidget {
                 body: Center(child: CircularProgressIndicator()),
               );
             }
-            if (auth.isAuthenticated) {
-              return _Shell(key: _Shell.shellKey);
-            }
-            return const _AuthFlow();
+            // Show Shell for both authenticated and guest users to access tools
+            // Account tab (index 5) will show login screen for guests
+            return _Shell(key: _Shell.shellKey);
           },
         ),
         routes: {
