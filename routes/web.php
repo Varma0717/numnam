@@ -211,6 +211,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Settings
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
         Route::post('/settings', [SettingsController::class, 'update'])->name('settings.update');
+        Route::post('/settings/email/test', [SettingsController::class, 'sendTestEmail'])->name('settings.email.test');
         Route::get('/settings/create', [SettingsController::class, 'create'])->name('settings.create');
         Route::post('/settings/store', [SettingsController::class, 'store'])->name('settings.store');
         Route::delete('/settings/{setting}', [SettingsController::class, 'destroy'])->name('settings.destroy');
