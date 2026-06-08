@@ -278,6 +278,11 @@
 .nn-fullscreen-menu {
   position: fixed;
   inset: 0;
+  --nn-board-ratio: 1.1395;
+  --nn-board-max-w: min(980px, calc(100vw - 24px));
+  --nn-board-max-h: min(860px, calc(100vh - 24px));
+  --nn-board-w: min(var(--nn-board-max-w), calc(var(--nn-board-max-h) * var(--nn-board-ratio)));
+  --nn-board-h: min(var(--nn-board-max-h), calc(var(--nn-board-max-w) / var(--nn-board-ratio)));
   --nn-board-top-safe: clamp(11.5rem, 24vh, 16rem);
   --nn-board-bottom-safe: clamp(2.2rem, 6vh, 3.6rem);
   --nn-board-side-safe: clamp(2rem, 6vw, 4.2rem);
@@ -291,6 +296,8 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  overflow-y: auto;
+  overflow-x: hidden;
   transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
     visibility 0.4s;
 }
@@ -305,15 +312,15 @@
 .nn-fullscreen-menu::before {
   content: '';
   position: absolute;
-  inset: 0;
-  margin: auto;
-  width: min(980px, 96vw);
-  height: min(90svh, 860px);
+  top: 50%;
+  left: 50%;
+  width: var(--nn-board-w);
+  height: var(--nn-board-h);
   background-image: url("/assets/images/659d92d67d3c7025e7633126_PinkSign.png");
   background-repeat: no-repeat;
-  background-position: center top;
-  background-size: 100% 100%;
-  transform: translateY(-110vh) scale(0.98);
+  background-position: center center;
+  background-size: contain;
+  transform: translate(-50%, calc(-50% - 110vh)) scale(0.98);
   transform-origin: top center;
   opacity: 0;
   transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
@@ -322,14 +329,14 @@
 }
 
 .nn-fullscreen-menu.open::before {
-  transform: translateY(0) scale(1);
+  transform: translate(-50%, -50%) scale(1);
   opacity: 1;
 }
 
 /* Inner 3-column layout – CSS Grid for true horizontal centering */
 .nn-fullscreen-menu__inner {
-  width: min(980px, 96vw);
-  height: min(90svh, 860px);
+  width: var(--nn-board-w);
+  height: var(--nn-board-h);
   padding: var(--nn-board-top-safe) var(--nn-board-side-safe) var(--nn-board-bottom-safe);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -472,7 +479,7 @@
 .nn-menu-social-auth {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   gap: 0.5rem;
   margin-top: 0.6rem;
   padding-top: 0.6rem;
@@ -497,43 +504,97 @@
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .nn-fullscreen-menu {
-    --nn-board-top-safe: clamp(10.5rem, 23vh, 13.5rem);
-    --nn-board-bottom-safe: clamp(1.6rem, 5vh, 2.4rem);
-    --nn-board-side-safe: clamp(1.2rem, 5vw, 2rem);
+    --nn-board-max-w: min(740px, calc(100vw - 10px));
+    --nn-board-max-h: min(760px, calc(100vh - 10px));
+    --nn-board-top-safe: clamp(7.2rem, 17vh, 10.2rem);
+    --nn-board-bottom-safe: clamp(1.2rem, 4vh, 2rem);
+    --nn-board-side-safe: clamp(0.95rem, 4vw, 1.5rem);
   }
 
   .nn-fullscreen-menu::before {
-    width: min(98vw, 740px);
-    height: min(92svh, 760px);
-    background-size: 100% 100%;
+    background-size: contain;
   }
 
   .nn-fullscreen-menu__inner {
-    width: min(98vw, 740px);
-    height: min(92svh, 760px);
     grid-template-columns: 1fr;
     justify-items: center;
     text-align: center;
   }
 
-  .nn-menu-foot,
   .nn-menu-social {
-    display: none;
+    grid-column: 1;
+    padding-top: 0.8rem;
+    gap: 0.55rem;
   }
 
   .nn-menu-link {
-    font-size: clamp(1.35rem, 7vw, 2.25rem);
+    font-size: clamp(1.08rem, 5.7vw, 1.72rem);
+    line-height: 1.02;
+  }
+
+  .nn-social-link {
+    width: 40px;
+    height: 40px;
+  }
+
+  .nn-menu-social-auth {
+    margin-top: 0.35rem;
+    padding-top: 0.45rem;
+    gap: 0.34rem;
+  }
+
+  .nn-social-auth-link {
+    font-size: 0.74rem;
+    letter-spacing: 0.05em;
   }
 }
 
 @media (max-height: 860px) and (min-width: 769px) {
   .nn-fullscreen-menu {
-    --nn-board-top-safe: clamp(12rem, 26vh, 15rem);
-    --nn-board-bottom-safe: clamp(1.8rem, 5vh, 3rem);
+    --nn-board-top-safe: clamp(8.7rem, 21vh, 12.4rem);
+    --nn-board-bottom-safe: clamp(1.2rem, 4vh, 2.4rem);
+    --nn-board-side-safe: clamp(1.15rem, 4vw, 2.2rem);
   }
 
   .nn-menu-main {
-    padding-top: clamp(1.5rem, 5vh, 3rem);
+    padding-top: clamp(1rem, 3vh, 1.6rem);
+    gap: clamp(0.05rem, 0.55vh, 0.24rem);
+  }
+
+  .nn-menu-link {
+    font-size: clamp(1.06rem, 2.2vw, 1.95rem);
+  }
+
+  .nn-menu-social {
+    padding-top: clamp(1rem, 3vh, 1.6rem);
+    gap: 0.55rem;
+  }
+
+  .nn-social-link {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media (max-height: 700px) {
+  .nn-fullscreen-menu {
+    --nn-board-top-safe: clamp(5.7rem, 15vh, 7.3rem);
+    --nn-board-bottom-safe: clamp(0.75rem, 2.2vh, 1.15rem);
+    --nn-board-side-safe: clamp(0.7rem, 3vw, 1.2rem);
+  }
+
+  .nn-menu-main {
+    padding-top: 0.4rem;
+    gap: 0.04rem;
+  }
+
+  .nn-menu-link {
+    font-size: clamp(0.92rem, 2.25vw, 1.45rem);
+  }
+
+  .nn-menu-social {
+    padding-top: 0.4rem;
+    gap: 0.34rem;
   }
 }
 
