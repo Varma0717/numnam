@@ -554,6 +554,7 @@
     padding-top: 0.45rem;
     padding-bottom: 0.55rem;
     margin-top: auto;
+    transform: translateY(-15px);
     gap: 0.5rem;
     flex-direction: row;
     flex-wrap: wrap;
@@ -568,7 +569,7 @@
   }
 
   .nn-menu-link {
-    font-size: clamp(0.9rem, 4.35vw, 1.22rem);
+    font-size: clamp(1.21rem, 5.2vw, 1.53rem);
     line-height: 1.01;
   }
 
