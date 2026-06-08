@@ -569,7 +569,7 @@
   }
 
   .nn-menu-link {
-    font-size: clamp(1.21rem, 5.2vw, 1.53rem);
+    font-size: clamp(1.21rem, 5.2vw, 1.53rem) !important;
     line-height: 1.01;
   }
 
