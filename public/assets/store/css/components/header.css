@@ -455,7 +455,9 @@
   align-items: center;
   gap: 0.85rem;
   min-width: 0;
-  padding-top: clamp(1.5rem, 4vh, 2.5rem);
+  padding-top: 0;
+  align-self: center;
+  justify-content: center;
   justify-self: center;
   width: 100%;
   max-width: 150px;
@@ -580,7 +582,7 @@
   }
 
   .nn-menu-social {
-    padding-top: clamp(1rem, 3vh, 1.6rem);
+    padding-top: 0;
     gap: 0.55rem;
   }
 
@@ -616,7 +618,7 @@
   }
 
   .nn-menu-social {
-    padding-top: 0.4rem;
+    padding-top: 0;
     gap: 0.34rem;
   }
 }
