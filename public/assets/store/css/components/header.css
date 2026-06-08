@@ -278,9 +278,10 @@
 .nn-fullscreen-menu {
   position: fixed;
   inset: 0;
+  --nn-header-clearance: 120px;
   --nn-board-ratio: 1.1395;
   --nn-board-max-w: min(980px, calc(100vw - 24px));
-  --nn-board-max-h: min(860px, calc(100vh - 24px));
+  --nn-board-max-h: min(860px, calc(100vh - var(--nn-header-clearance) - 16px));
   --nn-board-w: min(var(--nn-board-max-w), calc(var(--nn-board-max-h) * var(--nn-board-ratio)));
   --nn-board-h: min(var(--nn-board-max-h), calc(var(--nn-board-max-w) / var(--nn-board-ratio)));
   --nn-board-top-safe: clamp(11.5rem, 24vh, 16rem);
@@ -312,15 +313,15 @@
 .nn-fullscreen-menu::before {
   content: '';
   position: absolute;
-  top: 50%;
+  top: var(--nn-header-clearance);
   left: 50%;
   width: var(--nn-board-w);
   height: var(--nn-board-h);
   background-image: url("/assets/images/659d92d67d3c7025e7633126_PinkSign.png");
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: contain;
-  transform: translate(-50%, calc(-50% - 120vh)) scale(0.98);
+  background-position: center top;
+  background-size: 100% 100%;
+  transform: translate(-50%, calc(-120%)) scale(0.98);
   transform-origin: top center;
   opacity: 0;
   transition: transform 0.72s cubic-bezier(0.2, 0.95, 0.3, 1), opacity 0.5s ease;
@@ -329,12 +330,15 @@
 }
 
 .nn-fullscreen-menu.open::before {
-  transform: translate(-50%, -50%) scale(1);
+  transform: translate(-50%, 0) scale(1);
   opacity: 1;
 }
 
 /* Inner 3-column layout – CSS Grid for true horizontal centering */
 .nn-fullscreen-menu__inner {
+  position: absolute;
+  top: var(--nn-header-clearance);
+  left: 50%;
   width: var(--nn-board-w);
   height: var(--nn-board-h);
   padding: var(--nn-board-top-safe) var(--nn-board-side-safe) var(--nn-board-bottom-safe);
@@ -343,16 +347,15 @@
   align-items: start;
   justify-items: center;
   gap: 0;
-  transform: translateY(36px);
+  transform: translate(-50%, 36px);
   opacity: 0;
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.28s,
     opacity 0.42s ease 0.28s;
-  position: relative;
   z-index: 2;
 }
 
 .nn-fullscreen-menu.open .nn-fullscreen-menu__inner {
-  transform: translateY(0);
+  transform: translate(-50%, 0);
   opacity: 1;
 }
 
@@ -509,6 +512,7 @@
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .nn-fullscreen-menu {
+    --nn-header-clearance: 78px;
     --nn-board-max-w: min(740px, calc(100vw - 10px));
     --nn-board-max-h: min(760px, calc(100vh - 10px));
     --nn-board-top-safe: clamp(7.2rem, 17vh, 10.2rem);
@@ -517,7 +521,7 @@
   }
 
   .nn-fullscreen-menu::before {
-    background-size: contain;
+    background-size: 100% 100%;
   }
 
   .nn-fullscreen-menu__inner {
