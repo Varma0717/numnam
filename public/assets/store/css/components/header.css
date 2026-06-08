@@ -515,11 +515,13 @@
 @media (max-width: 768px) {
   .nn-fullscreen-menu {
     --nn-header-clearance: 78px;
-    --nn-board-max-w: min(740px, calc(100vw - 10px));
-    --nn-board-max-h: min(760px, calc(100vh - 10px));
-    --nn-board-top-safe: clamp(7.2rem, 17vh, 10.2rem);
-    --nn-board-bottom-safe: clamp(1.2rem, 4vh, 2rem);
-    --nn-board-side-safe: clamp(0.95rem, 4vw, 1.5rem);
+    /* Mobile-only stretch: make board taller so all links + social/auth fit */
+    --nn-board-ratio: 0.62;
+    --nn-board-max-w: calc(100vw - 8px);
+    --nn-board-max-h: calc(100vh - var(--nn-header-clearance) - 6px);
+    --nn-board-top-safe: clamp(6.4rem, 14vh, 8.6rem);
+    --nn-board-bottom-safe: clamp(1rem, 3.5vh, 1.8rem);
+    --nn-board-side-safe: clamp(0.8rem, 3.2vw, 1.2rem);
   }
 
   .nn-fullscreen-menu::before {
@@ -539,12 +541,12 @@
 
   .nn-menu-social {
     grid-column: 1;
-    padding-top: 0.8rem;
-    gap: 0.55rem;
+    padding-top: 0.45rem;
+    gap: 0.45rem;
   }
 
   .nn-menu-link {
-    font-size: clamp(0.96rem, 5.1vw, 1.45rem);
+    font-size: clamp(0.9rem, 4.7vw, 1.3rem);
     line-height: 1.02;
   }
 
