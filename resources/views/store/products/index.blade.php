@@ -197,6 +197,7 @@ asset('assets/images/Purees/berry%20swush%202.png'),
         </form>
     </div>
 </div>
+@endsection
 
 @section('scripts')
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
