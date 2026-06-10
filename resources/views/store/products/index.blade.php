@@ -119,6 +119,13 @@ asset('assets/images/Purees/berry%20swush%202.png'),
                     @endif
                 </div>
 
+                <!-- Quantity Selector -->
+                <div class="mt-4 flex items-center gap-3 justify-center">
+                    <button type="button" class="quantity-decrement h-10 w-10 rounded-full border border-numnam-600 text-numnam-600 font-bold text-lg transition-colors duration-200 hover:bg-numnam-50" data-product-id="{{ $product->id }}">−</button>
+                    <span class="quantity-display w-8 text-center font-semibold text-lg text-slate-900" data-product-id="{{ $product->id }}">1</span>
+                    <button type="button" class="quantity-increment h-10 w-10 rounded-full border border-numnam-600 text-numnam-600 font-bold text-lg transition-colors duration-200 hover:bg-numnam-50" data-product-id="{{ $product->id }}">+</button>
+                </div>
+
                 <form method="POST" action="{{ route('store.cart.add', $product) }}" class="mt-4 flex gap-2">
                     @csrf
                     <button class="flex-1 inline-flex h-10 items-center justify-center rounded-full bg-numnam-600 px-5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-numnam-700" type="submit">Add to Cart</button>
@@ -202,6 +209,45 @@ asset('assets/images/Purees/berry%20swush%202.png'),
 @section('scripts')
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
+    // Quantity tracking
+    const quantities = {};
+
+    // Initialize quantities
+    document.querySelectorAll('[data-product-id]').forEach(el => {
+        const productId = el.dataset.productId;
+        if (!quantities[productId]) {
+            quantities[productId] = 1;
+        }
+    });
+
+    // Quantity increment/decrement handlers
+    document.querySelectorAll('.quantity-increment').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const productId = btn.dataset.productId;
+            quantities[productId] = (quantities[productId] || 1) + 1;
+            updateQuantityDisplay(productId);
+        });
+    });
+
+    document.querySelectorAll('.quantity-decrement').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const productId = btn.dataset.productId;
+            if ((quantities[productId] || 1) > 1) {
+                quantities[productId]--;
+            }
+            updateQuantityDisplay(productId);
+        });
+    });
+
+    function updateQuantityDisplay(productId) {
+        const display = document.querySelector(`.quantity-display[data-product-id="${productId}"]`);
+        if (display) {
+            display.textContent = quantities[productId] || 1;
+        }
+    }
+
     // Guest Buy Now for Products Listing
     (function() {
         const modal = document.getElementById('guest-checkout-modal-list');
@@ -216,10 +262,12 @@ asset('assets/images/Purees/berry%20swush%202.png'),
 
         buyNowBtns.forEach(btn => {
             btn.addEventListener('click', () => {
+                const productId = btn.dataset.productId;
                 selectedProduct = {
-                    id: btn.dataset.productId,
+                    id: productId,
                     name: btn.dataset.productName,
                     price: btn.dataset.productPrice,
+                    quantity: quantities[productId] || 1,
                 };
                 modal.style.display = 'flex';
                 modal.style.alignItems = 'center';
@@ -264,6 +312,8 @@ asset('assets/images/Purees/berry%20swush%202.png'),
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                     },
                     body: JSON.stringify({
+                        product_id: selectedProduct.id,
+                        quantity: selectedProduct.quantity,
                         ship_name: formData.get('ship_name'),
                         ship_phone: formData.get('ship_phone'),
                         ship_address: formData.get('ship_address'),

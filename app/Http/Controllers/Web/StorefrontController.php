@@ -1025,16 +1025,11 @@ class StorefrontController extends Controller
      */
     public function createGuestProductCheckout(Request $request): JsonResponse
     {
-        $cart = $this->hydrateCart($request);
-
-        if (empty($cart['items'])) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Cart is empty.',
-            ], 422);
-        }
-
         try {
+            // Check if this is a direct product purchase (from Buy Now on shop page) or cart checkout
+            $product_id = $request->input('product_id');
+            $quantity = $request->input('quantity', 1);
+
             $validated = $request->validate([
                 'ship_name' => 'required|string|max:150',
                 'ship_phone' => 'required|string|max:25',
@@ -1043,9 +1038,43 @@ class StorefrontController extends Controller
                 'ship_state' => 'required|string|max:120',
                 'ship_pincode' => 'required|string|max:20',
                 'email' => 'required|email|max:255',
+                'product_id' => 'nullable|integer|exists:products,id',
+                'quantity' => 'nullable|integer|min:1',
                 'coupon_code' => 'nullable|string|max:32',
                 'notes' => 'nullable|string|max:1200',
             ]);
+
+            // Determine cart source
+            $cart = null;
+            if ($product_id) {
+                // Direct product purchase from Buy Now button
+                $product = Product::findOrFail($product_id);
+                $unitPrice = $product->sale_price ?: $product->price;
+                $cart = [
+                    'items' => [
+                        [
+                            'product' => $product,
+                            'qty' => max(1, (int) $quantity),
+                            'unit_price' => $unitPrice,
+                            'line_total' => $unitPrice * max(1, (int) $quantity),
+                        ]
+                    ],
+                    'totals' => [
+                        'subtotal' => $unitPrice * max(1, (int) $quantity),
+                        'shipping_fee' => 0,
+                    ]
+                ];
+            } else {
+                // Regular cart checkout
+                $cart = $this->hydrateCart($request);
+            }
+
+            if (empty($cart['items'])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cart is empty.',
+                ], 422);
+            }
 
             $order = null;
 
