@@ -122,7 +122,7 @@ asset('assets/images/Purees/berry%20swush%202.png'),
                 <form method="POST" action="{{ route('store.cart.add', $product) }}" class="mt-4 flex gap-2">
                     @csrf
                     <button class="flex-1 inline-flex h-10 items-center justify-center rounded-full bg-numnam-600 px-5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-numnam-700" type="submit">Add to Cart</button>
-                    <button type="button" class="buy-now-btn-list h-10 px-5 rounded-full border border-numnam-600 text-numnam-600 font-semibold text-sm transition-colors duration-200 hover:bg-numnam-50" data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}" data-product-price="{{ $product->sale_price ?: $product->price }}">Buy Now</button>
+                    <button type="button" class="flex-1 inline-flex h-10 items-center justify-center rounded-full border border-numnam-600 text-numnam-600 font-semibold text-sm transition-colors duration-200 hover:bg-numnam-50 buy-now-btn-list" data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}" data-product-price="{{ $product->sale_price ?: $product->price }}">Buy Now</button>
                 </form>
 
 
