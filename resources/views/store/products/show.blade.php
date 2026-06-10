@@ -175,10 +175,11 @@ $safetyItems = [
                 <button class="inline-flex h-11 items-center justify-center rounded-full bg-numnam-600 px-5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-numnam-700" type="submit" name="action" value="add-to-cart" {{ $product->stock <= 0 ? 'disabled' : '' }}>
                     Add to Cart
                 </button>
-                <button class="inline-flex h-11 items-center justify-center rounded-full border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:bg-slate-50" type="submit" name="action" value="buy-now" {{ $product->stock <= 0 ? 'disabled' : '' }}>
-                    Buy Now
-                </button>
             </form>
+
+            <button type="button" id="buy-now-btn" class="mt-3 inline-flex h-11 items-center justify-center rounded-full border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:bg-slate-50" {{ $product->stock <= 0 ? 'disabled' : '' }}>
+                Buy Now
+            </button>
 
 
 
@@ -498,57 +499,233 @@ $safetyItems = [
 @endif
 @endsection
 
+<!-- Guest Checkout Modal for Buy Now -->
+<div id="guest-checkout-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; overflow-y: auto;">
+    <div style="background: white; margin: 2rem auto; border-radius: 1.5rem; max-width: 500px; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.25rem; font-weight: 600; color: #1e293b;">Quick Checkout</h2>
+            <button type="button" id="close-modal" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">×</button>
+        </div>
+
+        <form id="guest-buy-now-form" style="display: flex; flex-direction: column; gap: 1rem;">
+            <div>
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #475569; margin-bottom: 0.5rem;">Full Name</label>
+                <input type="text" name="ship_name" required placeholder="Your full name" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; font-size: 0.875rem;">
+            </div>
+
+            <div>
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #475569; margin-bottom: 0.5rem;">Email</label>
+                <input type="email" name="email" required placeholder="your@email.com" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; font-size: 0.875rem;">
+            </div>
+
+            <div>
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #475569; margin-bottom: 0.5rem;">Phone</label>
+                <input type="tel" name="ship_phone" required placeholder="10-digit number" pattern="[0-9]{10}" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; font-size: 0.875rem;">
+            </div>
+
+            <div>
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #475569; margin-bottom: 0.5rem;">Address</label>
+                <input type="text" name="ship_address" required placeholder="Street address" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; font-size: 0.875rem;">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #475569; margin-bottom: 0.5rem;">City</label>
+                    <input type="text" name="ship_city" required placeholder="City" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; font-size: 0.875rem;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #475569; margin-bottom: 0.5rem;">State</label>
+                    <input type="text" name="ship_state" required placeholder="State" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; font-size: 0.875rem;">
+                </div>
+            </div>
+
+            <div>
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #475569; margin-bottom: 0.5rem;">Pincode</label>
+                <input type="text" name="ship_pincode" required placeholder="6-digit pincode" pattern="[0-9]{6}" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; font-size: 0.875rem;">
+            </div>
+
+            <p id="modal-message" style="font-size: 0.875rem; color: #64748b; display: none;"></p>
+
+            <button type="submit" style="width: 100%; padding: 0.75rem; background: #16a34a; color: white; border: none; border-radius: 2rem; font-weight: 600; cursor: pointer; font-size: 0.875rem;">
+                Continue to Payment
+            </button>
+        </form>
+    </div>
+</div>
+
 @section('scripts')
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
+    // Guest Buy Now Modal
     (function() {
-        var mainImg = document.getElementById('mainProductImage');
-        if (!mainImg) {
-            return;
-        }
+        const buyNowBtn = document.getElementById('buy-now-btn');
+        const modal = document.getElementById('guest-checkout-modal');
+        const closeBtn = document.getElementById('close-modal');
+        const form = document.getElementById('guest-buy-now-form');
+        const message = document.getElementById('modal-message');
 
-        var thumbs = document.querySelectorAll('.product-thumb[data-img]');
-        thumbs.forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                thumbs.forEach(function(b) {
-                    b.style.borderColor = '#e2e8f0';
-                    b.classList.remove('active');
-                });
+        if (!buyNowBtn || !modal) return;
 
-                btn.style.borderColor = '#fe7d94';
-                btn.classList.add('active');
-                mainImg.style.opacity = '0';
-
-                setTimeout(function() {
-                    mainImg.src = btn.dataset.img;
-                    mainImg.style.opacity = '1';
-                }, 120);
-            });
+        buyNowBtn.addEventListener('click', () => {
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            document.body.style.overflow = 'hidden';
         });
 
-        var lightbox = document.getElementById('productLightbox');
-        var lightboxImg = lightbox ? lightbox.querySelector('img') : null;
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            form.reset();
+            message.style.display = 'none';
+        });
 
-        if (lightbox && lightboxImg) {
-            mainImg.style.cursor = 'zoom-in';
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                form.reset();
+                message.style.display = 'none';
+            }
+        });
 
-            mainImg.addEventListener('click', function() {
-                lightboxImg.src = mainImg.src;
-                lightbox.hidden = false;
-            });
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-            var closeBtn = lightbox.querySelector('.lightbox-close');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', function() {
-                    lightbox.hidden = true;
+            const formData = new FormData(form);
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+            message.style.display = 'none';
+
+            try {
+                const response = await fetch('{{ route("store.checkout.guest-payment") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                    body: JSON.stringify({
+                        ship_name: formData.get('ship_name'),
+                        ship_phone: formData.get('ship_phone'),
+                        ship_address: formData.get('ship_address'),
+                        ship_city: formData.get('ship_city'),
+                        ship_state: formData.get('ship_state'),
+                        ship_pincode: formData.get('ship_pincode'),
+                        email: formData.get('email'),
+                    }),
                 });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    message.textContent = result.message || 'Failed to create checkout';
+                    message.style.color = '#dc2626';
+                    message.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                    return;
+                }
+
+                // Show Razorpay checkout
+                if (typeof window.Razorpay === 'undefined') {
+                    message.textContent = 'Unable to load Razorpay. Please refresh and try again.';
+                    message.style.color = '#dc2626';
+                    message.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                    return;
+                }
+
+                const razorpayOptions = {
+                    key: result.key_id,
+                    amount: result.amount,
+                    currency: result.currency,
+                    order_id: result.razorpay_order_id,
+                    customer_notification: 1,
+                    handler: function(response) {
+                        message.textContent = 'Payment successful! Order #' + result.order_number;
+                        message.style.color = '#16a34a';
+                        message.style.display = 'block';
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+
+                        setTimeout(() => {
+                            window.location.href = '/shop';
+                        }, 2000);
+                    },
+                    prefill: {
+                        name: result.customer_name,
+                        email: result.customer_email,
+                        contact: result.customer_phone,
+                    },
+                    theme: {
+                        color: '#16a34a'
+                    },
+                };
+
+                const razorpay = new window.Razorpay(razorpayOptions);
+                razorpay.open();
+            } catch (error) {
+                message.textContent = error.message || 'Unable to process checkout';
+                message.style.color = '#dc2626';
+                message.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+    })(); <
+    script >
+        (function() {
+            var mainImg = document.getElementById('mainProductImage');
+            if (!mainImg) {
+                return;
             }
 
-            lightbox.addEventListener('click', function(e) {
-                if (e.target === lightbox) {
-                    lightbox.hidden = true;
-                }
+            var thumbs = document.querySelectorAll('.product-thumb[data-img]');
+            thumbs.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    thumbs.forEach(function(b) {
+                        b.style.borderColor = '#e2e8f0';
+                        b.classList.remove('active');
+                    });
+
+                    btn.style.borderColor = '#fe7d94';
+                    btn.classList.add('active');
+                    mainImg.style.opacity = '0';
+
+                    setTimeout(function() {
+                        mainImg.src = btn.dataset.img;
+                        mainImg.style.opacity = '1';
+                    }, 120);
+                });
             });
-        }
-    }());
+
+            var lightbox = document.getElementById('productLightbox');
+            var lightboxImg = lightbox ? lightbox.querySelector('img') : null;
+
+            if (lightbox && lightboxImg) {
+                mainImg.style.cursor = 'zoom-in';
+
+                mainImg.addEventListener('click', function() {
+                    lightboxImg.src = mainImg.src;
+                    lightbox.hidden = false;
+                });
+
+                var closeBtn = lightbox.querySelector('.lightbox-close');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', function() {
+                        lightbox.hidden = true;
+                    });
+                }
+
+                lightbox.addEventListener('click', function(e) {
+                    if (e.target === lightbox) {
+                        lightbox.hidden = true;
+                    }
+                });
+            }
+        }());
 </script>
 @endsection
