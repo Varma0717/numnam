@@ -497,7 +497,6 @@ $safetyItems = [
     :products="$recentlyViewed"
     empty-text="Your recently viewed products will appear here." />
 @endif
-@endsection
 
 <!-- Guest Checkout Modal for Buy Now -->
 <div id="guest-checkout-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; overflow-y: auto;">
@@ -552,6 +551,7 @@ $safetyItems = [
         </form>
     </div>
 </div>
+@endsection
 
 @section('scripts')
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
