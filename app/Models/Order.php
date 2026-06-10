@@ -24,6 +24,7 @@ use App\Models\PaymentEvent;
  * @property string|null $payment_reference
  * @property array|null $payment_meta
  * @property string|null $ship_name
+ * @property string|null $ship_email
  * @property string|null $ship_phone
  * @property string|null $ship_address
  * @property string|null $ship_city
@@ -55,6 +56,7 @@ class Order extends Model
         'payment_reference',
         'payment_meta',
         'ship_name',
+        'ship_email',
         'ship_phone',
         'ship_address',
         'ship_city',

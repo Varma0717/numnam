@@ -17,9 +17,18 @@
         <span class="h-px w-8 bg-slate-300"></span>
         <span class="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1">3 Confirmation</span>
     </div>
+
+    @guest
+    <div class="mt-4 flex flex-wrap items-center gap-2">
+        <span class="text-sm text-slate-600">Prefer quick checkout?</span>
+        <button type="button" id="toggle-guest-checkout" class="inline-flex h-9 items-center justify-center rounded-full border border-numnam-300 bg-numnam-50 px-4 text-xs font-semibold text-numnam-700 transition-colors duration-200 hover:bg-numnam-100">
+            Try Guest Checkout
+        </button>
+    </div>
+    @endguest
 </section>
 
-<section class="section pt-4">
+<section class="section pt-4" id="checkout-section">
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-start">
         <form id="checkout-form" method="POST" action="{{ route('store.checkout.place-order') }}" class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
             @csrf
@@ -194,6 +203,101 @@
         </aside>
     </div>
 </section>
+
+<!-- Guest Checkout Form - Hidden by default, shown when toggled -->
+<section class="section pt-4" id="guest-checkout-section" style="display: none;">
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-start">
+        <form id="guest-checkout-form" class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
+            <div class="mb-4 flex items-center justify-between">
+                <h2 class="text-xl font-semibold tracking-tight text-slate-900">Quick Checkout</h2>
+                <button type="button" id="back-to-full-checkout" class="text-sm text-slate-600 hover:text-slate-900">← Back to full form</button>
+            </div>
+
+            <div class="space-y-4">
+                <div class="form-group">
+                    <label for="guest_name" class="mb-1 block text-sm font-medium text-slate-700">Full Name</label>
+                    <input class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400" id="guest_name" name="ship_name" placeholder="Your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="guest_email" class="mb-1 block text-sm font-medium text-slate-700">Email</label>
+                    <input class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400" id="guest_email" name="email" type="email" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="guest_phone" class="mb-1 block text-sm font-medium text-slate-700">Phone</label>
+                    <input class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400" id="guest_phone" name="ship_phone" placeholder="10-digit phone number" pattern="[0-9]{10}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="guest_address" class="mb-1 block text-sm font-medium text-slate-700">Shipping Address</label>
+                    <input class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400" id="guest_address" name="ship_address" placeholder="Street address" required>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div class="form-group">
+                        <label for="guest_city" class="mb-1 block text-sm font-medium text-slate-700">City</label>
+                        <input class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400" id="guest_city" name="ship_city" placeholder="City" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="guest_state" class="mb-1 block text-sm font-medium text-slate-700">State</label>
+                        <input class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400" id="guest_state" name="ship_state" placeholder="State" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="guest_pincode" class="mb-1 block text-sm font-medium text-slate-700">Pincode</label>
+                    <input class="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-800 outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400" id="guest_pincode" name="ship_pincode" placeholder="6-digit pincode" pattern="[0-9]{6}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="guest_notes" class="mb-1 block text-sm font-medium text-slate-700">Order Notes (optional)</label>
+                    <textarea id="guest_notes" name="notes" class="min-h-[100px] w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm text-slate-800 outline-none transition-colors duration-200 placeholder:text-slate-400 focus:border-numnam-400" placeholder="Special instructions..."></textarea>
+                </div>
+
+                <p id="guest-checkout-message" class="text-sm text-slate-600" style="display: none;"></p>
+
+                <button type="submit" id="guest-checkout-submit" class="mt-6 inline-flex h-11 w-full items-center justify-center rounded-full bg-numnam-600 px-5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-numnam-700 disabled:opacity-50" style="gap: 0.375rem;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0110 0v4" />
+                    </svg>
+                    Continue to Payment
+                </button>
+            </div>
+        </form>
+
+        <aside id="guest-summary" class="rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm sm:p-7" style="display: none;">
+            <h3 class="text-base font-semibold text-slate-900">Order Summary</h3>
+            <div id="guest-items-list" class="mt-4 space-y-2 border-b border-slate-200 pb-4">
+                <!-- Items will be populated by JavaScript -->
+            </div>
+
+            <div class="mt-2 flex items-center justify-between text-sm text-slate-600">
+                <span>Subtotal</span>
+                <strong id="guest-summary-subtotal" class="text-slate-900">Rs 0</strong>
+            </div>
+            <div class="mt-2 flex items-center justify-between text-sm text-slate-600">
+                <span>Shipping</span>
+                <strong id="guest-summary-shipping" class="text-slate-900">Rs 0</strong>
+            </div>
+            <div class="mt-2 flex items-center justify-between border-t border-slate-200 pt-4">
+                <span class="text-base font-semibold text-slate-900">Total</span>
+                <strong id="guest-summary-total" class="text-xl text-slate-900">Rs 0</strong>
+            </div>
+
+            <div class="mt-5 space-y-2 border-t border-slate-200 pt-4">
+                <p class="inline-flex items-center gap-1.5 text-sm text-slate-600">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    Secure SSL encrypted checkout
+                </p>
+            </div>
+        </aside>
+    </div>
+</section>
+
 @endsection
 
 @section('scripts')
@@ -415,6 +519,145 @@
             } catch (error) {
                 setLoading(false);
                 alert(error.message || 'Unable to proceed with payment.');
+            }
+        });
+    })();
+
+    // Guest Checkout Handler
+    (function() {
+        const toggleBtn = document.getElementById('toggle-guest-checkout');
+        const backBtn = document.getElementById('back-to-full-checkout');
+        const checkoutSection = document.getElementById('checkout-section');
+        const guestCheckoutSection = document.getElementById('guest-checkout-section');
+        const guestCheckoutForm = document.getElementById('guest-checkout-form');
+        const guestCheckoutSubmit = document.getElementById('guest-checkout-submit');
+        const guestMessage = document.getElementById('guest-checkout-message');
+        const guestSummary = document.getElementById('guest-summary');
+        const guestItemsList = document.getElementById('guest-items-list');
+        const guestSubtotal = document.getElementById('guest-summary-subtotal');
+        const guestShipping = document.getElementById('guest-summary-shipping');
+        const guestTotal = document.getElementById('guest-summary-total');
+
+        if (!toggleBtn || !guestCheckoutForm) {
+            return;
+        }
+
+        // Populate guest summary from regular summary
+        const populateGuestSummary = () => {
+            const cartItems = document.querySelectorAll('#checkout-form [data-product-item]');
+            guestItemsList.innerHTML = '';
+
+            // Try to get items from the cart - this is a simplified approach
+            const regularSummary = document.querySelector('.summary');
+            if (regularSummary) {
+                const subtotal = document.getElementById('summary-subtotal')?.textContent || 'Rs 0';
+                const shipping = document.getElementById('summary-shipping')?.textContent || 'Rs 0';
+                const total = document.getElementById('summary-total')?.textContent || 'Rs 0';
+
+                guestSubtotal.textContent = subtotal;
+                guestShipping.textContent = shipping;
+                guestTotal.textContent = total;
+            }
+        };
+
+        // Toggle between forms
+        toggleBtn.addEventListener('click', () => {
+            checkoutSection.style.display = 'none';
+            guestCheckoutSection.style.display = 'block';
+            populateGuestSummary();
+            guestSummary.style.display = 'block';
+            window.scrollTo({
+                top: guestCheckoutSection.offsetTop - 100,
+                behavior: 'smooth'
+            });
+        });
+
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            checkoutSection.style.display = 'block';
+            guestCheckoutSection.style.display = 'none';
+            guestSummary.style.display = 'none';
+            window.scrollTo({
+                top: checkoutSection.offsetTop - 100,
+                behavior: 'smooth'
+            });
+        });
+
+        // Guest checkout form submission
+        guestCheckoutForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(guestCheckoutForm);
+            const data = Object.fromEntries(formData);
+
+            guestCheckoutSubmit.disabled = true;
+            guestCheckoutSubmit.textContent = 'Processing...';
+            guestMessage.style.display = 'none';
+
+            try {
+                const response = await fetch('{{ route("store.checkout.guest-payment") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    guestMessage.textContent = result.message || 'Failed to create checkout';
+                    guestMessage.style.display = 'block';
+                    guestMessage.style.color = 'rgb(220 38 38)';
+                    guestCheckoutSubmit.disabled = false;
+                    guestCheckoutSubmit.textContent = 'Continue to Payment';
+                    return;
+                }
+
+                // Show Razorpay checkout
+                if (typeof window.Razorpay === 'undefined') {
+                    alert('Unable to load Razorpay. Please refresh and try again.');
+                    guestCheckoutSubmit.disabled = false;
+                    guestCheckoutSubmit.textContent = 'Continue to Payment';
+                    return;
+                }
+
+                const razorpayOptions = {
+                    key: result.key_id,
+                    amount: result.amount,
+                    currency: result.currency,
+                    order_id: result.razorpay_order_id,
+                    customer_notification: 1,
+                    handler: function(response) {
+                        guestCheckoutSubmit.disabled = true;
+                        guestCheckoutSubmit.textContent = 'Payment Successful!';
+                        guestMessage.textContent = 'Your order has been confirmed. Order number: ' + result.order_number + '. Check your email for details.';
+                        guestMessage.style.display = 'block';
+                        guestMessage.style.color = 'rgb(34 197 94)';
+
+                        setTimeout(() => {
+                            window.location.href = '/shop';
+                        }, 3000);
+                    },
+                    prefill: {
+                        name: result.customer_name,
+                        email: result.customer_email,
+                        contact: result.customer_phone,
+                    },
+                    theme: {
+                        color: '#16a34a',
+                    },
+                };
+
+                const razorpay = new window.Razorpay(razorpayOptions);
+                razorpay.open();
+            } catch (error) {
+                guestMessage.textContent = error.message || 'Unable to process checkout';
+                guestMessage.style.display = 'block';
+                guestMessage.style.color = 'rgb(220 38 38)';
+                guestCheckoutSubmit.disabled = false;
+                guestCheckoutSubmit.textContent = 'Continue to Payment';
             }
         });
     })();

@@ -1020,6 +1020,157 @@ class StorefrontController extends Controller
         return view('store.order-success', compact('order'));
     }
 
+    /**
+     * Create a guest product checkout order and initiate Razorpay payment
+     */
+    public function createGuestProductCheckout(Request $request): JsonResponse
+    {
+        $cart = $this->hydrateCart($request);
+
+        if (empty($cart['items'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cart is empty.',
+            ], 422);
+        }
+
+        try {
+            $validated = $request->validate([
+                'ship_name' => 'required|string|max:150',
+                'ship_phone' => 'required|string|max:25',
+                'ship_address' => 'required|string|max:255',
+                'ship_city' => 'required|string|max:120',
+                'ship_state' => 'required|string|max:120',
+                'ship_pincode' => 'required|string|max:20',
+                'email' => 'required|email|max:255',
+                'coupon_code' => 'nullable|string|max:32',
+                'notes' => 'nullable|string|max:1200',
+            ]);
+
+            $order = null;
+
+            DB::transaction(function () use ($request, $validated, $cart, &$order) {
+                $discounts = $this->discountService->resolve(
+                    null,
+                    (float) $cart['totals']['subtotal'],
+                    $validated['coupon_code'] ?? null,
+                );
+
+                // Tax calculation
+                $taxSettings = SiteSetting::whereIn('key', ['tax_gst_enabled', 'tax_gst_rate', 'tax_inclusive'])
+                    ->pluck('value', 'key');
+                $gstEnabled = ($taxSettings['tax_gst_enabled'] ?? '0') === '1';
+                $gstRate = (float) ($taxSettings['tax_gst_rate'] ?? 0);
+                $taxInclusive = ($taxSettings['tax_inclusive'] ?? '1') === '1';
+                $taxAmount = 0;
+
+                $subtotalAfterDiscount = max(0, (float) $cart['totals']['subtotal'] - (float) $discounts['total_discount']);
+
+                if ($gstEnabled && $gstRate > 0) {
+                    if ($taxInclusive) {
+                        $taxAmount = round($subtotalAfterDiscount - ($subtotalAfterDiscount / (1 + $gstRate / 100)), 2);
+                    } else {
+                        $taxAmount = round($subtotalAfterDiscount * ($gstRate / 100), 2);
+                    }
+                }
+
+                $payableTotal = max(
+                    0,
+                    $subtotalAfterDiscount + ($taxInclusive ? 0 : $taxAmount) + (float) $cart['totals']['shipping_fee']
+                );
+
+                $order = Order::create([
+                    'user_id' => null,
+                    'status' => 'pending',
+                    'subtotal' => $cart['totals']['subtotal'],
+                    'discount' => $discounts['total_discount'],
+                    'tax_amount' => $taxAmount,
+                    'shipping_fee' => $cart['totals']['shipping_fee'],
+                    'total' => $payableTotal,
+                    'payment_method' => 'upi',
+                    'payment_gateway' => 'razorpay',
+                    'payment_status' => 'pending',
+                    'coupon_code' => $discounts['coupon']?->code,
+                    'ship_name' => $validated['ship_name'],
+                    'ship_phone' => $validated['ship_phone'],
+                    'ship_address' => $validated['ship_address'],
+                    'ship_city' => $validated['ship_city'],
+                    'ship_state' => $validated['ship_state'],
+                    'ship_pincode' => $validated['ship_pincode'],
+                    'ship_email' => $validated['email'],
+                    'notes' => $validated['notes'] ?? null,
+                ]);
+
+                foreach ($cart['items'] as $item) {
+                    $order->items()->create([
+                        'product_id' => $item['product']->id,
+                        'product_name' => $item['product']->name,
+                        'unit_price' => $item['unit_price'],
+                        'quantity' => $item['qty'],
+                        'line_total' => $item['line_total'],
+                    ]);
+                }
+            });
+
+            // Create Razorpay order
+            $razorpayResponse = $this->paymentGatewayService->createRazorpayOrder($order);
+
+            if (!$razorpayResponse['success']) {
+                Log::error('Razorpay order creation failed for guest', [
+                    'order_id' => $order->id,
+                    'message' => $razorpayResponse['message'],
+                ]);
+
+                return response()->json([
+                    'success' => false,
+                    'message' => $razorpayResponse['message'] ?? 'Unable to process payment. Please try again.',
+                ], 400);
+            }
+
+            // Store Razorpay order ID
+            $order->update([
+                'razorpay_order_id' => $razorpayResponse['data']['id'] ?? null,
+            ]);
+
+            // Send order confirmation email to guest
+            try {
+                Mail::to($order->ship_email)->send(new OrderPlacedCustomerNotification($order));
+            } catch (\Throwable $e) {
+                Log::warning('Guest order confirmation email failed', [
+                    'order_id' => $order->id,
+                    'email' => $order->ship_email,
+                    'message' => $e->getMessage(),
+                ]);
+            }
+
+            // Clear the cart
+            $request->session()->forget('cart');
+
+            return response()->json([
+                'success' => true,
+                'order_id' => $order->id,
+                'order_number' => $order->order_number,
+                'razorpay_order_id' => $razorpayResponse['data']['id'],
+                'amount' => $razorpayResponse['data']['amount'],
+                'currency' => $razorpayResponse['data']['currency'],
+                'key_id' => config('services.razorpay.key_id'),
+                'customer_name' => $validated['ship_name'],
+                'customer_email' => $validated['email'],
+                'customer_phone' => $validated['ship_phone'],
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Guest product checkout failed', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create checkout. Please try again.',
+            ], 500);
+        }
+    }
+
     public function account(Request $request)
     {
         $user = $request->user();

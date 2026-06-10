@@ -101,6 +101,7 @@ Route::delete('/cart/remove/{product}', [StorefrontController::class, 'removeFro
 Route::get('/checkout', [StorefrontController::class, 'checkout'])->name('store.checkout');
 Route::post('/checkout/coupon-preview', [StorefrontController::class, 'previewCheckoutCoupon'])->name('store.checkout.coupon-preview');
 Route::post('/checkout', [StorefrontController::class, 'placeOrder'])->name('store.checkout.place-order');
+Route::post('/checkout/guest-payment', [StorefrontController::class, 'createGuestProductCheckout'])->name('store.checkout.guest-payment');
 
 Route::middleware('auth')->group(function () {
     Route::get('/order-success/{order}', [StorefrontController::class, 'orderSuccess'])->name('store.order.success');
