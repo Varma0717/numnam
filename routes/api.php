@@ -29,6 +29,10 @@ use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\ProductModuleController;
 use App\Http\Controllers\Api\V1\SettingsController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
+use App\Http\Controllers\Api\V1\NumNamBabyController;
+use App\Http\Controllers\Api\V1\NumNamCommunityController;
+use App\Http\Controllers\Api\V1\NumNamFeedLogController;
+use App\Http\Controllers\Api\V1\NumNamRecipeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -101,6 +105,33 @@ Route::prefix('v1')->group(function () {
             Route::patch('subscriptions/{subscription}/resume', [SubscriptionController::class, 'resume']);
             Route::delete('subscriptions/{subscription}', [SubscriptionController::class, 'destroy']);
         });
+    });
+
+    // ── NumNam Weaning App API (Session-based auth:web) ─────────────────
+    Route::prefix('numnam')->middleware('auth:web')->group(function () {
+        // Baby Profile
+        Route::get('baby/profile', [NumNamBabyController::class, 'profile']);
+        Route::post('baby/profile', [NumNamBabyController::class, 'updateProfile']);
+        Route::get('baby/dashboard', [NumNamBabyController::class, 'dashboardSummary']);
+
+        // Feed Logs
+        Route::post('logs', [NumNamFeedLogController::class, 'store']);
+        Route::get('logs/today', [NumNamFeedLogController::class, 'todayLogs']);
+        Route::delete('logs/{feedLog}', [NumNamFeedLogController::class, 'destroy']);
+        Route::delete('logs/today/clear', [NumNamFeedLogController::class, 'clearToday']);
+
+        // Recipes
+        Route::get('recipes', [NumNamRecipeController::class, 'index']);
+        Route::get('recipes/{recipe}', [NumNamRecipeController::class, 'show']);
+        Route::post('recipes/{recipe}/like', [NumNamRecipeController::class, 'toggleLike']);
+        Route::get('recipes/type/{foodType}', [NumNamRecipeController::class, 'byType']);
+
+        // Community Chat
+        Route::get('community/rooms', [NumNamCommunityController::class, 'rooms']);
+        Route::get('community/rooms/{room}/messages', [NumNamCommunityController::class, 'roomMessages']);
+        Route::post('community/rooms/{room}/messages', [NumNamCommunityController::class, 'sendMessage']);
+        Route::post('community/messages/{message}/like', [NumNamCommunityController::class, 'likeMessage']);
+        Route::get('community/rooms/{room}/search', [NumNamCommunityController::class, 'searchMessages']);
     });
 
     // ── Admin CMS (AJAX JSON API) ───────────────────────────────────────
