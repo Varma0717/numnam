@@ -109,6 +109,9 @@ Route::prefix('v1')->group(function () {
 
     // ── NumNam Weaning App API (Session-based auth:sanctum) ─────────────────
     Route::prefix('numnam')->middleware('auth:sanctum')->group(function () {
+        // Test endpoint - remove after testing
+        Route::get('_test', fn() => response()->json(['message' => 'NumNam routes working!']));
+
         // Baby Profile
         Route::get('baby/profile', [NumNamBabyController::class, 'profile']);
         Route::post('baby/profile', [NumNamBabyController::class, 'updateProfile']);
