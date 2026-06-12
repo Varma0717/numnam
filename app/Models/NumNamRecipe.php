@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class NumNamRecipe extends Model
 {
+    protected $table = 'num_nam_recipes';
+
     protected $fillable = [
         'emoji',
         'name',
