@@ -1199,7 +1199,7 @@
                 await loadTodayLogs();
             }
         } catch (error) {
-            console.log('Profile load - login required or API error', error);
+            console.error('Profile load error:', error);
         }
     }
 
