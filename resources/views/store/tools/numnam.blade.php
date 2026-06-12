@@ -729,16 +729,14 @@
     </div>
 
     <div class="tabs">
-        <div class="tab active" onclick="showPage('dashboard', this)">📊 Dashboard</div>
-        <div class="tab" onclick="showPage('log', this)">➕ Log</div>
+        <div class="tab active" onclick="showPage('log', this)">➕ Log</div>
         <div class="tab" onclick="showPage('poop', this)">💩 Poop Guide</div>
-        <div class="tab" onclick="showPage('recipes', this)">🍽️ Recipes</div>
-        <div class="tab" onclick="showPage('community', this)">💬 Community</div>
         <div class="tab" onclick="showPage('guide', this)">📖 Guide</div>
+        <div class="tab" onclick="showPage('community', this)">💬 Community</div>
     </div>
 
     <!-- DASHBOARD -->
-    <div id="page-dashboard" class="tracker-page active">
+    <div id="page-dashboard" class="tracker-page" style="display:none;">
         <div id="milestone-area"></div>
         <div id="insight-area"></div>
 
@@ -791,7 +789,7 @@
     </div>
 
     <!-- LOG PAGE -->
-    <div id="page-log" class="tracker-page">
+    <div id="page-log" class="tracker-page active">
         <div class="section-title">Log a Feed</div>
         <div class="section-sub">Track milk, solids, water, or poop output</div>
 
@@ -990,7 +988,7 @@
     </div>
 
     <!-- RECIPES -->
-    <div id="page-recipes" class="tracker-page">
+    <div id="page-recipes" class="tracker-page" style="display:none;">
         <div class="section-title">🍽️ Recipe Swaps</div>
         <div class="section-sub">Mom-to-Mom favourites — filtered for your baby's age</div>
 
@@ -1173,8 +1171,7 @@
         await loadBabyProfile();
         await loadRecipes();
         await loadCommunityRooms();
-        renderDashboard();
-        document.getElementById('dash-date').textContent = new Date().toLocaleDateString();
+        renderCommunityRooms();
     });
 
     // API Helper: Get auth token from meta tag or localStorage
