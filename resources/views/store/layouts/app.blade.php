@@ -65,22 +65,15 @@
     </script>
     @yield('structured_data')
 
-    {{-- Fonts - defer non-critical weights, preload critical --}}
+    {{-- Fonts - load immediately for header rendering --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    {{-- Load only critical font weights, defer others --}}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
-    <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap">
-    </noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap">
 
     <meta name="asset-base" content="{{ rtrim(url(''), '/') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    {{-- Defer header CSS as it's non-critical for initial paint --}}
-    <link rel="stylesheet" href="{{ asset('assets/store/css/components/header.css') }}?v={{ filemtime(public_path('assets/store/css/components/header.css')) }}" media="print" onload="this.media='all'">
-    <noscript>
-        <link rel="stylesheet" href="{{ asset('assets/store/css/components/header.css') }}?v={{ filemtime(public_path('assets/store/css/components/header.css')) }}">
-    </noscript>
+    {{-- Load header CSS immediately (critical for header rendering) --}}
+    <link rel="stylesheet" href="{{ asset('assets/store/css/components/header.css') }}?v={{ filemtime(public_path('assets/store/css/components/header.css')) }}">
 
     {{-- Tracking & Analytics Codes --}}
     @php
