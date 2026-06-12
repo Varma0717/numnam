@@ -1161,7 +1161,7 @@
 
 <script>
     // NumNam API Integration - Backend-powered weaning tracker
-    let currentUser = @json(auth()->user());
+    let currentUser = @json(auth() - > user());
     let babyProfile = null;
     let todayLogs = [];
     let recipes = [];
@@ -1188,8 +1188,8 @@
     async function loadBabyProfile() {
         try {
             const response = await fetch('/api/v1/numnam/baby/profile', {
+                credentials: 'include',
                 headers: {
-                    'Authorization': 'Bearer ' + getAuthToken(),
                     'Accept': 'application/json'
                 }
             });
@@ -1209,8 +1209,8 @@
         if (!babyProfile) return;
         try {
             const response = await fetch('/api/v1/numnam/logs/today', {
+                credentials: 'include',
                 headers: {
-                    'Authorization': 'Bearer ' + getAuthToken(),
                     'Accept': 'application/json'
                 }
             });
@@ -1226,8 +1226,8 @@
     async function loadRecipes() {
         try {
             const response = await fetch('/api/v1/numnam/recipes', {
+                credentials: 'include',
                 headers: {
-                    'Authorization': 'Bearer ' + getAuthToken(),
                     'Accept': 'application/json'
                 }
             });
@@ -1243,8 +1243,8 @@
     async function loadCommunityRooms() {
         try {
             const response = await fetch('/api/v1/numnam/community/rooms', {
+                credentials: 'include',
                 headers: {
-                    'Authorization': 'Bearer ' + getAuthToken(),
                     'Accept': 'application/json'
                 }
             });
@@ -1280,9 +1280,9 @@
         try {
             const response = await fetch('/api/v1/numnam/baby/profile', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + getAuthToken(),
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
@@ -1395,9 +1395,9 @@
         try {
             const response = await fetch('/api/v1/numnam/logs', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + getAuthToken(),
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify(logData)
@@ -1620,8 +1620,8 @@
         try {
             const response = await fetch(`/api/v1/numnam/recipes/${recipeId}/like`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
-                    'Authorization': 'Bearer ' + getAuthToken(),
                     'Accept': 'application/json'
                 }
             });
@@ -1702,8 +1702,8 @@
     async function loadCommunityRoomMessages(roomId) {
         try {
             const response = await fetch(`/api/v1/numnam/community/rooms/${roomId}/messages`, {
+                credentials: 'include',
                 headers: {
-                    'Authorization': 'Bearer ' + getAuthToken(),
                     'Accept': 'application/json'
                 }
             });
@@ -1748,9 +1748,9 @@
         try {
             const response = await fetch(`/api/v1/numnam/community/rooms/${currentRoomId}/messages`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + getAuthToken(),
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
@@ -1775,8 +1775,8 @@
         try {
             const response = await fetch(`/api/v1/numnam/community/messages/${messageId}/like`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
-                    'Authorization': 'Bearer ' + getAuthToken(),
                     'Accept': 'application/json'
                 }
             });
