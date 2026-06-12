@@ -31,8 +31,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->routes(function () {
             // NumNam API routes with web middleware (session auth)
             Route::middleware('web')
-                ->prefix('api/v1')
-                ->name('api.v1.')
+                ->prefix('api')
                 ->group(base_path('routes/numnam-api.php'));
 
             Route::middleware('api')

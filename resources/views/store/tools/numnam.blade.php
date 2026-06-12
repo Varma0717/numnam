@@ -1174,10 +1174,15 @@
         renderCommunityRooms();
     });
 
-    // API Helper: Get auth token from meta tag or localStorage
-    function getAuthToken() {
-        return document.querySelector('meta[name="csrf-token"]')?.content ||
-            localStorage.getItem('authToken') || '';
+    // API Helper: Get CSRF token from meta tag
+    function getCsrfToken() {
+        return document.querySelector('meta[name="csrf-token"]')?.content || '';
+    }
+
+    // Helper function to add CSRF token to request headers
+    function addCsrfToken(headers = {}) {
+        headers['X-CSRF-TOKEN'] = getCsrfToken();
+        return headers;
     }
 
     // Load baby profile from API
@@ -1277,10 +1282,10 @@
             const response = await fetch('/api/v1/numnam/baby/profile', {
                 method: 'POST',
                 credentials: 'include',
-                headers: {
+                headers: addCsrfToken({
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
-                },
+                }),
                 body: JSON.stringify({
                     age_months: age,
                     baby_name: babyProfile.baby_name,
@@ -1392,10 +1397,10 @@
             const response = await fetch('/api/v1/numnam/logs', {
                 method: 'POST',
                 credentials: 'include',
-                headers: {
+                headers: addCsrfToken({
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
-                },
+                }),
                 body: JSON.stringify(logData)
             });
 
@@ -1617,9 +1622,9 @@
             const response = await fetch(`/api/v1/numnam/recipes/${recipeId}/like`, {
                 method: 'POST',
                 credentials: 'include',
-                headers: {
+                headers: addCsrfToken({
                     'Accept': 'application/json'
-                }
+                })
             });
             const data = await response.json();
             if (data.data) {
@@ -1745,10 +1750,10 @@
             const response = await fetch(`/api/v1/numnam/community/rooms/${currentRoomId}/messages`, {
                 method: 'POST',
                 credentials: 'include',
-                headers: {
+                headers: addCsrfToken({
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
-                },
+                }),
                 body: JSON.stringify({
                     message: message
                 })
@@ -1772,9 +1777,9 @@
             const response = await fetch(`/api/v1/numnam/community/messages/${messageId}/like`, {
                 method: 'POST',
                 credentials: 'include',
-                headers: {
+                headers: addCsrfToken({
                     'Accept': 'application/json'
-                }
+                })
             });
             const data = await response.json();
             if (data.data) {

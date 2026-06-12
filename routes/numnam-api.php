@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('numnam')->middleware('auth:web')->group(function () {
+Route::prefix('v1/numnam')->middleware('auth:web')->group(function () {
     // Baby Profile
     Route::get('baby/profile', [NumNamBabyController::class, 'profile']);
     Route::post('baby/profile', [NumNamBabyController::class, 'updateProfile']);
