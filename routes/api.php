@@ -107,8 +107,8 @@ Route::prefix('v1')->group(function () {
         });
     });
 
-    // ── NumNam Weaning App API (Session-based auth:web) ─────────────────
-    Route::prefix('numnam')->middleware('auth:web')->group(function () {
+    // ── NumNam Weaning App API (Session-based auth:sanctum) ─────────────────
+    Route::prefix('numnam')->middleware('auth:sanctum')->group(function () {
         // Baby Profile
         Route::get('baby/profile', [NumNamBabyController::class, 'profile']);
         Route::post('baby/profile', [NumNamBabyController::class, 'updateProfile']);
