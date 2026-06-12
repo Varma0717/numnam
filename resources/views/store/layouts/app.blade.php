@@ -188,9 +188,6 @@
     {{-- Toast notifications container --}}
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
-    {{-- Bird animation - defer to not block rendering --}}
-    <script src="{{ asset('assets/store/js/bird.js') }}?v=1" defer async></script>
-
     <script src="{{ asset('assets/store/js/components/header.js') }}?v=1" defer></script>
     <script src="{{ asset('assets/store/js/store.js') }}?v=1" defer></script>
     @yield('scripts')
