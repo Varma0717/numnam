@@ -57,9 +57,9 @@
                 "email": "info@numnam.com"
             },
             "sameAs": [
-                "https://www.instagram.com/numnam_baby",
-                "https://www.facebook.com/numnam",
-                "https://twitter.com/numnam_baby"
+                "https://www.instagram.com/numnameats",
+                "https://www.facebook.com/numnamofficial",
+                "https://www.linkedin.com/company/numnam"
             ]
         }
     </script>
@@ -68,11 +68,49 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap">
+    </noscript>
 
     <meta name="asset-base" content="<?php echo e(rtrim(url(''), '/')); ?>">
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
-    <link rel="stylesheet" href="<?php echo e(asset('assets/store/css/components/header.css')); ?>?v=<?php echo e(filemtime(public_path('assets/store/css/components/header.css'))); ?>">
+    
+    <link rel="stylesheet" href="<?php echo e(asset('assets/store/css/components/header.css')); ?>?v=<?php echo e(filemtime(public_path('assets/store/css/components/header.css'))); ?>" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="<?php echo e(asset('assets/store/css/components/header.css')); ?>?v=<?php echo e(filemtime(public_path('assets/store/css/components/header.css'))); ?>">
+    </noscript>
+
+    
+    <?php
+    try {
+    $settings = \App\Models\SiteSetting::all()->keyBy('key');
+    $googlePixel = $settings['tracking_google_pixel']->value ?? null;
+    $googleAnalytics = $settings['tracking_google_analytics']->value ?? null;
+    $facebookPixel = $settings['tracking_facebook_pixel']->value ?? null;
+    $customHead = $settings['tracking_custom_head']->value ?? null;
+    } catch (\Throwable $e) {
+    $googlePixel = $googleAnalytics = $facebookPixel = $customHead = null;
+    }
+    ?>
+    <?php if($googlePixel): ?>
+    <?php echo $googlePixel; ?>
+
+    <?php endif; ?>
+    <?php if($googleAnalytics): ?>
+    <?php echo $googleAnalytics; ?>
+
+    <?php endif; ?>
+    <?php if($facebookPixel): ?>
+    <?php echo $facebookPixel; ?>
+
+    <?php endif; ?>
+    <?php if($customHead): ?>
+    <?php echo $customHead; ?>
+
+    <?php endif; ?>
+
     <?php echo $__env->yieldContent('head'); ?>
 </head>
 
@@ -161,8 +199,11 @@
     
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
-    <script src="<?php echo e(asset('assets/store/js/components/header.js')); ?>?v=<?php echo e(filemtime(public_path('assets/store/js/components/header.js'))); ?>" defer></script>
-    <script src="<?php echo e(asset('assets/store/js/store.js')); ?>?v=<?php echo e(filemtime(public_path('assets/store/js/store.js'))); ?>" defer></script>
+    
+    <script src="<?php echo e(asset('assets/store/js/bird.js')); ?>?v=1" defer async></script>
+
+    <script src="<?php echo e(asset('assets/store/js/components/header.js')); ?>?v=1" defer></script>
+    <script src="<?php echo e(asset('assets/store/js/store.js')); ?>?v=1" defer></script>
     <?php echo $__env->yieldContent('scripts'); ?>
 </body>
 
