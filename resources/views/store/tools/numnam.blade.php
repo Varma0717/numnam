@@ -1161,7 +1161,7 @@
 
 <script>
     // NumNam API Integration - Backend-powered weaning tracker
-    let currentUser = @json(auth() - > user());
+    let currentUser = @json(auth()->user());
     let babyProfile = null;
     let todayLogs = [];
     let recipes = [];
