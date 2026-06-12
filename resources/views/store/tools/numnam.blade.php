@@ -1,9 +1,11 @@
 @extends('store.layouts.app')
 
-@section('title', 'NumNam Weaning Tracker - NumNam')
-@section('meta_description', 'Track your baby\'s feeding journey with personalized insights, recipes, and developmental guidance using the NumNam Weaning Tracker.')
+@section('title', 'NumNam Weaning Tracker')
+@section('meta_description', 'Track your baby\'s weaning journey with recipes, community chat, and poop diagnostics.')
 
 @section('head')
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+
 <style>
     /* Hide breadcrumbs and alerts for tracker page */
     nav.breadcrumbs,
@@ -731,6 +733,7 @@
         <div class="tab" onclick="showPage('log', this)">➕ Log</div>
         <div class="tab" onclick="showPage('poop', this)">💩 Poop Guide</div>
         <div class="tab" onclick="showPage('recipes', this)">🍽️ Recipes</div>
+        <div class="tab" onclick="showPage('community', this)">💬 Community</div>
         <div class="tab" onclick="showPage('guide', this)">📖 Guide</div>
     </div>
 
@@ -997,6 +1000,30 @@
         </div>
     </div>
 
+    <!-- COMMUNITY CHAT -->
+    <div id="page-community" class="tracker-page">
+        <div class="section-title">💬 Community Chat</div>
+        <div class="section-sub">Connect with other parents on your weaning journey</div>
+
+        <div class="card">
+            <div id="community-rooms-container" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;">
+            </div>
+        </div>
+
+        <div id="community-messages-area" style="display:none;">
+            <div class="card">
+                <div class="card-title" id="room-name-display"></div>
+                <div id="messages-list" style="max-height:400px;overflow-y:auto;margin-bottom:16px;">
+                </div>
+                <div class="form-row">
+                    <input type="text" id="message-input" placeholder="Share your question or experience...">
+                </div>
+                <button class="btn btn-primary" onclick="sendCommunityMessage()" style="width:100%;">Send Message</button>
+                <button class="btn btn-outline" onclick="backToCommunityRooms()" style="width:100%;margin-top:8px;">← Back to Rooms</button>
+            </div>
+        </div>
+    </div>
+
     <!-- GUIDE -->
     <div id="page-guide" class="tracker-page">
         <div class="section-title">📖 Weaning Guide</div>
@@ -1133,8 +1160,101 @@
 </div>
 
 <script>
-    // Tool is accessible to everyone - no authentication required
-    let pendingLogEntry = null;
+    // NumNam API Integration - Backend-powered weaning tracker
+    let currentUser = @json(auth() - > user());
+    let babyProfile = null;
+    let todayLogs = [];
+    let recipes = [];
+    let communityRooms = [];
+    let currentLogType = 'milk';
+    let selectedPoopType = '';
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', async () => {
+        await loadBabyProfile();
+        await loadRecipes();
+        await loadCommunityRooms();
+        renderDashboard();
+        document.getElementById('dash-date').textContent = new Date().toLocaleDateString();
+    });
+
+    // API Helper: Get auth token from meta tag or localStorage
+    function getAuthToken() {
+        return document.querySelector('meta[name="csrf-token"]')?.content ||
+            localStorage.getItem('authToken') || '';
+    }
+
+    // Load baby profile from API
+    async function loadBabyProfile() {
+        try {
+            const response = await fetch('/api/v1/numnam/baby/profile', {
+                headers: {
+                    'Authorization': 'Bearer ' + getAuthToken(),
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await response.json();
+            if (data.data) {
+                babyProfile = data.data;
+                document.getElementById('age-display').textContent = babyProfile.age_months + ' months';
+                await loadTodayLogs();
+            }
+        } catch (error) {
+            console.log('Profile load - login required or API error', error);
+        }
+    }
+
+    // Load today's logs from API
+    async function loadTodayLogs() {
+        if (!babyProfile) return;
+        try {
+            const response = await fetch('/api/v1/numnam/logs/today', {
+                headers: {
+                    'Authorization': 'Bearer ' + getAuthToken(),
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await response.json();
+            todayLogs = data.data || [];
+        } catch (error) {
+            console.log('Logs load error', error);
+            todayLogs = [];
+        }
+    }
+
+    // Load recipes from API
+    async function loadRecipes() {
+        try {
+            const response = await fetch('/api/v1/numnam/recipes', {
+                headers: {
+                    'Authorization': 'Bearer ' + getAuthToken(),
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await response.json();
+            recipes = data.data || [];
+        } catch (error) {
+            console.log('Recipes load error', error);
+            recipes = [];
+        }
+    }
+
+    // Load community rooms from API
+    async function loadCommunityRooms() {
+        try {
+            const response = await fetch('/api/v1/numnam/community/rooms', {
+                headers: {
+                    'Authorization': 'Bearer ' + getAuthToken(),
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await response.json();
+            communityRooms = data.data || [];
+        } catch (error) {
+            console.log('Community rooms load error', error);
+            communityRooms = [];
+        }
+    }
 
     function showPage(id, el) {
         document.querySelectorAll('.tracker-page').forEach(p => p.classList.remove('active'));
@@ -1142,21 +1262,47 @@
         document.getElementById('page-' + id).classList.add('active');
         el.classList.add('active');
         if (id === 'dashboard') renderDashboard();
+        if (id === 'recipes') renderRecipes();
+        if (id === 'guide') renderGuide();
     }
 
     function showAgeModal() {
-        document.getElementById('age-input').value = state.babyAge;
+        if (!babyProfile) {
+            alert('Please login to use the weaning tracker');
+            return;
+        }
+        document.getElementById('age-input').value = babyProfile.age_months;
         document.getElementById('age-modal').style.display = 'flex';
     }
 
-    function saveAge() {
-        state.babyAge = parseInt(document.getElementById('age-input').value) || 8;
-        document.getElementById('age-display').textContent = state.babyAge + ' months';
-        document.getElementById('age-modal').style.display = 'none';
-        saveState();
-        renderDashboard();
-        renderRecipes();
-        renderGuide();
+    async function saveAge() {
+        const age = parseInt(document.getElementById('age-input').value) || babyProfile.age_months;
+        try {
+            const response = await fetch('/api/v1/numnam/baby/profile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + getAuthToken(),
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    age_months: age,
+                    baby_name: babyProfile.baby_name,
+                    weight_kg: babyProfile.weight_kg,
+                    milk_type: babyProfile.milk_type
+                })
+            });
+            const data = await response.json();
+            babyProfile = data.data;
+            document.getElementById('age-display').textContent = age + ' months';
+            document.getElementById('age-modal').style.display = 'none';
+            renderDashboard();
+            await loadRecipes();
+            renderRecipes();
+            renderGuide();
+        } catch (error) {
+            alert('Error updating profile: ' + error.message);
+        }
     }
 
     function selectLogType(type, el) {
@@ -1184,27 +1330,27 @@
         if (type === 'Type 1') return {
             cls: '',
             title: '🪨 Hydration Rescue!',
-            text: 'Baby seems a bit backed up. Add 1 tsp of ghee or coconut oil to the next meal. Offer 20ml of extra water after solids.'
+            text: 'Baby seems backed up. Add 1 tsp of ghee or coconut oil to the next meal. Offer water sips.'
         };
         if (type === 'Type 2') return {
             cls: '',
             title: '💧 More fluids needed',
-            text: 'Offer water sips after solids. Focus on high-moisture fruits like melon or pear today.'
+            text: 'Offer water sips after solids. Focus on water-rich fruits like melon or pear today.'
         };
         if (type === 'Type 4') return {
             cls: 'green',
             title: '✅ Perfect!',
-            text: 'Fibre and fluid balance is just right. Keep up what you\'re doing!'
+            text: 'Fibre and fluid balance is just right. Keep doing what you\'re doing!'
         };
         if (type === 'Type 6') return {
             cls: 'blue',
             title: '⚡ Slow down on new foods',
-            text: 'Possible sensitivity or fibre spike. Pause new high-fibre veggies for 2 days and monitor.'
+            text: 'Possible sensitivity. Pause new high-fibre veggies for 2 days and monitor.'
         };
         if (type === 'Red/Undigested') return {
             cls: '',
             title: '🍅 Digestion Check',
-            text: 'Bits of carrot or tomato? Totally normal! The gut is still learning to break down fibre. Try mashing more thoroughly for the next 2 days.'
+            text: 'Undigested bits are normal! Gut is learning. Try mashing more for the next 2 days.'
         };
         return {
             cls: 'blue',
@@ -1217,57 +1363,64 @@
         document.getElementById(displayId).textContent = el.value;
     }
 
-    function logEntry(type) {
-        // Tool is free and accessible to everyone - save directly
-        saveLogEntry(type);
-    }
+    async function logEntry(type) {
+        if (!babyProfile) {
+            alert('Please login first');
+            return;
+        }
 
-    function saveLogEntry(type) {
-        const now = new Date();
-        let entry = {
-            id: Date.now(),
-            type,
-            timestamp: now.toISOString()
+        const logData = {
+            type: type,
+            logged_at: new Date().toISOString()
         };
 
         if (type === 'milk') {
-            entry.volume = parseInt(document.getElementById('milk-slider').value);
-            entry.milkType = document.getElementById('milk-type').value;
-            entry.time = document.getElementById('milk-time').value;
-            entry.label = `${entry.volume}ml ${entry.milkType}`;
+            logData.volume_ml = parseInt(document.getElementById('milk-slider').value);
+            logData.milk_type = document.getElementById('milk-type').value;
         } else if (type === 'solid') {
-            entry.volume = parseInt(document.getElementById('solid-slider').value);
-            entry.food = document.getElementById('solid-food').value || 'Solids';
-            entry.texture = document.getElementById('solid-texture').value;
-            entry.finish = document.getElementById('solid-finish').value;
-            entry.time = document.getElementById('solid-time').value;
-            entry.label = `${entry.food} (${entry.volume}ml, ${entry.finish})`;
+            logData.volume_ml = parseInt(document.getElementById('solid-slider').value);
+            logData.food_name = document.getElementById('solid-food').value || 'Solids';
+            logData.texture = document.getElementById('solid-texture').value;
+            logData.finish_level = document.getElementById('solid-finish').value;
         } else if (type === 'water') {
-            entry.volume = parseInt(document.getElementById('water-slider').value);
-            entry.time = document.getElementById('water-time').value;
-            entry.label = `${entry.volume}ml water`;
+            logData.volume_ml = parseInt(document.getElementById('water-slider').value);
         } else if (type === 'poop') {
             if (!selectedPoopType) {
                 alert('Please select a poop type!');
                 return;
             }
-            entry.poopType = selectedPoopType;
-            entry.time = document.getElementById('poop-time').value;
-            entry.label = selectedPoopType;
+            logData.poop_type = selectedPoopType;
         }
 
-        state.logs.push(entry);
-        saveState();
-        renderDashboard();
+        try {
+            const response = await fetch('/api/v1/numnam/logs', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + getAuthToken(),
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(logData)
+            });
 
-        const btn = event.target;
-        const orig = btn.textContent;
-        btn.textContent = '✓ Saved!';
-        btn.style.background = '#4ECDC4';
-        setTimeout(() => {
-            btn.textContent = orig;
-            btn.style.background = '';
-        }, 1500);
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.message || 'Failed to save log');
+
+            await loadTodayLogs();
+            renderDashboard();
+            resetForm(type);
+
+            const btn = event.target;
+            const orig = btn.textContent;
+            btn.textContent = '✓ Saved!';
+            btn.style.background = '#4ECDC4';
+            setTimeout(() => {
+                btn.textContent = orig;
+                btn.style.background = '';
+            }, 1500);
+        } catch (error) {
+            alert('Error saving entry: ' + error.message);
+        }
     }
 
     function resetForm(type) {
@@ -1289,162 +1442,22 @@
         }
     }
 
-    function showGuestCheckoutModal() {
-        // Clear previous values
-        document.getElementById('guest-name').value = '';
-        document.getElementById('guest-email').value = '';
-        document.getElementById('guest-phone').value = '';
-        document.getElementById('guest-address').value = '';
-        document.getElementById('guest-checkout-modal').style.display = 'flex';
-    }
-
-    function closeGuestModal() {
-        document.getElementById('guest-checkout-modal').style.display = 'none';
-        pendingLogEntry = null;
-    }
-
-    async function proceedWithRazorpay() {
-        const name = document.getElementById('guest-name').value.trim();
-        const email = document.getElementById('guest-email').value.trim();
-        const phone = document.getElementById('guest-phone').value.trim();
-        const address = document.getElementById('guest-address').value.trim();
-
-        if (!name || !email || !phone) {
-            alert('Please fill in all required fields');
+    function renderDashboard() {
+        if (!babyProfile) {
+            document.getElementById('page-dashboard').innerHTML = '<div style="text-align:center;padding:40px;"><p>Please login to use the NumNam Tracker</p></div>';
             return;
         }
-
-        const btn = document.getElementById('guest-checkout-btn');
-        btn.disabled = true;
-        btn.textContent = 'Processing...';
-
-        try {
-            // Create guest checkout
-            const response = await fetch('{{ route("store.tools.guest-checkout") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
-                },
-                body: JSON.stringify({
-                    name,
-                    email,
-                    phone,
-                    address
-                })
-            });
-
-            const data = await response.json();
-
-            if (!data.success) {
-                alert(data.message || 'Failed to create checkout');
-                btn.disabled = false;
-                btn.textContent = 'Pay & Verify (₹1)';
-                return;
-            }
-
-            // Open Razorpay modal
-            openRazorpayCheckout(data);
-        } catch (error) {
-            console.error('Checkout error:', error);
-            alert('An error occurred. Please try again.');
-            btn.disabled = false;
-            btn.textContent = 'Pay & Verify (₹1)';
-        }
-    }
-
-    function openRazorpayCheckout(checkoutData) {
-        const script = document.createElement('script');
-        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-        script.async = true;
-        script.onload = () => {
-            const options = {
-                key: checkoutData.key_id,
-                amount: checkoutData.amount,
-                currency: checkoutData.currency,
-                order_id: checkoutData.razorpay_order_id,
-                handler: async function(response) {
-                    await verifyPayment(checkoutData.guest_checkout_id, response);
-                },
-                prefill: {
-                    name: document.getElementById('guest-name').value,
-                    email: document.getElementById('guest-email').value,
-                    contact: document.getElementById('guest-phone').value
-                },
-                theme: {
-                    color: '#FF6B8A'
-                },
-                modal: {
-                    ondismiss: function() {
-                        const btn = document.getElementById('guest-checkout-btn');
-                        btn.disabled = false;
-                        btn.textContent = 'Pay & Verify (₹1)';
-                    }
-                }
-            };
-
-            const rzp = new Razorpay(options);
-            rzp.open();
-        };
-        document.body.appendChild(script);
-    }
-
-    async function verifyPayment(guestCheckoutId, response) {
-        const btn = document.getElementById('guest-checkout-btn');
-        btn.textContent = 'Verifying payment...';
-
-        try {
-            const verifyResponse = await fetch('{{ route("store.tools.verify-guest-payment") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
-                },
-                body: JSON.stringify({
-                    guest_checkout_id: guestCheckoutId,
-                    razorpay_payment_id: response.razorpay_payment_id,
-                    razorpay_order_id: response.razorpay_order_id,
-                    razorpay_signature: response.razorpay_signature
-                })
-            });
-
-            const data = await verifyResponse.json();
-
-            if (data.success) {
-                // Payment successful - save the pending log entry
-                closeGuestModal();
-                if (pendingLogEntry) {
-                    saveLogEntry(pendingLogEntry.type);
-                    pendingLogEntry = null;
-                }
-                alert('✓ Payment verified! Your entry has been saved.');
-            } else {
-                alert(data.message || 'Payment verification failed');
-                btn.disabled = false;
-                btn.textContent = 'Pay & Verify (₹1)';
-            }
-        } catch (error) {
-            console.error('Verification error:', error);
-            alert('An error occurred during verification. Please try again.');
-            btn.disabled = false;
-            btn.textContent = 'Pay & Verify (₹1)';
-        }
-    }
-
-    function renderDashboard() {
-        const today = new Date().toDateString();
-        const todayLogs = state.logs.filter(l => new Date(l.timestamp).toDateString() === today);
 
         let totalMilk = 0,
             totalSolid = 0,
             totalWater = 0,
             lastPoop = '—';
 
-        todayLogs.forEach(l => {
-            if (l.type === 'milk') totalMilk += l.volume || 0;
-            if (l.type === 'solid') totalSolid += l.volume || 0;
-            if (l.type === 'water') totalWater += l.volume || 0;
-            if (l.type === 'poop') lastPoop = l.poopType?.replace('Type ', 'T') || '—';
+        todayLogs.forEach(log => {
+            if (log.type === 'milk') totalMilk += log.volume_ml || 0;
+            if (log.type === 'solid') totalSolid += log.volume_ml || 0;
+            if (log.type === 'water') totalWater += log.volume_ml || 0;
+            if (log.type === 'poop') lastPoop = log.poop_type?.replace('Type ', 'T') || '—';
         });
 
         document.getElementById('dash-milk').textContent = totalMilk;
@@ -1490,9 +1503,17 @@
                     cls: 'water'
                 }
             };
-            logList.innerHTML = [...todayLogs].reverse().map(l => {
-                const ic = icons[l.type];
-                return `<div class="log-entry"><div class="log-icon ${ic.cls}">${ic.icon}</div><div class="log-info"><strong>${l.label}</strong><div class="log-time">${l.time}</div></div></div>`;
+            logList.innerHTML = [...todayLogs].reverse().map(log => {
+                const ic = icons[log.type];
+                const time = new Date(log.logged_at).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                let label = `${log.volume_ml}ml`;
+                if (log.type === 'milk') label += ` ${log.milk_type}`;
+                if (log.type === 'solid') label = `${log.food_name} (${log.volume_ml}ml)`;
+                if (log.type === 'poop') label = log.poop_type;
+                return `<div class="log-entry"><div class="log-icon ${ic.cls}">${ic.icon}</div><div class="log-info"><strong>${label}</strong><div class="log-time">${time}</div></div></div>`;
             }).join('');
         }
     }
@@ -1503,26 +1524,26 @@
 
         const poopLog = todayLogs.filter(l => l.type === 'poop').pop();
         if (poopLog) {
-            if (poopLog.poopType === 'Type 1') {
+            if (poopLog.poop_type === 'Type 1') {
                 insights.push({
                     cls: '',
                     title: '🪨 Hydration Rescue!',
-                    text: 'Output looks dry. For the next meal, add 1 tsp of healthy fat (ghee, coconut oil, or rapeseed oil). This acts as a natural gut lubricant. Also offer 2–3 extra sips of water after solids.'
+                    text: 'Add 1 tsp healthy fat (ghee, oil) to next meal. Offer water sips.'
                 });
-            } else if (poopLog.poopType === 'Type 4') {
+            } else if (poopLog.poop_type === 'Type 4') {
                 insights.push({
                     cls: 'green',
                     title: '✅ Perfect Output!',
-                    text: 'Fibre and fluid balance is exactly right. Keep doing what you\'re doing — baby is digesting beautifully.'
+                    text: 'Fibre balance is ideal. Keep doing what you\'re doing!'
                 });
             }
         }
 
-        if (state.babyAge >= 10 && totalSolid < 50 && totalMilk > 400) {
+        if (babyProfile.age_months >= 10 && totalSolid < 50 && totalMilk > 400) {
             insights.push({
                 cls: 'blue',
                 title: '🥛 Milk-Heavy Alert',
-                text: `Baby is loving their milk, but at ${state.babyAge} months we're in the golden window for palate tuning! Try introducing a bitter green today to help with the transition to family foods.`
+                text: `At ${babyProfile.age_months} months, try introducing bitter greens for palate tuning!`
             });
         }
 
@@ -1530,7 +1551,7 @@
             insights.push({
                 cls: '',
                 title: '💧 Water Time!',
-                text: 'Baby is eating more solids! Time to offer a few sips of water to keep digestion happy and the poop-o-meter in the green zone.'
+                text: 'Baby eating solids! Offer water sips to keep digestion happy.'
             });
         }
 
@@ -1543,20 +1564,20 @@
 
     function renderMilestone() {
         const area = document.getElementById('milestone-area');
-        const age = state.babyAge;
+        const age = babyProfile.age_months;
         let msg = null;
 
         if (age === 6) msg = {
             title: '🎉 First Spoon!',
-            text: 'Today is about the tongue, not the tummy! If baby pushes food out — that\'s the extrusion reflex, not rejection. Start with 1–2 spoons of a single veggie.'
+            text: 'Focus on tongue & taste, not nutrition. Start with 1-2 spoons single veggie.'
         };
         else if (age === 8) msg = {
             title: '🌟 Bridge to Texture!',
-            text: 'Baby is getting ~30% of energy from solids. If they seem less interested in milk, that\'s okay! Make every bite nutrient-dense.'
+            text: 'Baby getting 30% energy from solids. Make every bite nutrient-dense.'
         };
         else if (age === 10) msg = {
-            title: '🍽️ Texture Challenge Time!',
-            text: 'Stop the blender! Moving to mashed and soft lumps now helps develop jaw muscles needed for speech. If baby gags slightly, stay calm — it\'s a safety reflex.'
+            title: '🍽️ Texture Challenge!',
+            text: 'Time for mashed & soft lumps! Helps develop jaw muscles for speech.'
         };
 
         if (msg) {
@@ -1566,90 +1587,18 @@
         }
     }
 
-    const RECIPES = [{
-            id: 1,
-            emoji: '🥕',
-            name: 'Carrot & Ginger Purée',
-            age: 6,
-            texture: 'Smooth purée',
-            hearts: 42,
-            notes: 'Rich in beta-carotene. Good first food.'
-        },
-        {
-            id: 2,
-            emoji: '🥦',
-            name: 'Broccoli & Apple Mash',
-            age: 7,
-            texture: 'Thick purée',
-            hearts: 38,
-            notes: 'Bitter-sweet combo for palate tuning.'
-        },
-        {
-            id: 3,
-            emoji: '🍠',
-            name: 'Sweet Potato & Coconut',
-            age: 6,
-            texture: 'Smooth purée',
-            hearts: 61,
-            notes: 'Healthy fat + iron-rich combo.'
-        },
-        {
-            id: 4,
-            emoji: '🍌',
-            name: 'Banana & Oat Porridge',
-            age: 7,
-            texture: 'Mashed',
-            hearts: 55,
-            notes: 'Natural binder — great for Type 6 poop!'
-        },
-        {
-            id: 5,
-            emoji: '🥚',
-            name: 'Scrambled Egg Fingers',
-            age: 8,
-            texture: 'Soft lumps',
-            hearts: 29,
-            notes: 'Allergen intro. Serve soft.'
-        },
-        {
-            id: 6,
-            emoji: '🐠',
-            name: 'Salmon & Sweet Pea Mash',
-            age: 9,
-            texture: 'Mashed',
-            hearts: 47,
-            notes: 'Omega-3 for brain development.'
-        },
-        {
-            id: 7,
-            emoji: '🫘',
-            name: 'Lentil & Spinach Dhal',
-            age: 7,
-            texture: 'Thick purée',
-            hearts: 66,
-            notes: 'Iron-rich. Perfect for Indian weaning.'
-        },
-        {
-            id: 8,
-            emoji: '🍐',
-            name: 'Pear & Prune Purée',
-            age: 6,
-            texture: 'Smooth purée',
-            hearts: 33,
-            notes: 'Natural gut mover — great for Type 1/2 poop.'
-        },
-    ];
-
     function renderRecipes() {
+        if (!babyProfile) return;
+
         const grid = document.getElementById('recipe-grid');
-        const age = state.babyAge;
-        const filtered = RECIPES.filter(r => r.age <= age);
+        const age = babyProfile.age_months;
+        const filtered = recipes.filter(r => r.min_age_months <= age);
 
         const insightEl = document.getElementById('recipes-insight');
         if (age >= 6 && age < 8) {
-            insightEl.innerHTML = `<div class="insight"><div class="ins-title">💡 Stage Tip</div>We're showing recipes for smooth and thick purées. As baby gets older, we'll unlock mashed and finger-food recipes!</div>`;
+            insightEl.innerHTML = `<div class="insight"><div class="ins-title">💡 Stage Tip</div>Smooth & thick purées recommended. More textures unlock as baby grows!</div>`;
         } else if (age >= 8) {
-            insightEl.innerHTML = `<div class="insight green"><div class="ins-title">💡 Stage Tip</div>Baby is ready for lumpy mashes and soft finger foods! These recipes are designed to build chewing skills and independence.</div>`;
+            insightEl.innerHTML = `<div class="insight green"><div class="ins-title">💡 Stage Tip</div>Baby ready for lumpy mashes & soft finger foods! Build chewing skills & independence.</div>`;
         }
 
         grid.innerHTML = filtered.map(r => `
@@ -1657,22 +1606,32 @@
             <div class="r-emoji">${r.emoji}</div>
             <div class="r-name">${r.name}</div>
             <div class="r-meta">${r.texture}</div>
-            <div class="r-hearts"><span class="heart-btn" onclick="heartRecipe(${r.id}, this)">❤️</span> <span id="hearts-${r.id}">${r.hearts}</span></div>
+            <div class="r-hearts"><span class="heart-btn" onclick="toggleRecipeLike(${r.id}, this)">❤️</span> <span id="hearts-${r.id}">${r.hearts_count}</span></div>
         </div>
-    `).join('');
+        `).join('');
     }
 
-    function heartRecipe(id, el) {
-        const rec = RECIPES.find(r => r.id === id);
-        if (!rec) return;
-        if (state.heartedRecipes.has(id)) {
-            state.heartedRecipes.delete(id);
-            document.getElementById('hearts-' + id).textContent = rec.hearts;
-        } else {
-            state.heartedRecipes.add(id);
-            document.getElementById('hearts-' + id).textContent = rec.hearts + 1;
+    async function toggleRecipeLike(recipeId, el) {
+        if (!babyProfile) {
+            alert('Please login to like recipes');
+            return;
         }
-        saveState();
+
+        try {
+            const response = await fetch(`/api/v1/numnam/recipes/${recipeId}/like`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + getAuthToken(),
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await response.json();
+            if (data.data) {
+                document.getElementById('hearts-' + recipeId).textContent = data.data.hearts_count;
+            }
+        } catch (error) {
+            console.log('Error liking recipe:', error);
+        }
     }
 
     function renderGuide() {
@@ -1680,28 +1639,161 @@
                 age: '4-6 mo',
                 emoji: '1️⃣',
                 title: 'Spoon Skills',
-                desc: 'Focus on the tongue-thrust reflex & taste exposure, not nutrition yet.'
+                desc: 'Focus on tongue-thrust reflex & taste exposure, not nutrition yet.'
             },
             {
                 age: '6-8 mo',
                 emoji: '2️⃣',
                 title: 'Texture Transition',
-                desc: 'Move from smooth to slightly lumpy. Baby can sit up with support.'
+                desc: 'Move from smooth to slightly lumpy. Baby sits with support.'
             },
             {
                 age: '8-10 mo',
                 emoji: '3️⃣',
                 title: 'Chewing Practice',
-                desc: 'Soft lumps & mashes. Baby begins pincer grasp (thumb + fingers).'
+                desc: 'Soft lumps & mashes. Baby develops pincer grasp (thumb + fingers).'
             },
         ];
 
-        const currentAge = state.babyAge;
+        const currentAge = babyProfile ? babyProfile.age_months : 0;
         document.getElementById('guide-stages').innerHTML = stages.map((s, i) => {
             return `<div class="guide-stage" style="${i === stages.length - 1 ? 'border-bottom:none' : ''}"><div class="stage-dot s${i+1}">${i+1}</div><div class="stage-info"><h4>${s.emoji} ${s.title} (${s.age})</h4><p>${s.desc}</p></div></div>`;
         }).join('');
     }
 
-    init();
+    // Community Chat Functions
+    function renderCommunityRooms() {
+        if (!communityRooms.length) {
+            document.getElementById('community-rooms-container').innerHTML = '<p>Loading community rooms...</p>';
+            return;
+        }
+
+        const roomsHtml = communityRooms.map(room => `
+            <div style="background:white;border:1px solid #FFD6E5;border-radius:10px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;" 
+                 onclick="showCommunityRoom(${room.id}, '${room.name.replace(/'/g, "\\'")}')">
+                <div style="font-size:28px;margin-bottom:8px;">${room.icon}</div>
+                <div style="font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:4px;">${room.name}</div>
+                <div style="font-size:11px;color:#999;">${room.description || 'Chat here'}</div>
+            </div>
+        `).join('');
+
+        document.getElementById('community-rooms-container').innerHTML = roomsHtml;
+    }
+
+    let currentRoomId = null;
+    let currentRoomMessages = [];
+
+    async function showCommunityRoom(roomId, roomName) {
+        currentRoomId = roomId;
+        document.getElementById('community-rooms-container').style.display = 'none';
+        document.getElementById('community-messages-area').style.display = 'block';
+        document.getElementById('room-name-display').textContent = roomName;
+        document.getElementById('message-input').value = '';
+
+        await loadCommunityRoomMessages(roomId);
+    }
+
+    function backToCommunityRooms() {
+        currentRoomId = null;
+        document.getElementById('community-rooms-container').style.display = 'grid';
+        document.getElementById('community-messages-area').style.display = 'none';
+    }
+
+    async function loadCommunityRoomMessages(roomId) {
+        try {
+            const response = await fetch(`/api/v1/numnam/community/rooms/${roomId}/messages`, {
+                headers: {
+                    'Authorization': 'Bearer ' + getAuthToken(),
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await response.json();
+            currentRoomMessages = data.data || [];
+            renderCommunityMessages();
+        } catch (error) {
+            console.log('Error loading messages:', error);
+        }
+    }
+
+    function renderCommunityMessages() {
+        if (!currentRoomMessages.length) {
+            document.getElementById('messages-list').innerHTML = '<p style="text-align:center;color:#999;">No messages yet. Be the first to share!</p>';
+            return;
+        }
+
+        const messagesHtml = currentRoomMessages.map(msg => `
+            <div style="border-bottom:1px solid #FFD6E5;padding:12px 0;">
+                <div style="font-weight:600;color:#1a1a1a;margin-bottom:4px;">${msg.user.name}</div>
+                <div style="color:#333;font-size:13px;margin-bottom:6px;line-height:1.5;">${msg.message}</div>
+                <div style="font-size:11px;color:#999;display:flex;justify-content:space-between;">
+                    <span>${new Date(msg.created_at).toLocaleString()}</span>
+                    <span onclick="likeCommunityMessage(${msg.id}, this)" style="cursor:pointer;">❤️ <span id="likes-${msg.id}">${msg.likes_count}</span></span>
+                </div>
+            </div>
+        `).join('');
+
+        document.getElementById('messages-list').innerHTML = messagesHtml;
+        document.getElementById('messages-list').scrollTop = document.getElementById('messages-list').scrollHeight;
+    }
+
+    async function sendCommunityMessage() {
+        if (!babyProfile) {
+            alert('Please login to send messages');
+            return;
+        }
+
+        const message = document.getElementById('message-input').value.trim();
+        if (!message || !currentRoomId) return;
+
+        try {
+            const response = await fetch(`/api/v1/numnam/community/rooms/${currentRoomId}/messages`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + getAuthToken(),
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: message
+                })
+            });
+
+            if (!response.ok) throw new Error('Failed to send message');
+
+            await loadCommunityRoomMessages(currentRoomId);
+        } catch (error) {
+            alert('Error sending message: ' + error.message);
+        }
+    }
+
+    async function likeCommunityMessage(messageId, el) {
+        if (!babyProfile) {
+            alert('Please login to like messages');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/v1/numnam/community/messages/${messageId}/like`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + getAuthToken(),
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await response.json();
+            if (data.data) {
+                document.getElementById('likes-' + messageId).textContent = data.data.likes_count;
+            }
+        } catch (error) {
+            console.log('Error liking message:', error);
+        }
+    }
+
+    // Re-render community rooms when community tab is clicked
+    document.addEventListener('click', function(e) {
+        if (e.target.textContent.includes('💬 Community')) {
+            renderCommunityRooms();
+        }
+    });
 </script>
 @endsection
