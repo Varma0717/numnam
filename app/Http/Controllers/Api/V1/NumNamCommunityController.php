@@ -18,7 +18,7 @@ class NumNamCommunityController extends Controller
             ->get();
 
         return response()->json([
-            'rooms' => $rooms,
+            'data' => $rooms,
         ]);
     }
 
@@ -36,13 +36,7 @@ class NumNamCommunityController extends Controller
             ->paginate($perPage, ['*'], 'page', $page);
 
         return response()->json([
-            'room' => $room,
-            'messages' => $messages->reverse()->values(),
-            'pagination' => [
-                'current_page' => $messages->currentPage(),
-                'total' => $messages->total(),
-                'per_page' => $messages->perPage(),
-            ],
+            'data' => $messages->reverse()->values(),
         ]);
     }
 
@@ -78,8 +72,9 @@ class NumNamCommunityController extends Controller
         $message->incrementLikes();
 
         return response()->json([
-            'message' => 'Message liked',
-            'likes_count' => $message->likes_count,
+            'data' => [
+                'likes_count' => $message->likes_count,
+            ]
         ]);
     }
 

@@ -47,8 +47,7 @@ class NumNamFeedLogController extends Controller
         $logs = FeedLog::getTodayLogs($profile->id);
 
         return response()->json([
-            'logs' => $logs,
-            'count' => $logs->count(),
+            'data' => $logs,
         ]);
     }
 

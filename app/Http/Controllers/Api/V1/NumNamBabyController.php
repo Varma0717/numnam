@@ -16,7 +16,9 @@ class NumNamBabyController extends Controller
         $profile = BabyProfile::where('user_id', $request->user()->id)
             ->first() ?? new BabyProfile(['user_id' => $request->user()->id]);
 
-        return response()->json($profile);
+        return response()->json([
+            'data' => $profile,
+        ]);
     }
 
     /**

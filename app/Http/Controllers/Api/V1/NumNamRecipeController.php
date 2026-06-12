@@ -18,8 +18,7 @@ class NumNamRecipeController extends Controller
         $recipes = NumNamRecipe::getForAge($profile->age_months);
 
         return response()->json([
-            'baby_age' => $profile->age_months,
-            'recipes' => $recipes,
+            'data' => $recipes,
         ]);
     }
 
@@ -40,9 +39,10 @@ class NumNamRecipeController extends Controller
         $recipe->refresh();
 
         return response()->json([
-            'message' => 'Recipe like toggled',
-            'liked' => $recipe->likedByUsers()->where('user_id', $request->user()->id)->exists(),
-            'hearts_count' => $recipe->hearts_count,
+            'data' => [
+                'hearts_count' => $recipe->hearts_count,
+                'liked' => $recipe->likedByUsers()->where('user_id', $request->user()->id)->exists(),
+            ]
         ]);
     }
 
