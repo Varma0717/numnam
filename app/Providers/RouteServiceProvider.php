@@ -29,6 +29,12 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
+            // NumNam API routes with web middleware (session auth)
+            Route::middleware('web')
+                ->prefix('api/v1')
+                ->name('api.v1.')
+                ->group(base_path('routes/numnam-api.php'));
+
             Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
