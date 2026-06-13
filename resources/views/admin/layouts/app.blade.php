@@ -246,6 +246,18 @@
                     </a>
                 </li>
                 @endif
+                @if(Route::has('admin.tools.index'))
+                <li class="{{ request()->routeIs('admin.tools*') ? 'current' : '' }}">
+                    <a href="{{ route('admin.tools.index') }}">
+                        <span class="menu-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 6l-9.5-1L9 6M12.5 6v12m-7-6h14M6 19h12" />
+                            </svg>
+                        </span>
+                        Tools Analytics
+                    </a>
+                </li>
+                @endif
                 <li class="menu-separator"></li>
                 <li class="{{ request()->routeIs('admin.settings*') ? 'current' : '' }}">
                     <a href="{{ route('admin.settings.index') }}">

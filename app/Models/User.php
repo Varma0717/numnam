@@ -9,6 +9,7 @@ use App\Models\RewardLedger;
 use App\Models\Wishlist;
 use App\Models\CartItem;
 use App\Models\ProductReview;
+use App\Models\BabyProfile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -101,5 +102,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function reviews()
     {
         return $this->hasMany(ProductReview::class);
+    }
+
+    public function babyProfiles()
+    {
+        return $this->hasMany(BabyProfile::class);
+    }
+
+    public function babyProfile()
+    {
+        return $this->hasOne(BabyProfile::class);
     }
 }

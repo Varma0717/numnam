@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\MenuManagementController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\SubscriptionManagementController;
+use App\Http\Controllers\Admin\ToolsManagementController;
 use App\Http\Controllers\Web\CustomerAuthController;
 use App\Http\Controllers\Web\Payments\CheckoutPaymentController;
 use App\Http\Controllers\Web\PasswordResetController;
@@ -243,6 +244,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/reports/sales', [ReportsController::class, 'sales'])->name('reports.sales');
         Route::get('/reports/customers', [ReportsController::class, 'customers'])->name('reports.customers');
         Route::get('/reports/stock', [ReportsController::class, 'stock'])->name('reports.stock');
+
+        // Tools Usage (NumNam Features - Logging, Community, etc.)
+        Route::get('/tools', [ToolsManagementController::class, 'index'])->name('tools.index');
+        Route::get('/tools/feed-logs', [ToolsManagementController::class, 'feedLogs'])->name('tools.feed-logs');
+        Route::get('/tools/community', [ToolsManagementController::class, 'community'])->name('tools.community');
+        Route::get('/tools/customer/{customer}', [ToolsManagementController::class, 'customerDetail'])->name('tools.customer-detail');
+
+        // Tools Usage (NumNam Features)
+        Route::get('/tools', [ToolsManagementController::class, 'index'])->name('tools.index');
+        Route::get('/tools/feed-logs', [ToolsManagementController::class, 'feedLogs'])->name('tools.feed-logs');
+        Route::get('/tools/community', [ToolsManagementController::class, 'community'])->name('tools.community');
+        Route::get('/tools/customer/{customer}', [ToolsManagementController::class, 'customerDetail'])->name('tools.customer-detail');
 
         // Bulk actions
         Route::post('/products/bulk', [ProductManagementController::class, 'bulk'])->name('products.bulk');
