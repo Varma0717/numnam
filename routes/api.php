@@ -136,12 +136,15 @@ Route::prefix('v1')->group(function () {
         Route::delete('logs/{feedLog}', [NumNamFeedLogController::class, 'destroy']);
         Route::delete('logs/today/clear', [NumNamFeedLogController::class, 'clearToday']);
 
-        // Community Chat - Write Endpoints (Protected)
-        Route::post('community/rooms/{room}/messages', [NumNamCommunityController::class, 'sendMessage']);
-        Route::post('community/messages/{message}/like', [NumNamCommunityController::class, 'likeMessage']);
-
         // Recipes - Write Endpoints (Protected)
         Route::post('recipes/{recipe}/like', [NumNamRecipeController::class, 'toggleLike']);
+    });
+
+    // ── NumNam Community Chat - Write Endpoints (Web Session Auth Only) ─────────────────
+    Route::prefix('numnam')->middleware('auth:web')->group(function () {
+        // Community Chat - Write Endpoints (Protected by session)
+        Route::post('community/rooms/{room}/messages', [NumNamCommunityController::class, 'sendMessage']);
+        Route::post('community/messages/{message}/like', [NumNamCommunityController::class, 'likeMessage']);
     });
 
     // ── Admin CMS (AJAX JSON API) ───────────────────────────────────────
