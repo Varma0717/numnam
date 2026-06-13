@@ -90,83 +90,43 @@
             const data = await response.json();
             const rooms = data.data || [];
 
-            const sampleRooms = [{
-                    id: 1,
-                    name: "First Time Parents",
-                    description: "For parents starting their weaning journey. Share questions and experiences.",
-                    members: 1250,
-                    messages_today: 248,
-                    emoji: "👶"
-                },
-                {
-                    id: 2,
-                    name: "Recipe Sharing",
-                    description: "Share and discuss homemade baby food recipes that work for your little ones.",
-                    members: 890,
-                    messages_today: 156,
-                    emoji: "🍽️"
-                },
-                {
-                    id: 3,
-                    name: "Allergy Support",
-                    description: "Support group for parents dealing with food allergies and intolerances.",
-                    members: 520,
-                    messages_today: 94,
-                    emoji: "⚠️"
-                },
-                {
-                    id: 4,
-                    name: "Picky Eaters",
-                    description: "Tips and tricks for dealing with picky eaters and food refusal.",
-                    members: 1420,
-                    messages_today: 312,
-                    emoji: "🤔"
-                },
-                {
-                    id: 5,
-                    name: "Nutrition & Development",
-                    description: "Discuss nutrition, milestones, and developmental concerns with experts.",
-                    members: 680,
-                    messages_today: 127,
-                    emoji: "🧠"
-                },
-                {
-                    id: 6,
-                    name: "Product Reviews",
-                    description: "Share and read reviews of baby feeding products and equipment.",
-                    members: 950,
-                    messages_today: 203,
-                    emoji: "⭐"
-                }
-            ];
+            // Use real rooms from API - no sample data needed
+            if (rooms.length === 0) {
+                document.getElementById('rooms-container').innerHTML = `
+                    <div class="text-center py-12">
+                        <p class="text-slate-500">No community rooms available yet. Check back soon!</p>
+                    </div>
+                `;
+                return;
+            }
 
-            // Update stats
-            const totalMembers = sampleRooms.reduce((sum, r) => sum + r.members, 0);
-            const totalMessages = sampleRooms.reduce((sum, r) => sum + r.messages_today, 0);
+            // Update stats based on real data
+            document.getElementById('room-count').textContent = rooms.length;
+            document.getElementById('member-count').textContent = '--';
+            let totalMessages = 0;
 
-            document.getElementById('member-count').textContent = totalMembers.toLocaleString();
-            document.getElementById('room-count').textContent = sampleRooms.length;
-            document.getElementById('message-count').textContent = totalMessages.toLocaleString();
-
-            // Display rooms
-            const roomsHtml = sampleRooms.map(room => `
+            // Display real rooms from database
+            const roomsHtml = rooms.map(room => `
                 <div class="rounded-2xl border border-slate-200 p-5 hover:border-numnam-300 hover:shadow-md transition cursor-pointer" onclick="joinRoom(${room.id})">
                     <div class="flex items-start gap-4">
-                        <div class="text-4xl">${room.emoji}</div>
+                        <div class="text-4xl">${room.icon || '💬'}</div>
                         <div class="flex-1">
                             <h3 class="font-bold text-slate-900 text-lg">${room.name}</h3>
                             <p class="text-sm text-slate-600 mt-1">${room.description}</p>
                             <div class="flex gap-4 mt-3 text-xs text-slate-500">
-                                <span>👥 ${room.members.toLocaleString()} members</span>
-                                <span>💬 ${room.messages_today} today</span>
+                                <span>💬 ${room.message_count || 0} messages</span>
                             </div>
                         </div>
                         <button class="rounded-lg bg-numnam-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-numnam-700">
-                            Join
+                            Enter
                         </button>
                     </div>
                 </div>
             `).join('');
+
+            // Calculate total messages
+            totalMessages = rooms.reduce((sum, r) => sum + (r.message_count || 0), 0);
+            document.getElementById('message-count').textContent = totalMessages;
 
             document.getElementById('rooms-container').innerHTML = `
                 <div class="space-y-4">
@@ -184,8 +144,8 @@
     }
 
     function joinRoom(roomId) {
-        // TODO: Implement room joining and chat interface
-        alert('Room joining feature coming soon!');
+        // Navigate to room detail page
+        window.location.href = `/community/${roomId}`;
     }
 
     // Load rooms on page load
