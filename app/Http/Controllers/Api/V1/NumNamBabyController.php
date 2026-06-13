@@ -31,7 +31,7 @@ class NumNamBabyController extends Controller
             'baby_name' => 'required|string|max:100',
             'age_months' => 'required|integer|min:5|max:36',
             'weight_kg' => 'nullable|numeric|min:3|max:20',
-            'milk_type' => 'required|in:breast,formula',
+            'milk_type' => 'required|in:breast,formula,combination',
         ]);
 
         $profile = BabyProfile::updateOrCreate(

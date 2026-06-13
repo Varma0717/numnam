@@ -28,7 +28,7 @@ class NumNamFeedLogController extends Controller
         $validated = $request->validate([
             'type' => 'required|in:milk,solid,water,poop',
             'volume_ml' => 'required_if:type,milk,solid,water|integer|min:1',
-            'milk_type' => 'required_if:type,milk|in:breast,formula',
+            'milk_type' => 'required_if:type,milk|in:breast,formula,combination',
             'food_name' => 'required_if:type,solid|string|max:100',
             'food_type' => 'required_if:type,solid|in:veggie,fruit,protein,grain,dairy,mixed',
             'texture' => 'required_if:type,solid|string|max:50',

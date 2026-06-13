@@ -11,7 +11,7 @@ class FeedLog extends Model
         'baby_profile_id',
         'type', // milk, solid, water, poop
         'volume_ml',
-        'milk_type', // breast, formula
+        'milk_type', // breast, formula, combination
         'food_name',
         'food_type', // veggie, fruit, protein, grain, dairy, mixed
         'texture', // smooth, thick, mashed, lumpy, chopped
@@ -35,7 +35,12 @@ class FeedLog extends Model
     public function getCaloriesAttribute()
     {
         if ($this->type === 'milk') {
-            $kcalPerMl = $this->milk_type === 'breast' ? 0.70 : 0.67;
+            $kcalPerMl = match($this->milk_type) {
+                'breast' => 0.70,
+                'formula' => 0.67,
+                'combination' => 0.685, // average of breast and formula
+                default => 0.68,
+            };
             return round($this->volume_ml * $kcalPerMl);
         }
 
