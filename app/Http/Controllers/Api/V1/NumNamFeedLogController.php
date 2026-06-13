@@ -14,7 +14,16 @@ class NumNamFeedLogController extends Controller
      */
     public function store(Request $request)
     {
-        $profile = BabyProfile::where('user_id', $request->user()->id)->firstOrFail();
+        $profile = BabyProfile::where('user_id', $request->user()->id)->first();
+
+        // Auto-create profile if it doesn't exist
+        if (!$profile) {
+            $profile = BabyProfile::create([
+                'user_id' => $request->user()->id,
+                'name' => 'My Baby',
+                'date_of_birth' => now()->subMonths(6), // Default to 6 months old
+            ]);
+        }
 
         $validated = $request->validate([
             'type' => 'required|in:milk,solid,water,poop',
@@ -44,7 +53,12 @@ class NumNamFeedLogController extends Controller
      */
     public function todayLogs(Request $request)
     {
-        $profile = BabyProfile::where('user_id', $request->user()->id)->firstOrFail();
+        $profile = BabyProfile::where('user_id', $request->user()->id)->first();
+
+        if (!$profile) {
+            return response()->json(['data' => []]);
+        }
+
         $logs = FeedLog::getTodayLogs($profile->id);
 
         return response()->json([
@@ -57,9 +71,9 @@ class NumNamFeedLogController extends Controller
      */
     public function destroy(Request $request, FeedLog $feedLog)
     {
-        $profile = BabyProfile::where('user_id', $request->user()->id)->firstOrFail();
+        $profile = BabyProfile::where('user_id', $request->user()->id)->first();
 
-        if ($feedLog->baby_profile_id !== $profile->id) {
+        if (!$profile || $feedLog->baby_profile_id !== $profile->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
@@ -73,7 +87,11 @@ class NumNamFeedLogController extends Controller
      */
     public function clearToday(Request $request)
     {
-        $profile = BabyProfile::where('user_id', $request->user()->id)->firstOrFail();
+        $profile = BabyProfile::where('user_id', $request->user()->id)->first();
+
+        if (!$profile) {
+            return response()->json(['message' => 'No baby profile found']);
+        }
 
         FeedLog::where('baby_profile_id', $profile->id)
             ->whereDate('logged_at', today())

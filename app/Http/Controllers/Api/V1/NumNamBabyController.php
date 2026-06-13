@@ -50,7 +50,17 @@ class NumNamBabyController extends Controller
      */
     public function dashboardSummary(Request $request)
     {
-        $profile = BabyProfile::where('user_id', $request->user()->id)->firstOrFail();
+        $profile = BabyProfile::where('user_id', $request->user()->id)->first();
+
+        // Auto-create profile if it doesn't exist
+        if (!$profile) {
+            $profile = BabyProfile::create([
+                'user_id' => $request->user()->id,
+                'name' => 'My Baby',
+                'date_of_birth' => now()->subMonths(6),
+            ]);
+        }
+
         $logs = FeedLog::getTodayLogs($profile->id);
 
         $milk = $logs->where('type', 'milk')->sum('volume_ml');
