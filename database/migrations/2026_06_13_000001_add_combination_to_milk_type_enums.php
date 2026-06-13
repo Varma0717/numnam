@@ -1,32 +1,25 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
     public function up(): void
     {
-        // Alter baby_profiles table
-        Schema::table('baby_profiles', function (Blueprint $table) {
-            $table->enum('milk_type', ['breast', 'formula', 'combination'])->default('formula')->change();
-        });
+        // Alter baby_profiles table using raw SQL to avoid Doctrine requirement
+        DB::statement("ALTER TABLE baby_profiles MODIFY COLUMN milk_type ENUM('breast', 'formula', 'combination') DEFAULT 'formula'");
 
-        // Alter feed_logs table
-        Schema::table('feed_logs', function (Blueprint $table) {
-            $table->enum('milk_type', ['breast', 'formula', 'combination'])->nullable()->change();
-        });
+        // Alter feed_logs table using raw SQL
+        DB::statement("ALTER TABLE feed_logs MODIFY COLUMN milk_type ENUM('breast', 'formula', 'combination') NULL");
     }
 
     public function down(): void
     {
-        Schema::table('baby_profiles', function (Blueprint $table) {
-            $table->enum('milk_type', ['breast', 'formula'])->default('formula')->change();
-        });
+        // Revert baby_profiles table
+        DB::statement("ALTER TABLE baby_profiles MODIFY COLUMN milk_type ENUM('breast', 'formula') DEFAULT 'formula'");
 
-        Schema::table('feed_logs', function (Blueprint $table) {
-            $table->enum('milk_type', ['breast', 'formula'])->nullable()->change();
-        });
+        // Revert feed_logs table
+        DB::statement("ALTER TABLE feed_logs MODIFY COLUMN milk_type ENUM('breast', 'formula') NULL");
     }
 };
