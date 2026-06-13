@@ -45,6 +45,14 @@ class ToolsController extends Controller
     }
 
     /**
+     * Show feeding and poop logger
+     */
+    public function logging()
+    {
+        return view('store.tools.logging');
+    }
+
+    /**
      * Create guest checkout order with Razorpay
      */
     public function createGuestCheckout(Request $request)

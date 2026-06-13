@@ -42,15 +42,21 @@
 {{-- Tabs --}}
 <section class="section pb-14 account-section">
     <div class="account-tabs flex gap-1 overflow-x-auto rounded-2xl border border-slate-200 bg-slate-100 p-1" role="tablist" aria-label="Account sections">
-        <button class="account-tab active" data-tab="profile" role="tab" aria-selected="true" aria-controls="panel-profile">Profile</button>
+        <button class="account-tab active" data-tab="today" role="tab" aria-selected="true" aria-controls="panel-today">🍼 Today</button>
+        <button class="account-tab" data-tab="profile" role="tab" aria-selected="false" aria-controls="panel-profile">Profile</button>
         <button class="account-tab" data-tab="orders" role="tab" aria-selected="false" aria-controls="panel-orders">Orders</button>
         <button class="account-tab" data-tab="subscriptions" role="tab" aria-selected="false" aria-controls="panel-subscriptions">Subscriptions</button>
         <button class="account-tab" data-tab="referrals" role="tab" aria-selected="false" aria-controls="panel-referrals">Referrals</button>
         <button class="account-tab" data-tab="rewards" role="tab" aria-selected="false" aria-controls="panel-rewards">Rewards</button>
     </div>
 
+    {{-- Today Panel --}}
+    <div class="account-panel active mt-4" data-panel="today" id="panel-today" role="tabpanel">
+        @include('store.partials.today-overview')
+    </div>
+
     {{-- Profile Panel --}}
-    <div class="account-panel active mt-4" data-panel="profile" id="panel-profile" role="tabpanel">
+    <div class="account-panel mt-4" data-panel="profile" id="panel-profile" role="tabpanel">
         <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
             @if(session('profile-status'))
             <div class="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm font-medium text-emerald-700">{{ session('profile-status') }}</div>
@@ -75,7 +81,7 @@
                     </div>
                     <div>
                         <label class="mb-1 block text-sm font-semibold text-slate-700" for="date_of_birth">Child's Date of Birth</label>
-                        <input class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" type="date" name="date_of_birth" id="date_of_birth" value="{{ old('date_of_birth', auth()->user()->date_of_birth?->toDateString()) }}">
+                        <input class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-numnam-400 focus:ring-1 focus:ring-numnam-400" type="date" name="date_of_birth" id="date_of_birth" value="{{ old('date_of_birth', auth()->user()->date_of_birth ? auth()->user()->date_of_birth->toDateString() : '') }}">
                     </div>
                     <div>
                         <label class="mb-1 block text-sm font-semibold text-slate-700" for="gender">Gender</label>
@@ -297,4 +303,34 @@
         @endif
     </div>
 </section>
+
+@endsection
+
+@section('scripts')
+<script>
+    // Account tabs switching
+    document.querySelectorAll('.account-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabName = this.dataset.tab;
+
+            // Update tabs - remove active from all
+            document.querySelectorAll('.account-tab').forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
+
+            // Update panels - hide all
+            document.querySelectorAll('.account-panel').forEach(p => {
+                p.classList.remove('active');
+            });
+
+            // Activate clicked tab
+            this.classList.add('active');
+            this.setAttribute('aria-selected', 'true');
+
+            // Show corresponding panel
+            document.querySelector(`[data-panel="${tabName}"]`).classList.add('active');
+        });
+    });
+</script>
 @endsection

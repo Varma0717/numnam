@@ -33,11 +33,11 @@ class NumNamCommunityController extends Controller
 
         $messages = ChatMessage::where('room_id', $room->id)
             ->with('user:id,name')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->paginate($perPage, ['*'], 'page', $page);
 
         return response()->json([
-            'data' => $messages->reverse()->values(),
+            'data' => $messages->items(),
         ]);
     }
 

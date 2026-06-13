@@ -60,6 +60,7 @@ Route::get('/refer-friends', [StorefrontController::class, 'referFriends'])->nam
 Route::prefix('tools')->name('store.tools.')->group(function () {
     Route::get('/', [ToolsController::class, 'index'])->name('index');
     Route::get('/numnam-tracker', [ToolsController::class, 'numnam'])->name('numnam');
+    Route::get('/logging', [ToolsController::class, 'logging'])->name('logging');
 
     // Guest checkout for tools
     Route::post('/guest-checkout', [ToolsController::class, 'createGuestCheckout'])->name('guest-checkout');
@@ -79,6 +80,8 @@ Route::post('/subscription-checkout', [StorefrontController::class, 'placeSubscr
 
 Route::get('/blog', [StorefrontController::class, 'blogIndex'])->name('store.blog.index');
 Route::get('/blog/{blog:slug}', [StorefrontController::class, 'blogShow'])->name('store.blog.show');
+
+Route::get('/community', fn() => view('store.community'))->name('store.community');
 
 Route::get('/contact', [StorefrontController::class, 'contact'])->name('store.contact');
 Route::post('/contact', [StorefrontController::class, 'contactSubmit'])

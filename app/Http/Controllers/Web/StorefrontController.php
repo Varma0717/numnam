@@ -1142,6 +1142,9 @@ class StorefrontController extends Controller
             });
 
             // Create Razorpay order
+            if (!$order) {
+                return response()->json(['success' => false, 'message' => 'Failed to create order'], 500);
+            }
             $razorpayResponse = $this->paymentGatewayService->createRazorpayOrder($order);
 
             if (!$razorpayResponse['success']) {

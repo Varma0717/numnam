@@ -1,7 +1,6 @@
 ﻿@extends('store.layouts.app')
 
-@section('title', 'NumNam - Recipes & Nutrition Tips')
-@section('meta_description', 'Simple, stage-aware recipes and feeding tips for infants and toddlers.')
+@section('title', 'NumNam Recipes - Healthy Baby Food Ideas')
 
 @section('content')
 <section class="section pb-8 pt-4 sm:pt-8">
