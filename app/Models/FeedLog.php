@@ -35,7 +35,7 @@ class FeedLog extends Model
     public function getCaloriesAttribute()
     {
         if ($this->type === 'milk') {
-            $kcalPerMl = match($this->milk_type) {
+            $kcalPerMl = match ($this->milk_type) {
                 'breast' => 0.70,
                 'formula' => 0.67,
                 'combination' => 0.685, // average of breast and formula
