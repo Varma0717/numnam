@@ -11,7 +11,7 @@ $babyProfile = auth()->user()->babyProfiles()->first();
         <p class="text-sm font-medium text-amber-800">
             Please set up your baby's profile to start tracking.
         </p>
-        <a href="#" onclick="document.querySelector('[data-tab=profile]').click()" class="mt-2 inline-block rounded-full bg-amber-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-700">
+        <a href="#" onclick="document.querySelector('[data-tab=profile]').click()" class="mt-2 inline-block rounded-full bg-numnam-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-numnam-700">
             Go to Profile
         </a>
     </div>
