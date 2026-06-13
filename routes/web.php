@@ -83,6 +83,7 @@ Route::get('/blog', [StorefrontController::class, 'blogIndex'])->name('store.blo
 Route::get('/blog/{blog:slug}', [StorefrontController::class, 'blogShow'])->name('store.blog.show');
 
 Route::get('/community', fn() => view('store.community'))->name('store.community');
+Route::get('/community/{room}', [StorefrontController::class, 'communityRoom'])->name('store.community.show');
 
 Route::get('/contact', [StorefrontController::class, 'contact'])->name('store.contact');
 Route::post('/contact', [StorefrontController::class, 'contactSubmit'])

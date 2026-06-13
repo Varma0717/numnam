@@ -8,6 +8,8 @@ use App\Mail\OrderPlacedCustomerNotification;
 use App\Models\Blog;
 use App\Models\CartItem;
 use App\Models\Category;
+use App\Models\ChatMessage;
+use App\Models\CommunityRoom;
 use App\Models\Contact;
 use App\Models\Order;
 use App\Models\Page;
@@ -598,6 +600,19 @@ class StorefrontController extends Controller
         $blog->increment('view_count');
 
         return view('store.blog.show', compact('blog'));
+    }
+
+    public function communityRoom(CommunityRoom $room)
+    {
+        abort_unless($room->is_active, 404);
+
+        $messages = ChatMessage::query()
+            ->where('room_id', $room->id)
+            ->with('user:id,name')
+            ->latest('created_at')
+            ->paginate(50);
+
+        return view('store.community-room', compact('room', 'messages'));
     }
 
     public function contact()
