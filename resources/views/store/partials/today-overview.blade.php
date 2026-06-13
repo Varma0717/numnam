@@ -150,8 +150,8 @@ $babyProfile = auth()->user()->babyProfiles()->first();
     async function loadTodayOverview() {
         try {
             const response = await fetch('/api/v1/numnam/logs/today', {
+                credentials: 'include',
                 headers: {
-                    'Authorization': 'Bearer ' + (document.querySelector('meta[name="csrf-token"]')?.content || ''),
                     'Accept': 'application/json'
                 }
             });
@@ -220,8 +220,9 @@ $babyProfile = auth()->user()->babyProfiles()->first();
                     if (confirm('Are you sure you want to delete this log?')) {
                         await fetch(`/api/v1/numnam/logs/${this.dataset.id}`, {
                             method: 'DELETE',
+                            credentials: 'include',
                             headers: {
-                                'Authorization': 'Bearer ' + (document.querySelector('meta[name="csrf-token"]')?.content || ''),
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
                             }
                         });
                         loadTodayOverview();

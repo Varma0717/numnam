@@ -81,8 +81,7 @@
         try {
             const response = await fetch('/api/v1/numnam/community/rooms', {
                 headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    'Accept': 'application/json'
                 }
             });
 

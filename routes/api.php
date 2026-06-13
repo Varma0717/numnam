@@ -107,8 +107,21 @@ Route::prefix('v1')->group(function () {
         });
     });
 
-    // ── NumNam Weaning App API (Session-based auth:sanctum) ─────────────────
-    Route::prefix('numnam')->middleware('auth:sanctum')->group(function () {
+    // ── NumNam Weaning App API - Public Read Routes ─────────────────
+    Route::prefix('numnam')->group(function () {
+        // Community Chat - Public Read Endpoints
+        Route::get('community/rooms', [NumNamCommunityController::class, 'rooms']);
+        Route::get('community/rooms/{room}/messages', [NumNamCommunityController::class, 'roomMessages']);
+        Route::get('community/rooms/{room}/search', [NumNamCommunityController::class, 'searchMessages']);
+
+        // Recipes - Public Read Endpoints
+        Route::get('recipes', [NumNamRecipeController::class, 'index']);
+        Route::get('recipes/{recipe}', [NumNamRecipeController::class, 'show']);
+        Route::get('recipes/type/{foodType}', [NumNamRecipeController::class, 'byType']);
+    });
+
+    // ── NumNam Weaning App API - Protected Routes (auth:sanctum + session) ─────────────────
+    Route::prefix('numnam')->middleware(['auth:sanctum', 'auth:web'])->group(function () {
         // Test endpoint - remove after testing
         Route::get('_test', fn() => response()->json(['message' => 'NumNam routes working!']));
 
@@ -123,18 +136,12 @@ Route::prefix('v1')->group(function () {
         Route::delete('logs/{feedLog}', [NumNamFeedLogController::class, 'destroy']);
         Route::delete('logs/today/clear', [NumNamFeedLogController::class, 'clearToday']);
 
-        // Recipes
-        Route::get('recipes', [NumNamRecipeController::class, 'index']);
-        Route::get('recipes/{recipe}', [NumNamRecipeController::class, 'show']);
-        Route::post('recipes/{recipe}/like', [NumNamRecipeController::class, 'toggleLike']);
-        Route::get('recipes/type/{foodType}', [NumNamRecipeController::class, 'byType']);
-
-        // Community Chat
-        Route::get('community/rooms', [NumNamCommunityController::class, 'rooms']);
-        Route::get('community/rooms/{room}/messages', [NumNamCommunityController::class, 'roomMessages']);
+        // Community Chat - Write Endpoints (Protected)
         Route::post('community/rooms/{room}/messages', [NumNamCommunityController::class, 'sendMessage']);
         Route::post('community/messages/{message}/like', [NumNamCommunityController::class, 'likeMessage']);
-        Route::get('community/rooms/{room}/search', [NumNamCommunityController::class, 'searchMessages']);
+
+        // Recipes - Write Endpoints (Protected)
+        Route::post('recipes/{recipe}/like', [NumNamRecipeController::class, 'toggleLike']);
     });
 
     // ── Admin CMS (AJAX JSON API) ───────────────────────────────────────

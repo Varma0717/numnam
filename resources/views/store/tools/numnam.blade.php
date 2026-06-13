@@ -732,7 +732,6 @@
         <div class="tab active" onclick="showPage('log', this)">➕ Log</div>
         <div class="tab" onclick="showPage('poop', this)">💩 Poop Guide</div>
         <div class="tab" onclick="showPage('guide', this)">📖 Guide</div>
-        <div class="tab" onclick="showPage('community', this)">💬 Community</div>
     </div>
 
     <!-- DASHBOARD -->
@@ -998,29 +997,7 @@
         </div>
     </div>
 
-    <!-- COMMUNITY CHAT -->
-    <div id="page-community" class="tracker-page">
-        <div class="section-title">💬 Community Chat</div>
-        <div class="section-sub">Connect with other parents on your weaning journey</div>
 
-        <div class="card">
-            <div id="community-rooms-container" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;">
-            </div>
-        </div>
-
-        <div id="community-messages-area" style="display:none;">
-            <div class="card">
-                <div class="card-title" id="room-name-display"></div>
-                <div id="messages-list" style="max-height:400px;overflow-y:auto;margin-bottom:16px;">
-                </div>
-                <div class="form-row">
-                    <input type="text" id="message-input" placeholder="Share your question or experience...">
-                </div>
-                <button class="btn btn-primary" onclick="sendCommunityMessage()" style="width:100%;">Send Message</button>
-                <button class="btn btn-outline" onclick="backToCommunityRooms()" style="width:100%;margin-top:8px;">← Back to Rooms</button>
-            </div>
-        </div>
-    </div>
 
     <!-- GUIDE -->
     <div id="page-guide" class="tracker-page">
@@ -1162,7 +1139,6 @@
     let babyProfile = null;
     let todayLogs = [];
     let recipes = [];
-    let communityRooms = [];
     let currentLogType = 'milk';
     let selectedPoopType = '';
 
@@ -1170,8 +1146,6 @@
     document.addEventListener('DOMContentLoaded', async () => {
         await loadBabyProfile();
         await loadRecipes();
-        await loadCommunityRooms();
-        renderCommunityRooms();
     });
 
     // API Helper: Get CSRF token from meta tag
@@ -1240,22 +1214,7 @@
         }
     }
 
-    // Load community rooms from API
-    async function loadCommunityRooms() {
-        try {
-            const response = await fetch('/api/v1/numnam/community/rooms', {
-                credentials: 'include',
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-            const data = await response.json();
-            communityRooms = data.data || [];
-        } catch (error) {
-            console.log('Community rooms load error', error);
-            communityRooms = [];
-        }
-    }
+
 
     function showPage(id, el) {
         document.querySelectorAll('.tracker-page').forEach(p => p.classList.remove('active'));
@@ -1661,140 +1620,5 @@
             return `<div class="guide-stage" style="${i === stages.length - 1 ? 'border-bottom:none' : ''}"><div class="stage-dot s${i+1}">${i+1}</div><div class="stage-info"><h4>${s.emoji} ${s.title} (${s.age})</h4><p>${s.desc}</p></div></div>`;
         }).join('');
     }
-
-    // Community Chat Functions
-    function renderCommunityRooms() {
-        if (!communityRooms.length) {
-            document.getElementById('community-rooms-container').innerHTML = '<p>Loading community rooms...</p>';
-            return;
-        }
-
-        const roomsHtml = communityRooms.map(room => `
-            <div style="background:white;border:1px solid #FFD6E5;border-radius:10px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;" 
-                 onclick="showCommunityRoom(${room.id}, '${room.name.replace(/'/g, "\\'")}')">
-                <div style="font-size:28px;margin-bottom:8px;">${room.icon}</div>
-                <div style="font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:4px;">${room.name}</div>
-                <div style="font-size:11px;color:#999;">${room.description || 'Chat here'}</div>
-            </div>
-        `).join('');
-
-        document.getElementById('community-rooms-container').innerHTML = roomsHtml;
-    }
-
-    let currentRoomId = null;
-    let currentRoomMessages = [];
-
-    async function showCommunityRoom(roomId, roomName) {
-        currentRoomId = roomId;
-        document.getElementById('community-rooms-container').style.display = 'none';
-        document.getElementById('community-messages-area').style.display = 'block';
-        document.getElementById('room-name-display').textContent = roomName;
-        document.getElementById('message-input').value = '';
-
-        await loadCommunityRoomMessages(roomId);
-    }
-
-    function backToCommunityRooms() {
-        currentRoomId = null;
-        document.getElementById('community-rooms-container').style.display = 'grid';
-        document.getElementById('community-messages-area').style.display = 'none';
-    }
-
-    async function loadCommunityRoomMessages(roomId) {
-        try {
-            const response = await fetch(`/api/v1/numnam/community/rooms/${roomId}/messages`, {
-                credentials: 'include',
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-            const data = await response.json();
-            currentRoomMessages = data.data || [];
-            renderCommunityMessages();
-        } catch (error) {
-            console.log('Error loading messages:', error);
-        }
-    }
-
-    function renderCommunityMessages() {
-        if (!currentRoomMessages.length) {
-            document.getElementById('messages-list').innerHTML = '<p style="text-align:center;color:#999;">No messages yet. Be the first to share!</p>';
-            return;
-        }
-
-        const messagesHtml = currentRoomMessages.map(msg => `
-            <div style="border-bottom:1px solid #FFD6E5;padding:12px 0;">
-                <div style="font-weight:600;color:#1a1a1a;margin-bottom:4px;">${msg.user.name}</div>
-                <div style="color:#333;font-size:13px;margin-bottom:6px;line-height:1.5;">${msg.message}</div>
-                <div style="font-size:11px;color:#999;display:flex;justify-content:space-between;">
-                    <span>${new Date(msg.created_at).toLocaleString()}</span>
-                    <span onclick="likeCommunityMessage(${msg.id}, this)" style="cursor:pointer;">❤️ <span id="likes-${msg.id}">${msg.likes_count}</span></span>
-                </div>
-            </div>
-        `).join('');
-
-        document.getElementById('messages-list').innerHTML = messagesHtml;
-        document.getElementById('messages-list').scrollTop = document.getElementById('messages-list').scrollHeight;
-    }
-
-    async function sendCommunityMessage() {
-        if (!babyProfile) {
-            alert('Please login to send messages');
-            return;
-        }
-
-        const message = document.getElementById('message-input').value.trim();
-        if (!message || !currentRoomId) return;
-
-        try {
-            const response = await fetch(`/api/v1/numnam/community/rooms/${currentRoomId}/messages`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: addCsrfToken({
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }),
-                body: JSON.stringify({
-                    message: message
-                })
-            });
-
-            if (!response.ok) throw new Error('Failed to send message');
-
-            await loadCommunityRoomMessages(currentRoomId);
-        } catch (error) {
-            alert('Error sending message: ' + error.message);
-        }
-    }
-
-    async function likeCommunityMessage(messageId, el) {
-        if (!babyProfile) {
-            alert('Please login to like messages');
-            return;
-        }
-
-        try {
-            const response = await fetch(`/api/v1/numnam/community/messages/${messageId}/like`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: addCsrfToken({
-                    'Accept': 'application/json'
-                })
-            });
-            const data = await response.json();
-            if (data.data) {
-                document.getElementById('likes-' + messageId).textContent = data.data.likes_count;
-            }
-        } catch (error) {
-            console.log('Error liking message:', error);
-        }
-    }
-
-    // Re-render community rooms when community tab is clicked
-    document.addEventListener('click', function(e) {
-        if (e.target.textContent.includes('💬 Community')) {
-            renderCommunityRooms();
-        }
-    });
 </script>
 @endsection
