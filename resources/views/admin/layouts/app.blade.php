@@ -8,6 +8,7 @@
     <title>@yield('title', 'NumNam Admin')</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="{{ url('assets/admin/css/admin.css') }}">
+    @stack('styles')
 </head>
 
 <body class="admin-body">
