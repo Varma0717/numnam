@@ -2,6 +2,30 @@
 
 @section('title', 'Tools Usage Analytics')
 
+@push('styles')
+<style>
+    .metric-card-blue {
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border: 1px solid #dbeafe;
+    }
+
+    .metric-card-purple {
+        background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+        border: 1px solid #f3e8ff;
+    }
+
+    .metric-card-green {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border: 1px solid #dcfce7;
+    }
+
+    .metric-card-orange {
+        background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+        border: 1px solid #fed7aa;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="space-y-8 bg-slate-50 p-8">
     <!-- Header Section -->
@@ -31,7 +55,7 @@
     <!-- Key Metrics Cards -->
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         <!-- Feed Logs Card -->
-        <div class="rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 to-blue-100 p-6 shadow-sm transition hover:shadow-md">
+        <div class="metric-card-blue rounded-xl p-6 shadow-sm transition hover:shadow-md">
             <div class="flex items-start justify-between">
                 <div>
                     <p class="text-sm font-medium text-blue-600">Feed Logs</p>
@@ -43,7 +67,7 @@
         </div>
 
         <!-- Chat Messages Card -->
-        <div class="rounded-xl border border-purple-100 bg-gradient-to-br from-purple-50 to-purple-100 p-6 shadow-sm transition hover:shadow-md">
+        <div class="metric-card-purple rounded-xl p-6 shadow-sm transition hover:shadow-md">
             <div class="flex items-start justify-between">
                 <div>
                     <p class="text-sm font-medium text-purple-600">Chat Messages</p>
@@ -55,7 +79,7 @@
         </div>
 
         <!-- Active Logging Users Card -->
-        <div class="rounded-xl border border-green-100 bg-gradient-to-br from-green-50 to-green-100 p-6 shadow-sm transition hover:shadow-md">
+        <div class="metric-card-green rounded-xl p-6 shadow-sm transition hover:shadow-md">
             <div class="flex items-start justify-between">
                 <div>
                     <p class="text-sm font-medium text-green-600">Logging Users</p>
@@ -67,7 +91,7 @@
         </div>
 
         <!-- Active Chat Users Card -->
-        <div class="rounded-xl border border-orange-100 bg-gradient-to-br from-orange-50 to-orange-100 p-6 shadow-sm transition hover:shadow-md">
+        <div class="metric-card-orange rounded-xl p-6 shadow-sm transition hover:shadow-md">
             <div class="flex items-start justify-between">
                 <div>
                     <p class="text-sm font-medium text-orange-600">Community Users</p>
