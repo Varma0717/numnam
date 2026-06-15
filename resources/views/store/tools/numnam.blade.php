@@ -529,6 +529,53 @@
         background: #FFF0F5;
     }
 
+    .log-icon-svg {
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        flex-shrink: 0;
+    }
+
+    .log-icon.milk {
+        background: #e8f4ff;
+    }
+
+    .log-icon.milk .log-icon-svg {
+        stroke: #0066cc;
+        color: #0066cc;
+    }
+
+    .log-icon.solid {
+        background: #fff5e8;
+    }
+
+    .log-icon.solid .log-icon-svg {
+        stroke: #cc6600;
+        color: #cc6600;
+    }
+
+    .log-icon.water {
+        background: #e8f7ff;
+    }
+
+    .log-icon.water .log-icon-svg {
+        stroke: #0099cc;
+        color: #0099cc;
+        fill: currentColor;
+        stroke: none;
+    }
+
+    .log-icon.poop {
+        background: #fff9e8;
+    }
+
+    .log-icon.poop .log-icon-svg {
+        stroke: #ccaa00;
+        color: #ccaa00;
+    }
+
     .log-info strong {
         font-size: 13px;
         font-weight: 600;
@@ -712,6 +759,84 @@
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         }
     }
+
+    /* Range slider wrapper */
+    .slider-wrap {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-sizing: border-box;
+    }
+
+    .slider-wrap input[type="range"] {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .slider-wrap input[type="time"] {
+        width: 120px;
+    }
+
+    /* Range slider styling */
+    input[type="range"] {
+        width: 100%;
+        height: 8px;
+        border-radius: 4px;
+        background: linear-gradient(to right, #FF6B8A 0%, #FF6B8A var(--range-percentage), #FFD6E5 var(--range-percentage), #FFD6E5 100%) !important;
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+
+    /* Webkit browsers (Chrome, Safari) */
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: white;
+        border: 3px solid #FF6B8A;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(255, 107, 138, 0.3);
+        transition: all 0.2s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+        width: 28px;
+        height: 28px;
+        box-shadow: 0 4px 12px rgba(255, 107, 138, 0.4);
+    }
+
+    input[type="range"]::-webkit-slider-thumb:active {
+        background: #FF6B8A;
+    }
+
+    /* Firefox */
+    input[type="range"]::-moz-range-thumb {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: white;
+        border: 3px solid #FF6B8A;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(255, 107, 138, 0.3);
+        transition: all 0.2s;
+    }
+
+    input[type="range"]::-moz-range-thumb:hover {
+        width: 28px;
+        height: 28px;
+        box-shadow: 0 4px 12px rgba(255, 107, 138, 0.4);
+    }
+
+    input[type="range"]::-moz-range-track {
+        background: transparent;
+        border: none;
+    }
 </style>
 @endsection
 
@@ -723,15 +848,27 @@
         <div class="logo-container">
             <div class="tracker-logo">Num<span>Nam</span></div>
             <button class="baby-age-pill" onclick="showAgeModal()" type="button" aria-label="Update baby age">
-                👶 Baby: <span id="age-display">8 months</span>
+                <svg class="inline h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0Z" />
+                    <path d="M12 1v6m0 6v6" />
+                </svg>Baby: <span id="age-display">8 months</span>
             </button>
         </div>
     </div>
 
     <div class="tabs">
-        <div class="tab active" onclick="showPage('log', this)">➕ Log</div>
-        <div class="tab" onclick="showPage('poop', this)">💩 Poop Guide</div>
-        <div class="tab" onclick="showPage('guide', this)">📖 Guide</div>
+        <div class="tab active" onclick="showPage('log', this)"><svg class="inline h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>Log</div>
+        <div class="tab" onclick="showPage('poop', this)"><svg class="inline h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <ellipse cx="12" cy="13" rx="9" ry="5" />
+                <path d="M3 13c0 2.209 4.03 4 9 4s9-1.791 9-4M3 13v4c0 2.209 4.03 4 9 4s9-1.791 9-4v-4" />
+            </svg>Poop Guide</div>
+        <div class="tab" onclick="showPage('guide', this)"><svg class="inline h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            </svg>Guide</div>
     </div>
 
     <!-- DASHBOARD -->
@@ -795,29 +932,39 @@
         <div class="card">
             <div class="card-title">What are you logging?</div>
             <div class="tag-row" id="log-type-row">
-                <div class="tag active" onclick="selectLogType('milk', this)">🍼 Milk</div>
-                <div class="tag" onclick="selectLogType('solid', this)">🥣 Solids</div>
-                <div class="tag" onclick="selectLogType('water', this)">💧 Water</div>
-                <div class="tag" onclick="selectLogType('poop', this)">💩 Poop</div>
+                <div class="tag active" onclick="selectLogType('milk', this)"><svg class="inline h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 15c0 1.657.895 3.096 2.209 3.872.826.492 1.786.793 2.791.793s1.965-.301 2.791-.793C16.105 18.096 17 16.657 17 15V5c0-2.761-2.239-5-5-5s-5 2.239-5 5v10Z" />
+                    </svg>Milk</div>
+                <div class="tag" onclick="selectLogType('solid', this)"><svg class="inline h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 2v6h6M21 22v-6h-6M6 13c0-3.866 3.134-7 7-7s7 3.134 7 7-3.134 7-7 7-7-3.134-7-7Z" />
+                    </svg>Solids</div>
+                <div class="tag" onclick="selectLogType('water', this)"><svg class="inline h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2c.96 0 1.92.38 2.65 1.13.73.75 1.13 1.77 1.13 2.82 0 .82-.26 1.62-.77 2.31.53.16 1.1.24 1.68.24 2.54 0 4.8-1.07 6.46-2.86l1.41 1.41c-2.12 2.3-5.07 3.65-8.32 3.65-.58 0-1.13-.08-1.66-.23.51.69.77 1.49.77 2.31 0 1.05-.4 2.07-1.13 2.82-.73.75-1.69 1.13-2.65 1.13s-1.92-.38-2.65-1.13c-.73-.75-1.13-1.77-1.13-2.82 0-.82.26-1.62.77-2.31-.53-.16-1.1-.24-1.68-.24-2.54 0-4.8 1.07-6.46 2.86L2.07 14.5c2.12-2.3 5.07-3.65 8.32-3.65.58 0 1.13.08 1.66.23-.51-.69-.77-1.49-.77-2.31 0-1.05.4-2.07 1.13-2.82.73-.75 1.69-1.13 2.65-1.13Z" />
+                    </svg>Water</div>
+                <div class="tag" onclick="selectLogType('poop', this)"><svg class="inline h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <ellipse cx="12" cy="13" rx="9" ry="5" />
+                        <path d="M3 13c0 2.209 4.03 4 9 4s9-1.791 9-4M3 13v4c0 2.209 4.03 4 9 4s9-1.791 9-4v-4" />
+                    </svg>Poop</div>
             </div>
         </div>
 
         <!-- MILK FORM -->
         <div id="form-milk" class="card">
-            <div class="card-title">🍼 Milk Feed</div>
+            <div class="card-title">Milk Feed</div>
             <div class="card-sub">Formula or breast milk</div>
             <div class="form-row">
                 <label>Milk Type</label>
                 <select id="milk-type">
-                    <option value="Formula">Formula</option>
-                    <option value="Breast Milk">Breast Milk</option>
-                    <option value="Expressed Milk">Expressed Milk</option>
+                    <option value="formula">Formula</option>
+                    <option value="breast">Breast Milk</option>
+                    <option value="combination">Combination (Breast + Formula)</option>
                 </select>
             </div>
             <div class="form-row">
                 <label>Volume: <span id="milk-vol-display">180</span> ml</label>
                 <div class="slider-wrap">
-                    <input type="range" id="milk-slider" min="0" max="300" value="180" step="10" oninput="updateSlider(this, 'milk-vol-display')">
+                    <input type="range" id="milk-slider" min="0" max="300" value="180" step="10" oninput="updateSlider(this, 'milk-vol-display')" style="--range-percentage: 60%">
+                    <label for="milk-time" style="margin: 0; white-space: nowrap;">Time:</label>
                     <input type="time" id="milk-time" required>
                 </div>
             </div>
@@ -826,60 +973,80 @@
                 <input type="text" id="milk-notes" placeholder="e.g., seemed hungry, fell asleep quickly">
             </div>
             <div class="btn-row">
-                <button class="btn btn-primary" onclick="logEntry('milk')">Log Milk Feed</button>
+                <button class="btn btn-primary" onclick="logEntry('milk', this)">Log Milk Feed</button>
                 <button class="btn btn-outline" onclick="resetForm('milk')">Clear</button>
             </div>
         </div>
 
         <!-- SOLID FORM -->
         <div id="form-solid" class="card" style="display:none">
-            <div class="card-title">🥣 Solid Food</div>
+            <div class="card-title">Solid Food</div>
             <div class="card-sub">Purees, mashed, or finger food</div>
             <div class="form-row">
                 <label>Food Name</label>
                 <input type="text" id="solid-food" placeholder="e.g., Carrot Puree, Banana Mash">
             </div>
             <div class="form-row">
+                <label>Food Type</label>
+                <select id="solid-food-type" required>
+                    <option value="">-- Select --</option>
+                    <option value="veggie">Vegetable</option>
+                    <option value="fruit">Fruit</option>
+                    <option value="protein">Protein</option>
+                    <option value="grain">Grain</option>
+                    <option value="dairy">Dairy</option>
+                    <option value="mixed">Mixed</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label>Texture</label>
+                <select id="solid-texture" required>
+                    <option value="">-- Select --</option>
+                    <option value="Smooth purée">Smooth Purée</option>
+                    <option value="Thick purée">Thick Purée</option>
+                    <option value="Mashed">Mashed</option>
+                    <option value="Soft lumps">Soft Lumps</option>
+                    <option value="Chopped">Chopped/Finger Food</option>
+                </select>
+            </div>
+            <div class="form-row">
                 <label>Volume: <span id="solid-vol-display">100</span> ml</label>
                 <div class="slider-wrap">
-                    <input type="range" id="solid-slider" min="0" max="300" value="100" step="10" oninput="updateSlider(this, 'solid-vol-display')">
+                    <input type="range" id="solid-slider" min="0" max="300" value="100" step="10" oninput="updateSlider(this, 'solid-vol-display')" style="--range-percentage: 33.33%">
+                    <label for="solid-time" style="margin: 0; white-space: nowrap;">Time:</label>
                     <input type="time" id="solid-time" required>
                 </div>
             </div>
             <div class="form-row">
-                <label>Texture</label>
-                <select id="solid-texture">
-                    <option value="Smooth Puree">Smooth Puree</option>
-                    <option value="Thick Puree">Thick Puree</option>
-                    <option value="Mashed with lumps">Mashed with lumps</option>
-                    <option value="Soft finger food">Soft finger food</option>
-                </select>
-            </div>
-            <div class="form-row">
-                <label>Baby's Response</label>
-                <select id="solid-finish">
-                    <option value="Finished all">Finished all</option>
-                    <option value="Left some">Left some</option>
-                    <option value="Refused">Refused</option>
+                <label>How Much Did Baby Eat?</label>
+                <select id="solid-finish" required>
+                    <option value="">-- Select --</option>
+                    <option value="all">Finished All</option>
+                    <option value="most">Ate Most</option>
+                    <option value="half">Ate Half</option>
+                    <option value="few">Ate a Few Bites</option>
+                    <option value="floor">Mostly on Floor</option>
+                    <option value="refused">Refused</option>
                 </select>
             </div>
             <div class="form-row">
                 <label>Notes (optional)</label>
-                <input type="text" id="solid-notes" placeholder="e.g., new food, seemed to like it">
+                <input type="text" id="solid-notes" placeholder="e.g., seemed to like it, new food">
             </div>
             <div class="btn-row">
-                <button class="btn btn-primary" onclick="logEntry('solid')">Log Solid Food</button>
+                <button class="btn btn-primary" onclick="logEntry('solid', this)">Log Solid Food</button>
                 <button class="btn btn-outline" onclick="resetForm('solid')">Clear</button>
             </div>
         </div>
 
         <!-- WATER FORM -->
         <div id="form-water" class="card" style="display:none">
-            <div class="card-title">💧 Water</div>
+            <div class="card-title">Water</div>
             <div class="form-row">
                 <label>Volume: <span id="water-vol-display">30</span> ml</label>
                 <div class="slider-wrap">
-                    <input type="range" id="water-slider" min="0" max="120" value="30" step="5" oninput="updateSlider(this, 'water-vol-display')">
+                    <input type="range" id="water-slider" min="0" max="120" value="30" step="5" oninput="updateSlider(this, 'water-vol-display')" style="--range-percentage: 25%">
+                    <label for="water-time" style="margin: 0; white-space: nowrap;">Time:</label>
                     <input type="time" id="water-time" required>
                 </div>
             </div>
@@ -888,14 +1055,14 @@
                 <input type="text" id="water-notes" placeholder="e.g., in sippy cup">
             </div>
             <div class="btn-row">
-                <button class="btn btn-primary" onclick="logEntry('water')">Log Water</button>
+                <button class="btn btn-primary" onclick="logEntry('water', this)">Log Water</button>
                 <button class="btn btn-outline" onclick="resetForm('water')">Clear</button>
             </div>
         </div>
 
         <!-- POOP FORM -->
         <div id="form-poop" class="card" style="display:none">
-            <div class="card-title">💩 Poop Log</div>
+            <div class="card-title">Poop Log</div>
             <div class="card-sub">Select the closest match (Bristol Stool Chart – infant adapted)</div>
             <div class="poop-grid" id="poop-selector">
                 <div class="poop-btn" onclick="selectPoop('Type 1', this)"><span class="poop-icon">🪨</span><span class="poop-label">Type 1<br>Hard</span></div>
@@ -906,12 +1073,12 @@
             </div>
             <div id="poop-insight" style="margin-top:14px;display:none"></div>
             <div class="form-row" style="margin-top:12px">
-                <label>Time</label>
+                <label>Time:</label>
                 <input type="time" id="poop-time" required>
             </div>
             <input type="hidden" id="poop-selected" value="">
             <div class="btn-row">
-                <button class="btn btn-primary" onclick="logEntry('poop')">Log Poop</button>
+                <button class="btn btn-primary" onclick="logEntry('poop', this)">Log Poop</button>
                 <button class="btn btn-outline" onclick="resetForm('poop')">Clear</button>
             </div>
         </div>
@@ -919,7 +1086,7 @@
 
     <!-- POOP GUIDE -->
     <div id="page-poop" class="tracker-page">
-        <div class="section-title">💩 Poop Diagnostics</div>
+        <div class="section-title">Poop Diagnostics</div>
         <div class="section-sub">What your baby's output is telling you</div>
 
         <div class="card">
@@ -1001,7 +1168,7 @@
 
     <!-- GUIDE -->
     <div id="page-guide" class="tracker-page">
-        <div class="section-title">📖 Weaning Guide</div>
+        <div class="section-title">Weaning Guide</div>
         <div class="section-sub">Stage-by-stage advice tailored to your baby</div>
 
         <div class="card" style="background:linear-gradient(135deg,#fff8f0 0%,#fdf0e0 100%)">
@@ -1085,14 +1252,36 @@
 
     <!-- AGE MODAL -->
     <div id="age-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center;">
-        <div style="background:white;border-radius:20px;padding:28px;max-width:340px;width:90%;margin:auto;position:relative;top:50%;transform:translateY(-50%)">
-            <div style="font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;margin-bottom:14px;color:#C0502A">How old is your baby?</div>
+        <div style="background:white;border-radius:20px;padding:28px;max-width:420px;width:90%;margin:auto;position:relative;top:50%;transform:translateY(-50%);max-height:90vh;overflow-y:auto">
+            <div style="font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;margin-bottom:18px;color:#C0502A">Your Baby's Profile</div>
+
             <div class="form-row">
-                <label>Age (months)</label>
-                <input type="number" id="age-input" min="4" max="36" value="8">
+                <label>Baby's Name *</label>
+                <input type="text" id="baby-name-input" placeholder="e.g., Emma" maxlength="100" style="border:1px solid #ccc;padding:10px;border-radius:6px;width:100%;font-size:14px">
             </div>
+
+            <div class="form-row">
+                <label>Age (months) *</label>
+                <input type="number" id="age-input" min="5" max="36" value="6" style="border:1px solid #ccc;padding:10px;border-radius:6px;width:100%;font-size:14px">
+            </div>
+
+            <div class="form-row">
+                <label>Milk Type *</label>
+                <select id="milk-type-input" style="border:1px solid #ccc;padding:10px;border-radius:6px;width:100%;font-size:14px">
+                    <option value="">Select milk type</option>
+                    <option value="breast">Breast Milk</option>
+                    <option value="formula">Formula</option>
+                    <option value="combination">Combination (Breast + Formula)</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Weight (kg) - Optional</label>
+                <input type="number" id="weight-input" placeholder="e.g., 7.5" min="3" max="20" step="0.1" style="border:1px solid #ccc;padding:10px;border-radius:6px;width:100%;font-size:14px">
+            </div>
+
             <div class="btn-row">
-                <button class="btn btn-primary" onclick="saveAge()">Save</button>
+                <button class="btn btn-primary" onclick="saveAge()">Save Profile</button>
                 <button class="btn btn-outline" onclick="document.getElementById('age-modal').style.display='none'">Cancel</button>
             </div>
         </div>
@@ -1231,12 +1420,34 @@
             alert('Please login to use the weaning tracker');
             return;
         }
-        document.getElementById('age-input').value = babyProfile.age_months;
+        // Populate modal with existing profile data
+        document.getElementById('baby-name-input').value = babyProfile.baby_name || '';
+        document.getElementById('age-input').value = babyProfile.age_months || 6;
+        document.getElementById('milk-type-input').value = babyProfile.milk_type || '';
+        document.getElementById('weight-input').value = babyProfile.weight_kg || '';
         document.getElementById('age-modal').style.display = 'flex';
     }
 
     async function saveAge() {
-        const age = parseInt(document.getElementById('age-input').value) || babyProfile.age_months;
+        const babyName = document.getElementById('baby-name-input').value.trim();
+        const age = parseInt(document.getElementById('age-input').value);
+        const milkType = document.getElementById('milk-type-input').value;
+        const weight = document.getElementById('weight-input').value;
+
+        // Validation
+        if (!babyName) {
+            alert('Please enter your baby\'s name');
+            return;
+        }
+        if (!age || age < 5 || age > 36) {
+            alert('Please enter a valid age between 5 and 36 months');
+            return;
+        }
+        if (!milkType) {
+            alert('Please select a milk type');
+            return;
+        }
+
         try {
             const response = await fetch('/api/v1/numnam/baby/profile', {
                 method: 'POST',
@@ -1246,12 +1457,20 @@
                     'Accept': 'application/json'
                 }),
                 body: JSON.stringify({
+                    baby_name: babyName,
                     age_months: age,
-                    baby_name: babyProfile.baby_name,
-                    weight_kg: babyProfile.weight_kg,
-                    milk_type: babyProfile.milk_type
+                    milk_type: milkType,
+                    weight_kg: weight ? parseFloat(weight) : null
                 })
             });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                const errorMsg = errorData.message || 'Failed to save profile. Please check your inputs.';
+                alert('Error: ' + errorMsg);
+                return;
+            }
+
             const data = await response.json();
             babyProfile = data.data;
             document.getElementById('age-display').textContent = age + ' months';
@@ -1321,9 +1540,12 @@
 
     function updateSlider(el, displayId) {
         document.getElementById(displayId).textContent = el.value;
+        // Update the CSS gradient variable for progress bar
+        const percentage = (el.value - el.min) / (el.max - el.min) * 100;
+        el.style.setProperty('--range-percentage', percentage + '%');
     }
 
-    async function logEntry(type) {
+    async function logEntry(type, btn) {
         if (!babyProfile) {
             alert('Please login first');
             return;
@@ -1340,6 +1562,7 @@
         } else if (type === 'solid') {
             logData.volume_ml = parseInt(document.getElementById('solid-slider').value);
             logData.food_name = document.getElementById('solid-food').value || 'Solids';
+            logData.food_type = document.getElementById('solid-food-type').value;
             logData.texture = document.getElementById('solid-texture').value;
             logData.finish_level = document.getElementById('solid-finish').value;
         } else if (type === 'water') {
@@ -1370,14 +1593,15 @@
             renderDashboard();
             resetForm(type);
 
-            const btn = event.target;
-            const orig = btn.textContent;
-            btn.textContent = '✓ Saved!';
-            btn.style.background = '#4ECDC4';
-            setTimeout(() => {
-                btn.textContent = orig;
-                btn.style.background = '';
-            }, 1500);
+            if (btn) {
+                const orig = btn.textContent;
+                btn.textContent = '✓ Saved!';
+                btn.style.background = '#4ECDC4';
+                setTimeout(() => {
+                    btn.textContent = orig;
+                    btn.style.background = '';
+                }, 1500);
+            }
         } catch (error) {
             alert('Error saving entry: ' + error.message);
         }
@@ -1387,11 +1611,15 @@
         if (type === 'milk') {
             document.getElementById('milk-slider').value = 180;
             document.getElementById('milk-vol-display').textContent = '180';
-            document.getElementById('milk-type').value = 'Formula';
+            document.getElementById('milk-type').value = 'formula';
         } else if (type === 'solid') {
             document.getElementById('solid-slider').value = 100;
             document.getElementById('solid-vol-display').textContent = '100';
             document.getElementById('solid-food').value = '';
+            document.getElementById('solid-food-type').value = '';
+            document.getElementById('solid-texture').value = '';
+            document.getElementById('solid-finish').value = '';
+            document.getElementById('solid-notes').value = '';
         } else if (type === 'water') {
             document.getElementById('water-slider').value = 30;
             document.getElementById('water-vol-display').textContent = '30';
@@ -1443,31 +1671,34 @@
 
         const logList = document.getElementById('today-log-list');
         if (todayLogs.length === 0) {
-            logList.innerHTML = '<div class="empty-log"><div class="empty-icon">🍼</div>No entries yet. Tap <strong>Log</strong> to add!</div>';
+            logList.innerHTML = '<div class="empty-log"><div class="empty-icon" style="width:20px;height:20px;background:#ddd;border-radius:4px;"></div>No entries yet. Tap <strong>Log</strong> to add!</div>';
         } else {
             const icons = {
                 milk: {
-                    icon: '🍼',
+                    icon: '<svg class="log-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 15c0 1.657.895 3.096 2.209 3.872.826.492 1.786.793 2.791.793s1.965-.301 2.791-.793C16.105 18.096 17 16.657 17 15V5c0-2.761-2.239-5-5-5s-5 2.239-5 5v10Z"/></svg>',
                     cls: 'milk'
                 },
                 solid: {
-                    icon: '🥣',
+                    icon: '<svg class="log-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v6h6M21 22v-6h-6M6 13c0-3.866 3.134-7 7-7s7 3.134 7 7-3.134 7-7 7-7-3.134-7-7Z"/></svg>',
                     cls: 'solid'
                 },
                 poop: {
-                    icon: '💩',
+                    icon: '<svg class="log-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="13" rx="9" ry="5"/><path d="M3 13c0 2.209 4.03 4 9 4s9-1.791 9-4M3 13v4c0 2.209 4.03 4 9 4s9-1.791 9-4v-4"/></svg>',
                     cls: 'poop'
                 },
                 water: {
-                    icon: '💧',
+                    icon: '<svg class="log-icon-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.96 0 1.92.38 2.65 1.13.73.75 1.13 1.77 1.13 2.82 0 .82-.26 1.62-.77 2.31.53.16 1.1.24 1.68.24 2.54 0 4.8-1.07 6.46-2.86l1.41 1.41c-2.12 2.3-5.07 3.65-8.32 3.65-.58 0-1.13-.08-1.66-.23.51.69.77 1.49.77 2.31 0 1.05-.4 2.07-1.13 2.82-.73.75-1.69 1.13-2.65 1.13s-1.92-.38-2.65-1.13c-.73-.75-1.13-1.77-1.13-2.82 0-.82.26-1.62.77-2.31-.53-.16-1.1-.24-1.68-.24-2.54 0-4.8 1.07-6.46 2.86L2.07 14.5c2.12-2.3 5.07-3.65 8.32-3.65.58 0 1.13.08 1.66.23-.51-.69-.77-1.49-.77-2.31 0-1.05.4-2.07 1.13-2.82.73-.75 1.69-1.13 2.65-1.13Z"/></svg>',
                     cls: 'water'
                 }
             };
             logList.innerHTML = [...todayLogs].reverse().map(log => {
                 const ic = icons[log.type];
-                const time = new Date(log.logged_at).toLocaleTimeString([], {
+                const date = new Date(log.logged_at);
+                const time = date.toLocaleTimeString('en-IN', {
                     hour: '2-digit',
-                    minute: '2-digit'
+                    minute: '2-digit',
+                    timeZone: 'Asia/Kolkata',
+                    hour12: true
                 });
                 let label = `${log.volume_ml}ml`;
                 if (log.type === 'milk') label += ` ${log.milk_type}`;
@@ -1620,5 +1851,30 @@
             return `<div class="guide-stage" style="${i === stages.length - 1 ? 'border-bottom:none' : ''}"><div class="stage-dot s${i+1}">${i+1}</div><div class="stage-info"><h4>${s.emoji} ${s.title} (${s.age})</h4><p>${s.desc}</p></div></div>`;
         }).join('');
     }
+
+    // Handle type parameter from URL (e.g., ?type=milk)
+    window.addEventListener('load', function() {
+        const params = new URLSearchParams(window.location.search);
+        const logType = params.get('type');
+
+        if (logType && ['milk', 'solid', 'water', 'poop'].includes(logType)) {
+            // Navigate to log page
+            const logTab = document.querySelector('.tab[onclick="showPage(\'log\', this)"]');
+            if (logTab) showPage('log', logTab);
+
+            // Select the appropriate log type using the tag index
+            const tagMap = {
+                milk: 0,
+                solid: 1,
+                water: 2,
+                poop: 3
+            };
+            const tagIndex = tagMap[logType];
+            const tags = document.querySelectorAll('#log-type-row .tag');
+            if (tags[tagIndex]) {
+                tags[tagIndex].click();
+            }
+        }
+    });
 </script>
 @endsection

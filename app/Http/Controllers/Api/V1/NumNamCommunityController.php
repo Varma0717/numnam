@@ -15,8 +15,20 @@ class NumNamCommunityController extends Controller
     public function rooms()
     {
         $rooms = CommunityRoom::where('is_active', true)
+            ->withCount('messages')
             ->orderBy('display_order')
-            ->get();
+            ->get()
+            ->map(function ($room) {
+                return [
+                    'id' => $room->id,
+                    'name' => $room->name,
+                    'description' => $room->description,
+                    'icon' => $room->icon,
+                    'color' => $room->color,
+                    'slug' => $room->slug,
+                    'message_count' => $room->messages_count,
+                ];
+            });
 
         return response()->json([
             'data' => $rooms,

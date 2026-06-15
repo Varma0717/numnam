@@ -7,6 +7,7 @@ use App\Models\FeedLog;
 use App\Models\ChatMessage;
 use App\Models\NumNamRecipe;
 use App\Models\Blog;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,13 +21,27 @@ class ToolsManagementController extends Controller
         $from = $request->get('from', now()->subDays(30)->format('Y-m-d'));
         $to = $request->get('to', now()->format('Y-m-d'));
 
-        // Feed logs usage
-        $feedLogUsers = FeedLog::whereBetween('created_at', [$from, $to . ' 23:59:59'])
-            ->with('user:id,name,email')
-            ->select(DB::raw('user_id'), DB::raw('COUNT(*) as log_count'), DB::raw('COUNT(DISTINCT DATE(created_at)) as days_used'))
-            ->groupBy('user_id')
-            ->orderByDesc('log_count')
-            ->get();
+        // Get log counts per user
+        $logCounts = FeedLog::whereBetween('feed_logs.created_at', [$from, $to . ' 23:59:59'])
+            ->join('baby_profiles', 'feed_logs.baby_profile_id', '=', 'baby_profiles.id')
+            ->select('baby_profiles.user_id', DB::raw('COUNT(*) as log_count'), DB::raw('COUNT(DISTINCT DATE(feed_logs.created_at)) as days_used'))
+            ->groupBy('baby_profiles.user_id')
+            ->get()
+            ->keyBy('user_id');
+
+        // Load users with their log counts
+        $feedLogUsers = \App\Models\User::whereIn('id', $logCounts->keys())
+            ->select('id', 'name', 'email')
+            ->get()
+            ->map(function ($user) use ($logCounts) {
+                $counts = $logCounts[$user->id];
+                return (object)[
+                    'user' => $user,
+                    'log_count' => $counts->log_count,
+                    'days_used' => $counts->days_used,
+                ];
+            })
+            ->sortByDesc('log_count');
 
         // Chat messages usage
         $chatUsers = ChatMessage::whereBetween('created_at', [$from, $to . ' 23:59:59'])
@@ -38,11 +53,11 @@ class ToolsManagementController extends Controller
 
         // Overall statistics
         $stats = [
-            'total_feed_logs' => FeedLog::whereBetween('created_at', [$from, $to . ' 23:59:59'])->count(),
+            'total_feed_logs' => FeedLog::whereBetween('feed_logs.created_at', [$from, $to . ' 23:59:59'])->count(),
             'total_chat_messages' => ChatMessage::whereBetween('created_at', [$from, $to . ' 23:59:59'])->count(),
             'active_logging_users' => $feedLogUsers->count(),
             'active_chat_users' => $chatUsers->count(),
-            'feed_log_types' => FeedLog::whereBetween('created_at', [$from, $to . ' 23:59:59'])
+            'feed_log_types' => FeedLog::whereBetween('feed_logs.created_at', [$from, $to . ' 23:59:59'])
                 ->select(DB::raw('type'), DB::raw('COUNT(*) as count'))
                 ->groupBy('type')
                 ->get()
@@ -70,10 +85,10 @@ class ToolsManagementController extends Controller
         $type = $request->get('type'); // milk, solid, water, poop
 
         $query = FeedLog::whereBetween('created_at', [$from, $to . ' 23:59:59'])
-            ->with('user:id,name,email');
+            ->with('babyProfile.user:id,name,email');
 
         if ($userId) {
-            $query->where('user_id', $userId);
+            $query->whereHas('babyProfile', fn($q) => $q->where('user_id', $userId));
         }
 
         if ($type) {
@@ -94,13 +109,13 @@ class ToolsManagementController extends Controller
             ->orderBy('date')
             ->get();
 
-        $users = FeedLog::whereNotNull('user_id')
-            ->distinct()
-            ->select('user_id')
-            ->with('user:id,name,email')
-            ->get()
-            ->map(fn($log) => $log->user)
-            ->filter();
+        $users = User::whereIn('id', FeedLog::distinct()
+            ->join('baby_profiles', 'feed_logs.baby_profile_id', '=', 'baby_profiles.id')
+            ->select('baby_profiles.user_id')
+            ->pluck('user_id'))
+            ->select('id', 'name', 'email')
+            ->orderBy('name')
+            ->get();
 
         return view('admin.tools.feed-logs', compact(
             'from',
@@ -138,29 +153,51 @@ class ToolsManagementController extends Controller
             ->paginate(50);
 
         // Room activity
-        $roomActivity = ChatMessage::whereBetween('created_at', [$from, $to . ' 23:59:59'])
+        $roomActivityData = ChatMessage::whereBetween('created_at', [$from, $to . ' 23:59:59'])
             ->select(DB::raw('room_id'), DB::raw('COUNT(*) as message_count'), DB::raw('COUNT(DISTINCT user_id) as user_count'))
-            ->with('room:id,name')
             ->groupBy('room_id')
             ->orderByDesc('message_count')
             ->get();
 
+        $roomIds = $roomActivityData->pluck('room_id')->toArray();
+        $rooms_map = \App\Models\CommunityRoom::whereIn('id', $roomIds)->get()->keyBy('id');
+
+        $roomActivity = $roomActivityData->map(function ($item) use ($rooms_map) {
+            return (object)[
+                'room_id' => $item->room_id,
+                'message_count' => $item->message_count,
+                'user_count' => $item->user_count,
+                'room' => $rooms_map[$item->room_id] ?? null,
+            ];
+        });
+
         // User activity
-        $userActivity = ChatMessage::whereBetween('created_at', [$from, $to . ' 23:59:59'])
+        $userActivityData = ChatMessage::whereBetween('created_at', [$from, $to . ' 23:59:59'])
             ->select(DB::raw('user_id'), DB::raw('COUNT(*) as message_count'), DB::raw('COUNT(DISTINCT room_id) as rooms_count'))
-            ->with('user:id,name,email')
             ->groupBy('user_id')
             ->orderByDesc('message_count')
             ->get();
 
+        $userIds = $userActivityData->pluck('user_id')->toArray();
+        $users_map = User::whereIn('id', $userIds)->select('id', 'name', 'email')->get()->keyBy('id');
+
+        $userActivity = $userActivityData->map(function ($item) use ($users_map) {
+            return (object)[
+                'user_id' => $item->user_id,
+                'message_count' => $item->message_count,
+                'rooms_count' => $item->rooms_count,
+                'user' => $users_map[$item->user_id] ?? null,
+            ];
+        });
+
         $rooms = \App\Models\CommunityRoom::select('id', 'name')->get();
-        $users = ChatMessage::whereNotNull('user_id')
+        $users = User::whereIn('id', ChatMessage::whereNotNull('user_id')
             ->distinct()
             ->select('user_id')
-            ->with('user:id,name,email')
-            ->get()
-            ->map(fn($msg) => $msg->user)
-            ->filter();
+            ->pluck('user_id'))
+            ->select('id', 'name', 'email')
+            ->orderBy('name')
+            ->get();
 
         return view('admin.tools.community', compact(
             'from',
@@ -186,8 +223,9 @@ class ToolsManagementController extends Controller
         $to = $request->get('to', now()->format('Y-m-d'));
 
         // Feed logs
-        $feedLogs = FeedLog::where('user_id', $userId)
+        $feedLogs = FeedLog::whereHas('babyProfile', fn($q) => $q->where('user_id', $userId))
             ->whereBetween('created_at', [$from, $to . ' 23:59:59'])
+            ->with('babyProfile:id,baby_name,user_id')
             ->orderByDesc('logged_at')
             ->get();
 
