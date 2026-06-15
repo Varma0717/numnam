@@ -15,7 +15,7 @@ class NumNamRecipeController extends Controller
     public function index(Request $request)
     {
         $ageMonths = 6; // Default age
-        
+
         // If user is authenticated, get their baby's age
         if ($request->user()) {
             $profile = BabyProfile::where('user_id', $request->user()->id)->first();
@@ -65,7 +65,7 @@ class NumNamRecipeController extends Controller
         ]);
 
         $ageMonths = 6; // Default age
-        
+
         // If user is authenticated, get their baby's age
         if ($request->user()) {
             $profile = BabyProfile::where('user_id', $request->user()->id)->first();
