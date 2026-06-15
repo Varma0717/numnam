@@ -14,9 +14,17 @@ class NumNamRecipeController extends Controller
      */
     public function index(Request $request)
     {
-        $profile = BabyProfile::where('user_id', $request->user()->id)->firstOrFail();
+        $ageMonths = 6; // Default age
+        
+        // If user is authenticated, get their baby's age
+        if ($request->user()) {
+            $profile = BabyProfile::where('user_id', $request->user()->id)->first();
+            if ($profile) {
+                $ageMonths = $profile->age_months;
+            }
+        }
 
-        $recipes = NumNamRecipe::getForAge($profile->age_months);
+        $recipes = NumNamRecipe::getForAge($ageMonths);
 
         return response()->json([
             'data' => $recipes,
@@ -56,9 +64,17 @@ class NumNamRecipeController extends Controller
             'food_type' => 'required|in:veggie,fruit,protein,grain,dairy,mixed',
         ]);
 
-        $profile = BabyProfile::where('user_id', $request->user()->id)->firstOrFail();
+        $ageMonths = 6; // Default age
+        
+        // If user is authenticated, get their baby's age
+        if ($request->user()) {
+            $profile = BabyProfile::where('user_id', $request->user()->id)->first();
+            if ($profile) {
+                $ageMonths = $profile->age_months;
+            }
+        }
 
-        $recipes = NumNamRecipe::where('min_age_months', '<=', $profile->age_months)
+        $recipes = NumNamRecipe::where('min_age_months', '<=', $ageMonths)
             ->where('food_type', $foodType)
             ->orderBy('hearts_count', 'desc')
             ->get();

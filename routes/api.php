@@ -120,8 +120,8 @@ Route::prefix('v1')->group(function () {
         Route::get('recipes/type/{foodType}', [NumNamRecipeController::class, 'byType']);
     });
 
-    // ── NumNam Weaning App API - Protected Routes (auth:sanctum + session) ─────────────────
-    Route::prefix('numnam')->middleware(['auth:sanctum', 'auth:web'])->group(function () {
+    // ── NumNam Weaning App API - Protected Routes (auth:web session only) ─────────────────
+    Route::prefix('numnam')->middleware('auth:web')->group(function () {
         // Test endpoint - remove after testing
         Route::get('_test', fn() => response()->json(['message' => 'NumNam routes working!']));
 
@@ -138,10 +138,7 @@ Route::prefix('v1')->group(function () {
 
         // Recipes - Write Endpoints (Protected)
         Route::post('recipes/{recipe}/like', [NumNamRecipeController::class, 'toggleLike']);
-    });
 
-    // ── NumNam Community Chat - Write Endpoints (Web Session Auth Only) ─────────────────
-    Route::prefix('numnam')->middleware('auth:web')->group(function () {
         // Community Chat - Write Endpoints (Protected by session)
         Route::post('community/rooms/{room}/messages', [NumNamCommunityController::class, 'sendMessage']);
         Route::post('community/messages/{message}/like', [NumNamCommunityController::class, 'likeMessage']);
