@@ -16,11 +16,11 @@
         <form method="GET" action="{{ route('admin.tools.index') }}" class="flex flex-col gap-4 md:flex-row md:items-end">
             <div class="flex-1">
                 <label class="block text-sm font-medium text-slate-700">From Date</label>
-                <input type="date" name="from" value="{{  }}" class="mt-2 w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                <input type="date" name="from" value="{{ $from }}" class="mt-2 w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
             </div>
             <div class="flex-1">
                 <label class="block text-sm font-medium text-slate-700">To Date</label>
-                <input type="date" name="to" value="{{  }}" class="mt-2 w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                <input type="date" name="to" value="{{ $to }}" class="mt-2 w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
             </div>
             <button type="submit" class="rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-2.5 font-semibold text-white transition hover:shadow-lg">
                 🔍 Filter
@@ -35,7 +35,7 @@
             <div class="flex items-start justify-between">
                 <div>
                     <p class="text-sm font-medium text-blue-600">Feed Logs</p>
-                    <p class="mt-2 text-3xl font-bold text-blue-900">{{ \['total_feed_logs'] }}</p>
+                    <p class="mt-2 text-3xl font-bold text-blue-900">{{ $stats['total_feed_logs'] }}</p>
                     <p class="mt-1 text-xs text-blue-700">Total logs recorded</p>
                 </div>
                 <div class="text-4xl">📝</div>
@@ -47,7 +47,7 @@
             <div class="flex items-start justify-between">
                 <div>
                     <p class="text-sm font-medium text-purple-600">Chat Messages</p>
-                    <p class="mt-2 text-3xl font-bold text-purple-900">{{ \['total_chat_messages'] }}</p>
+                    <p class="mt-2 text-3xl font-bold text-purple-900">{{ $stats['total_chat_messages'] }}</p>
                     <p class="mt-1 text-xs text-purple-700">Community conversations</p>
                 </div>
                 <div class="text-4xl">💬</div>
@@ -59,7 +59,7 @@
             <div class="flex items-start justify-between">
                 <div>
                     <p class="text-sm font-medium text-green-600">Logging Users</p>
-                    <p class="mt-2 text-3xl font-bold text-green-900">{{ \['active_logging_users'] }}</p>
+                    <p class="mt-2 text-3xl font-bold text-green-900">{{ $stats['active_logging_users'] }}</p>
                     <p class="mt-1 text-xs text-green-700">Active in last 30 days</p>
                 </div>
                 <div class="text-4xl">👨‍👩‍👧</div>
@@ -71,7 +71,7 @@
             <div class="flex items-start justify-between">
                 <div>
                     <p class="text-sm font-medium text-orange-600">Community Users</p>
-                    <p class="mt-2 text-3xl font-bold text-orange-900">{{ \['active_chat_users'] }}</p>
+                    <p class="mt-2 text-3xl font-bold text-orange-900">{{ $stats['active_chat_users'] }}</p>
                     <p class="mt-1 text-xs text-orange-700">Chatting & engaging</p>
                 </div>
                 <div class="text-4xl">👥</div>
@@ -80,36 +80,19 @@
     </div>
 
     <!-- Log Types Breakdown -->
-    @if(\['feed_log_types'])
+    @if(isset($stats['feed_log_types']) && count($stats['feed_log_types']) > 0)
     <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
         <div class="mb-6 border-b border-slate-200 pb-4">
             <h2 class="text-2xl font-bold text-slate-900">📊 Log Types Breakdown</h2>
             <p class="mt-1 text-sm text-slate-600">Distribution of different feed log types</p>
         </div>
         <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
-            @forelse(\['feed_log_types'] as \ => \)
+            @forelse($stats['feed_log_types'] as $type => $count)
             <div class="rounded-lg border-2 border-slate-200 bg-slate-50 p-6 text-center transition hover:border-slate-300 hover:bg-white">
-                <div class="mb-3 text-5xl">
-                    @switch(\)
-                    @case('milk')
-                    🍼
-                    @break
-                    @case('solid')
-                    🥣
-                    @break
-                    @case('water')
-                    💧
-                    @break
-                    @case('poop')
-                    💩
-                    @break
-                    @default
-                    📊
-                    @endswitch
-                </div>
-                <p class="mb-1 text-sm font-medium capitalize text-slate-600">{{ \ }} Logs</p>
-                <p class="text-2xl font-bold text-slate-900">{{ \['count'] }}</p>
-                <p class="mt-2 text-xs text-slate-500">recorded</p>
+                <div class="mb-3 text-4xl">📊</div>
+                <p class="mb-1 text-sm font-medium capitalize text-slate-600">{{ (string)$type }}</p>
+                <p class="text-2xl font-bold text-slate-900">{{ is_array($count) ? count($count) : (int)$count }}</p>
+                <p class="mt-2 text-xs text-slate-500">logs</p>
             </div>
             @empty
             <div class="col-span-4 text-center py-8">
@@ -134,21 +117,21 @@
                 </a>
             </div>
             <div class="space-y-2">
-                @forelse(\->take(5) as \)
+                @forelse($feedLogUsers->take(5) as $logUser)
                 <div class="group rounded-lg border border-slate-200 bg-gradient-to-r from-slate-50 to-transparent p-4 transition hover:bg-blue-50">
                     <div class="flex items-center justify-between">
                         <div class="flex-1">
-                            <p class="font-semibold text-slate-900">{{ \->user->name ?? 'Unknown User' }}</p>
-                            <p class="text-sm text-slate-500">{{ \->user->email ?? 'N/A' }}</p>
+                            <p class="font-semibold text-slate-900">{{ $logUser->user->name ?? 'Unknown User' }}</p>
+                            <p class="text-sm text-slate-500">{{ $logUser->user->email ?? 'N/A' }}</p>
                         </div>
                         <div class="text-right">
-                            <p class="text-lg font-bold text-blue-600">{{ \->log_count }}</p>
-                            <p class="text-xs text-slate-500">{{ \->days_used }} day{{ \->days_used != 1 ? 's' : '' }}</p>
+                            <p class="text-lg font-bold text-blue-600">{{ $logUser->log_count }}</p>
+                            <p class="text-xs text-slate-500">{{ $logUser->days_used }} day{{ $logUser->days_used != 1 ? 's' : '' }}</p>
                         </div>
                     </div>
-                    @if(\->user)
+                    @if($logUser->user)
                     <div class="mt-3 pt-3 border-t border-slate-100">
-                        <a href="{{ route('admin.tools.customer-detail', \->user->id) }}" class="text-xs font-medium text-blue-600 transition group-hover:text-blue-700">
+                        <a href="{{ route('admin.tools.customer-detail', $logUser->user->id) }}" class="text-xs font-medium text-blue-600 transition group-hover:text-blue-700">
                             📋 View Detailed Report →
                         </a>
                     </div>
@@ -174,21 +157,21 @@
                 </a>
             </div>
             <div class="space-y-2">
-                @forelse(\->take(5) as \)
+                @forelse($chatUsers->take(5) as $chatUser)
                 <div class="group rounded-lg border border-slate-200 bg-gradient-to-r from-slate-50 to-transparent p-4 transition hover:bg-purple-50">
                     <div class="flex items-center justify-between">
                         <div class="flex-1">
-                            <p class="font-semibold text-slate-900">{{ \->user->name ?? 'Unknown User' }}</p>
-                            <p class="text-sm text-slate-500">{{ \->user->email ?? 'N/A' }}</p>
+                            <p class="font-semibold text-slate-900">{{ $chatUser->user->name ?? 'Unknown User' }}</p>
+                            <p class="text-sm text-slate-500">{{ $chatUser->user->email ?? 'N/A' }}</p>
                         </div>
                         <div class="text-right">
-                            <p class="text-lg font-bold text-purple-600">{{ \->message_count }}</p>
-                            <p class="text-xs text-slate-500">in {{ \->rooms_count }} room{{ \->rooms_count != 1 ? 's' : '' }}</p>
+                            <p class="text-lg font-bold text-purple-600">{{ $chatUser->message_count }}</p>
+                            <p class="text-xs text-slate-500">in {{ $chatUser->rooms_count }} room{{ $chatUser->rooms_count != 1 ? 's' : '' }}</p>
                         </div>
                     </div>
-                    @if(\->user)
+                    @if($chatUser->user)
                     <div class="mt-3 pt-3 border-t border-slate-100">
-                        <a href="{{ route('admin.tools.customer-detail', \->user->id) }}" class="text-xs font-medium text-purple-600 transition group-hover:text-purple-700">
+                        <a href="{{ route('admin.tools.customer-detail', $chatUser->user->id) }}" class="text-xs font-medium text-purple-600 transition group-hover:text-purple-700">
                             📋 View Detailed Report →
                         </a>
                     </div>
