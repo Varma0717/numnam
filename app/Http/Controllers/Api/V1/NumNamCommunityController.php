@@ -251,4 +251,22 @@ class NumNamCommunityController extends Controller
             'count' => $messages->count(),
         ]);
     }
+
+    /**
+     * Get community statistics
+     */
+    public function stats()
+    {
+        $activeRooms = CommunityRoom::where('is_active', true)->count();
+        $totalMessages = ChatMessage::count();
+        $activeMembers = ChatMessage::select('user_id')
+            ->distinct()
+            ->count();
+
+        return response()->json([
+            'active_rooms' => $activeRooms,
+            'total_messages' => $totalMessages,
+            'active_members' => $activeMembers,
+        ]);
+    }
 }

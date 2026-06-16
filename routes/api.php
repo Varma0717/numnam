@@ -114,6 +114,7 @@ Route::prefix('v1')->group(function () {
         Route::get('community/rooms/{room}/messages', [NumNamCommunityController::class, 'roomMessages']);
         Route::get('community/messages/{message}/comments', [NumNamCommunityController::class, 'getComments']);
         Route::get('community/rooms/{room}/search', [NumNamCommunityController::class, 'searchMessages']);
+        Route::get('community/stats', [NumNamCommunityController::class, 'stats']);
 
         // Recipes - Public Read Endpoints
         Route::get('recipes', [NumNamRecipeController::class, 'index']);

@@ -124,6 +124,25 @@
 @section('scripts')
 @auth
 <script>
+    async function loadCommunityStats() {
+        try {
+            const response = await fetch('/api/v1/numnam/community/stats', {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('room-count').textContent = data.active_rooms;
+                document.getElementById('message-count').textContent = data.total_messages;
+                document.getElementById('member-count').textContent = data.active_members;
+            }
+        } catch (error) {
+            console.error('Error loading stats:', error);
+        }
+    }
+
     async function loadCommunityRooms() {
         try {
             const response = await fetch('/api/v1/numnam/community/rooms', {
@@ -163,11 +182,6 @@
                     </div>
                 </a>
             `).join('');
-
-            // Update stats
-            document.getElementById('room-count').textContent = rooms.length;
-            document.getElementById('message-count').textContent = rooms.reduce((sum, r) => sum + r.message_count, 0);
-            document.getElementById('member-count').textContent = Math.floor(Math.random() * 5000) + 1000;
         } catch (error) {
             console.error('Error loading rooms:', error);
             document.getElementById('rooms-container').innerHTML = `
@@ -178,7 +192,10 @@
         }
     }
 
-    document.addEventListener('DOMContentLoaded', loadCommunityRooms);
+    document.addEventListener('DOMContentLoaded', function() {
+        loadCommunityStats();
+        loadCommunityRooms();
+    });
 </script>
 @endauth
 @endsection
