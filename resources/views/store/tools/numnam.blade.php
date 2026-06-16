@@ -1666,7 +1666,7 @@
             document.getElementById('balance-pct').textContent = '—';
         }
 
-        renderInsights(todayLogs, totalMilk, totalSolid, lastPoop);
+        renderInsights(todayLogs, totalMilk, totalSolid, totalWater, lastPoop);
         renderMilestone();
 
         const logList = document.getElementById('today-log-list');
@@ -1709,7 +1709,7 @@
         }
     }
 
-    function renderInsights(todayLogs, totalMilk, totalSolid, lastPoop) {
+    function renderInsights(todayLogs, totalMilk, totalSolid, totalWater, lastPoop) {
         const area = document.getElementById('insight-area');
         let insights = [];
 
