@@ -167,9 +167,9 @@
             // Update stats
             document.getElementById('room-count').textContent = rooms.length;
             document.getElementById('message-count').textContent = rooms.reduce((sum, r) => sum + r.message_count, 0);
-            document.getElementById('member-count').textContent = Math.floor(Math.random() * 5000) + 1000; // Placeholder
+            document.getElementById('member-count').textContent = Math.floor(Math.random() * 5000) + 1000;
         } catch (error) {
-            console.error('Failed to load rooms:', error);
+            console.error('Error loading rooms:', error);
             document.getElementById('rooms-container').innerHTML = `
                 <div class="col-span-2 text-center py-12">
                     <p class="text-red-600">Failed to load community rooms. Please try again.</p>
@@ -179,62 +179,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', loadCommunityRooms);
-</script>
-@endauth
-@endsection
-
-}
-
-// Update stats based on real data
-document.getElementById('room-count').textContent = rooms.length;
-document.getElementById('member-count').textContent = '--';
-let totalMessages = 0;
-
-// Display real rooms from database
-const roomsHtml = rooms.map(room => `
-<div class="rounded-2xl border border-slate-200 p-5 hover:border-numnam-300 hover:shadow-md transition cursor-pointer" onclick="joinRoom(${room.id})">
-    <div class="flex items-start gap-4">
-        <div class="text-4xl">${room.icon || '💬'}</div>
-        <div class="flex-1">
-            <h3 class="font-bold text-slate-900 text-lg">${room.name}</h3>
-            <p class="text-sm text-slate-600 mt-1">${room.description}</p>
-            <div class="flex gap-4 mt-3 text-xs text-slate-500">
-                <span>💬 ${room.message_count || 0} messages</span>
-            </div>
-        </div>
-        <button class="rounded-lg bg-numnam-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-numnam-700">
-            Enter
-        </button>
-    </div>
-</div>
-`).join('');
-
-// Calculate total messages
-totalMessages = rooms.reduce((sum, r) => sum + (r.message_count || 0), 0);
-document.getElementById('message-count').textContent = totalMessages;
-
-document.getElementById('rooms-container').innerHTML = `
-<div class="space-y-4">
-    ${roomsHtml}
-</div>
-`;
-} catch (error) {
-console.error('Error loading rooms:', error);
-document.getElementById('rooms-container').innerHTML = `
-<div class="text-center py-12">
-    <p class="text-red-600">Failed to load community rooms. Please try again.</p>
-</div>
-`;
-}
-}
-
-function joinRoom(roomId) {
-// Navigate to room detail page
-window.location.href = `/community/${roomId}`;
-}
-
-// Load rooms on page load
-loadCommunityRooms();
 </script>
 @endauth
 @endsection
