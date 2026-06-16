@@ -167,7 +167,7 @@
 
             const container = document.getElementById('rooms-container');
             container.innerHTML = rooms.map(room => `
-                <a href="{{ route('store.community.show', '') }}/${room.slug}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-lg hover:border-numnam-300">
+                <a href="/community/${room.id}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-lg hover:border-numnam-300">
                     <div class="flex items-start justify-between mb-3">
                         <div class="text-4xl">${room.icon || '💬'}</div>
                         <span class="inline-flex items-center rounded-full bg-numnam-100 px-3 py-1 text-xs font-semibold text-numnam-700">
