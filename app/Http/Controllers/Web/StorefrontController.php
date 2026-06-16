@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\NewOrderAdminNotification;
 use App\Mail\OrderPlacedCustomerNotification;
 use App\Models\Blog;
+use App\Models\BabyProfile;
 use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\ChatMessage;
@@ -1261,7 +1262,31 @@ class StorefrontController extends Controller
 
         $request->user()->fill($validated)->save();
 
-        return back()->with('success', 'Profile updated successfully.');
+        // If date_of_birth is provided, create/update BabyProfile with calculated age_months
+        $babyProfileUpdated = false;
+        if (!empty($validated['date_of_birth'])) {
+            $dateOfBirth = \Carbon\Carbon::parse($validated['date_of_birth']);
+            $ageMonths = $dateOfBirth->diffInMonths(now());
+
+            // Ensure age_months is at least 5 (minimum for weaning tracker)
+            $ageMonths = max(5, $ageMonths);
+
+            BabyProfile::updateOrCreate(
+                ['user_id' => $request->user()->id],
+                [
+                    'baby_name' => $request->user()->name . '\'s Baby',
+                    'age_months' => $ageMonths,
+                    'milk_type' => 'breast',
+                ]
+            );
+            $babyProfileUpdated = true;
+        }
+
+        $message = $babyProfileUpdated
+            ? 'Profile updated! Your baby profile is now ready for tracking.'
+            : 'Profile updated successfully.';
+
+        return back()->with('profile-status', $message);
     }
 
     public function changePassword(Request $request): RedirectResponse
