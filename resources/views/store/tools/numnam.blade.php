@@ -1065,11 +1065,29 @@
             <div class="card-title">Poop Log</div>
             <div class="card-sub">Select the closest match (Bristol Stool Chart – infant adapted)</div>
             <div class="poop-grid" id="poop-selector">
-                <div class="poop-btn" onclick="selectPoop('Type 1', this)"><span class="poop-icon">🪨</span><span class="poop-label">Type 1<br>Hard</span></div>
-                <div class="poop-btn" onclick="selectPoop('Type 2', this)"><span class="poop-icon">🔗</span><span class="poop-label">Type 2<br>Lumpy</span></div>
-                <div class="poop-btn" onclick="selectPoop('Type 4', this)"><span class="poop-icon">✨</span><span class="poop-label">Type 4<br>Perfect</span></div>
-                <div class="poop-btn" onclick="selectPoop('Type 6', this)"><span class="poop-icon">⚡</span><span class="poop-label">Type 6<br>Loose</span></div>
-                <div class="poop-btn" onclick="selectPoop('Red/Undigested', this)"><span class="poop-icon">🍅</span><span class="poop-label">Red/<br>Undigested</span></div>
+                <div class="poop-btn" onclick="selectPoop('Type 1', this)"><span class="poop-icon"><svg class="inline h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="9" />
+                            <circle cx="12" cy="12" r="6" fill="currentColor" opacity="0.3" />
+                        </svg></span><span class="poop-label">Type 1<br>Hard</span></div>
+                <div class="poop-btn" onclick="selectPoop('Type 2', this)"><span class="poop-icon"><svg class="inline h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="8" cy="8" r="2.5" />
+                            <circle cx="16" cy="8" r="2.5" />
+                            <circle cx="12" cy="15" r="2.5" />
+                            <circle cx="8" cy="15" r="2.5" />
+                        </svg></span><span class="poop-label">Type 2<br>Lumpy</span></div>
+                <div class="poop-btn" onclick="selectPoop('Type 4', this)"><span class="poop-icon"><svg class="inline h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M8 14s1 2 4 2 4-2 4-2" />
+                            <circle cx="9" cy="9" r="1" />
+                            <circle cx="15" cy="9" r="1" />
+                        </svg></span><span class="poop-label">Type 4<br>Perfect</span></div>
+                <div class="poop-btn" onclick="selectPoop('Type 6', this)"><span class="poop-icon"><svg class="inline h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2c-1.657 0-3 1.343-3 3v4c0 1.105-.895 2-2 2s-2-.895-2-2V5m0 0v4m0-4h6V5c0-1.657-1.343-3-3-3z" />
+                            <path d="M9 15c-1.657 0-3 1.343-3 3v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2c0-1.657-1.343-3-3-3z" />
+                        </svg></span><span class="poop-label">Type 6<br>Loose</span></div>
+                <div class="poop-btn" onclick="selectPoop('Red/Undigested', this)"><span class="poop-icon"><svg class="inline h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l1.103 2.206L15.5 4.5l-2.397 1.294L12 8l-1.103-2.206L8.5 4.5l2.397-1.294L12 2m0 6c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4m0 2c-1.105 0-2 .895-2 2s.895 2 2 2 2-.895 2-2-.895-2-2-2m0 6c-3.314 0-6 2.686-6 6v2h12v-2c0-3.314-2.686-6-6-6z" />
+                        </svg></span><span class="poop-label">Red/<br>Undigested</span></div>
             </div>
             <div id="poop-insight" style="margin-top:14px;display:none"></div>
             <div class="form-row" style="margin-top:12px">
@@ -1139,7 +1157,7 @@
             <div class="card-sub">If-this-then-that interventions</div>
 
             <div class="insight">
-                <div class="ins-title">🪨 Hard Poop? → Hydration Rescue</div>
+                <div class="ins-title">⚪ Hard Poop? → Hydration Rescue</div>
                 Add 1 tsp of ghee/oil to next meal. Offer water sips. Add water-rich fruits.
             </div>
             <div class="insight blue">
@@ -1508,32 +1526,32 @@
     function getPoopAdvice(type) {
         if (type === 'Type 1') return {
             cls: '',
-            title: '🪨 Hydration Rescue!',
+            title: '⚪ Hard & Constipated - Hydration Rescue!',
             text: 'Baby seems backed up. Add 1 tsp of ghee or coconut oil to the next meal. Offer water sips.'
         };
         if (type === 'Type 2') return {
             cls: '',
-            title: '💧 More fluids needed',
+            title: '⚪ Lumpy & Firm - More fluids needed',
             text: 'Offer water sips after solids. Focus on water-rich fruits like melon or pear today.'
         };
         if (type === 'Type 4') return {
             cls: 'green',
-            title: '✅ Perfect!',
+            title: '✓ Ideal Consistency - Perfect!',
             text: 'Fibre and fluid balance is just right. Keep doing what you\'re doing!'
         };
         if (type === 'Type 6') return {
             cls: 'blue',
-            title: '⚡ Slow down on new foods',
+            title: '💧 Soft & Loose - Slow down on new foods',
             text: 'Possible sensitivity. Pause new high-fibre veggies for 2 days and monitor.'
         };
         if (type === 'Red/Undigested') return {
             cls: '',
-            title: '🍅 Digestion Check',
+            title: '⚠ Red or Undigested - Digestion Check',
             text: 'Undigested bits are normal! Gut is learning. Try mashing more for the next 2 days.'
         };
         return {
             cls: 'blue',
-            title: 'ℹ️ Normal variation',
+            title: 'ℹ Normal variation',
             text: 'Nothing to worry about. Keep an eye on it over the next day or two.'
         };
     }
