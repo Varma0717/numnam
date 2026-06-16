@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -11,31 +10,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Add performance indexes to chat_messages (if they don't exist)
-        Schema::table('chat_messages', function (Blueprint $table) {
-            $sm = Schema::getConnection()->getDoctrineSchemaManager();
-            $indexes = $sm->listTableIndexes('chat_messages');
+        // Add indexes using raw SQL to avoid Doctrine issues
+        DB::statement('ALTER TABLE chat_messages ADD INDEX IF NOT EXISTS chat_messages_room_id_index(room_id)');
+        DB::statement('ALTER TABLE chat_messages ADD INDEX IF NOT EXISTS chat_messages_room_id_created_at_index(room_id, created_at)');
 
-            if (!isset($indexes['chat_messages_room_id_index'])) {
-                $table->index('room_id');
-            }
-
-            if (!isset($indexes['chat_messages_room_id_created_at_index'])) {
-                $table->index(['room_id', 'created_at']);
-            }
-        });
-
-        // Add indexes to chat_message_likes for faster lookups
-        if (Schema::hasTable('chat_message_likes')) {
-            Schema::table('chat_message_likes', function (Blueprint $table) {
-                $sm = Schema::getConnection()->getDoctrineSchemaManager();
-                $indexes = $sm->listTableIndexes('chat_message_likes');
-
-                // Prevent duplicate likes (unique constraint)
-                if (!isset($indexes['chat_message_likes_message_id_user_id_unique'])) {
-                    $table->unique(['message_id', 'user_id']);
-                }
-            });
+        // Add unique constraint for message likes if table exists
+        if ($this->hasTable('chat_message_likes')) {
+            DB::statement('ALTER TABLE chat_message_likes ADD UNIQUE INDEX IF NOT EXISTS chat_message_likes_message_id_user_id_unique(message_id, user_id)');
         }
     }
 
@@ -44,15 +25,19 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('chat_messages', function (Blueprint $table) {
-            $table->dropIndex(['room_id']);
-            $table->dropIndex(['room_id', 'created_at']);
-        });
+        DB::statement('ALTER TABLE chat_messages DROP INDEX IF EXISTS chat_messages_room_id_index');
+        DB::statement('ALTER TABLE chat_messages DROP INDEX IF EXISTS chat_messages_room_id_created_at_index');
 
-        if (Schema::hasTable('chat_message_likes')) {
-            Schema::table('chat_message_likes', function (Blueprint $table) {
-                $table->dropUnique(['message_id', 'user_id']);
-            });
+        if ($this->hasTable('chat_message_likes')) {
+            DB::statement('ALTER TABLE chat_message_likes DROP INDEX IF EXISTS chat_message_likes_message_id_user_id_unique');
         }
+    }
+
+    /**
+     * Check if table exists
+     */
+    private function hasTable($table): bool
+    {
+        return DB::getSchemaBuilder()->hasTable($table);
     }
 };
