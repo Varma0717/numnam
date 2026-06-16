@@ -11,18 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Add performance indexes to chat_messages
+        // Add performance indexes to chat_messages (if they don't exist)
         Schema::table('chat_messages', function (Blueprint $table) {
-            // Check if indexes don't already exist
-            $table->index('room_id');
-            $table->index(['room_id', 'created_at']);
+            $sm = Schema::getConnection()->getDoctrineSchemaManager();
+            $indexes = $sm->listTableIndexes('chat_messages');
+
+            if (!isset($indexes['chat_messages_room_id_index'])) {
+                $table->index('room_id');
+            }
+
+            if (!isset($indexes['chat_messages_room_id_created_at_index'])) {
+                $table->index(['room_id', 'created_at']);
+            }
         });
 
         // Add indexes to chat_message_likes for faster lookups
         if (Schema::hasTable('chat_message_likes')) {
             Schema::table('chat_message_likes', function (Blueprint $table) {
+                $sm = Schema::getConnection()->getDoctrineSchemaManager();
+                $indexes = $sm->listTableIndexes('chat_message_likes');
+
                 // Prevent duplicate likes (unique constraint)
-                if (!Schema::hasIndex('chat_message_likes', 'chat_message_likes_message_id_user_id_unique')) {
+                if (!isset($indexes['chat_message_likes_message_id_user_id_unique'])) {
                     $table->unique(['message_id', 'user_id']);
                 }
             });
