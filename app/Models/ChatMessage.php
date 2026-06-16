@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class ChatMessage extends Model
 {
@@ -12,6 +14,7 @@ class ChatMessage extends Model
         'user_id',
         'message',
         'likes_count',
+        'comments_count',
         'created_at',
         'updated_at',
     ];
@@ -31,13 +34,29 @@ class ChatMessage extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function likedByUsers()
+    public function comments(): HasMany
     {
-        return $this->belongsToMany(User::class, 'chat_message_likes', 'message_id', 'user_id');
+        return $this->hasMany(MessageComment::class, 'message_id');
+    }
+
+    public function likedByUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'chat_message_likes', 'message_id', 'user_id')
+            ->withTimestamps();
+    }
+
+    public function isLikedBy(User $user): bool
+    {
+        return $this->likedByUsers()->where('user_id', $user->id)->exists();
     }
 
     public function incrementLikes()
     {
         return $this->increment('likes_count');
+    }
+
+    public function decrementLikes()
+    {
+        return $this->decrement('likes_count');
     }
 }

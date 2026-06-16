@@ -112,6 +112,7 @@ Route::prefix('v1')->group(function () {
         // Community Chat - Public Read Endpoints
         Route::get('community/rooms', [NumNamCommunityController::class, 'rooms']);
         Route::get('community/rooms/{room}/messages', [NumNamCommunityController::class, 'roomMessages']);
+        Route::get('community/messages/{message}/comments', [NumNamCommunityController::class, 'getComments']);
         Route::get('community/rooms/{room}/search', [NumNamCommunityController::class, 'searchMessages']);
 
         // Recipes - Public Read Endpoints
@@ -141,7 +142,9 @@ Route::prefix('v1')->group(function () {
 
         // Community Chat - Write Endpoints (Protected by session)
         Route::post('community/rooms/{room}/messages', [NumNamCommunityController::class, 'sendMessage']);
-        Route::post('community/messages/{message}/like', [NumNamCommunityController::class, 'likeMessage']);
+        Route::post('community/messages/{message}/like', [NumNamCommunityController::class, 'toggleLike']);
+        Route::post('community/messages/{message}/comments', [NumNamCommunityController::class, 'addComment']);
+        Route::post('community/comments/{comment}/like', [NumNamCommunityController::class, 'likeComment']);
     });
 
     // ── Admin CMS (AJAX JSON API) ───────────────────────────────────────
