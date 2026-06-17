@@ -817,7 +817,8 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                 GestureDetector(
                   onTap: () async {
                     try {
-                      await TrackerService.toggleRecipeHeart(recipe['id'] ?? id);
+                      await TrackerService.toggleRecipeHeart(
+                          recipe['id'] ?? id);
                       setState(() {
                         if (isHearted) {
                           heartedRecipes.remove(id);

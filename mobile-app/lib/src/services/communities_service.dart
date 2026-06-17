@@ -66,14 +66,16 @@ class CommunitiesService {
   /// Post a new message to a room
   static Future<Message> postMessage(int roomId, String content) async {
     try {
-      final response = await http.post(
-        Uri.parse('$_baseUrl$_endpoint/rooms/$roomId/messages'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode({'content': content}),
-      ).timeout(const Duration(seconds: 10));
+      final response = await http
+          .post(
+            Uri.parse('$_baseUrl$_endpoint/rooms/$roomId/messages'),
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: jsonEncode({'content': content}),
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final json = jsonDecode(response.body);
@@ -105,14 +107,16 @@ class CommunitiesService {
   /// Post a comment on a message
   static Future<Comment> postComment(int messageId, String content) async {
     try {
-      final response = await http.post(
-        Uri.parse('$_baseUrl$_endpoint/messages/$messageId/comments'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode({'content': content}),
-      ).timeout(const Duration(seconds: 10));
+      final response = await http
+          .post(
+            Uri.parse('$_baseUrl$_endpoint/messages/$messageId/comments'),
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: jsonEncode({'content': content}),
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final json = jsonDecode(response.body);

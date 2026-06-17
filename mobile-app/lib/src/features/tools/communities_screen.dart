@@ -98,7 +98,8 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.people_outline, size: 48, color: Colors.grey),
+                          Icon(Icons.people_outline,
+                              size: 48, color: Colors.grey),
                           SizedBox(height: 16),
                           Text('No communities available yet'),
                         ],
@@ -367,8 +368,8 @@ class _RoomDetailViewState extends State<RoomDetailView> {
                               message: message,
                               onLikePressed: () async {
                                 try {
-                                  await CommunitiesService
-                                      .toggleMessageLike(message.id);
+                                  await CommunitiesService.toggleMessageLike(
+                                      message.id);
                                   setState(() {
                                     messages[index] = Message(
                                       id: message.id,
@@ -639,8 +640,8 @@ class _CommentSheetViewState extends State<CommentSheetView> {
     });
 
     try {
-      final newComment = await CommunitiesService.postComment(
-          widget.message.id, content);
+      final newComment =
+          await CommunitiesService.postComment(widget.message.id, content);
       setState(() {
         comments.insert(0, newComment);
         _isPostingComment = false;
@@ -738,8 +739,8 @@ class _CommentSheetViewState extends State<CommentSheetView> {
                                 comment: comment,
                                 onLikePressed: () async {
                                   try {
-                                    await CommunitiesService
-                                        .toggleCommentLike(comment.id);
+                                    await CommunitiesService.toggleCommentLike(
+                                        comment.id);
                                     setState(() {
                                       comments[index] = Comment(
                                         id: comment.id,
@@ -756,8 +757,7 @@ class _CommentSheetViewState extends State<CommentSheetView> {
                                       );
                                     });
                                   } catch (e) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(
+                                    ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text('Error: $e'),
                                         backgroundColor: Colors.red,
