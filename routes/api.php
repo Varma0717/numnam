@@ -123,11 +123,11 @@ Route::prefix('v1')->group(function () {
         Route::get('recipes/type/{foodType}', [NumNamRecipeController::class, 'byType']);
     });
 
-    // ── NumNam Weaning App API - Protected Routes (auth:web session only) ─────────────────
-    Route::prefix('numnam')->middleware('auth:web')->group(function () {
+    // ── NumNam Weaning App API - Protected Routes (JWT auth for mobile app) ─────────────────
+    Route::prefix('numnam')->middleware('jwt.auth')->group(function () {
         // Test endpoint - shows current authenticated user
         Route::get('_test', function () {
-            $user = Auth::user();
+            $user = Auth::guard('api')->user();
             return response()->json([
                 'message' => 'NumNam routes working!',
                 'authenticated' => $user ? true : false,
