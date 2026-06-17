@@ -138,6 +138,7 @@ Route::prefix('v1')->group(function () {
 
         // Baby Profile
         Route::get('baby/profile', [NumNamBabyController::class, 'profile']);
+        Route::get('tracker/data', [NumNamBabyController::class, 'trackerData']);
         Route::post('baby/profile', [NumNamBabyController::class, 'updateProfile']);
         Route::get('baby/dashboard', [NumNamBabyController::class, 'dashboardSummary']);
 

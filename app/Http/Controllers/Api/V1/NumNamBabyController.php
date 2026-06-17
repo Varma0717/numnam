@@ -3,12 +3,48 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FeedLogResource;
 use App\Models\BabyProfile;
 use App\Models\FeedLog;
 use Illuminate\Http\Request;
 
 class NumNamBabyController extends Controller
 {
+    /**
+     * Get complete tracker data for mobile app
+     * Returns: { baby_age, logs, hearted_recipes }
+     */
+    public function trackerData(Request $request)
+    {
+        $userId = $request->user()->id;
+        
+        // Get or create baby profile
+        $profile = BabyProfile::firstOrCreate(
+            ['user_id' => $userId],
+            ['baby_name' => 'My Baby', 'age_months' => 6, 'milk_type' => 'breast']
+        );
+
+        // Get today's logs with proper field mapping
+        $logs = FeedLog::where('baby_profile_id', $profile->id)
+            ->whereDate('created_at', today())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Transform logs using resource to map field names
+        $transformedLogs = FeedLogResource::collection($logs)->resolve();
+
+        // Get hearted recipes (if you have a likes/hearts system)
+        $heartedRecipes = []; // TODO: implement recipe likes
+
+        return response()->json([
+            'data' => [
+                'baby_age' => $profile->age_months,
+                'logs' => $transformedLogs,
+                'hearted_recipes' => $heartedRecipes,
+            ]
+        ]);
+    }
+
     /**
      * Get or create baby profile
      */

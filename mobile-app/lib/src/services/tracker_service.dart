@@ -10,7 +10,7 @@ export '../models/tracker_data.dart';
 
 class TrackerService {
   static final String _baseUrl = AppConfig.apiBaseUrl;
-  static const String _endpoint = '/numnam/baby/profile';
+  static const String _endpoint = '/numnam/tracker/data';
   static final _storage = StorageService();
 
   /// Get authorization headers with JWT token

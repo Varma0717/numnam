@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FeedLogResource;
 use App\Models\BabyProfile;
 use App\Models\FeedLog;
 use Illuminate\Http\Request;
@@ -62,7 +63,7 @@ class NumNamFeedLogController extends Controller
         $logs = FeedLog::getTodayLogs($profile->id);
 
         return response()->json([
-            'data' => $logs,
+            'data' => FeedLogResource::collection($logs)->resolve(),
         ]);
     }
 
