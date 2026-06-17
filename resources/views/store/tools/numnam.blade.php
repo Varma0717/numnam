@@ -1383,6 +1383,16 @@
                     'Accept': 'application/json'
                 }
             });
+            
+            if (!response.ok) {
+                console.warn('Profile API returned:', response.status, response.statusText);
+                if (response.status === 401) {
+                    console.log('User not authenticated - showing login prompt');
+                    document.getElementById('page-dashboard').innerHTML = '<div style="text-align:center;padding:40px;"><p style="font-size:18px;color:#FF6B8A;font-weight:600;">Please login to use the NumNam Tracker</p><a href="/login" style="display:inline-block;margin-top:16px;background:#FF6B8A;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;">Login Now</a></div>';
+                }
+                return;
+            }
+            
             const data = await response.json();
             if (data.data) {
                 babyProfile = data.data;
@@ -1391,6 +1401,7 @@
             }
         } catch (error) {
             console.error('Profile load error:', error);
+            document.getElementById('page-dashboard').innerHTML = '<div style="text-align:center;padding:40px;"><p style="color:#999;">Error loading profile. Please refresh the page.</p></div>';
         }
     }
 
