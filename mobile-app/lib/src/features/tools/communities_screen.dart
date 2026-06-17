@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:addmagpro_mobile/src/services/communities_service.dart';
+import 'package:mobile_app/src/services/communities_service.dart';
+import 'package:mobile_app/src/models/communities.dart';
 
 class CommunitiesScreen extends StatefulWidget {
   static const routeName = '/tools/communities';
@@ -113,29 +114,30 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
                           child: TabBar(
                             controller: _tabController,
                             isScrollable: true,
-                            tabs: rooms
-                                .map((room) => Tab(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(room.emoji,
-                                              style: const TextStyle(
-                                                  fontSize: 16)),
-                                          const SizedBox(width: 4),
-                                          Text(room.name),
-                                        ],
-                                      ),
-                                    ))
-                                .toList(),
+                            tabs: [
+                              for (final room in rooms)
+                                Tab(
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(room.emoji,
+                                          style: const TextStyle(fontSize: 16)),
+                                      const SizedBox(width: 4),
+                                      Text(room.name),
+                                    ],
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
                         // Room content
                         Expanded(
                           child: TabBarView(
                             controller: _tabController,
-                            children: rooms
-                                .map((room) => RoomDetailView(room: room))
-                                .toList(),
+                            children: [
+                              for (final room in rooms)
+                                RoomDetailView(room: room),
+                            ],
                           ),
                         ),
                       ],

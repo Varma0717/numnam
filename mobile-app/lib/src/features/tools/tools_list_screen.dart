@@ -57,17 +57,17 @@ class ToolsListScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      tool['icon'],
+                      tool['icon'] as String,
                       style: const TextStyle(fontSize: 40),
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      tool['name'],
+                      tool['name'] as String,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      tool['description'],
+                      tool['description'] as String,
                       style: Theme.of(context).textTheme.bodyMedium,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -90,6 +90,3 @@ class ToolsListScreen extends StatelessWidget {
     );
   }
 }
-
-// Import the tracker screen
-import 'numnam_tracker_screen.dart';

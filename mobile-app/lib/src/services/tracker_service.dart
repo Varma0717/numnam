@@ -1,9 +1,10 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:addmagpro_mobile/src/config/app_config.dart';
+import 'package:mobile_app/src/config/app_config.dart';
+import 'package:mobile_app/src/models/feed_log.dart';
 
 class TrackerService {
-  static const String _baseUrl = AppConfig.apiBaseUrl;
+  static final String _baseUrl = AppConfig.apiBaseUrl;
   static const String _endpoint = '/api/v1/tracker';
 
   /// Fetch tracker data for current user

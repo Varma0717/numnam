@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:addmagpro_mobile/src/services/tracker_service.dart';
+import 'package:mobile_app/src/services/tracker_service.dart';
+import 'package:mobile_app/src/models/feed_log.dart';
 
 class NumNamTrackerScreen extends StatefulWidget {
   static const routeName = '/tools/numnam-tracker';
@@ -737,7 +738,8 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
       },
     ];
 
-    final filtered = recipes.where((r) => r['age']! <= babyAge).toList();
+    final filtered =
+        recipes.where((r) => (r['age'] as int?) ?? 0 <= babyAge).toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
