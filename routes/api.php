@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\V1\NumNamBabyController;
 use App\Http\Controllers\Api\V1\NumNamCommunityController;
 use App\Http\Controllers\Api\V1\NumNamFeedLogController;
 use App\Http\Controllers\Api\V1\NumNamRecipeController;
+use App\Http\Controllers\Api\V1\TrackerConfigController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -121,6 +122,9 @@ Route::prefix('v1')->group(function () {
         Route::get('recipes', [NumNamRecipeController::class, 'index']);
         Route::get('recipes/{recipe}', [NumNamRecipeController::class, 'show']);
         Route::get('recipes/type/{foodType}', [NumNamRecipeController::class, 'byType']);
+
+        // Tracker Configuration - Public
+        Route::get('tracker/config', [TrackerConfigController::class, 'config']);
     });
 
     // ── NumNam Weaning App & Website Tracker API - Protected Routes (Session OR JWT auth) ───

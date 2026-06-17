@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/src/services/tracker_service.dart';
+import 'package:mobile_app/src/services/tracker_config_service.dart';
 
 class NumNamTrackerScreen extends StatefulWidget {
   static const routeName = '/tools/numnam-tracker';
@@ -20,6 +21,9 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   bool _isLoading = true;
   String? _error;
 
+  // Configuration from API
+  TrackerConfig? _config;
+
   // Form state
   String _selectedLogType = 'milk';
   String _selectedMilkType = 'Formula';
@@ -38,6 +42,31 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
     });
     _ageController = TextEditingController(text: '8');
     _loadTrackerData();
+    _loadConfig();
+  }
+
+  Future<void> _loadConfig() async {
+    try {
+      final config = await TrackerConfigService.fetchConfig();
+      setState(() {
+        _config = config;
+        // Update form defaults from config
+        if (_config != null && _config!.milkTypes.isNotEmpty) {
+          _selectedMilkType = _config!.milkTypes[0].name;
+          _milkVolume = _config!.milkTypes[0].defaultVolume.toDouble();
+        }
+        if (_config != null && _config!.feedTypes.isNotEmpty) {
+          final waterType =
+              _config!.feedTypes.where((f) => f.id == 'water').firstOrNull;
+          if (waterType != null && waterType.defaultVolume != null) {
+            _waterVolume = waterType.defaultVolume!.toDouble();
+          }
+        }
+      });
+    } catch (e) {
+      print('Error loading tracker config: $e');
+      // Use default values if config fails to load
+    }
   }
 
   Future<void> _loadTrackerData() async {
@@ -404,6 +433,20 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   }
 
   Widget _buildMilkForm() {
+    if (_config == null || _config!.milkTypes.isEmpty) {
+      return const Card(
+          child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Text('Loading milk options...'),
+      ));
+    }
+
+    final milkTypeOptions = _config!.milkTypes;
+    final currentMilkConfig = milkTypeOptions.firstWhere(
+      (m) => m.name == _selectedMilkType,
+      orElse: () => milkTypeOptions[0],
+    );
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
@@ -411,22 +454,28 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('🍼 Milk Feed',
+            Text('${currentMilkConfig.emoji} Milk Feed',
                 style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             Text(
-              'Formula or breast milk',
+              currentMilkConfig.description,
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
               value: _selectedMilkType,
-              items: ['Formula', 'Breast Milk', 'Expressed Milk']
-                  .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+              items: milkTypeOptions
+                  .map((e) => DropdownMenuItem(
+                      value: e.name, child: Text('${e.emoji} ${e.name}')))
                   .toList(),
               onChanged: (value) {
                 if (value != null) {
-                  setState(() => _selectedMilkType = value);
+                  final selected =
+                      milkTypeOptions.firstWhere((m) => m.name == value);
+                  setState(() {
+                    _selectedMilkType = value;
+                    _milkVolume = selected.defaultVolume.toDouble();
+                  });
                 }
               },
               decoration: InputDecoration(
@@ -443,9 +492,11 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                 Text('Volume: ${_milkVolume.toInt()} ml'),
                 Slider(
                   value: _milkVolume,
-                  min: 0,
-                  max: 300,
-                  divisions: 30,
+                  min: currentMilkConfig.minVolume.toDouble(),
+                  max: currentMilkConfig.maxVolume.toDouble(),
+                  divisions: (currentMilkConfig.maxVolume -
+                          currentMilkConfig.minVolume) ~/
+                      10,
                   onChanged: (value) {
                     setState(() => _milkVolume = value);
                   },
@@ -522,6 +573,19 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   }
 
   Widget _buildWaterForm() {
+    if (_config == null || _config!.feedTypes.isEmpty) {
+      return const Card(
+          child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Text('Loading water options...'),
+      ));
+    }
+
+    final waterConfig = _config!.feedTypes.firstWhere(
+      (f) => f.id == 'water',
+      orElse: () => _config!.feedTypes[0],
+    );
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
@@ -529,9 +593,10 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('💧 Water', style: Theme.of(context).textTheme.titleMedium),
+            Text('${waterConfig.emoji} Water',
+                style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
-            Text('Water intake for hydration',
+            Text(waterConfig.description,
                 style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(height: 16),
             Column(
@@ -540,9 +605,11 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                 Text('Volume: ${_waterVolume.toInt()} ml'),
                 Slider(
                   value: _waterVolume,
-                  min: 0,
-                  max: 100,
-                  divisions: 10,
+                  min: (waterConfig.minVolume ?? 0).toDouble(),
+                  max: (waterConfig.maxVolume ?? 100).toDouble(),
+                  divisions: ((waterConfig.maxVolume ?? 100) -
+                          (waterConfig.minVolume ?? 0)) ~/
+                      10,
                   onChanged: (value) {
                     setState(() => _waterVolume = value);
                   },
@@ -569,6 +636,19 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   }
 
   Widget _buildPoopForm() {
+    if (_config == null || _config!.poopTypes.isEmpty) {
+      return const Card(
+          child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Text('Loading poop options...'),
+      ));
+    }
+
+    final poopConfig = _config!.feedTypes.firstWhere(
+      (f) => f.id == 'poop',
+      orElse: () => _config!.feedTypes[0],
+    );
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
@@ -576,20 +656,18 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('💩 Poop Tracking',
+            Text('${poopConfig.emoji} Poop Tracking',
                 style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
-            Text('Select the poop type to track',
+            Text(poopConfig.description,
                 style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(height: 16),
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: [
-                _buildPoopTypeSelection('Type 1', '🪨'),
-                _buildPoopTypeSelection('Type 2', '🔗'),
-                _buildPoopTypeSelection('Type 4', '✨'),
-                _buildPoopTypeSelection('Type 6', '⚡'),
+                for (final poop in _config!.poopTypes)
+                  _buildPoopTypeSelection(poop.type, poop.emoji),
               ],
             ),
             const SizedBox(height: 16),
@@ -626,6 +704,10 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   }
 
   Widget _buildPoopGuidePage() {
+    if (_config == null || _config!.poopTypes.isEmpty) {
+      return const Center(child: Text('Loading poop guide...'));
+    }
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -641,37 +723,22 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 16),
-          _buildPoopTypeCard(
-            'Type 1',
-            '🪨',
-            'Hard, small balls',
-            'Constipation risk. Increase fluids and healthy fats.',
-            Colors.red[100]!,
-          ),
-          _buildPoopTypeCard(
-            'Type 2',
-            '🔗',
-            'Lumpy, connected balls',
-            'Mild constipation. Increase water & fibre slightly.',
-            Colors.orange[100]!,
-          ),
-          _buildPoopTypeCard(
-            'Type 4',
-            '✨',
-            'Smooth, soft log',
-            'Perfect! Fibre & fluid balance is ideal.',
-            Colors.green[100]!,
-          ),
-          _buildPoopTypeCard(
-            'Type 6',
-            '⚡',
-            'Fluffy, mushy pieces',
-            'Loose/Diarrhoea risk. Reduce high-fibre foods.',
-            Colors.yellow[100]!,
-          ),
+          for (final poop in _config!.poopTypes)
+            _buildPoopTypeCard(
+              poop.type,
+              poop.emoji,
+              poop.appearance,
+              poop.meaning,
+              _parseColorFromHex(poop.color),
+            ),
         ],
       ),
     );
+  }
+
+  Color _parseColorFromHex(String hexColor) {
+    hexColor = hexColor.replaceAll('#', '');
+    return Color(int.parse('FF$hexColor', radix: 16));
   }
 
   Widget _buildPoopTypeCard(
@@ -704,6 +771,10 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   }
 
   Widget _buildGuidePage() {
+    if (_config == null) {
+      return const Center(child: Text('Loading weaning guide...'));
+    }
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -719,37 +790,20 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 24),
-          _buildMilestoneCard(
-            6,
-            '🎉 First Spoon!',
-            'Today is about the tongue, not the tummy! If baby pushes food out — that\'s the extrusion reflex, not rejection.',
-          ),
-          _buildMilestoneCard(
-            8,
-            '🌟 Bridge to Texture!',
-            'Baby is getting ~30% of energy from solids. If they seem less interested in milk, that\'s okay!',
-          ),
-          _buildMilestoneCard(
-            10,
-            '🍽️ Texture Challenge Time!',
-            'Stop the blender! Moving to mashed and soft lumps now helps develop jaw muscles needed for speech.',
-          ),
+          for (final milestone in _config!.milestones)
+            _buildMilestoneCard(
+              milestone.age,
+              milestone.title,
+              milestone.description,
+            ),
           const SizedBox(height: 24),
           Text(
             '⚠️ Safety Rules',
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 12),
-          _buildSafetyRule('Never salt or sugar babies under 1',
-              'Their kidneys can\'t process extra sodium.'),
-          _buildSafetyRule(
-            'Choking hazards: whole nuts, popcorn, hard candy, grapes',
-            'Cut grapes lengthwise into 4 pieces.',
-          ),
-          _buildSafetyRule(
-            'Never honey before 1 year',
-            'Botulism risk. Use mashed fruit or date paste instead.',
-          ),
+          for (final rule in _config!.safetyRules)
+            _buildSafetyRule(rule.title, rule.description),
         ],
       ),
     );

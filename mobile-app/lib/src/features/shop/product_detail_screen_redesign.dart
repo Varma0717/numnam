@@ -257,6 +257,23 @@ class _ProductDetailScreenRedesignState
                   ),
                   const SizedBox(height: 32),
 
+                  // Ingredients
+                  if (_product!.ingredients != null &&
+                      _product!.ingredients!.isNotEmpty) ...[
+                    Text('Ingredients',
+                        style: GoogleFonts.baloo2(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: kNavy)),
+                    const SizedBox(height: 12),
+                    Text(_product!.ingredients!,
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            color: kNavy.withOpacity(0.7),
+                            height: 1.6)),
+                    const SizedBox(height: 32),
+                  ],
+
                   // Nutrition Info
                   if (_product!.nutritionInfo != null) ...[
                     Text('Nutrition Info',
@@ -266,6 +283,23 @@ class _ProductDetailScreenRedesignState
                             color: kNavy)),
                     const SizedBox(height: 16),
                     _buildNutritionRow(_product!.nutritionInfo!),
+                    const SizedBox(height: 32),
+                  ],
+
+                  // Content/Details
+                  if (_product!.content != null &&
+                      _product!.content!.isNotEmpty) ...[
+                    Text('Details',
+                        style: GoogleFonts.baloo2(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: kNavy)),
+                    const SizedBox(height: 12),
+                    Text(_product!.content!,
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            color: kNavy.withOpacity(0.7),
+                            height: 1.6)),
                     const SizedBox(height: 32),
                   ],
 

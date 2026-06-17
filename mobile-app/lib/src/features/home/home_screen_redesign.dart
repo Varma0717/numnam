@@ -64,7 +64,7 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
       // Parallel fetching for better performance
       final results = await Future.wait([
         api.dio.get(ApiEndpoints.products,
-            queryParameters: {'per_page': 8, 'featured': 1}),
+            queryParameters: {'per_page': 12, 'page': 1, 'featured': 1}),
         api.dio.get(ApiEndpoints.pricingPlans),
       ]);
 
@@ -112,17 +112,42 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
   }
 
   List<PricingPlan> _parsePlans(dynamic data) {
-    List<dynamic> list;
-    if (data is Map && data['data'] != null) {
-      list = data['data'] as List? ?? [];
+    print('DEBUG: _parsePlans received data type: ${data.runtimeType}');
+    print('DEBUG: _parsePlans data: $data');
+
+    List<dynamic> list = [];
+
+    if (data is Map) {
+      final dataField = data['data'];
+      print('DEBUG: dataField type: ${dataField.runtimeType}');
+
+      if (dataField is List) {
+        list = dataField;
+      } else if (dataField is Map && dataField['data'] != null) {
+        list = dataField['data'] as List;
+      }
     } else if (data is List) {
       list = data;
-    } else {
-      list = [];
     }
-    return list
-        .map((e) => PricingPlan.fromJson(e as Map<String, dynamic>))
-        .toList();
+
+    print('✓ Parsed ${list.length} pricing plans');
+
+    final result = <PricingPlan>[];
+    for (int i = 0; i < list.length; i++) {
+      try {
+        final item = list[i];
+        if (item is! Map<String, dynamic>) {
+          print('WARN: Plan item $i is not a Map, got ${item.runtimeType}');
+          continue;
+        }
+        result.add(PricingPlan.fromJson(item as Map<String, dynamic>));
+      } catch (e) {
+        print('ERROR parsing pricing plan $i: $e');
+      }
+    }
+
+    print('✓ Successfully parsed ${result.length} pricing plans');
+    return result;
   }
 
   @override

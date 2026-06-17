@@ -46,7 +46,8 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
     try {
       final api = context.read<ApiClient>();
       final resp = await api.dio.get(ApiEndpoints.products, queryParameters: {
-        'per_page': 50,
+        'per_page': 100,
+        'page': 1,
         'sort': _sortBy,
       });
 

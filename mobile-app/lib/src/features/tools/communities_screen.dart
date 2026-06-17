@@ -507,10 +507,14 @@ class MessageCard extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                           fontSize: 12,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       Text(
                         _timeAgo(message.createdAt),
                         style: Theme.of(context).textTheme.bodySmall,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
@@ -519,10 +523,24 @@ class MessageCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             // Message content
-            Text(message.content),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width - 50,
+                ),
+                child: Text(
+                  message.content,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                ),
+              ),
+            ),
             const SizedBox(height: 12),
             // Actions
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
                   child: GestureDetector(
@@ -538,6 +556,8 @@ class MessageCard extends StatelessWidget {
                         Text(
                           message.likeCount.toString(),
                           style: Theme.of(context).textTheme.bodySmall,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
@@ -554,6 +574,8 @@ class MessageCard extends StatelessWidget {
                         Text(
                           message.commentCount.toString(),
                           style: Theme.of(context).textTheme.bodySmall,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
@@ -842,6 +864,7 @@ class CommentCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
                 radius: 16,
@@ -864,10 +887,15 @@ class CommentCard extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         fontSize: 11,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       comment.content,
                       style: const TextStyle(fontSize: 12),
+                      maxLines: 5,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
                     ),
                   ],
                 ),
