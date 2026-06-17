@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Mobile;
 
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\ShippingSettings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -115,7 +116,13 @@ class MobileCartController extends BaseMobileController
             $subtotal += $lineTotal;
         }
 
-        $shippingFee = $subtotal > 0 && $subtotal < 999 ? 99.0 : 0.0;
+        // Use admin-configured shipping settings instead of hardcoded values
+        $shippingSettings = ShippingSettings::first();
+        $shippingFee = 0.0;
+        
+        if ($shippingSettings && $shippingSettings->enabled && $subtotal > 0) {
+            $shippingFee = $shippingSettings->calculateShipping($subtotal);
+        }
 
         return [
             'items' => $items,
