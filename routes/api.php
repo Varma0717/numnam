@@ -125,8 +125,8 @@ Route::prefix('v1')->group(function () {
     // ── NumNam Weaning App API - Protected Routes (auth:web session only) ─────────────────
     Route::prefix('numnam')->middleware('auth:web')->group(function () {
         // Test endpoint - shows current authenticated user
-        Route::get('_test', function (Request $request) {
-            $user = $request->user();
+        Route::get('_test', function () {
+            $user = Auth::user();
             return response()->json([
                 'message' => 'NumNam routes working!',
                 'authenticated' => $user ? true : false,
