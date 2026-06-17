@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - NumNam</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header */
+        .email-header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .email-header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .email-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Content */
+        .email-content {
+            padding: 40px 30px;
+        }
+
+        .greeting {
+            margin-bottom: 24px;
+        }
+
+        .greeting h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .greeting p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Order Number Box */
+        .order-info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #6366f1;
+            padding: 16px;
+            margin: 24px 0;
+            border-radius: 4px;
+        }
+
+        .order-info-box p {
+            font-size: 13px;
+            color: #666;
+            margin: 8px 0;
+        }
+
+        .order-info-box strong {
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Items Table */
+        .items-section {
+            margin: 32px 0;
+        }
+
+        .items-section h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 12px;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+
+        .items-table thead {
+            background: #f8f9fa;
+        }
+
+        .items-table th {
+            padding: 12px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .items-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .items-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .item-qty {
+            color: #999;
+            font-size: 13px;
+        }
+
+        .item-price {
+            text-align: right;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Totals */
+        .order-totals {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 24px 0;
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .totals-row strong {
+            color: #333;
+        }
+
+        .totals-row span {
+            color: #666;
+        }
+
+        .totals-row.total {
+            border-top: 2px solid #e0e0e0;
+            padding-top: 12px;
+            margin-top: 12px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .totals-row.discount span {
+            color: #16a34a;
+            font-weight: 600;
+        }
+
+        /* Shipping Details */
+        .shipping-section {
+            background: #ecfdf5;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 24px 0;
+            border-left: 4px solid #16a34a;
+        }
+
+        .shipping-section h4 {
+            font-size: 14px;
+            color: #15803d;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .shipping-section p {
+            font-size: 13px;
+            color: #166534;
+            line-height: 1.6;
+            margin: 6px 0;
+        }
+
+        /* Next Steps */
+        .next-steps {
+            background: #f0f9ff;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 24px 0;
+            border-left: 4px solid #0284c7;
+        }
+
+        .next-steps h4 {
+            font-size: 14px;
+            color: #0c4a6e;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .next-steps ol {
+            margin-left: 20px;
+            font-size: 13px;
+            color: #164e63;
+        }
+
+        .next-steps li {
+            margin: 8px 0;
+        }
+
+        /* CTA Button */
+        .cta-section {
+            text-align: center;
+            margin: 32px 0;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 14px 32px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            display: inline-block;
+            font-size: 14px;
+            transition: transform 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Trust Signals */
+        .trust-signals {
+            display: flex;
+            gap: 16px;
+            margin: 24px 0;
+            flex-wrap: wrap;
+        }
+
+        .trust-badge {
+            flex: 1;
+            min-width: 140px;
+            text-align: center;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .trust-badge-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .trust-badge p {
+            font-weight: 600;
+            color: #333;
+            margin: 8px 0 4px;
+            font-size: 11px;
+        }
+
+        .trust-badge-text {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* Footer */
+        .email-footer {
+            background: #f8f9fa;
+            padding: 30px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .footer-links {
+            margin: 16px 0;
+        }
+
+        .footer-links a {
+            color: #6366f1;
+            text-decoration: none;
+            margin: 0 12px;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-social {
+            margin: 12px 0;
+        }
+
+        .footer-social a {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin: 0 6px;
+            color: #6366f1;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .email-container {
+                border-radius: 0;
+            }
+
+            .email-content {
+                padding: 20px 16px;
+            }
+
+            .items-table th,
+            .items-table td {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .trust-signals {
+                gap: 8px;
+            }
+
+            .trust-badge {
+                min-width: 100px;
+                padding: 12px;
+            }
+
+            .email-header {
+                padding: 30px 16px;
+            }
+
+            .email-footer {
+                padding: 20px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1>✓ Order Confirmed</h1>
+            <p>Thank you for choosing NumNam!</p>
+        </div>
+
+        <!-- Content -->
+        <div class="email-content">
+            <div class="greeting">
+                <h2>Hello {{ $order->ship_name }},</h2>
+                <p>We've received your order and will begin processing it immediately. Your baby's nutrition journey
+                    starts here!</p>
+            </div>
+
+            <!-- Order Info -->
+            <div class="order-info-box">
+                <p><strong>Order Number:</strong> #{{ $order->order_number }}</p>
+                <p><strong>Order Date:</strong> {{ $order->created_at->format('d M Y, h:i A') }}</p>
+                <p><strong>Status:</strong> Processing</p>
+            </div>
+
+            <!-- Items Ordered -->
+            <div class="items-section">
+                <h3>Items Ordered</h3>
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($order->items as $item)
+                        <tr>
+                            <td>
+                                <div class="item-name">{{ $item->product_name }}</div>
+                                <div class="item-qty">Rs {{ number_format($item->unit_price, 0) }} each</div>
+                            </td>
+                            <td>{{ $item->quantity }}</td>
+                            <td class="item-price">Rs {{ number_format($item->line_total, 0) }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Order Totals -->
+            <div class="order-totals">
+                <div class="totals-row">
+                    <strong>Subtotal</strong>
+                    <span>Rs {{ number_format($order->subtotal, 0) }}</span>
+                </div>
+                @if($order->discount > 0)
+                <div class="totals-row discount">
+                    <strong>Discount</strong>
+                    <span>-Rs {{ number_format($order->discount, 0) }}</span>
+                </div>
+                @endif
+                <div class="totals-row">
+                    <strong>Shipping</strong>
+                    <span>{{ $order->shipping_fee > 0 ? 'Rs ' . number_format($order->shipping_fee, 0) : 'Free'
+                        }}</span>
+                </div>
+                <div class="totals-row total">
+                    <strong>Total Amount</strong>
+                    <span>Rs {{ number_format($order->total, 0) }}</span>
+                </div>
+            </div>
+
+            <!-- Shipping Details -->
+            <div class="shipping-section">
+                <h4>📦 Shipping Address</h4>
+                <p>
+                    <strong>{{ $order->ship_name }}</strong><br>
+                    {{ $order->ship_address }}<br>
+                    {{ $order->ship_city }}, {{ $order->ship_state }} - {{ $order->ship_pincode }}<br>
+                    📞 {{ $order->ship_phone }}
+                </p>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="next-steps">
+                <h4>What's Next?</h4>
+                <ol>
+                    <li><strong>Processing:</strong> We'll pack your order with care</li>
+                    <li><strong>Quality Check:</strong> Every item is verified fresh</li>
+                    <li><strong>Dispatch:</strong> You'll get tracking details via SMS/Email</li>
+                    <li><strong>Delivery:</strong> We aim for delivery within 3-5 business days</li>
+                </ol>
+            </div>
+
+            <!-- Trust Signals -->
+            <div class="trust-signals">
+                <div class="trust-badge">
+                    <div class="trust-badge-icon">🔒</div>
+                    <p>Secure Payment</p>
+                    <div class="trust-badge-text">Encrypted & Protected</div>
+                </div>
+                <div class="trust-badge">
+                    <div class="trust-badge-icon">📦</div>
+                    <p>Fast Shipping</p>
+                    <div class="trust-badge-text">3-5 Business Days</div>
+                </div>
+                <div class="trust-badge">
+                    <div class="trust-badge-icon">☎️</div>
+                    <p>24/7 Support</p>
+                    <div class="trust-badge-text">Always Here to Help</div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="cta-section">
+                <a href="{{ url('/account/orders/' . $order->id) }}" class="cta-button">View Order Details</a>
+            </div>
+
+            <!-- Additional Info -->
+            <div
+                style="background: #fff9e6; padding: 16px; border-radius: 4px; margin-top: 24px; border-left: 4px solid #f59e0b;">
+                <h4 style="color: #92400e; font-size: 14px; margin-bottom: 8px;">💡 Feeding Guide</h4>
+                <p style="font-size: 13px; color: #b45309; margin: 0;">
+                    Check the age recommendations on each pouch. Start with small portions (1-2 teaspoons) and gradually
+                    increase. Introduce one new product at a time and observe for 2-3 days.
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <p style="margin-bottom: 12px;">
+                <strong>Thank you for choosing NumNam!</strong><br>
+                Doctor-backed nutrition for your baby's first food journey
+            </p>
+            <div class="footer-links">
+                <a href="https://numnam.com">Visit Store</a> •
+                <a href="https://numnam.com/recipes">Recipes</a> •
+                <a href="https://numnam.com/faq">FAQ</a> •
+                <a href="https://numnam.com/contact">Contact</a>
+            </div>
+            <p style="margin-top: 16px; border-top: 1px solid #e0e0e0; padding-top: 16px;">
+                © {{ date('Y') }} NumNam - All Rights Reserved<br>
+                <a href="https://numnam.com/privacy" style="color: #6366f1; text-decoration: none;">Privacy Policy</a> •
+                <a href="https://numnam.com/terms" style="color: #6366f1; text-decoration: none;">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

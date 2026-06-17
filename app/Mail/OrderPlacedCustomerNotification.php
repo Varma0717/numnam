@@ -16,8 +16,8 @@ class OrderPlacedCustomerNotification extends Mailable
 
     public function build(): self
     {
-        return $this->subject('Order Placed Successfully - #' . $this->order->order_number)
-            ->view('emails.order-placed-customer', [
+        return $this->subject('✓ Order Confirmed - #' . $this->order->order_number)
+            ->view('emails.order-placed', [
                 'order' => $this->order,
             ]);
     }

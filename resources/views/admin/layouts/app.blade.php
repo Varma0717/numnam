@@ -260,6 +260,16 @@
                 </li>
                 @endif
                 <li class="menu-separator"></li>
+                <li class="{{ request()->routeIs('admin.shipping*') ? 'current' : '' }}">
+                    <a href="{{ route('admin.shipping.index') }}">
+                        <span class="menu-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6M17 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z" />
+                            </svg>
+                        </span>
+                        Shipping
+                    </a>
+                </li>
                 <li class="{{ request()->routeIs('admin.settings*') ? 'current' : '' }}">
                     <a href="{{ route('admin.settings.index') }}">
                         <span class="menu-icon">

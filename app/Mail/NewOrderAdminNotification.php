@@ -16,8 +16,8 @@ class NewOrderAdminNotification extends Mailable
 
     public function build(): self
     {
-        return $this->subject('New Order Received - #' . $this->order->order_number)
-            ->view('emails.new-order-admin', [
+        return $this->subject('🔔 New Order #' . $this->order->order_number . ' - Action Required')
+            ->view('emails.order-admin-notification', [
                 'order' => $this->order,
             ]);
     }

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Order is On the Way - NumNam</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .email-header {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .email-header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .email-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .email-content {
+            padding: 40px 30px;
+        }
+
+        .tracking-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dbeafe 100%);
+            border: 2px solid #16a34a;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .tracking-card h2 {
+            font-size: 18px;
+            color: #15803d;
+            margin-bottom: 8px;
+        }
+
+        .tracking-number {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            letter-spacing: 1px;
+            margin: 12px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .tracking-copy-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .timeline {
+            background: #f9fafb;
+            padding: 24px;
+            border-radius: 8px;
+            margin: 24px 0;
+        }
+
+        .timeline h3 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 32px;
+            width: 2px;
+            height: 40px;
+            background: #e5e7eb;
+        }
+
+        .timeline-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #16a34a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        .timeline-dot.completed {
+            background: #16a34a;
+        }
+
+        .timeline-dot.pending {
+            background: #d1d5db;
+        }
+
+        .timeline-dot.active {
+            background: #16a34a;
+            box-shadow: 0 0 0 6px rgba(22, 163, 74, 0.2);
+        }
+
+        .timeline-content {
+            flex: 1;
+            padding-top: 2px;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+        }
+
+        .timeline-desc {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .info-box {
+            background: #ecfdf5;
+            border-left: 4px solid #16a34a;
+            padding: 16px;
+            margin: 24px 0;
+            border-radius: 4px;
+        }
+
+        .info-box h4 {
+            font-size: 13px;
+            color: #15803d;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .info-box p {
+            font-size: 13px;
+            color: #166534;
+            margin: 6px 0;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin: 24px 0;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .order-details {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 4px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 13px;
+        }
+
+        .detail-row strong {
+            color: #333;
+        }
+
+        .detail-row span {
+            color: #666;
+        }
+
+        .support-box {
+            background: #f0f9ff;
+            border: 1px solid #0284c7;
+            border-radius: 4px;
+            padding: 16px;
+            margin: 24px 0;
+        }
+
+        .support-box h4 {
+            font-size: 13px;
+            color: #0c4a6e;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .support-box p {
+            font-size: 12px;
+            color: #0c4a6e;
+            margin: 4px 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #16a34a;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+
+        .cta-button:hover {
+            background: #15803d;
+        }
+
+        .email-footer {
+            background: #f8f9fa;
+            padding: 24px 30px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .footer-links a {
+            color: #16a34a;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+
+        @media (max-width: 600px) {
+            .email-content {
+                padding: 20px 16px;
+            }
+
+            .tracking-card {
+                padding: 16px;
+            }
+
+            .timeline {
+                padding: 16px;
+            }
+
+            .email-header {
+                padding: 30px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1>📦 Order Dispatched!</h1>
+            <p>Your package is on its way</p>
+        </div>
+
+        <!-- Content -->
+        <div class="email-content">
+            <p style="margin-bottom: 12px;">Hi {{ $order->ship_name }},</p>
+            <p style="color: #666; margin-bottom: 24px;">
+                Great news! Your NumNam order has been shipped and is now on its way to you. We've packed it with care
+                to ensure the freshness and quality of your baby's nutrition.
+            </p>
+
+            <!-- Tracking Card -->
+            <div class="tracking-card">
+                <h2>🎯 Track Your Package</h2>
+                <p style="font-size: 13px; color: #666; margin-bottom: 8px;">Tracking Number:</p>
+                <div class="tracking-number">{{ $shipment->tracking_number ?? 'TBD' }}</div>
+                <p class="tracking-copy-hint">Use this number to track your shipment</p>
+                <a href="{{ $shipment->tracking_url ?? '#' }}" class="cta-button"
+                    style="background: #16a34a; margin-top: 16px;">Track Shipment</a>
+            </div>
+
+            <!-- Timeline -->
+            <div class="timeline">
+                <h3>📍 Delivery Timeline</h3>
+                <div class="timeline-item">
+                    <div class="timeline-dot completed">✓</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Order Confirmed</div>
+                        <div class="timeline-desc">{{ $order->created_at->format('d M Y, h:i A') }}</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot completed">✓</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Packed & Verified</div>
+                        <div class="timeline-desc">All items checked for quality and freshness</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot active">→</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">In Transit</div>
+                        <div class="timeline-desc">Expected delivery in 2-5 business days</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot pending">○</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Delivery</div>
+                        <div class="timeline-desc">Right to your doorstep</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="section">
+                <div class="section-title">Order Details</div>
+                <div class="order-details">
+                    <div class="detail-row">
+                        <strong>Order Number</strong>
+                        <span>#{{ $order->order_number }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Items Shipped</strong>
+                        <span>{{ $order->items->count() }} product{{ $order->items->count() != 1 ? 's' : '' }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Total Amount</strong>
+                        <span><strong>Rs {{ number_format($order->total, 0) }}</strong></span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Delivery To</strong>
+                        <span>{{ $order->ship_city }}, {{ $order->ship_state }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Instructions -->
+            <div class="info-box">
+                <h4>💡 Tips for Best Results</h4>
+                <p>
+                    <strong>Upon Delivery:</strong><br>
+                    ✓ Check the pouch seal for any damage<br>
+                    ✓ Store in a cool, dry place<br>
+                    ✓ Use within 2 days of opening<br>
+                    ✓ Follow age & serving recommendations
+                </p>
+            </div>
+
+            <!-- Support -->
+            <div class="support-box">
+                <h4>❓ Need Help?</h4>
+                <p>Tracking not updating? Contact us immediately at:</p>
+                <p style="font-weight: 600;">📞 +91 XXXX-XXXX-XX | 📧 support@numnam.com</p>
+                <a href="https://numnam.com/contact" class="cta-button"
+                    style="background: #0284c7; margin-top: 12px;">Contact Support</a>
+            </div>
+
+            <!-- Thank You -->
+            <div
+                style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 4px; margin: 24px 0;">
+                <p style="font-size: 13px; color: #92400e; margin: 0;">
+                    <strong>Thank you for choosing NumNam!</strong> We're committed to providing doctor-backed nutrition
+                    for your baby's first food journey. Enjoy the goodness! 🥗
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <p style="margin-bottom: 12px;">
+                <strong>NumNam - Doctor-Backed Baby Nutrition</strong>
+            </p>
+            <div style="margin: 12px 0;">
+                <a href="https://numnam.com">Visit Store</a> •
+                <a href="https://numnam.com/recipes">Recipes</a> •
+                <a href="https://numnam.com/faq">FAQ</a>
+            </div>
+            <p style="margin-top: 12px; border-top: 1px solid #e0e0e0; padding-top: 12px;">
+                © {{ date('Y') }} NumNam - All Rights Reserved<br>
+                <a href="https://numnam.com/privacy" style="color: #16a34a; text-decoration: none;">Privacy</a> •
+                <a href="https://numnam.com/terms" style="color: #16a34a; text-decoration: none;">Terms</a>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

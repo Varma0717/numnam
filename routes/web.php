@@ -235,6 +235,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ])
             ->except('show');
 
+        // Shipping Settings (flat rates and product exclusions)
+        Route::get('/shipping', [\App\Http\Controllers\Admin\Commerce\ShippingController::class, 'index'])->name('shipping.index');
+        Route::put('/shipping', [\App\Http\Controllers\Admin\Commerce\ShippingController::class, 'update'])->name('shipping.update');
+        Route::patch('/products/{product}/toggle-shipping', [\App\Http\Controllers\Admin\Commerce\ShippingController::class, 'toggleShipping'])->name('product.toggle-shipping');
+
         // Pages
         Route::resource('pages', PageManagementController::class)->except('show');
 

@@ -52,7 +52,7 @@ class NumNamBabyController extends Controller
      */
     public function dashboardSummary(Request $request)
     {
-        $profile = BabyProfile::where('user_id', $request->user()->id)->first();
+        $profile = BabyProfile::query()->where('user_id', $request->user()->id)->first();
 
         // Auto-create profile if it doesn't exist
         if (!$profile) {
@@ -63,18 +63,18 @@ class NumNamBabyController extends Controller
             ]);
         }
 
-        $logs = FeedLog::getTodayLogs($profile->id);
+        $logs = collect(FeedLog::getTodayLogs($profile->id));
 
-        $milk = $logs->where('type', 'milk')->sum('volume_ml');
-        $solid = $logs->where('type', 'solid')->sum('volume_ml');
-        $water = $logs->where('type', 'water')->sum('volume_ml');
+        $milk = (int) $logs->where('type', 'milk')->sum('volume_ml');
+        $solid = (int) $logs->where('type', 'solid')->sum('volume_ml');
+        $water = (int) $logs->where('type', 'water')->sum('volume_ml');
         $lastPoop = $logs->where('type', 'poop')->latest('logged_at')->first();
 
-        $mkCal = $logs->where('type', 'milk')->sum(function ($log) {
+        $mkCal = (float) $logs->where('type', 'milk')->sum(function ($log) {
             return $log->calories;
         });
 
-        $skCal = $logs->where('type', 'solid')->sum(function ($log) {
+        $skCal = (float) $logs->where('type', 'solid')->sum(function ($log) {
             return $log->calories;
         });
 

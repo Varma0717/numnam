@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:addmagpro_mobile/src/services/tracker_service.dart';
 
 class NumNamTrackerScreen extends StatefulWidget {
   static const routeName = '/tools/numnam-tracker';
@@ -15,9 +14,11 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int babyAge = 8;
-  List<FeedEntry> logs = [];
+  List<FeedLog> logs = [];
   Set<int> heartedRecipes = {};
   int _currentTabIndex = 0;
+  bool _isLoading = true;
+  String? _error;
 
   // Form state
   String _selectedLogType = 'milk';
@@ -36,42 +37,62 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
       setState(() => _currentTabIndex = _tabController.index);
     });
     _ageController = TextEditingController(text: '8');
-    _loadState();
+    _loadTrackerData();
   }
 
-  Future<void> _loadState() async {
-    final prefs = await SharedPreferences.getInstance();
+  Future<void> _loadTrackerData() async {
     setState(() {
-      babyAge = prefs.getInt('numnam_baby_age') ?? 8;
-      final logsJson = prefs.getStringList('numnam_logs') ?? [];
-      logs = logsJson.map((e) => FeedEntry.fromJson(jsonDecode(e))).toList();
-      final heartedJson = prefs.getStringList('numnam_hearted') ?? [];
-      heartedRecipes = Set.from(heartedJson.map(int.parse));
+      _isLoading = true;
+      _error = null;
     });
+    try {
+      final data = await TrackerService.fetchTrackerData();
+      setState(() {
+        babyAge = data.babyAge;
+        logs = data.logs;
+        heartedRecipes = data.heartedRecipes;
+        _ageController?.text = babyAge.toString();
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error loading tracker: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
-  Future<void> _saveState() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('numnam_baby_age', babyAge);
-    await prefs.setStringList(
-      'numnam_logs',
-      logs.map((e) => jsonEncode(e.toJson())).toList(),
-    );
-    await prefs.setStringList(
-      'numnam_hearted',
-      heartedRecipes.map((e) => e.toString()).toList(),
-    );
-  }
-
-  void _addLog(FeedEntry entry) {
-    setState(() => logs.add(entry));
-    _saveState();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('✓ Log saved!'),
-        duration: Duration(seconds: 2),
-      ),
-    );
+  Future<void> _addLog(FeedLogRequest logRequest) async {
+    try {
+      await TrackerService.addFeedLog(logRequest);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('✓ Log saved!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        // Refresh logs
+        _loadTrackerData();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error saving log: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -97,17 +118,45 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
           ],
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          _buildDashboard(),
-          _buildLogPage(),
-          _buildPoopGuidePage(),
-          _buildRecipesPage(),
-          _buildGuidePage(),
-        ],
-      ),
-      floatingActionButton: _currentTabIndex == 0
+      body: _isLoading
+          ? const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
+                  Text('Loading tracker data...'),
+                ],
+              ),
+            )
+          : _error != null
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.error_outline,
+                          size: 48, color: Colors.red),
+                      const SizedBox(height: 16),
+                      Text('Error: $_error'),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: _loadTrackerData,
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                )
+              : TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildDashboard(),
+                    _buildLogPage(),
+                    _buildPoopGuidePage(),
+                    _buildRecipesPage(),
+                    _buildGuidePage(),
+                  ],
+                ),
+      floatingActionButton: _currentTabIndex == 0 && !_isLoading
           ? FloatingActionButton(
               onPressed: () {
                 _tabController.animateTo(1);
@@ -122,10 +171,9 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   Widget _buildDashboard() {
     final today = DateTime.now();
     final todayLogs = logs.where((log) {
-      final logDate = DateTime.parse(log.timestamp);
-      return logDate.year == today.year &&
-          logDate.month == today.month &&
-          logDate.day == today.day;
+      return log.timestamp.year == today.year &&
+          log.timestamp.month == today.month &&
+          log.timestamp.day == today.day;
     }).toList();
 
     int totalMilk = 0, totalSolid = 0, totalWater = 0;
@@ -271,7 +319,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
     );
   }
 
-  Widget _buildLogEntryCard(FeedEntry log) {
+  Widget _buildLogEntryCard(FeedLog log) {
     final iconMap = {
       'milk': ('🍼', Colors.blue[100]!),
       'solid': ('🥣', Colors.orange[100]!),
@@ -409,12 +457,10 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
             const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: () {
-                _addLog(FeedEntry(
+                _addLog(FeedLogRequest(
                   type: 'milk',
                   volume: _milkVolume.toInt(),
-                  time: TimeOfDay.now().format(context),
                   label: '$_selectedMilkType - ${_milkVolume.toInt()} ml',
-                  timestamp: DateTime.now().toIso8601String(),
                   milkType: _selectedMilkType,
                 ));
                 // Reset form
@@ -460,12 +506,10 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
               onPressed: _solidFood.isEmpty
                   ? null
                   : () {
-                      _addLog(FeedEntry(
+                      _addLog(FeedLogRequest(
                         type: 'solid',
                         volume: 100,
-                        time: TimeOfDay.now().format(context),
                         label: _solidFood,
-                        timestamp: DateTime.now().toIso8601String(),
                         food: _solidFood,
                       ));
                       setState(() => _solidFood = '');
@@ -510,12 +554,10 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
             const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: () {
-                _addLog(FeedEntry(
+                _addLog(FeedLogRequest(
                   type: 'water',
                   volume: _waterVolume.toInt(),
-                  time: TimeOfDay.now().format(context),
                   label: 'Water - ${_waterVolume.toInt()} ml',
-                  timestamp: DateTime.now().toIso8601String(),
                 ));
                 setState(() => _waterVolume = 30);
               },
@@ -557,12 +599,10 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
               onPressed: _selectedPoopType.isEmpty
                   ? null
                   : () {
-                      _addLog(FeedEntry(
+                      _addLog(FeedLogRequest(
                         type: 'poop',
                         volume: 0,
-                        time: TimeOfDay.now().format(context),
                         label: 'Poop: $_selectedPoopType',
-                        timestamp: DateTime.now().toIso8601String(),
                         poopType: _selectedPoopType,
                       ));
                       setState(() => _selectedPoopType = '');
@@ -775,15 +815,26 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
             child: Row(
               children: [
                 GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      if (isHearted) {
-                        heartedRecipes.remove(id);
-                      } else {
-                        heartedRecipes.add(id);
+                  onTap: () async {
+                    try {
+                      await TrackerService.toggleRecipeHeart(recipe['id'] ?? id);
+                      setState(() {
+                        if (isHearted) {
+                          heartedRecipes.remove(id);
+                        } else {
+                          heartedRecipes.add(id);
+                        }
+                      });
+                    } catch (e) {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Error: $e'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
                       }
-                      _saveState();
-                    });
+                    }
                   },
                   child: Text(
                     isHearted ? '❤️' : '🤍',
@@ -950,11 +1001,31 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
               child: const Text('Cancel'),
             ),
             ElevatedButton(
-              onPressed: () {
-                setState(() => babyAge = tempAge);
-                _saveState();
-                ageTextController.dispose();
-                Navigator.pop(context);
+              onPressed: () async {
+                try {
+                  await TrackerService.saveBabyAge(tempAge);
+                  if (mounted) {
+                    setState(() => babyAge = tempAge);
+                    _ageController?.text = tempAge.toString();
+                    ageTextController.dispose();
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('✓ Baby age updated!'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Error: $e'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }
               },
               child: const Text('Save'),
             ),
@@ -963,56 +1034,4 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
       },
     );
   }
-}
-
-class FeedEntry {
-  final String type; // milk, solid, water, poop
-  final int volume;
-  final String time;
-  final String label;
-  final String timestamp;
-  final String? milkType;
-  final String? food;
-  final String? texture;
-  final String? finish;
-  final String? poopType;
-
-  FeedEntry({
-    required this.type,
-    required this.volume,
-    required this.time,
-    required this.label,
-    required this.timestamp,
-    this.milkType,
-    this.food,
-    this.texture,
-    this.finish,
-    this.poopType,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'type': type,
-        'volume': volume,
-        'time': time,
-        'label': label,
-        'timestamp': timestamp,
-        'milkType': milkType,
-        'food': food,
-        'texture': texture,
-        'finish': finish,
-        'poopType': poopType,
-      };
-
-  factory FeedEntry.fromJson(Map<String, dynamic> json) => FeedEntry(
-        type: json['type'],
-        volume: json['volume'],
-        time: json['time'],
-        label: json['label'],
-        timestamp: json['timestamp'],
-        milkType: json['milkType'],
-        food: json['food'],
-        texture: json['texture'],
-        finish: json['finish'],
-        poopType: json['poopType'],
-      );
 }

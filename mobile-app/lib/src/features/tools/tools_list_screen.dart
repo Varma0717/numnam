@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'numnam_tracker_screen.dart';
+import 'communities_screen.dart';
 
 class ToolsListScreen extends StatelessWidget {
   static const routeName = '/tools';
@@ -15,6 +17,14 @@ class ToolsListScreen extends StatelessWidget {
             'Track your baby\'s feeding journey with personalized insights, recipes, and developmental guidance.',
         'icon': '🍼',
         'screen': const NumNamTrackerScreen(),
+      },
+      {
+        'id': 'communities',
+        'name': 'NumNam Communities',
+        'description':
+            'Connect with other parents, share experiences, ask questions, and get support from the NumNam community.',
+        'icon': '👥',
+        'screen': const CommunitiesScreen(),
       },
     ];
 
