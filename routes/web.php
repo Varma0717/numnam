@@ -57,10 +57,15 @@ Route::get('/recipes', [StorefrontController::class, 'recipes'])->name('store.re
 Route::get('/faq', [StorefrontController::class, 'faq'])->name('store.faq');
 Route::get('/refer-friends', [StorefrontController::class, 'referFriends'])->name('store.refer-friends');
 
-// Tools routes - accessible to guests and authenticated users
+// Tools routes - requires authentication for tracker
 Route::prefix('tools')->name('store.tools.')->group(function () {
     Route::get('/', [ToolsController::class, 'index'])->name('index');
-    Route::get('/numnam-tracker', [ToolsController::class, 'numnam'])->name('numnam');
+    
+    // Tracker requires authentication
+    Route::middleware('auth')->group(function () {
+        Route::get('/numnam-tracker', [ToolsController::class, 'numnam'])->name('numnam');
+    });
+    
     Route::get('/logging', [ToolsController::class, 'logging'])->name('logging');
 
     // Guest checkout for tools
