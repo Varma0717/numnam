@@ -56,6 +56,9 @@ class FeedLogRequest {
   final String? milkType;
   final double? volume;
   final String? foodName;
+  final String? foodType;
+  final String? texture;
+  final String? finishLevel;
   final String? poopType;
   final String? notes;
 
@@ -64,18 +67,27 @@ class FeedLogRequest {
     this.milkType,
     this.volume,
     this.foodName,
+    this.foodType,
+    this.texture,
+    this.finishLevel,
     this.poopType,
     this.notes,
   });
 
   Map<String, dynamic> toJson() {
-    return {
-      'log_type': logType,
+    final json = {
+      'type': logType, // API expects 'type' not 'logType'
       'milk_type': milkType,
-      'volume': volume,
-      'food_name': foodName,
-      'poop_type': poopType,
+      'volume_ml': volume, // API expects 'volume_ml' not 'volume'
+      'food_name': foodName, // API expects 'food_name' not 'foodName'
+      'food_type': foodType,
+      'texture': texture,
+      'finish_level': finishLevel,
+      'poop_type': poopType, // API expects 'poop_type' not 'poopType'
       'notes': notes,
     };
+    // Remove null values
+    json.removeWhere((key, value) => value == null);
+    return json;
   }
 }

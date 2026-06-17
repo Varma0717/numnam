@@ -135,7 +135,7 @@ class CommunitiesService {
           .post(
             Uri.parse('$_baseUrl$_endpoint/rooms/$roomId/messages'),
             headers: headers,
-            body: jsonEncode({'content': content}),
+            body: jsonEncode({'message': content}),
           )
           .timeout(const Duration(seconds: 10));
 

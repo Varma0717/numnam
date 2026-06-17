@@ -297,33 +297,6 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
             ),
           ),
 
-          // Categories Horizontal
-          SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildSectionHeader('Shop by Stage', () {}),
-                SizedBox(
-                  height: 105,
-                  child: ListView(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      _buildCategoryItem(
-                          '4-6 Months', FontAwesomeIcons.baby, kCoral),
-                      _buildCategoryItem(
-                          '6-9 Months', FontAwesomeIcons.babyCarriage, kYellow),
-                      _buildCategoryItem(
-                          '9-12 Months', FontAwesomeIcons.utensils, kMint),
-                      _buildCategoryItem(
-                          '12+ Months', FontAwesomeIcons.plateWheat, kLavender),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-
           // IMPROVED SUBSCRIPTION SECTION: The "Perfect for Mobile" Card
           if (_plans.isNotEmpty)
             SliverToBoxAdapter(
@@ -439,7 +412,7 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
 
           // Featured Products Header
           SliverToBoxAdapter(
-            child: _buildSectionHeader('Best Sellers', () {
+            child: _buildSectionHeader('Featured Products 🛍️', () {
               // Products are shown below, no need to navigate
             }),
           ),
