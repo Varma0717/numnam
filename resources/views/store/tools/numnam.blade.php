@@ -1065,7 +1065,7 @@
             <div class="card-title">Poop Log</div>
             <div class="card-sub">Select the closest match (Bristol Stool Chart – infant adapted)</div>
             <div class="poop-grid" id="poop-selector">
-                <div class="poop-btn" onclick="selectPoop('Type 1', this)"><span class="poop-icon">🪨</span><span class="poop-label">Hard<br>pellets</span></div>
+                <div class="poop-btn" onclick="selectPoop('Type 1', this)"><span class="poop-icon">�</span><span class="poop-label">Hard<br>pellets</span></div>
                 <div class="poop-btn" onclick="selectPoop('Type 2', this)"><span class="poop-icon">🌰</span><span class="poop-label">Lumpy<br>sausage</span></div>
                 <div class="poop-btn" onclick="selectPoop('Type 3', this)"><span class="poop-icon">🌭</span><span class="poop-label">Cracked<br>sausage</span></div>
                 <div class="poop-btn" onclick="selectPoop('Type 4', this)"><span class="poop-icon">🍌</span><span class="poop-label">Smooth<br>✅ ideal</span></div>
@@ -1104,7 +1104,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><span class="poop-badge badge-red">🪨 Type 1</span></td>
+                        <td><span class="poop-badge badge-red">� Type 1</span></td>
                         <td>Hard pellets</td>
                         <td>All ages</td>
                         <td><strong>Constipation risk</strong>. Increase fluids and healthy fats (ghee, oil). Add more fruits like prunes or pears.</td>
