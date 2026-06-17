@@ -26,8 +26,8 @@ class NumNamBabyController extends Controller
 
         // Get today's logs with proper field mapping
         $logs = FeedLog::where('baby_profile_id', $profile->id)
-            ->whereDate('created_at', today())
-            ->orderBy('created_at', 'desc')
+            ->whereDate('logged_at', today())
+            ->orderBy('logged_at', 'desc')
             ->get();
 
         // Transform logs using resource to map field names
