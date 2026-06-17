@@ -126,11 +126,12 @@ Route::prefix('v1')->group(function () {
     Route::prefix('numnam')->middleware('auth:web')->group(function () {
         // Test endpoint - shows current authenticated user
         Route::get('_test', function (Request $request) {
+            $user = $request->user();
             return response()->json([
                 'message' => 'NumNam routes working!',
-                'authenticated' => true,
-                'user_id' => $request->user()->id,
-                'user_email' => $request->user()->email,
+                'authenticated' => $user ? true : false,
+                'user_id' => $user?->id ?? null,
+                'user_email' => $user?->email ?? null,
             ]);
         });
 
