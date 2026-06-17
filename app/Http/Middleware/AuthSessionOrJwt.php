@@ -23,9 +23,7 @@ class AuthSessionOrJwt
         // Check the web guard which is used for session auth
         $sessionUser = Auth::guard('web')->user();
         if ($sessionUser) {
-            // Set the user in all guards for compatibility
-            Auth::guard('web')->setUser($sessionUser);
-            Auth::guard('api')->setUser($sessionUser);
+            // Set the user in the default auth for compatibility
             Auth::setUser($sessionUser);
             return $next($request);
         }
@@ -37,7 +35,7 @@ class AuthSessionOrJwt
             if ($payload && !empty($payload['sub'])) {
                 $user = User::find($payload['sub']);
                 if ($user) {
-                    Auth::guard('api')->setUser($user);
+                    // Set the user in the default auth
                     Auth::setUser($user);
                     return $next($request);
                 }
