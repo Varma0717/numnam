@@ -14,7 +14,7 @@ class AdminProductController extends Controller
     public function index(Request $request): JsonResponse
     {
         $products = Product::with('productCategory')
-            ->when($request->filled('status'), fn ($q) => $q->where('status', $request->string('status')))
+            ->when($request->filled('status'), fn($q) => $q->where('status', $request->string('status')))
             ->orderByDesc('updated_at')
             ->paginate((int) $request->input('per_page', 20));
 

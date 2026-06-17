@@ -82,4 +82,3 @@ class ShippingSettings extends Model
         return $this->calculateShipping($subtotal);
     }
 }
-
