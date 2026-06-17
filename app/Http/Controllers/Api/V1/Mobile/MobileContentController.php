@@ -115,7 +115,7 @@ class MobileContentController extends BaseMobileController
 
         $query = Product::query()
             ->when(Schema::hasColumn('products', 'is_active'), fn($q) => $q->where('is_active', true))
-            ->when(Schema::hasColumn('products', 'status'), fn($q) => $q->where('status', 'published'))
+            ->when(Schema::hasColumn('products', 'status'), fn($q) => $q->whereIn('status', ['published', 'draft']))
             ->with('productCategory:id,name,slug');
 
         if ($request->filled('category_id')) {
@@ -152,7 +152,10 @@ class MobileContentController extends BaseMobileController
         }
 
         // Support both ID and slug for mobile app compatibility
-        $query = Product::query()->with(['productCategory:id,name,slug', 'approvedReviews']);
+        $query = Product::query()
+            ->when(Schema::hasColumn('products', 'is_active'), fn($q) => $q->where('is_active', true))
+            ->when(Schema::hasColumn('products', 'status'), fn($q) => $q->whereIn('status', ['published', 'draft']))
+            ->with(['productCategory:id,name,slug', 'approvedReviews']);
 
         // Check if slug is numeric (ID) or string (slug)
         if (is_numeric($slug)) {
