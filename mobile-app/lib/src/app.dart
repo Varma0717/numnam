@@ -11,7 +11,6 @@ import 'features/cart/cart_provider.dart';
 import 'features/home/home_screen_redesign.dart';
 import 'features/shop/shop_screen_redesign.dart';
 import 'features/cart/cart_screen_redesign.dart';
-import 'features/subscriptions/subscriptions_screen_redesign.dart';
 import 'features/checkout/checkout_screen.dart';
 import 'features/checkout/order_success_screen.dart';
 import 'features/orders/orders_screen.dart';

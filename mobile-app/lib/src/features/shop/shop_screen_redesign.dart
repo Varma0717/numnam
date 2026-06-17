@@ -136,7 +136,6 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
 
   @override
   Widget build(BuildContext context) {
-    final cartCount = context.watch<CartProvider>().cart.itemCount;
     return Scaffold(
       backgroundColor: kCream,
       appBar: AppBar(

@@ -16,7 +16,6 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
   List<Room> rooms = [];
   bool _isLoadingRooms = true;
   String? _error;
-  int _selectedRoomIndex = 0;
 
   @override
   void initState() {
@@ -38,7 +37,7 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
         if (rooms.isNotEmpty) {
           _tabController = TabController(length: rooms.length, vsync: this);
           _tabController.addListener(() {
-            setState(() => _selectedRoomIndex = _tabController.index);
+            setState(() {});
           });
         }
       });

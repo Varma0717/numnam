@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/src/config/app_config.dart';
-import 'package:mobile_app/src/core/constants.dart';
 
 class TrackerConfigService {
   static const String _endpoint = 'tracker/config';

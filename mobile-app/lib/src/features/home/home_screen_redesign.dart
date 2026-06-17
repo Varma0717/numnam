@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../core/auth_provider.dart';
@@ -526,28 +525,6 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                 style: GoogleFonts.poppins(
                     fontSize: 13, fontWeight: FontWeight.w700, color: kCoral)),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCategoryItem(String label, IconData icon, Color color) {
-    return Container(
-      width: 90,
-      margin: const EdgeInsets.only(right: 12),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-                color: color.withOpacity(0.12), shape: BoxShape.circle),
-            child: FaIcon(icon, color: color, size: 24),
-          ),
-          const SizedBox(height: 8),
-          Text(label,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
-                  fontSize: 11, fontWeight: FontWeight.w600, color: kNavy)),
         ],
       ),
     );
