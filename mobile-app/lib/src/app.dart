@@ -297,10 +297,8 @@ class _ShellState extends State<_Shell> {
       case 2:
         return const CartScreenRedesign();
       case 3:
-        return const SubscriptionsScreenRedesign();
-      case 4:
         return const ToolsListScreen();
-      case 5:
+      case 4:
         return const AccountScreen();
       default:
         return const HomeScreenRedesign();
@@ -407,11 +405,6 @@ class AppBottomNav extends StatelessWidget {
               child: const Icon(Icons.shopping_bag_rounded),
             ),
             label: 'Cart',
-          ),
-          const NavigationDestination(
-            icon: Icon(Icons.card_membership_outlined),
-            selectedIcon: Icon(Icons.card_membership_rounded),
-            label: 'Subscribe',
           ),
           const NavigationDestination(
             icon: Icon(Icons.construction_outlined),

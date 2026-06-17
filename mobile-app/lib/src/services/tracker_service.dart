@@ -9,7 +9,7 @@ export '../models/tracker_data.dart';
 
 class TrackerService {
   static final String _baseUrl = AppConfig.apiBaseUrl;
-  static const String _endpoint = '/api/v1/tracker';
+  static const String _endpoint = '/numnam/baby/profile';
 
   /// Fetch tracker data for current user
   static Future<TrackerData> fetchTrackerData() async {

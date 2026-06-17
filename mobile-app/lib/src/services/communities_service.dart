@@ -7,7 +7,7 @@ export '../models/communities.dart';
 
 class CommunitiesService {
   static final String _baseUrl = AppConfig.apiBaseUrl;
-  static const String _endpoint = '/api/v1/communities';
+  static const String _endpoint = '/communities';
 
   /// Fetch all available community rooms/channels
   static Future<List<Room>> fetchRooms() async {

@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\V1\NumNamBabyController;
 use App\Http\Controllers\Api\V1\NumNamCommunityController;
 use App\Http\Controllers\Api\V1\NumNamFeedLogController;
 use App\Http\Controllers\Api\V1\NumNamRecipeController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
