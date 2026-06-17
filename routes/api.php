@@ -123,8 +123,8 @@ Route::prefix('v1')->group(function () {
         Route::get('recipes/type/{foodType}', [NumNamRecipeController::class, 'byType']);
     });
 
-    // ── NumNam Weaning App API - Protected Routes (JWT auth for mobile app) ─────────────────
-    Route::prefix('numnam')->middleware('jwt.auth')->group(function () {
+    // ── NumNam Weaning App & Website Tracker API - Protected Routes (Session OR JWT auth) ───
+    Route::prefix('numnam')->middleware('auth.session.or.jwt')->group(function () {
         // Test endpoint - shows current authenticated user
         Route::get('_test', function () {
             $user = Auth::guard('api')->user();
@@ -151,7 +151,7 @@ Route::prefix('v1')->group(function () {
         // Recipes - Write Endpoints (Protected)
         Route::post('recipes/{recipe}/like', [NumNamRecipeController::class, 'toggleLike']);
 
-        // Community Chat - Write Endpoints (Protected by session)
+        // Community Chat - Write Endpoints
         Route::post('community/rooms/{room}/messages', [NumNamCommunityController::class, 'sendMessage']);
         Route::post('community/messages/{message}/like', [NumNamCommunityController::class, 'toggleLike']);
         Route::post('community/messages/{message}/comments', [NumNamCommunityController::class, 'addComment']);

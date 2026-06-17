@@ -32,7 +32,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
       setState(() => _currentTabIndex = _tabController.index);
     });
@@ -113,7 +113,6 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
             Tab(text: '📊 Dashboard'),
             Tab(text: '➕ Log'),
             Tab(text: '💩 Poop'),
-            Tab(text: '🍽️ Recipes'),
             Tab(text: '📖 Guide'),
           ],
         ),
@@ -152,7 +151,6 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                     _buildDashboard(),
                     _buildLogPage(),
                     _buildPoopGuidePage(),
-                    _buildRecipesPage(),
                     _buildGuidePage(),
                   ],
                 ),
@@ -701,157 +699,6 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
             Text(meaning, style: const TextStyle(fontSize: 12)),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildRecipesPage() {
-    final recipes = [
-      {
-        'emoji': '🥕',
-        'name': 'Carrot & Ginger Purée',
-        'age': 6,
-        'texture': 'Smooth purée',
-        'hearts': 42,
-      },
-      {
-        'emoji': '🥦',
-        'name': 'Broccoli & Apple Mash',
-        'age': 7,
-        'texture': 'Thick purée',
-        'hearts': 38,
-      },
-      {
-        'emoji': '🍠',
-        'name': 'Sweet Potato & Coconut',
-        'age': 6,
-        'texture': 'Smooth purée',
-        'hearts': 61,
-      },
-      {
-        'emoji': '🍌',
-        'name': 'Banana & Oat Porridge',
-        'age': 7,
-        'texture': 'Mashed',
-        'hearts': 55,
-      },
-    ];
-
-    final filtered =
-        recipes.where((r) => ((r['age'] as int?) ?? 0) <= babyAge).toList();
-
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '🍽️ Recipe Swaps',
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Mom-to-Mom favourites — filtered for your baby\'s age',
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-          const SizedBox(height: 16),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.85,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-            ),
-            itemCount: filtered.length,
-            itemBuilder: (context, index) {
-              final recipe = filtered[index];
-              return _buildRecipeCard(recipe);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRecipeCard(Map<String, dynamic> recipe) {
-    final id = recipe['name'].hashCode;
-    final isHearted = heartedRecipes.contains(id);
-
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  recipe['emoji'],
-                  style: const TextStyle(fontSize: 32),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  recipe['name'],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  recipe['texture'],
-                  style: const TextStyle(fontSize: 10),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () async {
-                    try {
-                      await TrackerService.toggleRecipeHeart(
-                          recipe['id'] ?? id);
-                      setState(() {
-                        if (isHearted) {
-                          heartedRecipes.remove(id);
-                        } else {
-                          heartedRecipes.add(id);
-                        }
-                      });
-                    } catch (e) {
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Error: $e'),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  child: Text(
-                    isHearted ? '❤️' : '🤍',
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  recipe['hearts'].toString(),
-                  style: const TextStyle(fontSize: 11),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
