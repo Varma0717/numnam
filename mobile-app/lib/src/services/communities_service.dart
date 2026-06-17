@@ -34,10 +34,30 @@ class CommunitiesService {
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
-        final rooms = (json['data'] as List?)
-                ?.map((e) => Room.fromJson(e as Map<String, dynamic>))
-                .toList() ??
-            [];
+        print('DEBUG: Rooms response type: ${json.runtimeType}');
+
+        final dataField = json is Map ? json['data'] : null;
+        print('DEBUG: Data field type: ${dataField.runtimeType}');
+
+        if (dataField is! List) {
+          print('WARN: Expected List, got ${dataField.runtimeType}');
+          return [];
+        }
+
+        final rooms = <Room>[];
+        for (int i = 0; i < (dataField as List).length; i++) {
+          try {
+            final item = dataField[i];
+            if (item is! Map<String, dynamic>) {
+              print('WARN: Room item $i is not a Map, got ${item.runtimeType}');
+              continue;
+            }
+            rooms.add(Room.fromJson(item as Map<String, dynamic>));
+          } catch (e) {
+            print('ERROR parsing room $i: $e');
+          }
+        }
+        print('✓ Successfully parsed ${rooms.length} rooms');
         return rooms;
       } else if (response.statusCode == 401) {
         throw 'Unauthorized. Please log in again.';
@@ -45,6 +65,7 @@ class CommunitiesService {
         throw 'Failed to load rooms: ${response.statusCode}';
       }
     } catch (e) {
+      print('ERROR fetching rooms: $e');
       throw 'Network error: $e';
     }
   }
@@ -71,15 +92,37 @@ class CommunitiesService {
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
-        final messages = (json['data'] as List?)
-                ?.map((e) => Message.fromJson(e as Map<String, dynamic>))
-                .toList() ??
-            [];
+        print('DEBUG: Messages response type: ${json.runtimeType}');
+
+        final dataField = json is Map ? json['data'] : null;
+        print('DEBUG: Data field type: ${dataField.runtimeType}');
+
+        if (dataField is! List) {
+          print('WARN: Expected List, got ${dataField.runtimeType}');
+          return [];
+        }
+
+        final messages = <Message>[];
+        for (int i = 0; i < (dataField as List).length; i++) {
+          try {
+            final item = dataField[i];
+            if (item is! Map<String, dynamic>) {
+              print(
+                  'WARN: Message item $i is not a Map, got ${item.runtimeType}');
+              continue;
+            }
+            messages.add(Message.fromJson(item as Map<String, dynamic>));
+          } catch (e) {
+            print('ERROR parsing message $i: $e');
+          }
+        }
+        print('✓ Successfully parsed ${messages.length} messages');
         return messages;
       } else {
         throw 'Failed to fetch messages: ${response.statusCode}';
       }
     } catch (e) {
+      print('ERROR fetching messages: $e');
       throw 'Error fetching messages: $e';
     }
   }
@@ -98,11 +141,29 @@ class CommunitiesService {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final json = jsonDecode(response.body);
-        return Message.fromJson(json['data'] ?? json);
+        print('DEBUG: Post message response type: ${json.runtimeType}');
+
+        final dataField = json is Map ? json['data'] : null;
+        print('DEBUG: Data field type: ${dataField.runtimeType}');
+        print('DEBUG: Data field: $dataField');
+
+        try {
+          if (dataField is! Map<String, dynamic>) {
+            print('ERROR: Expected Map, got ${dataField.runtimeType}');
+            throw 'Invalid message response format';
+          }
+          final message = Message.fromJson(dataField as Map<String, dynamic>);
+          print('✓ Successfully parsed posted message');
+          return message;
+        } catch (e) {
+          print('ERROR parsing Message: $e');
+          throw 'Failed to parse message response: $e';
+        }
       } else {
         throw 'Failed to post message: ${response.statusCode}';
       }
     } catch (e) {
+      print('ERROR posting message: $e');
       throw 'Error posting message: $e';
     }
   }
@@ -140,11 +201,28 @@ class CommunitiesService {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final json = jsonDecode(response.body);
-        return Comment.fromJson(json['data'] ?? json);
+        print('DEBUG: Post comment response type: ${json.runtimeType}');
+
+        final dataField = json is Map ? json['data'] : null;
+        print('DEBUG: Data field type: ${dataField.runtimeType}');
+
+        try {
+          if (dataField is! Map<String, dynamic>) {
+            print('ERROR: Expected Map, got ${dataField.runtimeType}');
+            throw 'Invalid comment response format';
+          }
+          final comment = Comment.fromJson(dataField as Map<String, dynamic>);
+          print('✓ Successfully parsed posted comment');
+          return comment;
+        } catch (e) {
+          print('ERROR parsing Comment: $e');
+          throw 'Failed to parse comment response: $e';
+        }
       } else {
         throw 'Failed to post comment: ${response.statusCode}';
       }
     } catch (e) {
+      print('ERROR posting comment: $e');
       throw 'Error posting comment: $e';
     }
   }
@@ -162,15 +240,37 @@ class CommunitiesService {
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
-        final comments = (json['data'] as List?)
-                ?.map((e) => Comment.fromJson(e as Map<String, dynamic>))
-                .toList() ??
-            [];
+        print('DEBUG: Comments response type: ${json.runtimeType}');
+
+        final dataField = json is Map ? json['data'] : null;
+        print('DEBUG: Data field type: ${dataField.runtimeType}');
+
+        if (dataField is! List) {
+          print('WARN: Expected List, got ${dataField.runtimeType}');
+          return [];
+        }
+
+        final comments = <Comment>[];
+        for (int i = 0; i < (dataField as List).length; i++) {
+          try {
+            final item = dataField[i];
+            if (item is! Map<String, dynamic>) {
+              print(
+                  'WARN: Comment item $i is not a Map, got ${item.runtimeType}');
+              continue;
+            }
+            comments.add(Comment.fromJson(item as Map<String, dynamic>));
+          } catch (e) {
+            print('ERROR parsing comment $i: $e');
+          }
+        }
+        print('✓ Successfully parsed ${comments.length} comments');
         return comments;
       } else {
         throw 'Failed to fetch comments: ${response.statusCode}';
       }
     } catch (e) {
+      print('ERROR fetching comments: $e');
       throw 'Error fetching comments: $e';
     }
   }

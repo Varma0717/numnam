@@ -41,8 +41,22 @@ class TrackerService {
       print('✓ Response body: ${response.body}');
 
       if (response.statusCode == 200) {
-        final json = jsonDecode(response.body) as Map<String, dynamic>;
-        return TrackerData.fromJson(json['data'] ?? json);
+        final json = jsonDecode(response.body);
+        print('DEBUG: Response type: ${json.runtimeType}');
+        print('DEBUG: Response keys: ${(json is Map) ? json.keys : 'N/A'}');
+
+        final dataField = json is Map ? json['data'] : null;
+        print('DEBUG: Data field type: ${dataField.runtimeType}');
+        print('DEBUG: Data field: $dataField');
+
+        try {
+          final result = TrackerData.fromJson(dataField ?? json);
+          print('✓ Successfully parsed tracker data');
+          return result;
+        } catch (e) {
+          print('ERROR parsing TrackerData: $e');
+          throw 'Failed to parse tracker data: $e';
+        }
       } else if (response.statusCode == 401) {
         throw 'Unauthorized. Please log in again.';
       } else if (response.statusCode == 422) {

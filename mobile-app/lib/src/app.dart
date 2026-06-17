@@ -64,8 +64,11 @@ class NumNamApp extends StatelessWidget {
                 body: Center(child: CircularProgressIndicator()),
               );
             }
-            // Show Shell for both authenticated and guest users to access tools
-            // Account tab (index 5) will show login screen for guests
+            // ✅ MANDATORY LOGIN: Show login screen if not authenticated
+            if (!auth.isAuthenticated) {
+              return const LoginScreen();
+            }
+            // ✅ Show app shell only after successful login
             return _Shell(key: _Shell.shellKey);
           },
         ),

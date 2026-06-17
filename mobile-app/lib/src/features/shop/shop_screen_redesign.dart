@@ -75,9 +75,16 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
   }
 
   List<Product> _parseProducts(dynamic data) {
-    List<dynamic> list;
+    print('DEBUG: _parseProducts received data type: ${data.runtimeType}');
+    print('DEBUG: _parseProducts data: $data');
+
+    List<dynamic> list = [];
+
     if (data is Map) {
       final dataField = data['data'];
+      print('DEBUG: dataField type: ${dataField.runtimeType}');
+      print('DEBUG: dataField: $dataField');
+
       if (dataField is List) {
         list = dataField;
       } else if (dataField is Map && dataField['data'] != null) {
@@ -87,12 +94,31 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
       }
     } else if (data is List) {
       list = data;
-    } else {
-      list = [];
     }
-    return list
-        .map((e) => Product.fromJson(e as Map<String, dynamic>))
-        .toList();
+
+    print('DEBUG: Parsed list length: ${list.length}');
+    if (list.isNotEmpty) {
+      print('DEBUG: First item type: ${list[0].runtimeType}');
+      print('DEBUG: First item: ${list[0]}');
+    }
+
+    final result = <Product>[];
+    for (int i = 0; i < list.length; i++) {
+      try {
+        final item = list[i];
+        if (item is! Map<String, dynamic>) {
+          print('WARN: Item $i is not a Map, got ${item.runtimeType}: $item');
+          continue;
+        }
+        final product = Product.fromJson(item as Map<String, dynamic>);
+        result.add(product);
+      } catch (e) {
+        print('ERROR parsing product $i: $e');
+      }
+    }
+
+    print('✓ Successfully parsed ${result.length} products');
+    return result;
   }
 
   void _applyFilters() {
