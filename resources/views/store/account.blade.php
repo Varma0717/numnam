@@ -42,21 +42,15 @@
 {{-- Tabs --}}
 <section class="section pb-14 account-section">
     <div class="account-tabs flex gap-1 overflow-x-auto rounded-2xl border border-slate-200 bg-slate-100 p-1" role="tablist" aria-label="Account sections">
-        <button class="account-tab active" data-tab="today" role="tab" aria-selected="true" aria-controls="panel-today">🍼 Today</button>
-        <button class="account-tab" data-tab="profile" role="tab" aria-selected="false" aria-controls="panel-profile">Profile</button>
+        <button class="account-tab active" data-tab="profile" role="tab" aria-selected="true" aria-controls="panel-profile">Profile</button>
         <button class="account-tab" data-tab="orders" role="tab" aria-selected="false" aria-controls="panel-orders">Orders</button>
         <button class="account-tab" data-tab="subscriptions" role="tab" aria-selected="false" aria-controls="panel-subscriptions">Subscriptions</button>
         <button class="account-tab" data-tab="referrals" role="tab" aria-selected="false" aria-controls="panel-referrals">Referrals</button>
         <button class="account-tab" data-tab="rewards" role="tab" aria-selected="false" aria-controls="panel-rewards">Rewards</button>
     </div>
 
-    {{-- Today Panel --}}
-    <div class="account-panel active mt-4" data-panel="today" id="panel-today" role="tabpanel">
-        @include('store.partials.today-overview')
-    </div>
-
     {{-- Profile Panel --}}
-    <div class="account-panel mt-4" data-panel="profile" id="panel-profile" role="tabpanel">
+    <div class="account-panel active mt-4" data-panel="profile" id="panel-profile" role="tabpanel">
         <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
             @if(session('profile-status'))
             <div class="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm font-medium text-emerald-700">{{ session('profile-status') }}</div>
