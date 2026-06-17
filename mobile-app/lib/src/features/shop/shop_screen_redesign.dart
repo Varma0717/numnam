@@ -23,6 +23,7 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
   bool _loading = true;
   bool _gridView = true;
   String _sortBy = 'popular';
+  String? _error;
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -38,7 +39,10 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
   }
 
   Future<void> _load() async {
-    setState(() => _loading = true);
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
     try {
       final api = context.read<ApiClient>();
       final resp = await api.dio.get(ApiEndpoints.products, queryParameters: {
@@ -46,15 +50,27 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
         'sort': _sortBy,
       });
 
+      print('✓ Products response received: ${resp.statusCode}');
+      print('✓ Response data: ${resp.data}');
+
       if (mounted) {
+        final products = _parseProducts(resp.data);
+        print('✓ Parsed ${products.length} products');
         setState(() {
-          _products = _parseProducts(resp.data);
+          _products = products;
           _applyFilters();
           _loading = false;
         });
       }
-    } catch (e) {
-      if (mounted) setState(() => _loading = false);
+    } catch (e, st) {
+      print('✗ Products load error: $e');
+      print('✗ Stack trace: $st');
+      if (mounted) {
+        setState(() {
+          _loading = false;
+          _error = 'Failed to load products: $e';
+        });
+      }
     }
   }
 
@@ -161,34 +177,53 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
           Expanded(
             child: _loading
                 ? const Center(child: CircularProgressIndicator(color: kCoral))
-                : _filteredProducts.isEmpty
-                    ? _buildEmpty()
-                    : RefreshIndicator(
-                        color: kCoral,
-                        onRefresh: _load,
-                        child: _gridView
-                            ? GridView.builder(
-                                padding: const EdgeInsets.all(16),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 0.65,
-                                  crossAxisSpacing: 14,
-                                  mainAxisSpacing: 14,
-                                ),
-                                itemCount: _filteredProducts.length,
-                                itemBuilder: (context, index) =>
-                                    _buildGridCard(_filteredProducts[index]),
-                              )
-                            : ListView.separated(
-                                padding: const EdgeInsets.all(16),
-                                itemCount: _filteredProducts.length,
-                                separatorBuilder: (_, __) =>
-                                    const SizedBox(height: 12),
-                                itemBuilder: (context, index) =>
-                                    _buildListCard(_filteredProducts[index]),
-                              ),
-                      ),
+                : _error != null
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.error_outline,
+                                size: 64, color: Colors.red),
+                            const SizedBox(height: 16),
+                            Text(_error!, textAlign: TextAlign.center),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: _load,
+                              child: const Text('Retry'),
+                            ),
+                          ],
+                        ),
+                      )
+                    : _filteredProducts.isEmpty
+                        ? _buildEmpty()
+                        : RefreshIndicator(
+                            color: kCoral,
+                            onRefresh: _load,
+                            child: _gridView
+                                ? GridView.builder(
+                                    padding: const EdgeInsets.all(16),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 0.65,
+                                      crossAxisSpacing: 14,
+                                      mainAxisSpacing: 14,
+                                    ),
+                                    itemCount: _filteredProducts.length,
+                                    itemBuilder: (context, index) =>
+                                        _buildGridCard(
+                                            _filteredProducts[index]),
+                                  )
+                                : ListView.separated(
+                                    padding: const EdgeInsets.all(16),
+                                    itemCount: _filteredProducts.length,
+                                    separatorBuilder: (_, __) =>
+                                        const SizedBox(height: 12),
+                                    itemBuilder: (context, index) =>
+                                        _buildListCard(
+                                            _filteredProducts[index]),
+                                  ),
+                          ),
           ),
         ],
       ),

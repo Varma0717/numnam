@@ -27,6 +27,9 @@ class TrackerService {
   static Future<TrackerData> fetchTrackerData() async {
     try {
       final headers = await _getHeaders();
+      print('✓ Fetching tracker data from: $_baseUrl$_endpoint');
+      print('✓ Headers: $headers');
+
       final response = await http
           .get(
             Uri.parse('$_baseUrl$_endpoint'),
@@ -34,15 +37,21 @@ class TrackerService {
           )
           .timeout(const Duration(seconds: 10));
 
+      print('✓ Tracker response: ${response.statusCode}');
+      print('✓ Response body: ${response.body}');
+
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body) as Map<String, dynamic>;
         return TrackerData.fromJson(json['data'] ?? json);
       } else if (response.statusCode == 401) {
         throw 'Unauthorized. Please log in again.';
+      } else if (response.statusCode == 422) {
+        throw 'Validation error: ${response.body}';
       } else {
         throw 'Failed to load tracker data: ${response.statusCode} - ${response.body}';
       }
     } catch (e) {
+      print('✗ Tracker fetch error: $e');
       throw 'Network error: $e';
     }
   }
@@ -53,16 +62,24 @@ class TrackerService {
       final headers = await _getHeaders();
       final response = await http
           .post(
-            Uri.parse('$_baseUrl$_endpoint'),
+            Uri.parse('$_baseUrl/numnam/baby/profile'),
             headers: headers,
-            body: jsonEncode({'age': age}),
+            body: jsonEncode({
+              'age_months': age,
+              'baby_name': 'My Baby',
+              'milk_type': 'breast',
+            }),
           )
           .timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200 && response.statusCode != 201) {
+        print(
+            '✗ Save baby age error: ${response.statusCode} - ${response.body}');
         throw 'Failed to save baby age: ${response.statusCode}';
       }
+      print('✓ Baby age saved successfully');
     } catch (e) {
+      print('✗ Error saving baby age: $e');
       throw 'Error saving baby age: $e';
     }
   }
@@ -71,18 +88,25 @@ class TrackerService {
   static Future<void> addFeedLog(FeedLogRequest log) async {
     try {
       final headers = await _getHeaders();
+      final body = jsonEncode(log.toJson());
+      print('✓ Sending feed log: $body');
+
       final response = await http
           .post(
             Uri.parse('$_baseUrl/numnam/logs'),
             headers: headers,
-            body: jsonEncode(log.toJson()),
+            body: body,
           )
           .timeout(const Duration(seconds: 10));
 
+      print('✓ Feed log response: ${response.statusCode} - ${response.body}');
+
       if (response.statusCode != 200 && response.statusCode != 201) {
-        throw 'Failed to save log: ${response.statusCode}';
+        throw 'Failed to save log: ${response.statusCode} - ${response.body}';
       }
+      print('✓ Feed log saved successfully');
     } catch (e) {
+      print('✗ Error saving feed log: $e');
       throw 'Error saving feed log: $e';
     }
   }
@@ -253,12 +277,13 @@ class FeedLogRequest {
   Map<String, dynamic> toJson() {
     return {
       'type': type,
-      'volume': volume,
-      'label': label,
+      'volume_ml': volume,
       if (milkType != null) 'milk_type': milkType,
-      if (food != null) 'food': food,
+      if (food != null) 'food_name': food,
+      if (food != null) 'food_type': 'mixed',
+      if (food != null) 'texture': label,
+      if (food != null) 'finish_level': 'all',
       if (poopType != null) 'poop_type': poopType,
-      'timestamp': DateTime.now().toIso8601String(),
     };
   }
 }

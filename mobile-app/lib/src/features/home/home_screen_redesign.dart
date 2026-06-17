@@ -68,14 +68,24 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
         api.dio.get(ApiEndpoints.pricingPlans),
       ]);
 
+      print('✓ Home page data loaded');
+      print('✓ Products response: ${results[0].statusCode}');
+      print('✓ Products data: ${results[0].data}');
+
       if (mounted) {
+        final featured = _parseProducts(results[0].data);
+        final plans = _parsePlans(results[1].data);
+        print('✓ Parsed ${featured.length} featured products');
+        print('✓ Parsed ${plans.length} pricing plans');
         setState(() {
-          _featured = _parseProducts(results[0].data);
-          _plans = _parsePlans(results[1].data);
+          _featured = featured;
+          _plans = plans;
           _loading = false;
         });
       }
-    } catch (e) {
+    } catch (e, st) {
+      print('✗ Home page load error: $e');
+      print('✗ Stack trace: $st');
       if (mounted) setState(() => _loading = false);
     }
   }
