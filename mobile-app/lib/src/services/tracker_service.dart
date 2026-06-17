@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:mobile_app/src/config/app_config.dart';
+import 'package:mobile_app/src/core/storage_service.dart';
 import '../models/feed_log.dart';
 import '../models/tracker_data.dart';
 
@@ -10,14 +11,28 @@ export '../models/tracker_data.dart';
 class TrackerService {
   static final String _baseUrl = AppConfig.apiBaseUrl;
   static const String _endpoint = '/numnam/baby/profile';
+  static final _storage = StorageService();
+
+  /// Get authorization headers with JWT token
+  static Future<Map<String, String>> _getHeaders() async {
+    final token = await _storage.getToken();
+    return {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      if (token != null) 'Authorization': 'Bearer $token',
+    };
+  }
 
   /// Fetch tracker data for current user
   static Future<TrackerData> fetchTrackerData() async {
     try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl$_endpoint'),
-        headers: {'Accept': 'application/json'},
-      ).timeout(const Duration(seconds: 10));
+      final headers = await _getHeaders();
+      final response = await http
+          .get(
+            Uri.parse('$_baseUrl$_endpoint'),
+            headers: headers,
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body) as Map<String, dynamic>;
@@ -25,7 +40,7 @@ class TrackerService {
       } else if (response.statusCode == 401) {
         throw 'Unauthorized. Please log in again.';
       } else {
-        throw 'Failed to load tracker data: ${response.statusCode}';
+        throw 'Failed to load tracker data: ${response.statusCode} - ${response.body}';
       }
     } catch (e) {
       throw 'Network error: $e';
@@ -35,13 +50,11 @@ class TrackerService {
   /// Save baby age to server
   static Future<void> saveBabyAge(int age) async {
     try {
+      final headers = await _getHeaders();
       final response = await http
           .post(
-            Uri.parse('$_baseUrl$_endpoint/baby-age'),
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
+            Uri.parse('$_baseUrl$_endpoint'),
+            headers: headers,
             body: jsonEncode({'age': age}),
           )
           .timeout(const Duration(seconds: 10));
@@ -57,13 +70,11 @@ class TrackerService {
   /// Add feeding log entry
   static Future<void> addFeedLog(FeedLogRequest log) async {
     try {
+      final headers = await _getHeaders();
       final response = await http
           .post(
-            Uri.parse('$_baseUrl$_endpoint/logs'),
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
+            Uri.parse('$_baseUrl/numnam/logs'),
+            headers: headers,
             body: jsonEncode(log.toJson()),
           )
           .timeout(const Duration(seconds: 10));
@@ -82,15 +93,18 @@ class TrackerService {
     required DateTime endDate,
   }) async {
     try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl$_endpoint/logs').replace(
-          queryParameters: {
-            'start_date': startDate.toIso8601String().split('T')[0],
-            'end_date': endDate.toIso8601String().split('T')[0],
-          },
-        ),
-        headers: {'Accept': 'application/json'},
-      ).timeout(const Duration(seconds: 10));
+      final headers = await _getHeaders();
+      final response = await http
+          .get(
+            Uri.parse('$_baseUrl/numnam/logs').replace(
+              queryParameters: {
+                'start_date': startDate.toIso8601String().split('T')[0],
+                'end_date': endDate.toIso8601String().split('T')[0],
+              },
+            ),
+            headers: headers,
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
@@ -110,10 +124,13 @@ class TrackerService {
   /// Heart/favorite a recipe
   static Future<void> toggleRecipeHeart(int recipeId) async {
     try {
-      final response = await http.post(
-        Uri.parse('$_baseUrl$_endpoint/recipes/$recipeId/heart'),
-        headers: {'Accept': 'application/json'},
-      ).timeout(const Duration(seconds: 10));
+      final headers = await _getHeaders();
+      final response = await http
+          .post(
+            Uri.parse('$_baseUrl/numnam/recipes/$recipeId/like'),
+            headers: headers,
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200) {
         throw 'Failed to update recipe: ${response.statusCode}';
@@ -126,11 +143,14 @@ class TrackerService {
   /// Fetch all recipes available for baby age
   static Future<List<Recipe>> fetchRecipes(int babyAge) async {
     try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl$_endpoint/recipes')
-            .replace(queryParameters: {'min_age': babyAge.toString()}),
-        headers: {'Accept': 'application/json'},
-      ).timeout(const Duration(seconds: 10));
+      final headers = await _getHeaders();
+      final response = await http
+          .get(
+            Uri.parse('$_baseUrl/numnam/recipes')
+                .replace(queryParameters: {'min_age': babyAge.toString()}),
+            headers: headers,
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);

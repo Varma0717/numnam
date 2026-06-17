@@ -1,21 +1,36 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:mobile_app/src/config/app_config.dart';
+import 'package:mobile_app/src/core/storage_service.dart';
 import '../models/communities.dart';
 
 export '../models/communities.dart';
 
 class CommunitiesService {
   static final String _baseUrl = AppConfig.apiBaseUrl;
-  static const String _endpoint = '/communities';
+  static const String _endpoint = '/numnam/community';
+  static final _storage = StorageService();
+
+  /// Get authorization headers with JWT token
+  static Future<Map<String, String>> _getHeaders() async {
+    final token = await _storage.getToken();
+    return {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      if (token != null) 'Authorization': 'Bearer $token',
+    };
+  }
 
   /// Fetch all available community rooms/channels
   static Future<List<Room>> fetchRooms() async {
     try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl$_endpoint/rooms'),
-        headers: {'Accept': 'application/json'},
-      ).timeout(const Duration(seconds: 10));
+      final headers = await _getHeaders();
+      final response = await http
+          .get(
+            Uri.parse('$_baseUrl$_endpoint/rooms'),
+            headers: headers,
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
@@ -41,15 +56,18 @@ class CommunitiesService {
     int perPage = 20,
   }) async {
     try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl$_endpoint/rooms/$roomId/messages').replace(
-          queryParameters: {
-            'page': page.toString(),
-            'per_page': perPage.toString(),
-          },
-        ),
-        headers: {'Accept': 'application/json'},
-      ).timeout(const Duration(seconds: 10));
+      final headers = await _getHeaders();
+      final response = await http
+          .get(
+            Uri.parse('$_baseUrl$_endpoint/rooms/$roomId/messages').replace(
+              queryParameters: {
+                'page': page.toString(),
+                'per_page': perPage.toString(),
+              },
+            ),
+            headers: headers,
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
@@ -69,13 +87,11 @@ class CommunitiesService {
   /// Post a new message to a room
   static Future<Message> postMessage(int roomId, String content) async {
     try {
+      final headers = await _getHeaders();
       final response = await http
           .post(
             Uri.parse('$_baseUrl$_endpoint/rooms/$roomId/messages'),
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
+            headers: headers,
             body: jsonEncode({'content': content}),
           )
           .timeout(const Duration(seconds: 10));
@@ -94,10 +110,13 @@ class CommunitiesService {
   /// Like/unlike a message
   static Future<void> toggleMessageLike(int messageId) async {
     try {
-      final response = await http.post(
-        Uri.parse('$_baseUrl$_endpoint/messages/$messageId/like'),
-        headers: {'Accept': 'application/json'},
-      ).timeout(const Duration(seconds: 10));
+      final headers = await _getHeaders();
+      final response = await http
+          .post(
+            Uri.parse('$_baseUrl$_endpoint/messages/$messageId/like'),
+            headers: headers,
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200) {
         throw 'Failed to update like: ${response.statusCode}';
@@ -110,13 +129,11 @@ class CommunitiesService {
   /// Post a comment on a message
   static Future<Comment> postComment(int messageId, String content) async {
     try {
+      final headers = await _getHeaders();
       final response = await http
           .post(
             Uri.parse('$_baseUrl$_endpoint/messages/$messageId/comments'),
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
+            headers: headers,
             body: jsonEncode({'content': content}),
           )
           .timeout(const Duration(seconds: 10));
@@ -135,10 +152,13 @@ class CommunitiesService {
   /// Fetch comments for a message
   static Future<List<Comment>> fetchMessageComments(int messageId) async {
     try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl$_endpoint/messages/$messageId/comments'),
-        headers: {'Accept': 'application/json'},
-      ).timeout(const Duration(seconds: 10));
+      final headers = await _getHeaders();
+      final response = await http
+          .get(
+            Uri.parse('$_baseUrl$_endpoint/messages/$messageId/comments'),
+            headers: headers,
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
@@ -158,10 +178,13 @@ class CommunitiesService {
   /// Like/unlike a comment
   static Future<void> toggleCommentLike(int commentId) async {
     try {
-      final response = await http.post(
-        Uri.parse('$_baseUrl$_endpoint/comments/$commentId/like'),
-        headers: {'Accept': 'application/json'},
-      ).timeout(const Duration(seconds: 10));
+      final headers = await _getHeaders();
+      final response = await http
+          .post(
+            Uri.parse('$_baseUrl$_endpoint/comments/$commentId/like'),
+            headers: headers,
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200) {
         throw 'Failed to update like: ${response.statusCode}';
@@ -174,10 +197,13 @@ class CommunitiesService {
   /// Join a room as a member
   static Future<void> joinRoom(int roomId) async {
     try {
-      final response = await http.post(
-        Uri.parse('$_baseUrl$_endpoint/rooms/$roomId/join'),
-        headers: {'Accept': 'application/json'},
-      ).timeout(const Duration(seconds: 10));
+      final headers = await _getHeaders();
+      final response = await http
+          .post(
+            Uri.parse('$_baseUrl$_endpoint/rooms/$roomId/join'),
+            headers: headers,
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200) {
         throw 'Failed to join room: ${response.statusCode}';
@@ -190,10 +216,13 @@ class CommunitiesService {
   /// Leave a room as a member
   static Future<void> leaveRoom(int roomId) async {
     try {
-      final response = await http.post(
-        Uri.parse('$_baseUrl$_endpoint/rooms/$roomId/leave'),
-        headers: {'Accept': 'application/json'},
-      ).timeout(const Duration(seconds: 10));
+      final headers = await _getHeaders();
+      final response = await http
+          .post(
+            Uri.parse('$_baseUrl$_endpoint/rooms/$roomId/leave'),
+            headers: headers,
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200) {
         throw 'Failed to leave room: ${response.statusCode}';
