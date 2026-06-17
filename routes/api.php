@@ -124,8 +124,15 @@ Route::prefix('v1')->group(function () {
 
     // ── NumNam Weaning App API - Protected Routes (auth:web session only) ─────────────────
     Route::prefix('numnam')->middleware('auth:web')->group(function () {
-        // Test endpoint - remove after testing
-        Route::get('_test', fn() => response()->json(['message' => 'NumNam routes working!']));
+        // Test endpoint - shows current authenticated user
+        Route::get('_test', function (Request $request) {
+            return response()->json([
+                'message' => 'NumNam routes working!',
+                'authenticated' => true,
+                'user_id' => $request->user()->id,
+                'user_email' => $request->user()->email,
+            ]);
+        });
 
         // Baby Profile
         Route::get('baby/profile', [NumNamBabyController::class, 'profile']);

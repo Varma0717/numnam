@@ -1359,6 +1359,22 @@
 
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', async () => {
+        // Test session authentication first
+        try {
+            const testResponse = await fetch('/api/v1/numnam/_test', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                }
+            });
+            console.log('Session test:', testResponse.status, testResponse.ok);
+            const testData = await testResponse.json();
+            console.log('Test response:', testData);
+        } catch (e) {
+            console.error('Session test failed:', e);
+        }
+        
         await loadBabyProfile();
         await loadRecipes();
     });
@@ -1377,12 +1393,19 @@
     // Load baby profile from API
     async function loadBabyProfile() {
         try {
+            console.log('Loading baby profile...');
+            console.log('Session cookie present:', document.cookie);
+            
             const response = await fetch('/api/v1/numnam/baby/profile', {
+                method: 'GET',
                 credentials: 'include',
                 headers: {
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                 }
             });
+            
+            console.log('Profile API response status:', response.status);
             
             if (!response.ok) {
                 console.warn('Profile API returned:', response.status, response.statusText);
@@ -1394,6 +1417,7 @@
             }
             
             const data = await response.json();
+            console.log('Profile data received:', data);
             if (data.data) {
                 babyProfile = data.data;
                 document.getElementById('age-display').textContent = babyProfile.age_months + ' months';
@@ -1401,7 +1425,7 @@
             }
         } catch (error) {
             console.error('Profile load error:', error);
-            document.getElementById('page-dashboard').innerHTML = '<div style="text-align:center;padding:40px;"><p style="color:#999;">Error loading profile. Please refresh the page.</p></div>';
+            document.getElementById('page-dashboard').innerHTML = '<div style="text-align:center;padding:40px;"><p style="color:#999;">Error loading profile: ' + error.message + '. Please refresh the page.</p></div>';
         }
     }
 
