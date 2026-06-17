@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/src/services/communities_service.dart';
-import 'package:mobile_app/src/models/communities.dart';
 
 class CommunitiesScreen extends StatefulWidget {
   static const routeName = '/tools/communities';

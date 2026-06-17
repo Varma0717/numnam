@@ -1,7 +1,11 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:mobile_app/src/config/app_config.dart';
-import 'package:mobile_app/src/models/feed_log.dart';
+import '../models/feed_log.dart';
+import '../models/tracker_data.dart';
+
+export '../models/feed_log.dart';
+export '../models/tracker_data.dart';
 
 class TrackerService {
   static final String _baseUrl = AppConfig.apiBaseUrl;

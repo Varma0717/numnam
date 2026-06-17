@@ -1,7 +1,9 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:mobile_app/src/config/app_config.dart';
-import 'package:mobile_app/src/models/communities.dart';
+import '../models/communities.dart';
+
+export '../models/communities.dart';
 
 class CommunitiesService {
   static final String _baseUrl = AppConfig.apiBaseUrl;
