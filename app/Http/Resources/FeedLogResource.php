@@ -15,14 +15,16 @@ class FeedLogResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->babyProfile?->user_id ?? null,
-            'log_type' => $this->type, // Maps 'type' to 'log_type'
+            'type' => $this->type,  // Keep original field name
             'milk_type' => $this->milk_type,
-            'volume' => $this->volume_ml, // Maps 'volume_ml' to 'volume'
+            'volume_ml' => $this->volume_ml,  // Keep original field name
             'food_name' => $this->food_name,
+            'food_type' => $this->food_type,
+            'texture' => $this->texture,
+            'finish_level' => $this->finish_level,
             'poop_type' => $this->poop_type,
             'notes' => $this->notes,
-            'created_at' => $this->logged_at?->toIso8601String() ?? $this->created_at?->toIso8601String(),
+            'logged_at' => $this->logged_at?->toIso8601String() ?? $this->created_at?->toIso8601String(),
         ];
     }
 }

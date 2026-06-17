@@ -45,7 +45,7 @@ class NumNamFeedLogController extends Controller
 
         return response()->json([
             'message' => 'Log entry created successfully',
-            'data' => $log,
+            'data' => FeedLogResource::make($log)->resolve(),
         ], 201);
     }
 
