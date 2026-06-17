@@ -1065,29 +1065,14 @@
             <div class="card-title">Poop Log</div>
             <div class="card-sub">Select the closest match (Bristol Stool Chart – infant adapted)</div>
             <div class="poop-grid" id="poop-selector">
-                <div class="poop-btn" onclick="selectPoop('Type 1', this)"><span class="poop-icon"><svg class="inline h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="9" />
-                            <circle cx="12" cy="12" r="6" fill="currentColor" opacity="0.3" />
-                        </svg></span><span class="poop-label">Type 1<br>Hard</span></div>
-                <div class="poop-btn" onclick="selectPoop('Type 2', this)"><span class="poop-icon"><svg class="inline h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="8" cy="8" r="2.5" />
-                            <circle cx="16" cy="8" r="2.5" />
-                            <circle cx="12" cy="15" r="2.5" />
-                            <circle cx="8" cy="15" r="2.5" />
-                        </svg></span><span class="poop-label">Type 2<br>Lumpy</span></div>
-                <div class="poop-btn" onclick="selectPoop('Type 4', this)"><span class="poop-icon"><svg class="inline h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M8 14s1 2 4 2 4-2 4-2" />
-                            <circle cx="9" cy="9" r="1" />
-                            <circle cx="15" cy="9" r="1" />
-                        </svg></span><span class="poop-label">Type 4<br>Perfect</span></div>
-                <div class="poop-btn" onclick="selectPoop('Type 6', this)"><span class="poop-icon"><svg class="inline h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2c-1.657 0-3 1.343-3 3v4c0 1.105-.895 2-2 2s-2-.895-2-2V5m0 0v4m0-4h6V5c0-1.657-1.343-3-3-3z" />
-                            <path d="M9 15c-1.657 0-3 1.343-3 3v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2c0-1.657-1.343-3-3-3z" />
-                        </svg></span><span class="poop-label">Type 6<br>Loose</span></div>
-                <div class="poop-btn" onclick="selectPoop('Red/Undigested', this)"><span class="poop-icon"><svg class="inline h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l1.103 2.206L15.5 4.5l-2.397 1.294L12 8l-1.103-2.206L8.5 4.5l2.397-1.294L12 2m0 6c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4m0 2c-1.105 0-2 .895-2 2s.895 2 2 2 2-.895 2-2-.895-2-2-2m0 6c-3.314 0-6 2.686-6 6v2h12v-2c0-3.314-2.686-6-6-6z" />
-                        </svg></span><span class="poop-label">Red/<br>Undigested</span></div>
+                <div class="poop-btn" onclick="selectPoop('Type 1', this)"><span class="poop-icon">🪨</span><span class="poop-label">Hard<br>pellets</span></div>
+                <div class="poop-btn" onclick="selectPoop('Type 2', this)"><span class="poop-icon">🌰</span><span class="poop-label">Lumpy<br>sausage</span></div>
+                <div class="poop-btn" onclick="selectPoop('Type 3', this)"><span class="poop-icon">🌭</span><span class="poop-label">Cracked<br>sausage</span></div>
+                <div class="poop-btn" onclick="selectPoop('Type 4', this)"><span class="poop-icon">🍌</span><span class="poop-label">Smooth<br>✅ ideal</span></div>
+                <div class="poop-btn" onclick="selectPoop('Type 5', this)"><span class="poop-icon">💛</span><span class="poop-label">Soft<br>blobs</span></div>
+                <div class="poop-btn" onclick="selectPoop('Type 6', this)"><span class="poop-icon">💦</span><span class="poop-label">Mushy<br>loose</span></div>
+                <div class="poop-btn" onclick="selectPoop('Red/Undigested', this)"><span class="poop-icon">🍅</span><span class="poop-label">Red bits<br>undigested</span></div>
+                <div class="poop-btn" onclick="selectPoop('Green/Mucous', this)"><span class="poop-icon">💚</span><span class="poop-label">Green<br>mucous</span></div>
             </div>
             <div id="poop-insight" style="margin-top:14px;display:none"></div>
             <div class="form-row" style="margin-top:12px">
@@ -1119,34 +1104,52 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><span class="poop-badge badge-red">Type 1</span></td>
-                        <td>Hard, small balls</td>
+                        <td><span class="poop-badge badge-red">🪨 Type 1</span></td>
+                        <td>Hard pellets</td>
                         <td>All ages</td>
                         <td><strong>Constipation risk</strong>. Increase fluids and healthy fats (ghee, oil). Add more fruits like prunes or pears.</td>
                     </tr>
                     <tr>
-                        <td><span class="poop-badge badge-orange">Type 2</span></td>
-                        <td>Lumpy, connected balls</td>
+                        <td><span class="poop-badge badge-orange">🌰 Type 2</span></td>
+                        <td>Lumpy sausage</td>
                         <td>All ages</td>
                         <td><strong>Mild constipation</strong>. Increase water & fibre slightly. Ensure good fat intake for lubrication.</td>
                     </tr>
                     <tr>
-                        <td><span class="poop-badge badge-green">Type 4</span></td>
-                        <td>Smooth, soft log (no cracks)</td>
+                        <td><span class="poop-badge badge-orange">🌭 Type 3</span></td>
+                        <td>Cracked sausage</td>
+                        <td>All ages</td>
+                        <td><strong>Mild constipation</strong>. Similar to Type 2. Add more fluids and cooked vegetables.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="poop-badge badge-green">🍌 Type 4</span></td>
+                        <td>Smooth (ideal)</td>
                         <td>All ages</td>
                         <td><strong>Perfect!</strong> Fibre & fluid balance is ideal. Gut microbiome is thriving. Keep doing what you're doing.</td>
                     </tr>
                     <tr>
-                        <td><span class="poop-badge badge-yellow">Type 6</span></td>
-                        <td>Fluffy, mushy pieces</td>
+                        <td><span class="poop-badge badge-yellow">💛 Type 5</span></td>
+                        <td>Soft blobs</td>
+                        <td>All ages</td>
+                        <td><strong>Slightly loose</strong>. Monitor for changes. Reduce high-fibre foods if becomes more loose. Stay hydrated.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="poop-badge badge-yellow">💦 Type 6</span></td>
+                        <td>Mushy loose</td>
                         <td>All ages</td>
                         <td><strong>Loose/Diarrhoea risk</strong>. Reduce high-fibre foods. Check for new foods or potential sensitivity. Hydrate well.</td>
                     </tr>
                     <tr>
-                        <td><span class="poop-badge badge-orange">Red/<br>Undigested</span></td>
-                        <td>Red, orange, or chunks of food visible</td>
+                        <td><span class="poop-badge badge-red">🍅 Red bits</span></td>
+                        <td>Red or undigested food chunks</td>
                         <td>6+ months</td>
                         <td><strong>Digestion still learning</strong>. Chop/mash foods more finely. Mush them thoroughly. Normal at this stage!</td>
+                    </tr>
+                    <tr>
+                        <td><span class="poop-badge badge-blue">💚 Green mucous</span></td>
+                        <td>Green with mucous coating</td>
+                        <td>All ages</td>
+                        <td><strong>Possible irritation</strong>. Check for new foods. May indicate allergy or sensitivity. Consult pediatrician if persistent.</td>
                     </tr>
                 </tbody>
             </table>

@@ -52,4 +52,34 @@ class ShippingSettings extends Model
 
         return 0;
     }
+
+    /**
+     * Calculate shipping based on cart items, excluding products marked as exclude_from_shipping
+     * @param array $cartItems - Array of cart items with 'product_id' and 'quantity'
+     * @param float $subtotal - Subtotal amount
+     * @return float
+     */
+    public function calculateShippingForCart($cartItems = [], $subtotal = 0)
+    {
+        if (!$this->enabled) {
+            return 0;
+        }
+
+        // Check if any items in the cart should be shipped
+        if (!empty($cartItems)) {
+            $productIds = array_column($cartItems, 'product_id');
+            $shippableProducts = Product::whereIn('id', $productIds)
+                ->where('exclude_from_shipping', false)
+                ->count();
+
+            // If no shippable products, return 0
+            if ($shippableProducts === 0) {
+                return 0;
+            }
+        }
+
+        // Apply normal shipping calculation
+        return $this->calculateShipping($subtotal);
+    }
 }
+

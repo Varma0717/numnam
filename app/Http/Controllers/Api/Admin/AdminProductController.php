@@ -50,6 +50,7 @@ class AdminProductController extends Controller
             'nutrition_info' => 'nullable|array',
             'is_featured' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
+            'exclude_from_shipping' => 'nullable|boolean',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
         ]);
@@ -94,6 +95,7 @@ class AdminProductController extends Controller
             'nutrition_info' => 'nullable|array',
             'is_featured' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
+            'exclude_from_shipping' => 'nullable|boolean',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
         ]);

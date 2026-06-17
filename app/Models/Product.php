@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Storage;
  * @property array|null $gallery
  * @property bool $is_active
  * @property bool $is_featured
+ * @property bool $exclude_from_shipping
  * @property string|null $status
  * @property \Carbon\Carbon|null $published_at
  * @property string|null $meta_title
@@ -70,6 +71,7 @@ class Product extends Model
         'gallery',
         'is_active',
         'is_featured',
+        'exclude_from_shipping',
         'status',
         'published_at',
         'meta_title',
@@ -98,9 +100,10 @@ class Product extends Model
         'specifications'  => 'array',
         'customer_care'   => 'array',
         'regulatory_info' => 'array',
-        'published_at'    => 'datetime',
-        'is_active'       => 'boolean',
-        'is_featured'     => 'boolean',
+        'published_at'           => 'datetime',
+        'is_active'              => 'boolean',
+        'is_featured'            => 'boolean',
+        'exclude_from_shipping'  => 'boolean',
     ];
 
     protected $appends = ['image_url', 'gallery_urls'];
