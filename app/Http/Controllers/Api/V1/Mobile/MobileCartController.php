@@ -116,12 +116,16 @@ class MobileCartController extends BaseMobileController
             $subtotal += $lineTotal;
         }
 
-        // Use admin-configured shipping settings instead of hardcoded values
+        // Use admin-configured shipping settings, respecting exclude_from_shipping per product
         $shippingSettings = ShippingSettings::first();
         $shippingFee = 0.0;
-        
+
         if ($shippingSettings && $shippingSettings->enabled && $subtotal > 0) {
-            $shippingFee = $shippingSettings->calculateShipping($subtotal);
+            $cartItemsForShipping = array_map(fn($item) => [
+                'product_id' => $item['product_id'],
+                'quantity'   => $item['qty'],
+            ], $items);
+            $shippingFee = $shippingSettings->calculateShippingForCart($cartItemsForShipping, $subtotal);
         }
 
         return [
