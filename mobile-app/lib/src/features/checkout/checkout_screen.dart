@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -351,12 +352,38 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     fontSize: 20, fontWeight: FontWeight.w700, color: kNavy)),
             const SizedBox(height: 10),
             ...cart.cart.items.map((item) => Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
+                  padding: const EdgeInsets.only(bottom: 10),
                   child: Row(
                     children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: SizedBox(
+                          width: 42,
+                          height: 42,
+                          child: item.displayImageUrl != null
+                              ? CachedNetworkImage(
+                                  imageUrl: item.displayImageUrl!,
+                                  fit: BoxFit.cover,
+                                  errorWidget: (_, __, ___) => Container(
+                                    color: const Color(0xFFFFF5F8),
+                                    child: const Icon(Icons.fastfood_rounded,
+                                        size: 18, color: kCoral),
+                                  ),
+                                )
+                              : Container(
+                                  color: const Color(0xFFFFF5F8),
+                                  child: const Icon(Icons.fastfood_rounded,
+                                      size: 18, color: kCoral),
+                                ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
                       Expanded(
-                          child: Text('${item.name} × ${item.qty}',
-                              style: GoogleFonts.poppins(fontSize: 13))),
+                        child: Text('${item.name} × ${item.qty}',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.poppins(fontSize: 13)),
+                      ),
                       Text('₹${item.lineTotal.toStringAsFixed(0)}',
                           style: GoogleFonts.poppins(
                               fontSize: 13, fontWeight: FontWeight.w600)),

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../core/wishlist_provider.dart';
+import '../../config/app_config.dart';
 import '../../shared/theme/colors.dart';
 import '../../shared/widgets/empty_state.dart';
 import '../../shared/widgets/loading_indicator.dart';
@@ -142,6 +143,7 @@ class _WishItem {
   final int productId;
   final String name;
   final String? imageUrl;
+  final String? image;
   final double price;
   final double? salePrice;
 
@@ -149,9 +151,12 @@ class _WishItem {
     required this.productId,
     required this.name,
     this.imageUrl,
+    this.image,
     required this.price,
     this.salePrice,
   });
+
+  String? get displayImageUrl => _normalizeImageUrl(imageUrl ?? image);
 
   factory _WishItem.fromJson(Map<String, dynamic> json) {
     final product = json['product'] as Map<String, dynamic>?;
@@ -160,11 +165,33 @@ class _WishItem {
     return _WishItem(
       productId: (json['product_id'] ?? product?['id'] ?? 0) as int,
       name: product?['name'] ?? json['name'] ?? '',
-      imageUrl: product?['image_url'] as String?,
+      imageUrl: (json['image_url'] ?? product?['image_url']) as String?,
+      image: (json['image'] ?? product?['image']) as String?,
       price: toD(product?['price'] ?? json['price']),
       salePrice:
           product?['sale_price'] != null ? toD(product!['sale_price']) : null,
     );
+  }
+
+  static String? _normalizeImageUrl(String? raw) {
+    if (raw == null || raw.trim().isEmpty) return null;
+
+    final value = raw.trim();
+    if (value.startsWith('http://') || value.startsWith('https://')) {
+      return value;
+    }
+
+    if (value.startsWith('/')) {
+      return '${AppConfig.siteBaseUrl}$value';
+    }
+
+    if (value.startsWith('storage/') ||
+        value.startsWith('assets/') ||
+        value.startsWith('cms-media/')) {
+      return '${AppConfig.siteBaseUrl}/$value';
+    }
+
+    return '${AppConfig.siteBaseUrl}/storage/$value';
   }
 }
 
@@ -197,9 +224,9 @@ class _WishTile extends StatelessWidget {
               child: SizedBox(
                 width: 80,
                 height: 80,
-                child: item.imageUrl != null
+                child: item.displayImageUrl != null
                     ? CachedNetworkImage(
-                        imageUrl: item.imageUrl!, fit: BoxFit.cover)
+                        imageUrl: item.displayImageUrl!, fit: BoxFit.cover)
                     : Container(
                         color: kCream,
                         child: const Icon(Icons.image, color: kCoral)),

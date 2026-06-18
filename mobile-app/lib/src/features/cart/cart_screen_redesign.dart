@@ -145,9 +145,9 @@ class CartScreenRedesign extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(14),
-                child: item.imageUrl != null
+                child: item.displayImageUrl != null
                     ? CachedNetworkImage(
-                        imageUrl: item.imageUrl!,
+                        imageUrl: item.displayImageUrl!,
                         fit: BoxFit.cover,
                         placeholder: (_, __) => const Center(
                           child: CircularProgressIndicator(

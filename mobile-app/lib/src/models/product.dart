@@ -1,3 +1,5 @@
+import '../config/app_config.dart';
+
 class Product {
   final int id;
   final String name;
@@ -52,6 +54,7 @@ class Product {
   double get effectivePrice => salePrice ?? price;
   bool get isOnSale => salePrice != null && salePrice! < price;
   bool get inStock => stock > 0;
+  String? get displayImageUrl => _normalizeImageUrl(imageUrl ?? image);
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
@@ -117,6 +120,27 @@ class Product {
       if (normalized == 'false' || normalized == '0') return false;
     }
     return fallback;
+  }
+
+  static String? _normalizeImageUrl(String? raw) {
+    if (raw == null || raw.trim().isEmpty) return null;
+
+    final value = raw.trim();
+    if (value.startsWith('http://') || value.startsWith('https://')) {
+      return value;
+    }
+
+    if (value.startsWith('/')) {
+      return '${AppConfig.siteBaseUrl}$value';
+    }
+
+    if (value.startsWith('storage/') ||
+        value.startsWith('assets/') ||
+        value.startsWith('cms-media/')) {
+      return '${AppConfig.siteBaseUrl}/$value';
+    }
+
+    return '${AppConfig.siteBaseUrl}/storage/$value';
   }
 }
 

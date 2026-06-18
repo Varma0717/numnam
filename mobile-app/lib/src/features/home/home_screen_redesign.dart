@@ -12,6 +12,7 @@ import '../../models/pricing_plan.dart';
 import '../../shared/theme/colors.dart';
 import '../../config/app_config.dart';
 import '../shop/product_detail_screen_redesign.dart';
+import '../shop/shop_screen_redesign.dart';
 import '../subscriptions/subscriptions_screen_redesign.dart';
 
 class HomeScreenRedesign extends StatefulWidget {
@@ -57,35 +58,52 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
   }
 
   Future<void> _load() async {
+    if (mounted) {
+      setState(() => _loading = true);
+    }
+
+    final api = context.read<ApiClient>();
+    List<Product> featured = [];
+    List<PricingPlan> plans = [];
+
     try {
-      final api = context.read<ApiClient>();
+      final productsResp = await api.dio.get(
+        ApiEndpoints.products,
+        queryParameters: {'per_page': 12, 'page': 1, 'featured': true},
+      );
+      print('✓ Products response: ${productsResp.statusCode}');
+      featured = _parseProducts(productsResp.data);
+      print('✓ Parsed ${featured.length} featured products');
 
-      // Parallel fetching for better performance
-      final results = await Future.wait([
-        api.dio.get(ApiEndpoints.products,
-            queryParameters: {'per_page': 12, 'page': 1, 'sort': 'newest'}),
-        api.dio.get(ApiEndpoints.pricingPlans),
-      ]);
-
-      print('✓ Home page data loaded');
-      print('✓ Products response: ${results[0].statusCode}');
-      print('✓ Products data: ${results[0].data}');
-
-      if (mounted) {
-        final featured = _parseProducts(results[0].data);
-        final plans = _parsePlans(results[1].data);
-        print('✓ Parsed ${featured.length} featured products');
-        print('✓ Parsed ${plans.length} pricing plans');
-        setState(() {
-          _featured = featured;
-          _plans = plans;
-          _loading = false;
-        });
+      if (featured.isEmpty) {
+        final fallbackResp = await api.dio.get(
+          ApiEndpoints.products,
+          queryParameters: {'per_page': 12, 'page': 1},
+        );
+        featured = _parseProducts(fallbackResp.data);
+        print('✓ Fallback products count: ${featured.length}');
       }
     } catch (e, st) {
-      print('✗ Home page load error: $e');
-      print('✗ Stack trace: $st');
-      if (mounted) setState(() => _loading = false);
+      print('✗ Products load error: $e');
+      print('✗ Products stack trace: $st');
+    }
+
+    try {
+      final plansResp = await api.dio.get(ApiEndpoints.pricingPlans);
+      print('✓ Plans response: ${plansResp.statusCode}');
+      plans = _parsePlans(plansResp.data);
+      print('✓ Parsed ${plans.length} pricing plans');
+    } catch (e, st) {
+      print('✗ Plans load error: $e');
+      print('✗ Plans stack trace: $st');
+    }
+
+    if (mounted) {
+      setState(() {
+        _featured = featured;
+        _plans = plans;
+        _loading = false;
+      });
     }
   }
 
@@ -143,7 +161,7 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
           print('WARN: Plan item $i is not a Map, got ${item.runtimeType}');
           continue;
         }
-        result.add(PricingPlan.fromJson(item as Map<String, dynamic>));
+        result.add(PricingPlan.fromJson(item));
       } catch (e) {
         print('ERROR parsing pricing plan $i: $e');
       }
@@ -303,7 +321,11 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
           // Featured Products Header
           SliverToBoxAdapter(
             child: _buildSectionHeader('Featured Products 🛍️', () {
-              // Products are shown below, no need to navigate
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ShopScreenRedesign(),
+                ),
+              );
             }),
           ),
 
@@ -630,7 +652,7 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                         width: double.infinity,
                         height: double.infinity,
                         child: CachedNetworkImage(
-                          imageUrl: product.imageUrl ?? '',
+                          imageUrl: product.displayImageUrl ?? '',
                           fit: BoxFit.cover,
                           errorWidget: (_, __, ___) => Container(
                               color: kCream,

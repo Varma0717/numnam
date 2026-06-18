@@ -48,9 +48,7 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
       final allProducts = <Product>[];
       const perPage = 50;
       var currentPage = 1;
-      var lastPage = 1;
-
-      do {
+      while (true) {
         final resp = await api.dio.get(ApiEndpoints.products, queryParameters: {
           'per_page': perPage,
           'page': currentPage,
@@ -63,9 +61,17 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
         final meta = (resp.data is Map<String, dynamic>)
             ? (resp.data['meta'] as Map<String, dynamic>?)
             : null;
-        lastPage = (meta?['last_page'] as num?)?.toInt() ?? currentPage;
+        final lastPage = (meta?['last_page'] as num?)?.toInt();
+
+        if (lastPage != null) {
+          if (currentPage >= lastPage) break;
+          currentPage += 1;
+          continue;
+        }
+
+        if (parsed.length < perPage) break;
         currentPage += 1;
-      } while (currentPage <= lastPage);
+      }
 
       if (mounted) {
         setState(() {
@@ -122,7 +128,7 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
           print('WARN: Item $i is not a Map, got ${item.runtimeType}: $item');
           continue;
         }
-        final product = Product.fromJson(item as Map<String, dynamic>);
+        final product = Product.fromJson(item);
         result.add(product);
       } catch (e) {
         print('ERROR parsing product $i: $e');
@@ -397,8 +403,8 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
                       width: double.infinity,
                       color: kCream,
                       child: CachedNetworkImage(
-                        imageUrl: product.imageUrl ?? '',
-                        fit: BoxFit.contain,
+                        imageUrl: product.displayImageUrl ?? '',
+                        fit: BoxFit.cover,
                         alignment: Alignment.center,
                         width: double.infinity,
                         errorWidget: (_, __, ___) => Container(color: kCream),
@@ -500,8 +506,8 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
                 child: Container(
                   color: kCream,
                   child: CachedNetworkImage(
-                    imageUrl: product.imageUrl ?? '',
-                    fit: BoxFit.contain,
+                    imageUrl: product.displayImageUrl ?? '',
+                    fit: BoxFit.cover,
                     alignment: Alignment.center,
                     errorWidget: (_, __, ___) => Container(color: kCream),
                   ),

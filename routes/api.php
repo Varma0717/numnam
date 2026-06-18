@@ -63,23 +63,19 @@ Route::prefix('v1')->group(function () {
             });
         });
 
+        // Public-read catalog/content endpoints for app bootstrap screens.
+        Route::get('homepage', [MobileContentController::class, 'homepage']);
+        Route::get('settings', [MobileContentController::class, 'settings']);
+        Route::get('products', [MobileContentController::class, 'products']);
+        Route::get('products/{slug}', [MobileContentController::class, 'productShow']);
+        Route::get('pricing-plans', [MobileContentController::class, 'pricingPlans']);
+        Route::get('pricing-plans/{slug}', [MobileContentController::class, 'pricingPlanShow']);
+        Route::get('blogs', [MobileContentController::class, 'blogs']);
+        Route::get('blogs/{slug}', [MobileContentController::class, 'blogShow']);
+        Route::get('menus', [MobileContentController::class, 'menus']);
+
         Route::middleware('jwt.auth')->group(function () {
-            Route::get('homepage', [MobileContentController::class, 'homepage']);
-
-            Route::get('settings', [MobileContentController::class, 'settings']);
-
-            Route::get('products', [MobileContentController::class, 'products']);
-            Route::get('products/{slug}', [MobileContentController::class, 'productShow']);
-
-            Route::get('pricing-plans', [MobileContentController::class, 'pricingPlans']);
-            Route::get('pricing-plans/{slug}', [MobileContentController::class, 'pricingPlanShow']);
-
-            Route::get('blogs', [MobileContentController::class, 'blogs']);
-            Route::get('blogs/{slug}', [MobileContentController::class, 'blogShow']);
-
             Route::post('contact-forms', [MobileContentController::class, 'submitContactForm']);
-
-            Route::get('menus', [MobileContentController::class, 'menus']);
 
             Route::get('cart', [MobileCartController::class, 'index']);
             Route::post('cart', [MobileCartController::class, 'store']);
