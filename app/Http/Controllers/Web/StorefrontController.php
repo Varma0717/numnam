@@ -1341,6 +1341,7 @@ class StorefrontController extends Controller
     public function account(Request $request)
     {
         $user = $request->user();
+        $user->ensureReferralCode();
 
         $orders = Order::query()
             ->where('user_id', $user->id)
