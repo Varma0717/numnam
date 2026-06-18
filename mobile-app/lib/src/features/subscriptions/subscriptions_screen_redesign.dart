@@ -247,7 +247,7 @@ class _SubscriptionsScreenRedesignState
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: kCoral.withOpacity(0.12),
+                            color: kCoral.withValues(alpha: 0.12),
                             shape: BoxShape.circle,
                           ),
                           child: const FaIcon(
@@ -271,7 +271,7 @@ class _SubscriptionsScreenRedesignState
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(
                             fontSize: 15,
-                            color: kNavy.withOpacity(0.7),
+                            color: kNavy.withValues(alpha: 0.7),
                             height: 1.5,
                           ),
                         ),
@@ -336,14 +336,14 @@ class _SubscriptionsScreenRedesignState
                             Icon(
                               Icons.inbox_outlined,
                               size: 60,
-                              color: kNavy.withOpacity(0.3),
+                              color: kNavy.withValues(alpha: 0.3),
                             ),
                             const SizedBox(height: 16),
                             Text(
                               'No subscription plans available',
                               style: GoogleFonts.poppins(
                                 fontSize: 16,
-                                color: kNavy.withOpacity(0.5),
+                                color: kNavy.withValues(alpha: 0.5),
                               ),
                             ),
                           ],
@@ -466,7 +466,7 @@ class _SubscriptionsScreenRedesignState
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
-                        color: _statusColor(status).withOpacity(0.14),
+                        color: _statusColor(status).withValues(alpha: 0.14),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
@@ -484,14 +484,14 @@ class _SubscriptionsScreenRedesignState
                 Text(
                   _billingLabel(sub),
                   style: GoogleFonts.poppins(
-                      fontSize: 13, color: kNavy.withOpacity(0.7)),
+                      fontSize: 13, color: kNavy.withValues(alpha: 0.7)),
                 ),
                 if (sub['next_billing_date'] != null) ...[
                   const SizedBox(height: 4),
                   Text(
                     'Next billing: ${sub['next_billing_date']}',
                     style: GoogleFonts.poppins(
-                        fontSize: 12, color: kNavy.withOpacity(0.55)),
+                        fontSize: 12, color: kNavy.withValues(alpha: 0.55)),
                   ),
                 ],
                 if (canPause || canResume || canCancel) ...[
@@ -540,10 +540,10 @@ class _SubscriptionsScreenRedesignState
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.2), width: 1.5),
+        border: Border.all(color: color.withValues(alpha: 0.2), width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.08),
+            color: color.withValues(alpha: 0.08),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -554,7 +554,7 @@ class _SubscriptionsScreenRedesignState
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.12),
+              color: color.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(12),
             ),
             child: FaIcon(
@@ -581,7 +581,7 @@ class _SubscriptionsScreenRedesignState
                   description,
                   style: GoogleFonts.poppins(
                     fontSize: 13,
-                    color: kNavy.withOpacity(0.6),
+                    color: kNavy.withValues(alpha: 0.6),
                   ),
                 ),
               ],
@@ -624,7 +624,7 @@ class _SubscriptionsScreenRedesignState
         boxShadow: plan.isPopular
             ? [
                 BoxShadow(
-                  color: kCoral.withOpacity(0.3),
+                  color: kCoral.withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -681,8 +681,8 @@ class _SubscriptionsScreenRedesignState
                 style: GoogleFonts.poppins(
                   fontSize: 14,
                   color: plan.isPopular
-                      ? Colors.white.withOpacity(0.9)
-                      : kNavy.withOpacity(0.7),
+                      ? Colors.white.withValues(alpha: 0.9)
+                      : kNavy.withValues(alpha: 0.7),
                   height: 1.5,
                 ),
               ),
@@ -708,8 +708,8 @@ class _SubscriptionsScreenRedesignState
                     style: GoogleFonts.poppins(
                       fontSize: 16,
                       color: plan.isPopular
-                          ? Colors.white.withOpacity(0.9)
-                          : kNavy.withOpacity(0.6),
+                          ? Colors.white.withValues(alpha: 0.9)
+                          : kNavy.withValues(alpha: 0.6),
                     ),
                   ),
                 ),
@@ -735,8 +735,8 @@ class _SubscriptionsScreenRedesignState
                             style: GoogleFonts.poppins(
                               fontSize: 14,
                               color: plan.isPopular
-                                  ? Colors.white.withOpacity(0.95)
-                                  : kNavy.withOpacity(0.8),
+                                  ? Colors.white.withValues(alpha: 0.95)
+                                  : kNavy.withValues(alpha: 0.8),
                             ),
                           ),
                         ),
@@ -757,12 +757,12 @@ class _SubscriptionsScreenRedesignState
                         if (isCurrentActive) return;
 
                         if (canResume) {
-                          _resumeSubscription(planSubId!);
+                          _resumeSubscription(planSubId);
                           return;
                         }
 
                         if (canRenew) {
-                          _resumeSubscription(planSubId!);
+                          _resumeSubscription(planSubId);
                           return;
                         }
 
@@ -810,8 +810,8 @@ class _SubscriptionsScreenRedesignState
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: plan.isPopular
-                      ? Colors.white.withOpacity(0.9)
-                      : kNavy.withOpacity(0.7),
+                      ? Colors.white.withValues(alpha: 0.9)
+                      : kNavy.withValues(alpha: 0.7),
                 ),
               ),
               const SizedBox(height: 12),
@@ -824,12 +824,12 @@ class _SubscriptionsScreenRedesignState
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: plan.isPopular
-                          ? Colors.white.withOpacity(0.2)
+                          ? Colors.white.withValues(alpha: 0.2)
                           : kCream,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: plan.isPopular
-                            ? Colors.white.withOpacity(0.3)
+                            ? Colors.white.withValues(alpha: 0.3)
                             : const Color(0xFFFFD6E5),
                       ),
                     ),
