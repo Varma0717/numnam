@@ -351,17 +351,23 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.accordion-trigger').forEach((trigger) => {
     trigger.addEventListener('click', () => {
       const item = trigger.closest('.accordion-item');
+      if (!item) return;
+
       const panel = item.querySelector('.accordion-panel');
+      const accordion = item.closest('.accordion');
       const isOpen = item.classList.contains('open');
-      // Close all siblings
-      item.closest('.accordion').querySelectorAll('.accordion-item').forEach((sibling) => {
+
+      // Close sibling items inside the same accordion; fallback to this item only.
+      const scope = accordion || item.parentElement || item;
+      scope.querySelectorAll('.accordion-item').forEach((sibling) => {
         sibling.classList.remove('open');
         const sp = sibling.querySelector('.accordion-panel');
         if (sp) sp.style.maxHeight = null;
       });
+
       if (!isOpen) {
         item.classList.add('open');
-        panel.style.maxHeight = panel.scrollHeight + 'px';
+        if (panel) panel.style.maxHeight = panel.scrollHeight + 'px';
       }
     });
   });
