@@ -36,10 +36,11 @@ class NumNamFeedLogController extends Controller
             'finish_level' => 'required_if:type,solid|in:all,most,half,few,floor,refused',
             'poop_type' => 'required_if:type,poop|string|max:50',
             'notes' => 'nullable|string|max:500',
+            'logged_at' => 'nullable|date',
         ]);
 
         $validated['baby_profile_id'] = $profile->id;
-        $validated['logged_at'] = now();
+        $validated['logged_at'] = $validated['logged_at'] ?? now();
 
         $log = FeedLog::create($validated);
 

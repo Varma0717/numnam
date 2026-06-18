@@ -151,6 +151,9 @@ class FeedType {
   final String emoji;
   final String description;
   final List<String>? typeOptions;
+  final List<String>? foodTypeOptions;
+  final List<String>? textureOptions;
+  final List<String>? finishOptions;
   final String? placeholder;
   final int? defaultVolume;
   final int? minVolume;
@@ -162,6 +165,9 @@ class FeedType {
     required this.emoji,
     required this.description,
     this.typeOptions,
+    this.foodTypeOptions,
+    this.textureOptions,
+    this.finishOptions,
     this.placeholder,
     this.defaultVolume,
     this.minVolume,
@@ -175,6 +181,9 @@ class FeedType {
       emoji: json['emoji'] ?? '📝',
       description: json['description'] ?? '',
       typeOptions: (json['type_options'] as List?)?.cast<String>(),
+      foodTypeOptions: (json['food_type_options'] as List?)?.cast<String>(),
+      textureOptions: (json['texture_options'] as List?)?.cast<String>(),
+      finishOptions: (json['finish_options'] as List?)?.cast<String>(),
       placeholder: json['placeholder'],
       defaultVolume: json['default_volume'],
       minVolume: json['min_volume'],

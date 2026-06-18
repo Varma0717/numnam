@@ -45,20 +45,31 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
     });
     try {
       final api = context.read<ApiClient>();
-      final resp = await api.dio.get(ApiEndpoints.products, queryParameters: {
-        'per_page': 100,
-        'page': 1,
-        'sort': _sortBy,
-      });
+      final allProducts = <Product>[];
+      const perPage = 50;
+      var currentPage = 1;
+      var lastPage = 1;
 
-      print('✓ Products response received: ${resp.statusCode}');
-      print('✓ Response data: ${resp.data}');
+      do {
+        final resp = await api.dio.get(ApiEndpoints.products, queryParameters: {
+          'per_page': perPage,
+          'page': currentPage,
+          'sort': _sortBy,
+        });
+
+        final parsed = _parseProducts(resp.data);
+        allProducts.addAll(parsed);
+
+        final meta = (resp.data is Map<String, dynamic>)
+            ? (resp.data['meta'] as Map<String, dynamic>?)
+            : null;
+        lastPage = (meta?['last_page'] as num?)?.toInt() ?? currentPage;
+        currentPage += 1;
+      } while (currentPage <= lastPage);
 
       if (mounted) {
-        final products = _parseProducts(resp.data);
-        print('✓ Parsed ${products.length} products');
         setState(() {
-          _products = products;
+          _products = allProducts;
           _applyFilters();
           _loading = false;
         });
@@ -382,11 +393,16 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
                   ClipRRect(
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(20)),
-                    child: CachedNetworkImage(
-                      imageUrl: product.imageUrl ?? '',
-                      fit: BoxFit.cover,
+                    child: Container(
                       width: double.infinity,
-                      errorWidget: (_, __, ___) => Container(color: kCream),
+                      color: kCream,
+                      child: CachedNetworkImage(
+                        imageUrl: product.imageUrl ?? '',
+                        fit: BoxFit.contain,
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        errorWidget: (_, __, ___) => Container(color: kCream),
+                      ),
                     ),
                   ),
                   Positioned(
@@ -481,10 +497,14 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
               child: SizedBox(
                 width: 110,
                 height: 110,
-                child: CachedNetworkImage(
-                  imageUrl: product.imageUrl ?? '',
-                  fit: BoxFit.cover,
-                  errorWidget: (_, __, ___) => Container(color: kCream),
+                child: Container(
+                  color: kCream,
+                  child: CachedNetworkImage(
+                    imageUrl: product.imageUrl ?? '',
+                    fit: BoxFit.contain,
+                    alignment: Alignment.center,
+                    errorWidget: (_, __, ___) => Container(color: kCream),
+                  ),
                 ),
               ),
             ),

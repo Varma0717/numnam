@@ -63,7 +63,7 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
       // Parallel fetching for better performance
       final results = await Future.wait([
         api.dio.get(ApiEndpoints.products,
-            queryParameters: {'per_page': 12, 'page': 1, 'featured': 1}),
+            queryParameters: {'per_page': 12, 'page': 1, 'sort': 'newest'}),
         api.dio.get(ApiEndpoints.pricingPlans),
       ]);
 
@@ -105,9 +105,13 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
     } else {
       list = [];
     }
-    return list
-        .map((e) => Product.fromJson(e as Map<String, dynamic>))
-        .toList();
+    final parsed = <Product>[];
+    for (final item in list) {
+      if (item is Map<String, dynamic>) {
+        parsed.add(Product.fromJson(item));
+      }
+    }
+    return parsed;
   }
 
   List<PricingPlan> _parsePlans(dynamic data) {

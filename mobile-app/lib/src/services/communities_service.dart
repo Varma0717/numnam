@@ -195,7 +195,7 @@ class CommunitiesService {
           .post(
             Uri.parse('$_baseUrl$_endpoint/messages/$messageId/comments'),
             headers: headers,
-            body: jsonEncode({'content': content}),
+            body: jsonEncode({'comment': content}),
           )
           .timeout(const Duration(seconds: 10));
 
@@ -296,40 +296,13 @@ class CommunitiesService {
 
   /// Join a room as a member
   static Future<void> joinRoom(int roomId) async {
-    try {
-      final headers = await _getHeaders();
-      final response = await http
-          .post(
-            Uri.parse('$_baseUrl$_endpoint/rooms/$roomId/join'),
-            headers: headers,
-          )
-          .timeout(const Duration(seconds: 10));
-
-      if (response.statusCode != 200) {
-        throw 'Failed to join room: ${response.statusCode}';
-      }
-    } catch (e) {
-      throw 'Error joining room: $e';
-    }
+    // Backend currently has no join/leave endpoints; rooms are open for authenticated posting.
+    return;
   }
 
   /// Leave a room as a member
   static Future<void> leaveRoom(int roomId) async {
-    try {
-      final headers = await _getHeaders();
-      final response = await http
-          .post(
-            Uri.parse('$_baseUrl$_endpoint/rooms/$roomId/leave'),
-            headers: headers,
-          )
-          .timeout(const Duration(seconds: 10));
-
-      if (response.statusCode != 200) {
-        throw 'Failed to leave room: ${response.statusCode}';
-      }
-    } catch (e) {
-      throw 'Error leaving room: $e';
-    }
+    return;
   }
 }
 
@@ -357,15 +330,15 @@ class Room {
 
   factory Room.fromJson(Map<String, dynamic> json) {
     return Room(
-      id: json['id'] ?? 0,
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      emoji: json['emoji'] ?? '💬',
-      memberCount: json['member_count'] ?? 0,
-      messageCount: json['message_count'] ?? 0,
-      isMember: json['is_member'] ?? false,
-      createdAt: DateTime.parse(
-          json['created_at'] ?? DateTime.now().toIso8601String()),
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      name: (json['name'] ?? '').toString(),
+      description: (json['description'] ?? '').toString(),
+      emoji: (json['emoji'] ?? json['icon'] ?? '💬').toString(),
+      memberCount: (json['member_count'] as num?)?.toInt() ?? 0,
+      messageCount: (json['message_count'] as num?)?.toInt() ?? 0,
+      isMember: true,
+      createdAt: DateTime.tryParse((json['created_at'] ?? '').toString()) ??
+          DateTime.now(),
     );
   }
 }
@@ -396,18 +369,25 @@ class Message {
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
+    final user = json['user'] as Map<String, dynamic>?;
     return Message(
-      id: json['id'] ?? 0,
-      roomId: json['room_id'] ?? 0,
-      userId: json['user_id'] ?? '',
-      userName: json['user_name'] ?? 'Unknown',
-      userAvatar: json['user_avatar'] ?? '',
-      content: json['content'] ?? '',
-      likeCount: json['like_count'] ?? 0,
-      isLiked: json['is_liked'] ?? false,
-      commentCount: json['comment_count'] ?? 0,
-      createdAt: DateTime.parse(
-          json['created_at'] ?? DateTime.now().toIso8601String()),
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      roomId: (json['room_id'] as num?)?.toInt() ?? 0,
+      userId: ((json['user_id'] ?? user?['id']) ?? '').toString(),
+      userName: (json['user_name'] ?? user?['name'] ?? 'Unknown').toString(),
+      userAvatar: (json['user_avatar'] ?? user?['avatar'] ?? '').toString(),
+      content: (json['content'] ?? json['message'] ?? '').toString(),
+      likeCount: (json['like_count'] as num?)?.toInt() ??
+          (json['likes_count'] as num?)?.toInt() ??
+          (json['likes'] as num?)?.toInt() ??
+          0,
+      isLiked:
+          (json['is_liked'] as bool?) ?? (json['user_liked'] as bool?) ?? false,
+      commentCount: (json['comment_count'] as num?)?.toInt() ??
+          (json['comments_count'] as num?)?.toInt() ??
+          0,
+      createdAt: DateTime.tryParse((json['created_at'] ?? '').toString()) ??
+          DateTime.now(),
     );
   }
 }
@@ -436,17 +416,21 @@ class Comment {
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) {
+    final user = json['user'] as Map<String, dynamic>?;
     return Comment(
-      id: json['id'] ?? 0,
-      messageId: json['message_id'] ?? 0,
-      userId: json['user_id'] ?? '',
-      userName: json['user_name'] ?? 'Unknown',
-      userAvatar: json['user_avatar'] ?? '',
-      content: json['content'] ?? '',
-      likeCount: json['like_count'] ?? 0,
-      isLiked: json['is_liked'] ?? false,
-      createdAt: DateTime.parse(
-          json['created_at'] ?? DateTime.now().toIso8601String()),
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      messageId: (json['message_id'] as num?)?.toInt() ?? 0,
+      userId: ((json['user_id'] ?? user?['id']) ?? '').toString(),
+      userName: (json['user_name'] ?? user?['name'] ?? 'Unknown').toString(),
+      userAvatar: (json['user_avatar'] ?? user?['avatar'] ?? '').toString(),
+      content: (json['content'] ?? json['comment'] ?? '').toString(),
+      likeCount: (json['like_count'] as num?)?.toInt() ??
+          (json['likes_count'] as num?)?.toInt() ??
+          0,
+      isLiked:
+          (json['is_liked'] as bool?) ?? (json['user_liked'] as bool?) ?? false,
+      createdAt: DateTime.tryParse((json['created_at'] ?? '').toString()) ??
+          DateTime.now(),
     );
   }
 }

@@ -55,7 +55,7 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      id: json['id'] as int,
+      id: _toInt(json['id']),
       name: json['name'] as String? ?? '',
       slug: json['slug'] as String? ?? '',
       sku: json['sku'] as String?,
@@ -66,8 +66,9 @@ class Product {
       ageGroup: json['age_group'] as String?,
       type: json['type'] as String?,
       price: _toDouble(json['price']),
-      salePrice: json['sale_price'] != null ? _toDouble(json['sale_price']) : null,
-      stock: json['stock'] as int? ?? 0,
+      salePrice:
+          json['sale_price'] != null ? _toDouble(json['sale_price']) : null,
+      stock: _toInt(json['stock']),
       image: json['image'] as String?,
       imageUrl: json['image_url'] as String?,
       gallery: (json['gallery'] as List<dynamic>?)
@@ -78,8 +79,8 @@ class Product {
               ?.map((e) => e.toString())
               .toList() ??
           const [],
-      isActive: json['is_active'] as bool? ?? true,
-      isFeatured: json['is_featured'] as bool? ?? false,
+      isActive: _toBool(json['is_active'], true),
+      isFeatured: _toBool(json['is_featured'], false),
       badges: (json['badges'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
@@ -98,6 +99,24 @@ class Product {
     if (v is int) return v.toDouble();
     if (v is String) return double.tryParse(v) ?? 0;
     return 0;
+  }
+
+  static int _toInt(dynamic v) {
+    if (v is int) return v;
+    if (v is double) return v.toInt();
+    if (v is String) return int.tryParse(v) ?? 0;
+    return 0;
+  }
+
+  static bool _toBool(dynamic v, bool fallback) {
+    if (v is bool) return v;
+    if (v is int) return v != 0;
+    if (v is String) {
+      final normalized = v.toLowerCase();
+      if (normalized == 'true' || normalized == '1') return true;
+      if (normalized == 'false' || normalized == '0') return false;
+    }
+    return fallback;
   }
 }
 
