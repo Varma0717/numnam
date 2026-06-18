@@ -41,8 +41,7 @@ class ChatMessage extends Model
 
     public function likedByUsers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'chat_message_likes', 'message_id', 'user_id')
-            ->withTimestamps();
+        return $this->belongsToMany(User::class, 'chat_message_likes', 'message_id', 'user_id');
     }
 
     public function isLikedBy(User $user): bool
