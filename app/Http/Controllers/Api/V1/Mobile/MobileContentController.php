@@ -121,7 +121,12 @@ class MobileContentController extends BaseMobileController
 
         $query = Product::query()
             ->when(Schema::hasColumn('products', 'is_active'), fn($q) => $q->where('is_active', true))
-            ->when(Schema::hasColumn('products', 'status'), fn($q) => $q->whereIn('status', ['published', 'draft']))
+            ->when(Schema::hasColumn('products', 'status'), function ($q) {
+                // Mobile catalog should include all sellable products and only hide archived ones.
+                $q->where(function ($statusQuery) {
+                    $statusQuery->whereNull('status')->orWhere('status', '!=', 'archived');
+                });
+            })
             ->with('productCategory:id,name,slug');
 
         if ($request->filled('category_id')) {
@@ -136,12 +141,21 @@ class MobileContentController extends BaseMobileController
             $keyword = $request->string('search')->toString();
             $query->where(function ($nested) use ($keyword) {
                 $nested->where('name', 'like', "%{$keyword}%")
-                    ->orWhere('short_description', 'like', "%{$keyword}%");
+                    ->orWhere('short_description', 'like', "%{$keyword}%")
+                    ->orWhere('description', 'like', "%{$keyword}%")
+                    ->orWhere('ingredients', 'like', "%{$keyword}%");
             });
         }
 
+        if ($request->filled('status') && Schema::hasColumn('products', 'status')) {
+            $query->where('status', $request->string('status')->toString());
+        }
+
         $perPage = min(max((int) $request->integer('per_page', 10), 1), 50);
-        $products = $query->orderByDesc('id')->paginate($perPage);
+        $products = $query
+            ->orderByDesc('is_featured')
+            ->orderByDesc('id')
+            ->paginate($perPage);
 
         return $this->success(
             $products->items(),
@@ -160,7 +174,11 @@ class MobileContentController extends BaseMobileController
         // Support both ID and slug for mobile app compatibility
         $query = Product::query()
             ->when(Schema::hasColumn('products', 'is_active'), fn($q) => $q->where('is_active', true))
-            ->when(Schema::hasColumn('products', 'status'), fn($q) => $q->whereIn('status', ['published', 'draft']))
+            ->when(Schema::hasColumn('products', 'status'), function ($q) {
+                $q->where(function ($statusQuery) {
+                    $statusQuery->whereNull('status')->orWhere('status', '!=', 'archived');
+                });
+            })
             ->with(['productCategory:id,name,slug', 'approvedReviews']);
 
         // Check if slug is numeric (ID) or string (slug)
@@ -182,7 +200,7 @@ class MobileContentController extends BaseMobileController
             return $this->error('Product is not available.', 404);
         }
 
-        if ($hasStatus && $product->status !== 'published') {
+        if ($hasStatus && $product->status === 'archived') {
             return $this->error('Product is not available.', 404);
         }
 

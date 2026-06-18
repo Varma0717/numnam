@@ -44,18 +44,61 @@ class SubscriptionController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'plan_name'       => 'required|string|max:100',
-            'plan_type'       => 'required|in:puree,puffs',
-            'duration'        => 'required|in:3M,6M,12M',
-            'frequency'       => 'required|in:weekly,monthly',
-            'price_per_cycle' => 'required|numeric|min:0',
-            'discount_percent' => 'required|integer|between:0,50',
+            // Legacy payload support
+            'plan_name' => 'required_without:pricing_plan_id|string|max:100',
+            'plan_type' => 'required_without:pricing_plan_id|in:puree,puffs',
+            'duration' => 'required_without:pricing_plan_id|in:3M,6M,12M',
+            'frequency' => 'required_without:pricing_plan_id|in:weekly,monthly',
+            'price_per_cycle' => 'required_without:pricing_plan_id|numeric|min:0',
+            'discount_percent' => 'nullable|integer|between:0,50',
+
+            // Mobile checkout payload support
+            'pricing_plan_id' => 'nullable|integer|exists:pricing_plans,id',
+            'payment_method' => 'nullable|string|max:50',
+            'ship_name' => 'nullable|string|max:255',
+            'ship_phone' => 'nullable|string|max:30',
+            'ship_address' => 'nullable|string|max:255',
+            'ship_city' => 'nullable|string|max:120',
+            'ship_state' => 'nullable|string|max:120',
+            'ship_pincode' => 'nullable|string|max:20',
+            'payment_reference' => 'nullable|string|max:255',
+            'razorpay_order_id' => 'nullable|string|max:255',
+            'razorpay_signature' => 'nullable|string|max:255',
         ]);
 
-        $validated['user_id'] = $request->user()->id;
-        $validated['next_billing_date'] = now()->addWeek();
+        $subscriptionData = [
+            'user_id' => $request->user()->id,
+            'discount_percent' => (int) ($validated['discount_percent'] ?? 0),
+        ];
 
-        $sub = Subscription::create($validated);
+        if (! empty($validated['pricing_plan_id'])) {
+            $plan = PricingPlan::query()
+                ->where('id', (int) $validated['pricing_plan_id'])
+                ->where('is_active', true)
+                ->firstOrFail();
+
+            $billingCycle = $plan->billing_cycle ?: 'monthly';
+            $frequency = in_array($billingCycle, ['weekly', 'monthly'], true) ? $billingCycle : 'monthly';
+            $durationValue = (string) ($plan->duration ?? '1');
+            $duration = preg_match('/^\d+$/', $durationValue) ? ($durationValue . 'M') : strtoupper($durationValue);
+
+            $subscriptionData['plan_name'] = $plan->name;
+            $subscriptionData['plan_type'] = str_contains(strtolower($plan->name), 'puff') ? 'puffs' : 'puree';
+            $subscriptionData['duration'] = in_array($duration, ['3M', '6M', '12M'], true) ? $duration : '3M';
+            $subscriptionData['frequency'] = $frequency;
+            $subscriptionData['price_per_cycle'] = $plan->price;
+        } else {
+            $subscriptionData['plan_name'] = $validated['plan_name'];
+            $subscriptionData['plan_type'] = $validated['plan_type'];
+            $subscriptionData['duration'] = $validated['duration'];
+            $subscriptionData['frequency'] = $validated['frequency'];
+            $subscriptionData['price_per_cycle'] = $validated['price_per_cycle'];
+        }
+
+        $subscriptionData['next_billing_date'] =
+            $subscriptionData['frequency'] === 'weekly' ? now()->addWeek() : now()->addMonth();
+
+        $sub = Subscription::create($subscriptionData);
 
         $this->notifySubscriptionStatus($sub, 'created');
         $this->notifyAdminAboutSubscription($sub, 'created');

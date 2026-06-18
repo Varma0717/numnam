@@ -13,6 +13,7 @@ import '../static/about_screen.dart';
 import '../static/faq_screen.dart';
 import '../static/static_page_screen.dart';
 import '../blog/blog_list_screen.dart';
+import '../subscriptions/subscriptions_screen_redesign.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -93,6 +94,14 @@ class AccountScreen extends StatelessWidget {
               }),
               _tile(context, Icons.favorite_border_rounded, 'Wishlist', () {
                 Navigator.of(context).pushNamed(WishlistScreen.routeName);
+              }),
+              _tile(context, Icons.subscriptions_outlined, 'My Subscription',
+                  () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const SubscriptionsScreenRedesign(),
+                  ),
+                );
               }),
               _tile(context, Icons.mail_outline_rounded, 'Contact Us', () {
                 Navigator.of(context).pushNamed(ContactFormScreen.routeName);

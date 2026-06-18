@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,7 +23,11 @@ class SubscriptionsScreenRedesign extends StatefulWidget {
 class _SubscriptionsScreenRedesignState
     extends State<SubscriptionsScreenRedesign> {
   List<PricingPlan> _plans = [];
+  List<Map<String, dynamic>> _mySubscriptions = [];
   bool _loading = true;
+  bool _loadingMySubs = true;
+  bool _actionInProgress = false;
+  String? _mySubsError;
 
   @override
   void initState() {
@@ -31,9 +36,15 @@ class _SubscriptionsScreenRedesignState
   }
 
   Future<void> _load() async {
-    setState(() => _loading = true);
+    setState(() {
+      _loading = true;
+      _loadingMySubs = true;
+      _mySubsError = null;
+    });
+
+    final api = context.read<ApiClient>();
+
     try {
-      final api = context.read<ApiClient>();
       final resp = await api.dio.get(ApiEndpoints.pricingPlans);
 
       if (mounted) {
@@ -44,6 +55,33 @@ class _SubscriptionsScreenRedesignState
       }
     } catch (e) {
       if (mounted) setState(() => _loading = false);
+    }
+
+    try {
+      final subsResp = await api.dio.get(ApiEndpoints.subscriptions);
+      if (mounted) {
+        setState(() {
+          _mySubscriptions = _parseSubscriptions(subsResp.data);
+          _loadingMySubs = false;
+        });
+      }
+    } on DioException catch (e) {
+      if (mounted) {
+        setState(() {
+          _loadingMySubs = false;
+          if ((e.response?.statusCode ?? 0) != 401) {
+            _mySubsError = e.response?.data?['message']?.toString() ??
+                'Failed to load your subscription status.';
+          }
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _loadingMySubs = false;
+          _mySubsError = 'Failed to load your subscription status.';
+        });
+      }
     }
   }
 
@@ -62,6 +100,97 @@ class _SubscriptionsScreenRedesignState
         .toList();
   }
 
+  List<Map<String, dynamic>> _parseSubscriptions(dynamic data) {
+    final dataField = data is Map ? data['data'] : data;
+    if (dataField is! List) return [];
+
+    return dataField
+        .whereType<Map>()
+        .map((item) => Map<String, dynamic>.from(item))
+        .toList();
+  }
+
+  Future<void> _pauseSubscription(int id) async {
+    await _runSubscriptionAction(() => context
+        .read<ApiClient>()
+        .dio
+        .patch('${ApiEndpoints.subscriptions}/$id/pause'));
+  }
+
+  Future<void> _resumeSubscription(int id) async {
+    await _runSubscriptionAction(() => context
+        .read<ApiClient>()
+        .dio
+        .patch('${ApiEndpoints.subscriptions}/$id/resume'));
+  }
+
+  Future<void> _cancelSubscription(int id) async {
+    final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Cancel Subscription?'),
+            content: const Text(
+              'You can subscribe again anytime. Do you want to cancel this plan now?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text('No'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text('Yes, Cancel'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+
+    if (!confirmed) return;
+
+    await _runSubscriptionAction(() => context
+        .read<ApiClient>()
+        .dio
+        .delete('${ApiEndpoints.subscriptions}/$id'));
+  }
+
+  Future<void> _runSubscriptionAction(Future<void> Function() action) async {
+    setState(() => _actionInProgress = true);
+    try {
+      await action();
+      await _load();
+    } on DioException catch (e) {
+      if (!mounted) return;
+      final message = e.response?.data?['message']?.toString() ??
+          'Unable to update subscription right now.';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message), behavior: SnackBarBehavior.floating),
+      );
+    } finally {
+      if (mounted) setState(() => _actionInProgress = false);
+    }
+  }
+
+  Color _statusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'active':
+        return kMint;
+      case 'paused':
+        return kYellow;
+      case 'cancelled':
+      case 'expired':
+        return Colors.redAccent;
+      default:
+        return kNavy;
+    }
+  }
+
+  String _billingLabel(Map<String, dynamic> sub) {
+    final price = (sub['price_per_cycle'] ?? 0).toString();
+    final frequency = (sub['frequency'] ?? 'monthly').toString();
+    return '₹$price / $frequency';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,6 +199,13 @@ class _SubscriptionsScreenRedesignState
           ? const Center(child: CircularProgressIndicator(color: kCoral))
           : CustomScrollView(
               slivers: [
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                    child: _buildMySubscriptionSection(),
+                  ),
+                ),
+
                 // Hero Section
                 SliverToBoxAdapter(
                   child: Container(
@@ -204,6 +340,166 @@ class _SubscriptionsScreenRedesignState
               ],
             ),
       bottomNavigationBar: const InnerPageNav(),
+    );
+  }
+
+  Widget _buildMySubscriptionSection() {
+    if (_loadingMySubs) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Center(child: CircularProgressIndicator(color: kCoral)),
+      );
+    }
+
+    if (_mySubsError != null) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFFFD6E5), width: 1.5),
+        ),
+        child: Text(
+          _mySubsError!,
+          style: GoogleFonts.poppins(fontSize: 13, color: kNavy),
+        ),
+      );
+    }
+
+    if (_mySubscriptions.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFFFD6E5), width: 1.5),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.subscriptions_outlined, color: kCoral),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                'No active subscription yet. Pick a plan below to get started.',
+                style: GoogleFonts.poppins(fontSize: 13, color: kNavy),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'My Subscription',
+          style: GoogleFonts.baloo2(
+            fontSize: 24,
+            fontWeight: FontWeight.w800,
+            color: kNavy,
+          ),
+        ),
+        const SizedBox(height: 12),
+        ..._mySubscriptions.map((sub) {
+          final id = (sub['id'] as num?)?.toInt();
+          final subId = id;
+          final status = (sub['status'] ?? 'unknown').toString();
+          final canPause = status == 'active' && id != null;
+          final canResume = status == 'paused' && id != null;
+          final canCancel =
+              (status == 'active' || status == 'paused') && id != null;
+
+          return Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFFFFD6E5), width: 1.5),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        (sub['plan_name'] ?? 'Subscription Plan').toString(),
+                        style: GoogleFonts.poppins(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: kNavy,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: _statusColor(status).withOpacity(0.14),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        status.toUpperCase(),
+                        style: GoogleFonts.poppins(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: _statusColor(status),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  _billingLabel(sub),
+                  style: GoogleFonts.poppins(
+                      fontSize: 13, color: kNavy.withOpacity(0.7)),
+                ),
+                if (sub['next_billing_date'] != null) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    'Next billing: ${sub['next_billing_date']}',
+                    style: GoogleFonts.poppins(
+                        fontSize: 12, color: kNavy.withOpacity(0.55)),
+                  ),
+                ],
+                if (canPause || canResume || canCancel) ...[
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      if (canPause && subId != null)
+                        OutlinedButton(
+                          onPressed: _actionInProgress
+                              ? null
+                              : () => _pauseSubscription(subId),
+                          child: const Text('Pause'),
+                        ),
+                      if (canResume && subId != null)
+                        FilledButton(
+                          onPressed: _actionInProgress
+                              ? null
+                              : () => _resumeSubscription(subId),
+                          child: const Text('Resume'),
+                        ),
+                      if (canCancel && subId != null)
+                        TextButton(
+                          onPressed: _actionInProgress
+                              ? null
+                              : () => _cancelSubscription(subId),
+                          child: const Text('Cancel Plan'),
+                        ),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+          );
+        }),
+      ],
     );
   }
 

@@ -235,14 +235,11 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      // Switch to Shop tab (index 1)
-                      final shellState = context
-                          .findAncestorStateOfType<State<StatefulWidget>>();
-                      if (shellState != null && shellState.mounted) {
-                        // Find the root navigator and switch tab
-                        Navigator.of(context, rootNavigator: true)
-                            .popUntil((route) => route.isFirst);
-                      }
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const ShopScreenRedesign(),
+                        ),
+                      );
                     },
                     borderRadius: BorderRadius.circular(16),
                     child: Container(
