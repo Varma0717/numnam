@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogManagementController;
 use App\Http\Controllers\Admin\Catalog\CategoryManagementController;
+use App\Http\Controllers\Admin\Catalog\PricingPlanManagementController;
 use App\Http\Controllers\Admin\Catalog\ProductManagementController;
 use App\Http\Controllers\Admin\Commerce\CouponManagementController;
 use App\Http\Controllers\Admin\Commerce\OrderManagementController;
@@ -175,6 +176,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::resource('coupons', CouponManagementController::class)->except('show');
         Route::resource('products', ProductManagementController::class)->except('show');
+        Route::resource('pricing-plans', PricingPlanManagementController::class)
+            ->parameters(['pricing-plans' => 'pricingPlan'])
+            ->except('show');
         Route::resource('categories', CategoryManagementController::class)->except('show');
         Route::resource('blogs', BlogManagementController::class)->except('show');
         Route::resource('blog-categories', BlogCategoryController::class)->except('show');

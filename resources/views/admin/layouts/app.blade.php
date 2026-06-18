@@ -74,6 +74,17 @@
                         Products
                     </a>
                 </li>
+                <li class="{{ request()->routeIs('admin.pricing-plans*') ? 'current' : '' }}">
+                    <a href="{{ route('admin.pricing-plans.index') }}">
+                        <span class="menu-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 1v22" />
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                            </svg>
+                        </span>
+                        Subscription Plans
+                    </a>
+                </li>
                 <li class="{{ request()->routeIs('admin.orders*') ? 'current' : '' }}">
                     <a href="{{ route('admin.orders.index') }}">
                         <span class="menu-icon">
