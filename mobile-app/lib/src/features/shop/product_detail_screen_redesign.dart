@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_html/flutter_html.dart';
 import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../core/wishlist_provider.dart';
@@ -251,12 +252,18 @@ class _ProductDetailScreenRedesignState
                         height: 1.2),
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    _product!.description ?? 'No description available.',
-                    style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        color: kNavy.withOpacity(0.6),
-                        height: 1.6),
+                  Html(
+                    data: _product!.description ?? 'No description available.',
+                    style: {
+                      'body': Style(
+                        margin: Margins.zero,
+                        padding: HtmlPaddings.zero,
+                        fontSize: FontSize(14),
+                        color: kNavy.withOpacity(0.7),
+                        lineHeight: const LineHeight(1.6),
+                      ),
+                      'p': Style(margin: Margins.only(bottom: 10)),
+                    },
                   ),
                   const SizedBox(height: 32),
 
@@ -298,11 +305,19 @@ class _ProductDetailScreenRedesignState
                             fontWeight: FontWeight.w800,
                             color: kNavy)),
                     const SizedBox(height: 12),
-                    Text(_product!.content!,
-                        style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            color: kNavy.withOpacity(0.7),
-                            height: 1.6)),
+                    Html(
+                      data: _product!.content!,
+                      style: {
+                        'body': Style(
+                          margin: Margins.zero,
+                          padding: HtmlPaddings.zero,
+                          fontSize: FontSize(14),
+                          color: kNavy.withOpacity(0.7),
+                          lineHeight: const LineHeight(1.6),
+                        ),
+                        'p': Style(margin: Margins.only(bottom: 10)),
+                      },
+                    ),
                     const SizedBox(height: 32),
                   ],
 

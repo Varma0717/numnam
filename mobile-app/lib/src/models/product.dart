@@ -88,8 +88,8 @@ class Product {
               ?.map((e) => e.toString())
               .toList() ??
           const [],
-      nutritionFacts: json['nutrition_facts'] as Map<String, dynamic>?,
-      nutritionInfo: json['nutrition_info'] as Map<String, dynamic>?,
+      nutritionFacts: _toMap(json['nutrition_facts']),
+      nutritionInfo: _toMap(json['nutrition_info']),
       productCategory: json['product_category'] != null
           ? ProductCategory.fromJson(
               json['product_category'] as Map<String, dynamic>)
@@ -120,6 +120,12 @@ class Product {
       if (normalized == 'false' || normalized == '0') return false;
     }
     return fallback;
+  }
+
+  static Map<String, dynamic>? _toMap(dynamic v) {
+    if (v is Map<String, dynamic>) return v;
+    if (v is Map) return Map<String, dynamic>.from(v);
+    return null;
   }
 
   static String? _normalizeImageUrl(String? raw) {

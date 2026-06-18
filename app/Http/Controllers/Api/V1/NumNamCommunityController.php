@@ -7,6 +7,8 @@ use App\Models\ChatMessage;
 use App\Models\CommunityRoom;
 use App\Models\MessageComment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
 
 class NumNamCommunityController extends Controller
@@ -129,18 +131,26 @@ class NumNamCommunityController extends Controller
             ]);
         }
 
+        if (!Schema::hasTable('chat_message_likes')) {
+            return response()->json([
+                'message' => 'Like system is temporarily unavailable.',
+            ], 503);
+        }
+
         // Check if already liked
         $isLiked = $message->likedByUsers()->where('user_id', $user->id)->exists();
 
-        if ($isLiked) {
-            // Unlike
-            $message->likedByUsers()->detach($user->id);
-            $message->decrementLikes();
-        } else {
-            // Like
-            $message->likedByUsers()->attach($user->id);
-            $message->incrementLikes();
-        }
+        DB::transaction(function () use ($message, $user, $isLiked) {
+            if ($isLiked) {
+                $message->likedByUsers()->detach($user->id);
+            } else {
+                $message->likedByUsers()->syncWithoutDetaching([$user->id]);
+            }
+
+            // Keep likes_count in sync with pivot table to avoid negative/duplicate drift.
+            $message->likes_count = $message->likedByUsers()->count();
+            $message->save();
+        });
 
         return response()->json([
             'liked' => !$isLiked,
