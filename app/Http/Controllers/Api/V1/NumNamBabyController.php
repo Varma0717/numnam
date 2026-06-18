@@ -46,17 +46,18 @@ class NumNamBabyController extends Controller
     }
 
     /**
-     * Get or create baby profile
+     * Get baby profile without auto-creating it.
+     * This allows first-time onboarding UIs to require explicit profile setup.
      */
     public function profile(Request $request)
     {
-        $profile = BabyProfile::firstOrCreate(
-            ['user_id' => $request->user()->id],
-            ['baby_name' => 'My Baby', 'age_months' => 6, 'milk_type' => 'breast']
-        );
+        $profile = BabyProfile::query()
+            ->where('user_id', $request->user()->id)
+            ->first();
 
         return response()->json([
             'data' => $profile,
+            'setup_required' => $profile === null,
         ]);
     }
 

@@ -856,6 +856,40 @@
         </div>
     </div>
 
+    <div id="profile-setup-gate" class="card" style="display:none;max-width:860px;margin:22px auto;">
+        <div class="card-title">Set Up Baby Profile</div>
+        <div class="card-sub">Complete this once to unlock your tracker dashboard, logs, poop guide, and age-based insights.</div>
+
+        <div class="form-row">
+            <label>Baby's Name *</label>
+            <input type="text" id="setup-baby-name-input" placeholder="e.g., Emma" maxlength="100">
+        </div>
+
+        <div class="form-row">
+            <label>Age (months) *</label>
+            <input type="number" id="setup-age-input" min="5" max="36" value="6">
+        </div>
+
+        <div class="form-row">
+            <label>Milk Type *</label>
+            <select id="setup-milk-type-input">
+                <option value="">Select milk type</option>
+                <option value="breast">Breast Milk</option>
+                <option value="formula">Formula</option>
+                <option value="combination">Combination (Breast + Formula)</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label>Weight (kg) - Optional</label>
+            <input type="number" id="setup-weight-input" placeholder="e.g., 7.5" min="3" max="20" step="0.1">
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="saveInitialProfile()">Save Baby Profile & Continue</button>
+        </div>
+    </div>
+
     <div class="tabs">
         <div class="tab active" onclick="showPage('dashboard', this)"><svg class="inline h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="1" />
@@ -1357,6 +1391,92 @@
     let currentLogType = 'milk';
     let selectedPoopType = '';
 
+    function setTrackerEnabled(enabled) {
+        const gate = document.getElementById('profile-setup-gate');
+        const tabs = document.querySelector('.tabs');
+        const agePill = document.querySelector('.baby-age-pill');
+
+        if (gate) gate.style.display = enabled ? 'none' : 'block';
+        if (tabs) tabs.style.display = enabled ? '' : 'none';
+        if (agePill) agePill.style.display = enabled ? 'inline-flex' : 'none';
+
+        document.querySelectorAll('.tracker-page').forEach((page) => {
+            page.style.display = enabled ? '' : 'none';
+        });
+    }
+
+    function copyProfileToForms(profile) {
+        const babyName = profile?.baby_name || '';
+        const ageMonths = profile?.age_months || 6;
+        const milkType = profile?.milk_type || '';
+        const weightKg = profile?.weight_kg || '';
+
+        const modalName = document.getElementById('baby-name-input');
+        const modalAge = document.getElementById('age-input');
+        const modalMilk = document.getElementById('milk-type-input');
+        const modalWeight = document.getElementById('weight-input');
+
+        if (modalName) modalName.value = babyName;
+        if (modalAge) modalAge.value = ageMonths;
+        if (modalMilk) modalMilk.value = milkType;
+        if (modalWeight) modalWeight.value = weightKg;
+
+        const setupName = document.getElementById('setup-baby-name-input');
+        const setupAge = document.getElementById('setup-age-input');
+        const setupMilk = document.getElementById('setup-milk-type-input');
+        const setupWeight = document.getElementById('setup-weight-input');
+
+        if (setupName) setupName.value = babyName;
+        if (setupAge) setupAge.value = ageMonths;
+        if (setupMilk) setupMilk.value = milkType;
+        if (setupWeight) setupWeight.value = weightKg;
+    }
+
+    function collectProfileValues(prefix) {
+        const babyName = document.getElementById(prefix + 'baby-name-input')?.value?.trim() || '';
+        const age = parseInt(document.getElementById(prefix + 'age-input')?.value || '0', 10);
+        const milkType = document.getElementById(prefix + 'milk-type-input')?.value || '';
+        const weightRaw = document.getElementById(prefix + 'weight-input')?.value;
+        const weight = weightRaw ? parseFloat(weightRaw) : null;
+
+        return {
+            baby_name: babyName,
+            age_months: age,
+            milk_type: milkType,
+            weight_kg: Number.isNaN(weight) ? null : weight,
+        };
+    }
+
+    async function persistProfile(payload) {
+        const response = await fetch('/api/v1/numnam/baby/profile', {
+            method: 'POST',
+            credentials: 'include',
+            headers: addCsrfToken({
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }),
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            const errorMsg = errorData.message || 'Failed to save profile. Please check your inputs.';
+            throw new Error(errorMsg);
+        }
+
+        const data = await response.json();
+        babyProfile = data.data;
+        copyProfileToForms(babyProfile);
+        document.getElementById('age-display').textContent = babyProfile.age_months + ' months';
+        setTrackerEnabled(true);
+
+        await loadTodayLogs();
+        renderDashboard();
+        await loadRecipes();
+        renderRecipes();
+        renderGuide();
+    }
+
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', async () => {
         // Test session authentication first
@@ -1376,7 +1496,9 @@
         }
         
         await loadBabyProfile();
-        await loadRecipes();
+        if (babyProfile) {
+            await loadRecipes();
+        }
     });
 
     // API Helper: Get CSRF token from meta tag
@@ -1418,14 +1540,45 @@
             
             const data = await response.json();
             console.log('Profile data received:', data);
+            if (data.setup_required || !data.data) {
+                babyProfile = null;
+                setTrackerEnabled(false);
+                return;
+            }
+
             if (data.data) {
                 babyProfile = data.data;
                 document.getElementById('age-display').textContent = babyProfile.age_months + ' months';
+                copyProfileToForms(babyProfile);
+                setTrackerEnabled(true);
                 await loadTodayLogs();
             }
         } catch (error) {
             console.error('Profile load error:', error);
             document.getElementById('page-dashboard').innerHTML = '<div style="text-align:center;padding:40px;"><p style="color:#999;">Error loading profile: ' + error.message + '. Please refresh the page.</p></div>';
+        }
+    }
+
+    async function saveInitialProfile() {
+        const payload = collectProfileValues('setup-');
+
+        if (!payload.baby_name) {
+            alert('Please enter your baby\'s name');
+            return;
+        }
+        if (!payload.age_months || payload.age_months < 5 || payload.age_months > 36) {
+            alert('Please enter a valid age between 5 and 36 months');
+            return;
+        }
+        if (!payload.milk_type) {
+            alert('Please select a milk type');
+            return;
+        }
+
+        try {
+            await persistProfile(payload);
+        } catch (error) {
+            alert('Error: ' + error.message);
         }
     }
 
@@ -1478,70 +1631,37 @@
 
     function showAgeModal() {
         if (!babyProfile) {
-            alert('Please login to use the weaning tracker');
+            setTrackerEnabled(false);
+            const gate = document.getElementById('profile-setup-gate');
+            if (gate) gate.scrollIntoView({ behavior: 'smooth', block: 'start' });
             return;
         }
-        // Populate modal with existing profile data
-        document.getElementById('baby-name-input').value = babyProfile.baby_name || '';
-        document.getElementById('age-input').value = babyProfile.age_months || 6;
-        document.getElementById('milk-type-input').value = babyProfile.milk_type || '';
-        document.getElementById('weight-input').value = babyProfile.weight_kg || '';
+        copyProfileToForms(babyProfile);
         document.getElementById('age-modal').style.display = 'flex';
     }
 
     async function saveAge() {
-        const babyName = document.getElementById('baby-name-input').value.trim();
-        const age = parseInt(document.getElementById('age-input').value);
-        const milkType = document.getElementById('milk-type-input').value;
-        const weight = document.getElementById('weight-input').value;
+        const payload = collectProfileValues('');
 
         // Validation
-        if (!babyName) {
+        if (!payload.baby_name) {
             alert('Please enter your baby\'s name');
             return;
         }
-        if (!age || age < 5 || age > 36) {
+        if (!payload.age_months || payload.age_months < 5 || payload.age_months > 36) {
             alert('Please enter a valid age between 5 and 36 months');
             return;
         }
-        if (!milkType) {
+        if (!payload.milk_type) {
             alert('Please select a milk type');
             return;
         }
 
         try {
-            const response = await fetch('/api/v1/numnam/baby/profile', {
-                method: 'POST',
-                credentials: 'include',
-                headers: addCsrfToken({
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }),
-                body: JSON.stringify({
-                    baby_name: babyName,
-                    age_months: age,
-                    milk_type: milkType,
-                    weight_kg: weight ? parseFloat(weight) : null
-                })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                const errorMsg = errorData.message || 'Failed to save profile. Please check your inputs.';
-                alert('Error: ' + errorMsg);
-                return;
-            }
-
-            const data = await response.json();
-            babyProfile = data.data;
-            document.getElementById('age-display').textContent = age + ' months';
+            await persistProfile(payload);
             document.getElementById('age-modal').style.display = 'none';
-            renderDashboard();
-            await loadRecipes();
-            renderRecipes();
-            renderGuide();
         } catch (error) {
-            alert('Error updating profile: ' + error.message);
+            alert('Error: ' + error.message);
         }
     }
 
