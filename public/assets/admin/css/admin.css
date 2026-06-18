@@ -1660,6 +1660,14 @@ to {
   border-color: var(--wp-link);
 }
 
+/* Laravel pagination chevrons render as SVGs; force a compact icon size. */
+.admin-main .pagination svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  flex: 0 0 auto;
+}
+
 /* ======== Media Library Page ======== */
 .admin-page-head {
   margin-bottom: 14px;
