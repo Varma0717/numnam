@@ -300,119 +300,6 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
             ),
           ),
 
-          // IMPROVED SUBSCRIPTION SECTION: The "Perfect for Mobile" Card
-          if (_plans.isNotEmpty)
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [kCoral, kLavender],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(28),
-                    boxShadow: [
-                      BoxShadow(
-                          color: kCoral.withOpacity(0.3),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10)),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(28),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          right: -20,
-                          top: -20,
-                          child: Icon(Icons.star,
-                              size: 120, color: Colors.white.withOpacity(0.1)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(24),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 6),
-                                decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Text('MOST POPULAR',
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w800,
-                                        color: Colors.white)),
-                              ),
-                              const SizedBox(height: 12),
-                              Text('The NumNam Way',
-                                  style: GoogleFonts.baloo2(
-                                      fontSize: 26,
-                                      fontWeight: FontWeight.w900,
-                                      color: Colors.white,
-                                      height: 1.1)),
-                              Text(
-                                  'Fresh organic purees, delivered to your door every month.',
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 13,
-                                      color: Colors.white.withOpacity(0.9))),
-                              const SizedBox(height: 20),
-
-                              // Horizontal plans layout that doesn't overflow
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                physics: const BouncingScrollPhysics(),
-                                child: Row(
-                                  children: _plans
-                                      .take(3)
-                                      .map((plan) => _buildPlanMiniCard(plan))
-                                      .toList(),
-                                ),
-                              ),
-
-                              const SizedBox(height: 20),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    // Navigate to subscriptions screen
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (_) =>
-                                            const SubscriptionsScreenRedesign(),
-                                      ),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white,
-                                    foregroundColor: kCoral,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 14),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(14)),
-                                    elevation: 0,
-                                  ),
-                                  child: Text('EXPLORE ALL PLANS',
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w800)),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
           // Featured Products Header
           SliverToBoxAdapter(
             child: _buildSectionHeader('Featured Products 🛍️', () {
@@ -445,6 +332,12 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                   childCount: _featured.length,
                 ),
               ),
+            ),
+
+          // Subscription section lives below products now.
+          if (!_loading)
+            SliverToBoxAdapter(
+              child: _buildSubscriptionBottomSection(),
             ),
 
           // Footer Space
@@ -530,6 +423,129 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
                     fontSize: 13, fontWeight: FontWeight.w700, color: kCoral)),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSubscriptionBottomSection() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [kCoral, kLavender],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: [
+            BoxShadow(
+                color: kCoral.withOpacity(0.3),
+                blurRadius: 20,
+                offset: const Offset(0, 10)),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(28),
+          child: Stack(
+            children: [
+              Positioned(
+                right: -20,
+                top: -20,
+                child: Icon(Icons.star,
+                    size: 120, color: Colors.white.withOpacity(0.1)),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Text('SUBSCRIPTIONS',
+                          style: GoogleFonts.poppins(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white)),
+                    ),
+                    const SizedBox(height: 12),
+                    Text('The NumNam Way',
+                        style: GoogleFonts.baloo2(
+                            fontSize: 26,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                            height: 1.1)),
+                    Text(
+                        'Fresh organic purees, delivered to your door every month.',
+                        style: GoogleFonts.poppins(
+                            fontSize: 13,
+                            color: Colors.white.withOpacity(0.9))),
+                    const SizedBox(height: 20),
+                    if (_plans.isNotEmpty)
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        child: Row(
+                          children: _plans
+                              .take(3)
+                              .map((plan) => _buildPlanMiniCard(plan))
+                              .toList(),
+                        ),
+                      )
+                    else
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(14),
+                          border:
+                              Border.all(color: Colors.white.withOpacity(0.3)),
+                        ),
+                        child: Text(
+                          'Subscription plans will appear here once published.',
+                          style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white),
+                        ),
+                      ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  const SubscriptionsScreenRedesign(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: kCoral,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14)),
+                          elevation: 0,
+                        ),
+                        child: Text('EXPLORE ALL PLANS',
+                            style: GoogleFonts.poppins(
+                                fontSize: 14, fontWeight: FontWeight.w800)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

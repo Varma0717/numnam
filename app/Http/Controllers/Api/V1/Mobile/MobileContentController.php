@@ -67,9 +67,15 @@ class MobileContentController extends BaseMobileController
 
         $pricingPlans = [];
         if (Schema::hasTable('pricing_plans')) {
-            $pricingPlans = PricingPlan::query()
-                ->where('is_active', true)
-                ->orderBy('sort_order')
+            $pricingPlansQuery = PricingPlan::query()
+                ->when(Schema::hasColumn('pricing_plans', 'is_active'), fn($q) => $q->where('is_active', true))
+                ->when(
+                    Schema::hasColumn('pricing_plans', 'sort_order'),
+                    fn($q) => $q->orderBy('sort_order'),
+                    fn($q) => $q->orderByDesc('id')
+                );
+
+            $pricingPlans = $pricingPlansQuery
                 ->limit(6)
                 ->get(['id', 'name', 'slug', 'price', 'duration', 'billing_cycle', 'features']);
         }
@@ -191,9 +197,13 @@ class MobileContentController extends BaseMobileController
 
         $perPage = min(max((int) $request->integer('per_page', 10), 1), 50);
         $plans = PricingPlan::query()
-            ->where('is_active', true)
+            ->when(Schema::hasColumn('pricing_plans', 'is_active'), fn($q) => $q->where('is_active', true))
             ->with(['products:id,name,slug,image,price,sale_price'])
-            ->orderBy('sort_order')
+            ->when(
+                Schema::hasColumn('pricing_plans', 'sort_order'),
+                fn($q) => $q->orderBy('sort_order'),
+                fn($q) => $q->orderByDesc('id')
+            )
             ->paginate($perPage);
 
         return $this->success(
@@ -212,7 +222,7 @@ class MobileContentController extends BaseMobileController
 
         $plan = PricingPlan::query()
             ->where('slug', $slug)
-            ->where('is_active', true)
+            ->when(Schema::hasColumn('pricing_plans', 'is_active'), fn($q) => $q->where('is_active', true))
             ->with(['products:id,name,slug,image,price,sale_price'])
             ->first();
 
