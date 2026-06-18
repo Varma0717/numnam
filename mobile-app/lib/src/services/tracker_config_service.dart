@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:mobile_app/src/config/app_config.dart';
 
 class TrackerConfigService {
-  static const String _endpoint = 'tracker/config';
+  static const String _endpoint = 'numnam/tracker/config';
 
   /// Fetch tracker configuration from API
   static Future<TrackerConfig> fetchConfig() async {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/src/models/feed_log.dart';
 import 'package:mobile_app/src/services/tracker_service.dart';
 import 'package:mobile_app/src/services/tracker_config_service.dart';
+import 'package:mobile_app/src/shared/widgets/inner_page_nav.dart';
 
 class NumNamTrackerScreen extends StatefulWidget {
   static const routeName = '/tools/numnam-tracker';
@@ -40,6 +41,13 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   final TextEditingController _solidNotesController = TextEditingController();
   final TextEditingController _waterNotesController = TextEditingController();
   TextEditingController? _ageController;
+
+  String _cleanLabel(String value) {
+    return value
+        .replaceAll(RegExp(r'[^\x00-\x7F]+'), '')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+  }
 
   @override
   void initState() {
@@ -151,12 +159,13 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
       appBar: AppBar(
         title: const Text('NumNam Tracker'),
         bottom: TabBar(
+          isScrollable: true,
           controller: _tabController,
           tabs: const [
-            Tab(text: '📊 Dashboard'),
-            Tab(text: '➕ Log'),
-            Tab(text: '💩 Poop'),
-            Tab(text: '📖 Guide'),
+            Tab(icon: Icon(Icons.dashboard_outlined), text: 'Dashboard'),
+            Tab(icon: Icon(Icons.add_circle_outline), text: 'Log'),
+            Tab(icon: Icon(Icons.monitor_heart_outlined), text: 'Stool'),
+            Tab(icon: Icon(Icons.menu_book_outlined), text: 'Guide'),
           ],
         ),
       ),
@@ -197,6 +206,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                     _buildGuidePage(),
                   ],
                 ),
+      bottomNavigationBar: const InnerPageNav(),
       floatingActionButton: _currentTabIndex == 0 && !_isLoading
           ? FloatingActionButton(
               onPressed: () {
@@ -246,7 +256,9 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text('👶 Age: '),
+                    const Icon(Icons.child_care_outlined, size: 18),
+                    const SizedBox(width: 6),
+                    const Text('Age:'),
                     Text('$babyAge months'),
                     const SizedBox(width: 12),
                     GestureDetector(
@@ -274,13 +286,14 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
             crossAxisSpacing: 12,
             childAspectRatio: 1.2,
             children: [
-              _buildStatCard(
-                  '🍼', totalMilk.toString(), 'Milk (ml)', Colors.blue[100]!),
-              _buildStatCard('🥣', totalSolid.toString(), 'Solids (ml)',
-                  Colors.orange[100]!),
-              _buildStatCard(
-                  '💧', totalWater.toString(), 'Water (ml)', Colors.cyan[100]!),
-              _buildStatCard('💩', lastPoop, 'Last Poop', Colors.green[100]!),
+              _buildStatCard(Icons.local_drink_outlined, totalMilk.toString(),
+                  'Milk (ml)', Colors.blue[100]!),
+              _buildStatCard(Icons.restaurant_outlined, totalSolid.toString(),
+                  'Solids (ml)', Colors.orange[100]!),
+              _buildStatCard(Icons.water_drop_outlined, totalWater.toString(),
+                  'Water (ml)', Colors.cyan[100]!),
+              _buildStatCard(Icons.monitor_heart_outlined, lastPoop,
+                  'Last Stool', Colors.green[100]!),
             ],
           ),
           const SizedBox(height: 24),
@@ -297,7 +310,8 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                 padding: const EdgeInsets.symmetric(vertical: 32),
                 child: Column(
                   children: [
-                    const Text('🍼', style: TextStyle(fontSize: 48)),
+                    Icon(Icons.event_note_outlined,
+                        size: 44, color: Colors.grey[500]),
                     const SizedBox(height: 8),
                     Text(
                       'No entries yet',
@@ -323,7 +337,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   }
 
   Widget _buildStatCard(
-    String emoji,
+    IconData icon,
     String value,
     String label,
     Color bgColor,
@@ -340,7 +354,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 32)),
+          Icon(icon, size: 30, color: Colors.black87),
           const SizedBox(height: 4),
           Text(
             value,
@@ -362,13 +376,14 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
 
   Widget _buildLogEntryCard(FeedLog log) {
     final iconMap = {
-      'milk': ('🍼', Colors.blue[100]!),
-      'solid': ('🥣', Colors.orange[100]!),
-      'water': ('💧', Colors.cyan[100]!),
-      'poop': ('💩', Colors.green[100]!),
+      'milk': (Icons.local_drink_outlined, Colors.blue[100]!),
+      'solid': (Icons.restaurant_outlined, Colors.orange[100]!),
+      'water': (Icons.water_drop_outlined, Colors.cyan[100]!),
+      'poop': (Icons.monitor_heart_outlined, Colors.green[100]!),
     };
 
-    final (icon, bgColor) = iconMap[log.type] ?? ('📝', Colors.grey[100]!);
+    final (icon, bgColor) =
+        iconMap[log.type] ?? (Icons.notes_outlined, Colors.grey[100]!);
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
@@ -383,7 +398,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                 color: bgColor,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Center(child: Text(icon)),
+              child: Center(child: Icon(icon, size: 20, color: Colors.black87)),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -417,10 +432,11 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
             spacing: 8,
             runSpacing: 8,
             children: [
-              _buildLogTypeButton('🍼 Milk', 'milk'),
-              _buildLogTypeButton('🥣 Solids', 'solid'),
-              _buildLogTypeButton('💧 Water', 'water'),
-              _buildLogTypeButton('💩 Poop', 'poop'),
+              _buildLogTypeButton(Icons.local_drink_outlined, 'Milk', 'milk'),
+              _buildLogTypeButton(Icons.restaurant_outlined, 'Solids', 'solid'),
+              _buildLogTypeButton(Icons.water_drop_outlined, 'Water', 'water'),
+              _buildLogTypeButton(
+                  Icons.monitor_heart_outlined, 'Stool', 'poop'),
             ],
           ),
           const SizedBox(height: 24),
@@ -435,10 +451,17 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
     );
   }
 
-  Widget _buildLogTypeButton(String label, String type) {
+  Widget _buildLogTypeButton(IconData icon, String label, String type) {
     final isSelected = _selectedLogType == type;
     return FilterChip(
-      label: Text(label),
+      label: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16),
+          const SizedBox(width: 6),
+          Text(label),
+        ],
+      ),
       selected: isSelected,
       onSelected: (selected) {
         setState(() => _selectedLogType = type);
@@ -468,8 +491,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${currentMilkConfig.emoji} Milk Feed',
-                style: Theme.of(context).textTheme.titleMedium),
+            Text('Milk Feed', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             Text(
               currentMilkConfig.description,
@@ -479,8 +501,8 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
             DropdownButtonFormField<String>(
               value: _selectedMilkTypeId,
               items: milkTypeOptions
-                  .map((e) => DropdownMenuItem(
-                      value: e.id, child: Text('${e.emoji} ${e.name}')))
+                  .map(
+                      (e) => DropdownMenuItem(value: e.id, child: Text(e.name)))
                   .toList(),
               onChanged: (value) {
                 if (value != null) {
@@ -591,8 +613,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('🥣 Solid Food',
-                style: Theme.of(context).textTheme.titleMedium),
+            Text('Solid Food', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             Text('Purees, mashed, or finger food',
                 style: Theme.of(context).textTheme.bodySmall),
@@ -716,7 +737,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('💧 Water', style: Theme.of(context).textTheme.titleMedium),
+            Text('Water', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             Text('Water intake for hydration',
                 style: Theme.of(context).textTheme.bodySmall),
@@ -785,7 +806,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('💩 Poop Log', style: Theme.of(context).textTheme.titleMedium),
+            Text('Stool Log', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             Text(
                 'Select the closest match (Bristol Stool Chart – infant adapted)',
@@ -796,7 +817,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
               runSpacing: 8,
               children: [
                 for (final poop in _config!.poopTypes)
-                  _buildPoopTypeSelection(poop.type, poop.emoji),
+                  _buildPoopTypeSelection(poop.type),
               ],
             ),
             const SizedBox(height: 16),
@@ -811,7 +832,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                       setState(() => _selectedPoopType = '');
                     },
               icon: const Icon(Icons.check),
-              label: const Text('Log Poop'),
+              label: const Text('Log Stool'),
             ),
           ],
         ),
@@ -819,10 +840,10 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
     );
   }
 
-  Widget _buildPoopTypeSelection(String label, String emoji) {
+  Widget _buildPoopTypeSelection(String label) {
     final isSelected = _selectedPoopType == label;
     return FilterChip(
-      label: Text('$emoji $label'),
+      label: Text(label),
       selected: isSelected,
       onSelected: (selected) {
         setState(() => _selectedPoopType = selected ? label : '');
@@ -841,7 +862,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '💩 Poop Diagnostics',
+            'Stool Diagnostics',
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 8),
@@ -853,7 +874,6 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
           for (final poop in _config!.poopTypes)
             _buildPoopTypeCard(
               poop.type,
-              poop.emoji,
               poop.appearance,
               poop.meaning,
               _parseColorFromHex(poop.color),
@@ -870,7 +890,6 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
 
   Widget _buildPoopTypeCard(
     String type,
-    String emoji,
     String appearance,
     String meaning,
     Color bgColor,
@@ -884,7 +903,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '$emoji $type',
+              type,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
@@ -908,7 +927,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '📖 Weaning Guide',
+            'Weaning Guide',
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 8),
@@ -920,17 +939,17 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
           for (final milestone in _config!.milestones)
             _buildMilestoneCard(
               milestone.age,
-              milestone.title,
+              _cleanLabel(milestone.title),
               milestone.description,
             ),
           const SizedBox(height: 24),
           Text(
-            '⚠️ Safety Rules',
+            'Safety Rules',
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 12),
           for (final rule in _config!.safetyRules)
-            _buildSafetyRule(rule.title, rule.description),
+            _buildSafetyRule(_cleanLabel(rule.title), rule.description),
         ],
       ),
     );

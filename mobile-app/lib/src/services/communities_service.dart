@@ -329,9 +329,15 @@ class Room {
   });
 
   factory Room.fromJson(Map<String, dynamic> json) {
+    final rawName = (json['name'] ?? '').toString();
+    final cleanName = rawName
+        .replaceAll(RegExp(r'[^\x00-\x7F]+'), '')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+
     return Room(
       id: (json['id'] as num?)?.toInt() ?? 0,
-      name: (json['name'] ?? '').toString(),
+      name: cleanName,
       description: (json['description'] ?? '').toString(),
       emoji: (json['emoji'] ?? json['icon'] ?? '💬').toString(),
       memberCount: (json['member_count'] as num?)?.toInt() ?? 0,

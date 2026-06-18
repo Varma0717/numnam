@@ -15,7 +15,7 @@ class ToolsListScreen extends StatelessWidget {
         'name': 'NumNam Weaning Tracker',
         'description':
             'Track your baby\'s feeding journey with personalized insights, recipes, and developmental guidance.',
-        'icon': '🍼',
+        'icon': Icons.monitor_heart_outlined,
         'screen': const NumNamTrackerScreen(),
       },
       {
@@ -23,7 +23,7 @@ class ToolsListScreen extends StatelessWidget {
         'name': 'NumNam Communities',
         'description':
             'Connect with other parents, share experiences, ask questions, and get support from the NumNam community.',
-        'icon': '👥',
+        'icon': Icons.forum_outlined,
         'screen': const CommunitiesScreen(),
       },
     ];
@@ -56,9 +56,10 @@ class ToolsListScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      tool['icon'] as String,
-                      style: const TextStyle(fontSize: 40),
+                    Icon(
+                      tool['icon'] as IconData,
+                      size: 36,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     const SizedBox(height: 12),
                     Text(

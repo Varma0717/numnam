@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/src/services/communities_service.dart';
+import 'package:mobile_app/src/shared/widgets/inner_page_nav.dart';
 
 class CommunitiesScreen extends StatefulWidget {
   static const routeName = '/tools/communities';
@@ -21,6 +22,17 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
   void initState() {
     super.initState();
     _loadRooms();
+  }
+
+  IconData _roomIcon(String roomName) {
+    final key = roomName.toLowerCase();
+    if (key.contains('recipe') || key.contains('food')) return Icons.restaurant;
+    if (key.contains('sleep')) return Icons.bedtime_outlined;
+    if (key.contains('growth')) return Icons.trending_up;
+    if (key.contains('doctor') || key.contains('health')) {
+      return Icons.health_and_safety_outlined;
+    }
+    return Icons.forum_outlined;
   }
 
   Future<void> _loadRooms() async {
@@ -118,8 +130,7 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text(room.emoji,
-                                          style: const TextStyle(fontSize: 16)),
+                                      Icon(_roomIcon(room.name), size: 16),
                                       const SizedBox(width: 4),
                                       Text(room.name),
                                     ],
@@ -140,6 +151,7 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
                         ),
                       ],
                     ),
+      bottomNavigationBar: const InnerPageNav(),
     );
   }
 }
@@ -270,7 +282,7 @@ class _RoomDetailViewState extends State<RoomDetailView> {
             const Icon(Icons.lock_outline, size: 48, color: Colors.grey),
             const SizedBox(height: 16),
             Text(
-              '${widget.room.emoji} ${widget.room.name}',
+              widget.room.name,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 8),
@@ -281,7 +293,7 @@ class _RoomDetailViewState extends State<RoomDetailView> {
             ),
             const SizedBox(height: 16),
             Text(
-              '👥 ${widget.room.memberCount} members',
+              '${widget.room.memberCount} members',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 24),
@@ -303,7 +315,7 @@ class _RoomDetailViewState extends State<RoomDetailView> {
           color: Colors.grey[100],
           child: Row(
             children: [
-              Text(widget.room.emoji, style: const TextStyle(fontSize: 24)),
+              Icon(Icons.forum_outlined, size: 24, color: Colors.grey[800]),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -314,7 +326,7 @@ class _RoomDetailViewState extends State<RoomDetailView> {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      '👥 ${widget.room.memberCount} members',
+                      '${widget.room.memberCount} members',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
@@ -354,7 +366,7 @@ class _RoomDetailViewState extends State<RoomDetailView> {
                               SizedBox(height: 16),
                               Text('No messages yet'),
                               SizedBox(height: 8),
-                              Text('Be the first to say hello! 👋'),
+                              Text('Be the first to start the conversation.'),
                             ],
                           ),
                         )
@@ -414,7 +426,7 @@ class _RoomDetailViewState extends State<RoomDetailView> {
                 child: TextField(
                   controller: _messageController,
                   decoration: InputDecoration(
-                    hintText: 'Say something... 💬',
+                    hintText: 'Say something...',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -547,9 +559,14 @@ class MessageCard extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          message.isLiked ? '❤️' : '🤍',
-                          style: const TextStyle(fontSize: 14),
+                        Icon(
+                          message.isLiked
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          size: 16,
+                          color: message.isLiked
+                              ? Colors.redAccent
+                              : Colors.grey[700],
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -568,7 +585,7 @@ class MessageCard extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text('💬', style: TextStyle(fontSize: 14)),
+                        const Icon(Icons.chat_bubble_outline, size: 15),
                         const SizedBox(width: 4),
                         Text(
                           message.commentCount.toString(),
@@ -907,9 +924,10 @@ class CommentCard extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  comment.isLiked ? '❤️' : '🤍',
-                  style: const TextStyle(fontSize: 12),
+                Icon(
+                  comment.isLiked ? Icons.favorite : Icons.favorite_border,
+                  size: 14,
+                  color: comment.isLiked ? Colors.redAccent : Colors.grey,
                 ),
                 const SizedBox(width: 4),
                 Text(
