@@ -127,6 +127,16 @@ Route::middleware('auth')->group(function () {
     // Product reviews
     Route::post('/products/{product:slug}/reviews', [StorefrontController::class, 'storeReview'])->name('store.review.store');
 
+    // Customer subscription management
+    Route::post('/subscriptions/{subscription}/pause', [StorefrontController::class, 'pauseSubscription'])
+        ->name('store.subscription.pause');
+    Route::post('/subscriptions/{subscription}/resume', [StorefrontController::class, 'resumeSubscription'])
+        ->name('store.subscription.resume');
+    Route::post('/subscriptions/{subscription}/cancel', [StorefrontController::class, 'cancelSubscription'])
+        ->name('store.subscription.cancel');
+    Route::post('/subscriptions/{subscription}/renew', [StorefrontController::class, 'renewSubscription'])
+        ->name('store.subscription.renew');
+
     Route::get('/checkout/pay/{order}', [CheckoutPaymentController::class, 'show'])
         ->name('store.checkout.payment.page');
     Route::post('/checkout/pay/{order}', [CheckoutPaymentController::class, 'createSession'])

@@ -191,6 +191,35 @@ class _SubscriptionsScreenRedesignState
     return '₹$price / $frequency';
   }
 
+  Map<String, dynamic>? _latestSubscriptionForPlan(String planName) {
+    final normalizedPlan = planName.trim().toLowerCase();
+    final matches = _mySubscriptions.where((sub) {
+      return (sub['plan_name'] ?? '').toString().trim().toLowerCase() ==
+          normalizedPlan;
+    }).toList();
+
+    if (matches.isEmpty) return null;
+
+    matches.sort((a, b) {
+      final ad = DateTime.tryParse((a['created_at'] ?? '').toString()) ??
+          DateTime.fromMillisecondsSinceEpoch(0);
+      final bd = DateTime.tryParse((b['created_at'] ?? '').toString()) ??
+          DateTime.fromMillisecondsSinceEpoch(0);
+      return bd.compareTo(ad);
+    });
+
+    return matches.first;
+  }
+
+  bool _hasAnotherActivePlan(String currentPlanName) {
+    final normalizedCurrent = currentPlanName.trim().toLowerCase();
+    return _mySubscriptions.any((sub) {
+      final status = (sub['status'] ?? '').toString().toLowerCase();
+      final name = (sub['plan_name'] ?? '').toString().trim().toLowerCase();
+      return status == 'active' && name != normalizedCurrent;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -564,6 +593,19 @@ class _SubscriptionsScreenRedesignState
   }
 
   Widget _buildPlanCard(PricingPlan plan) {
+    final planSub = _latestSubscriptionForPlan(plan.name);
+    final planSubId = (planSub?['id'] as num?)?.toInt();
+    final planSubStatus = (planSub?['status'] ?? '').toString().toLowerCase();
+    final isCurrentActive = planSubStatus == 'active';
+    final canResume = planSubStatus == 'paused' && planSubId != null;
+    final canRenew =
+        (planSubStatus == 'cancelled' || planSubStatus == 'expired') &&
+            planSubId != null;
+    final showUpgrade = !isCurrentActive &&
+        !canResume &&
+        !canRenew &&
+        _hasAnotherActivePlan(plan.name);
+
     return Container(
       decoration: BoxDecoration(
         gradient: plan.isPopular
@@ -709,14 +751,28 @@ class _SubscriptionsScreenRedesignState
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
-                onPressed: () {
-                  // Navigate to subscription-specific checkout
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => SubscriptionCheckoutScreen(plan: plan),
-                    ),
-                  );
-                },
+                onPressed: _actionInProgress
+                    ? null
+                    : () {
+                        if (isCurrentActive) return;
+
+                        if (canResume) {
+                          _resumeSubscription(planSubId!);
+                          return;
+                        }
+
+                        if (canRenew) {
+                          _resumeSubscription(planSubId!);
+                          return;
+                        }
+
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                SubscriptionCheckoutScreen(plan: plan),
+                          ),
+                        );
+                      },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: plan.isPopular ? Colors.white : kCoral,
                   foregroundColor: plan.isPopular ? kCoral : Colors.white,
@@ -726,7 +782,15 @@ class _SubscriptionsScreenRedesignState
                   elevation: 0,
                 ),
                 child: Text(
-                  'Subscribe Now',
+                  isCurrentActive
+                      ? 'Active Plan'
+                      : canResume
+                          ? 'Resume Plan'
+                          : canRenew
+                              ? 'Renew Plan'
+                              : showUpgrade
+                                  ? 'Upgrade Plan'
+                                  : 'Subscribe Now',
                   style: GoogleFonts.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,

@@ -18,6 +18,9 @@
         @forelse($plans as $plan)
         @php($isBestValue = collect($plan->features ?? [])->contains(fn($feature) => strtolower((string) $feature) === 'best value'))
         @php($cycleLabel = $plan->billing_cycle === 'one_time' ? 'One time' : 'Every ' . strtolower(str_replace('_', ' ', $plan->billing_cycle)))
+        @php($planSubscription = auth()->check() ? ($planSubscriptions[$plan->name] ?? null) : null)
+        @php($planStatus = $planSubscription?->status)
+        @php($hasAnotherActive = auth()->check() && $activeSubscription && $activeSubscription->plan_name !== $plan->name)
         <article class="relative overflow-visible rounded-3xl border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md {{ $isBestValue ? 'border-numnam-300 ring-2 ring-numnam-200' : 'border-slate-200' }}">
             @if($isBestValue)
             <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full border border-numnam-300 bg-numnam-600 px-4 py-1 text-xs font-bold text-white shadow-sm">Best Value</span>
@@ -39,10 +42,24 @@
                 </div>
                 <div class="mt-5">
                     @auth
+                    @if($planStatus === 'active')
+                    <button class="h-11 w-full rounded-full border border-emerald-300 bg-emerald-50 text-sm font-semibold text-emerald-700" type="button" disabled>Active Plan</button>
+                    @elseif($planStatus === 'paused')
+                    <form method="POST" action="{{ route('store.subscription.resume', $planSubscription) }}">
+                        @csrf
+                        <button class="h-11 w-full rounded-full border border-amber-300 bg-amber-50 text-sm font-semibold text-amber-700 hover:bg-amber-100" type="submit">Resume Plan</button>
+                    </form>
+                    @elseif(in_array($planStatus, ['cancelled', 'expired'], true))
+                    <form method="POST" action="{{ route('store.subscription.renew', $planSubscription) }}">
+                        @csrf
+                        <button class="h-11 w-full rounded-full border border-numnam-300 bg-white text-sm font-semibold text-numnam-700 hover:bg-numnam-50" type="submit">Renew Plan</button>
+                    </form>
+                    @else
                     <form method="POST" action="{{ route('store.pricing.subscribe', $plan) }}">
                         @csrf
-                        <button class="h-11 w-full rounded-full {{ $isBestValue ? 'bg-numnam-600 text-white hover:bg-numnam-700' : 'border border-numnam-300 bg-white text-numnam-700 hover:bg-numnam-50' }} text-sm font-semibold transition" type="submit">Select Plan</button>
+                        <button class="h-11 w-full rounded-full {{ $isBestValue ? 'bg-numnam-600 text-white hover:bg-numnam-700' : 'border border-numnam-300 bg-white text-numnam-700 hover:bg-numnam-50' }} text-sm font-semibold transition" type="submit">{{ $hasAnotherActive ? 'Upgrade Plan' : 'Select Plan' }}</button>
                     </form>
+                    @endif
                     @endauth
                     @guest
                     <a class="flex h-11 items-center justify-center rounded-full border border-numnam-300 bg-white text-sm font-semibold text-numnam-700 transition hover:bg-numnam-50" href="{{ route('store.login') }}">Login to Subscribe</a>

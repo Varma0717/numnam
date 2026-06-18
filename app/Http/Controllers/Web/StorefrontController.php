@@ -401,7 +401,23 @@ class StorefrontController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        return view('store.pricing.index', compact('plans'));
+        $planSubscriptions = collect();
+        $activeSubscription = null;
+
+        if (auth()->check()) {
+            $subscriptions = Subscription::query()
+                ->where('user_id', auth()->id())
+                ->orderByDesc('created_at')
+                ->get();
+
+            $planSubscriptions = $subscriptions
+                ->groupBy('plan_name')
+                ->map(fn ($group) => $group->first());
+
+            $activeSubscription = $subscriptions->firstWhere('status', 'active');
+        }
+
+        return view('store.pricing.index', compact('plans', 'planSubscriptions', 'activeSubscription'));
     }
 
     public function about()
@@ -537,6 +553,24 @@ class StorefrontController extends Controller
 
     public function subscribe(Request $request, PricingPlan $plan): RedirectResponse
     {
+        $existingActive = Subscription::query()
+            ->where('user_id', $request->user()->id)
+            ->where('status', 'active')
+            ->latest('id')
+            ->first();
+
+        if ($existingActive && $existingActive->plan_name === $plan->name) {
+            return redirect()->route('store.pricing')
+                ->with('status', 'This plan is already active on your account.');
+        }
+
+        if ($existingActive && $existingActive->plan_name !== $plan->name) {
+            $existingActive->update([
+                'status' => 'cancelled',
+                'ends_at' => now()->toDateString(),
+            ]);
+        }
+
         // Create subscription
         $subscription = $request->user()->subscriptions()->create([
             'plan_name' => $plan->name,
@@ -546,7 +580,7 @@ class StorefrontController extends Controller
             'price_per_cycle' => $plan->price,
             'discount_percent' => 0,
             'status' => 'active',
-            'next_billing_date' => now()->addMonth()->toDateString(),
+            'next_billing_date' => $this->calculateNextBillingDate($plan->billing_cycle),
         ]);
 
         // Store subscription info in session and redirect to checkout
@@ -600,6 +634,73 @@ class StorefrontController extends Controller
         $request->session()->forget('subscription');
 
         return redirect()->route('store.account')->with('status', 'Subscription activated successfully! Your delivery will start from next billing cycle.');
+    }
+
+    public function pauseSubscription(Request $request, Subscription $subscription): RedirectResponse
+    {
+        abort_unless($subscription->user_id === $request->user()->id, 403);
+
+        if ($subscription->status === 'active') {
+            $subscription->update(['status' => 'paused']);
+        }
+
+        return back()->with('status', 'Subscription paused successfully.');
+    }
+
+    public function resumeSubscription(Request $request, Subscription $subscription): RedirectResponse
+    {
+        abort_unless($subscription->user_id === $request->user()->id, 403);
+
+        if (in_array($subscription->status, ['paused', 'cancelled', 'expired'], true)) {
+            $subscription->update([
+                'status' => 'active',
+                'next_billing_date' => $this->calculateNextBillingDate($subscription->frequency),
+                'ends_at' => null,
+            ]);
+        }
+
+        return back()->with('status', 'Subscription resumed successfully.');
+    }
+
+    public function cancelSubscription(Request $request, Subscription $subscription): RedirectResponse
+    {
+        abort_unless($subscription->user_id === $request->user()->id, 403);
+
+        if (in_array($subscription->status, ['active', 'paused'], true)) {
+            $subscription->update([
+                'status' => 'cancelled',
+                'ends_at' => now()->toDateString(),
+            ]);
+        }
+
+        return back()->with('status', 'Subscription cancelled.');
+    }
+
+    public function renewSubscription(Request $request, Subscription $subscription): RedirectResponse
+    {
+        abort_unless($subscription->user_id === $request->user()->id, 403);
+
+        if (in_array($subscription->status, ['cancelled', 'expired'], true)) {
+            $subscription->update([
+                'status' => 'active',
+                'next_billing_date' => $this->calculateNextBillingDate($subscription->frequency),
+                'ends_at' => null,
+            ]);
+        }
+
+        return back()->with('status', 'Subscription renewed successfully.');
+    }
+
+    private function calculateNextBillingDate(?string $frequency): string
+    {
+        $normalized = strtolower((string) $frequency);
+
+        return match ($normalized) {
+            'weekly' => now()->addWeek()->toDateString(),
+            'quarterly' => now()->addMonths(3)->toDateString(),
+            'yearly' => now()->addYear()->toDateString(),
+            default => now()->addMonth()->toDateString(),
+        };
     }
 
     public function blogIndex()

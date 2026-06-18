@@ -204,6 +204,7 @@
                             <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Cycle</th>
                             <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Price</th>
                             <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Status</th>
+                            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -212,7 +213,46 @@
                             <td class="px-5 py-3 text-sm font-semibold text-slate-900">{{ $subscription->plan_name }}</td>
                             <td class="px-5 py-3 text-sm text-slate-600">{{ ucfirst($subscription->frequency) }}</td>
                             <td class="px-5 py-3 text-sm font-medium text-slate-900">Rs {{ number_format($subscription->price_per_cycle, 0) }}</td>
-                            <td class="px-5 py-3"><span class="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">{{ ucfirst($subscription->status) }}</span></td>
+                            <td class="px-5 py-3">
+                                @php($status = strtolower((string) $subscription->status))
+                                @php($statusClass = match($status) {
+                                    'active' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+                                    'paused' => 'border-amber-200 bg-amber-50 text-amber-700',
+                                    'cancelled', 'expired' => 'border-rose-200 bg-rose-50 text-rose-700',
+                                    default => 'border-slate-200 bg-slate-50 text-slate-700',
+                                })
+                                <span class="inline-flex rounded-full border px-2.5 py-0.5 text-xs font-semibold {{ $statusClass }}">{{ ucfirst($subscription->status) }}</span>
+                            </td>
+                            <td class="px-5 py-3">
+                                <div class="flex flex-wrap gap-2">
+                                    @if($status === 'active')
+                                    <form method="POST" action="{{ route('store.subscription.pause', $subscription) }}">
+                                        @csrf
+                                        <button class="rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 hover:bg-amber-100" type="submit">Pause</button>
+                                    </form>
+                                    <form method="POST" action="{{ route('store.subscription.cancel', $subscription) }}" onsubmit="return confirm('Cancel this subscription?');">
+                                        @csrf
+                                        <button class="rounded-full border border-rose-300 bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-100" type="submit">Cancel</button>
+                                    </form>
+                                    @elseif($status === 'paused')
+                                    <form method="POST" action="{{ route('store.subscription.resume', $subscription) }}">
+                                        @csrf
+                                        <button class="rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 hover:bg-emerald-100" type="submit">Resume</button>
+                                    </form>
+                                    <form method="POST" action="{{ route('store.subscription.cancel', $subscription) }}" onsubmit="return confirm('Cancel this subscription?');">
+                                        @csrf
+                                        <button class="rounded-full border border-rose-300 bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-100" type="submit">Cancel</button>
+                                    </form>
+                                    @elseif(in_array($status, ['cancelled', 'expired'], true))
+                                    <form method="POST" action="{{ route('store.subscription.renew', $subscription) }}">
+                                        @csrf
+                                        <button class="rounded-full border border-numnam-300 bg-white px-3 py-1 text-xs font-semibold text-numnam-700 hover:bg-numnam-50" type="submit">Renew</button>
+                                    </form>
+                                    @else
+                                    <span class="text-xs text-slate-500">-</span>
+                                    @endif
+                                </div>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
