@@ -7,6 +7,7 @@ import '../../core/constants.dart';
 import '../../core/wishlist_provider.dart';
 import '../../models/product.dart';
 import '../../shared/theme/colors.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 import '../cart/cart_provider.dart';
 
 class ProductDetailScreenRedesign extends StatefulWidget {
@@ -98,6 +99,7 @@ class _ProductDetailScreenRedesignState
       return const Scaffold(
         backgroundColor: kCream,
         body: Center(child: CircularProgressIndicator(color: kCoral)),
+        bottomNavigationBar: InnerPageNav(),
       );
     }
 
@@ -105,6 +107,7 @@ class _ProductDetailScreenRedesignState
       return Scaffold(
         appBar: AppBar(title: const Text('Error')),
         body: const Center(child: Text('Product not found')),
+        bottomNavigationBar: const InnerPageNav(),
       );
     }
 
@@ -330,6 +333,7 @@ class _ProductDetailScreenRedesignState
           ),
         ],
       ),
+      bottomNavigationBar: const InnerPageNav(),
       bottomSheet: Container(
         padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
         decoration: BoxDecoration(

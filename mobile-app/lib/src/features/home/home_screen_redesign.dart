@@ -71,9 +71,7 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
         ApiEndpoints.products,
         queryParameters: {'per_page': 12, 'page': 1, 'featured': true},
       );
-      print('✓ Products response: ${productsResp.statusCode}');
       featured = _parseProducts(productsResp.data);
-      print('✓ Parsed ${featured.length} featured products');
 
       if (featured.isEmpty) {
         final fallbackResp = await api.dio.get(
@@ -81,21 +79,30 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
           queryParameters: {'per_page': 12, 'page': 1},
         );
         featured = _parseProducts(fallbackResp.data);
-        print('✓ Fallback products count: ${featured.length}');
       }
     } catch (e, st) {
-      print('✗ Products load error: $e');
-      print('✗ Products stack trace: $st');
+      debugPrint('Products load error: $e');
+      debugPrint('$st');
+
+      // Secondary fallback for cases where mobile endpoint is blocked by
+      // stale auth state/network edge; keeps Home populated.
+      try {
+        final publicResp = await api.dio.get(
+          '/products',
+          queryParameters: {'per_page': 12, 'page': 1},
+        );
+        featured = _parseProducts(publicResp.data);
+      } catch (_) {
+        // Keep featured empty if all fallbacks fail.
+      }
     }
 
     try {
       final plansResp = await api.dio.get(ApiEndpoints.pricingPlans);
-      print('✓ Plans response: ${plansResp.statusCode}');
       plans = _parsePlans(plansResp.data);
-      print('✓ Parsed ${plans.length} pricing plans');
     } catch (e, st) {
-      print('✗ Plans load error: $e');
-      print('✗ Plans stack trace: $st');
+      debugPrint('Plans load error: $e');
+      debugPrint('$st');
     }
 
     if (mounted) {
@@ -113,7 +120,7 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
       final dataField = data['data'];
       if (dataField is List) {
         list = dataField;
-      } else if (dataField is Map && dataField['data'] != null) {
+      } else if (dataField is Map && dataField['data'] is List) {
         list = dataField['data'] as List;
       } else {
         list = [];
@@ -125,49 +132,38 @@ class _HomeScreenRedesignState extends State<HomeScreenRedesign> {
     }
     final parsed = <Product>[];
     for (final item in list) {
-      if (item is Map<String, dynamic>) {
-        parsed.add(Product.fromJson(item));
+      if (item is Map) {
+        parsed.add(Product.fromJson(Map<String, dynamic>.from(item)));
       }
     }
     return parsed;
   }
 
   List<PricingPlan> _parsePlans(dynamic data) {
-    print('DEBUG: _parsePlans received data type: ${data.runtimeType}');
-    print('DEBUG: _parsePlans data: $data');
-
     List<dynamic> list = [];
 
     if (data is Map) {
       final dataField = data['data'];
-      print('DEBUG: dataField type: ${dataField.runtimeType}');
 
       if (dataField is List) {
         list = dataField;
-      } else if (dataField is Map && dataField['data'] != null) {
+      } else if (dataField is Map && dataField['data'] is List) {
         list = dataField['data'] as List;
       }
     } else if (data is List) {
       list = data;
     }
 
-    print('✓ Parsed ${list.length} pricing plans');
-
     final result = <PricingPlan>[];
-    for (int i = 0; i < list.length; i++) {
+    for (final item in list) {
       try {
-        final item = list[i];
-        if (item is! Map<String, dynamic>) {
-          print('WARN: Plan item $i is not a Map, got ${item.runtimeType}');
-          continue;
+        if (item is Map) {
+          result.add(PricingPlan.fromJson(Map<String, dynamic>.from(item)));
         }
-        result.add(PricingPlan.fromJson(item));
       } catch (e) {
-        print('ERROR parsing pricing plan $i: $e');
+        debugPrint('Plan parsing error: $e');
       }
     }
-
-    print('✓ Successfully parsed ${result.length} pricing plans');
     return result;
   }
 

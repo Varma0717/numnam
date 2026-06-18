@@ -6,6 +6,7 @@ import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../models/pricing_plan.dart';
 import '../../shared/theme/colors.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 import 'subscription_checkout_screen.dart';
 
 class SubscriptionsScreenRedesign extends StatefulWidget {
@@ -56,7 +57,8 @@ class _SubscriptionsScreenRedesignState
       list = [];
     }
     return list
-        .map((e) => PricingPlan.fromJson(e as Map<String, dynamic>))
+        .whereType<Map>()
+        .map((e) => PricingPlan.fromJson(Map<String, dynamic>.from(e)))
         .toList();
   }
 
@@ -201,6 +203,7 @@ class _SubscriptionsScreenRedesignState
                 const SliverToBoxAdapter(child: SizedBox(height: 40)),
               ],
             ),
+      bottomNavigationBar: const InnerPageNav(),
     );
   }
 

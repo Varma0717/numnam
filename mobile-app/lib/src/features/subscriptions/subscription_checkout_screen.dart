@@ -9,6 +9,7 @@ import '../../core/api_client.dart';
 import '../../core/constants.dart';
 import '../../models/pricing_plan.dart';
 import '../../shared/theme/colors.dart';
+import '../../shared/widgets/inner_page_nav.dart';
 
 class SubscriptionCheckoutScreen extends StatefulWidget {
   final PricingPlan plan;
@@ -547,6 +548,7 @@ class _SubscriptionCheckoutScreenState
           ),
         ),
       ),
+      bottomNavigationBar: const InnerPageNav(),
     );
   }
 

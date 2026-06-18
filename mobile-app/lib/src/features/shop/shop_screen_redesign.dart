@@ -69,8 +69,16 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
           continue;
         }
 
-        if (parsed.length < perPage) break;
+        if (parsed.isEmpty || parsed.length < perPage) break;
         currentPage += 1;
+      }
+
+      if (allProducts.isEmpty) {
+        final fallbackResp = await api.dio.get('/products', queryParameters: {
+          'per_page': perPage,
+          'page': 1,
+        });
+        allProducts.addAll(_parseProducts(fallbackResp.data));
       }
 
       if (mounted) {
@@ -81,8 +89,8 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
         });
       }
     } catch (e, st) {
-      print('✗ Products load error: $e');
-      print('✗ Stack trace: $st');
+      debugPrint('Products load error: $e');
+      debugPrint('$st');
       if (mounted) {
         setState(() {
           _loading = false;
@@ -93,19 +101,14 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
   }
 
   List<Product> _parseProducts(dynamic data) {
-    print('DEBUG: _parseProducts received data type: ${data.runtimeType}');
-    print('DEBUG: _parseProducts data: $data');
-
     List<dynamic> list = [];
 
     if (data is Map) {
       final dataField = data['data'];
-      print('DEBUG: dataField type: ${dataField.runtimeType}');
-      print('DEBUG: dataField: $dataField');
 
       if (dataField is List) {
         list = dataField;
-      } else if (dataField is Map && dataField['data'] != null) {
+      } else if (dataField is Map && dataField['data'] is List) {
         list = dataField['data'] as List;
       } else {
         list = [];
@@ -114,28 +117,20 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
       list = data;
     }
 
-    print('DEBUG: Parsed list length: ${list.length}');
-    if (list.isNotEmpty) {
-      print('DEBUG: First item type: ${list[0].runtimeType}');
-      print('DEBUG: First item: ${list[0]}');
-    }
-
     final result = <Product>[];
     for (int i = 0; i < list.length; i++) {
       try {
         final item = list[i];
-        if (item is! Map<String, dynamic>) {
-          print('WARN: Item $i is not a Map, got ${item.runtimeType}: $item');
+        if (item is! Map) {
+          debugPrint('Invalid item type at index $i: ${item.runtimeType}');
           continue;
         }
-        final product = Product.fromJson(item);
+        final product = Product.fromJson(Map<String, dynamic>.from(item));
         result.add(product);
       } catch (e) {
-        print('ERROR parsing product $i: $e');
+        debugPrint('Product parsing error at index $i: $e');
       }
     }
-
-    print('✓ Successfully parsed ${result.length} products');
     return result;
   }
 
@@ -399,14 +394,12 @@ class _ShopScreenRedesignState extends State<ShopScreenRedesign> {
                   ClipRRect(
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(20)),
-                    child: Container(
-                      width: double.infinity,
-                      color: kCream,
+                    child: SizedBox.expand(
                       child: CachedNetworkImage(
                         imageUrl: product.displayImageUrl ?? '',
                         fit: BoxFit.cover,
                         alignment: Alignment.center,
-                        width: double.infinity,
+                        placeholder: (_, __) => Container(color: kCream),
                         errorWidget: (_, __, ___) => Container(color: kCream),
                       ),
                     ),

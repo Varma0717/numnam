@@ -466,10 +466,10 @@ class _RoomDetailViewState extends State<RoomDetailView> {
   }
 
   void _showCommentSheet(Message message) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) => CommentSheetView(message: message),
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => CommentScreen(message: message),
+      ),
     );
   }
 }
@@ -623,19 +623,19 @@ class MessageCard extends StatelessWidget {
   }
 }
 
-class CommentSheetView extends StatefulWidget {
+class CommentScreen extends StatefulWidget {
   final Message message;
 
-  const CommentSheetView({
+  const CommentScreen({
     required this.message,
     super.key,
   });
 
   @override
-  State<CommentSheetView> createState() => _CommentSheetViewState();
+  State<CommentScreen> createState() => _CommentScreenState();
 }
 
-class _CommentSheetViewState extends State<CommentSheetView> {
+class _CommentScreenState extends State<CommentScreen> {
   late List<Comment> comments = [];
   bool _isLoading = true;
   String? _error;
@@ -708,34 +708,12 @@ class _CommentSheetViewState extends State<CommentSheetView> {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.7,
-      minChildSize: 0.5,
-      maxChildSize: 0.95,
-      builder: (context, scrollController) => Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Comments'),
+      ),
+      body: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: Colors.grey[300]!)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Comments',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close),
-                ),
-              ],
-            ),
-          ),
           Expanded(
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
@@ -769,7 +747,6 @@ class _CommentSheetViewState extends State<CommentSheetView> {
                             ),
                           )
                         : ListView.builder(
-                            controller: scrollController,
                             padding: const EdgeInsets.all(12),
                             itemCount: comments.length,
                             itemBuilder: (context, index) {
@@ -858,6 +835,7 @@ class _CommentSheetViewState extends State<CommentSheetView> {
           ),
         ],
       ),
+      bottomNavigationBar: const InnerPageNav(),
     );
   }
 }

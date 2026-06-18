@@ -164,7 +164,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
           tabs: const [
             Tab(icon: Icon(Icons.dashboard_outlined), text: 'Dashboard'),
             Tab(icon: Icon(Icons.add_circle_outline), text: 'Log'),
-            Tab(icon: Icon(Icons.monitor_heart_outlined), text: 'Stool'),
+            Tab(icon: Icon(Icons.monitor_heart_outlined), text: 'Poop'),
             Tab(icon: Icon(Icons.menu_book_outlined), text: 'Guide'),
           ],
         ),
@@ -293,7 +293,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
               _buildStatCard(Icons.water_drop_outlined, totalWater.toString(),
                   'Water (ml)', Colors.cyan[100]!),
               _buildStatCard(Icons.monitor_heart_outlined, lastPoop,
-                  'Last Stool', Colors.green[100]!),
+                  'Last Poop', Colors.green[100]!),
             ],
           ),
           const SizedBox(height: 24),
@@ -435,8 +435,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
               _buildLogTypeButton(Icons.local_drink_outlined, 'Milk', 'milk'),
               _buildLogTypeButton(Icons.restaurant_outlined, 'Solids', 'solid'),
               _buildLogTypeButton(Icons.water_drop_outlined, 'Water', 'water'),
-              _buildLogTypeButton(
-                  Icons.monitor_heart_outlined, 'Stool', 'poop'),
+              _buildLogTypeButton(Icons.monitor_heart_outlined, 'Poop', 'poop'),
             ],
           ),
           const SizedBox(height: 24),
@@ -806,7 +805,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Stool Log', style: Theme.of(context).textTheme.titleMedium),
+            Text('Poop Log', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             Text(
                 'Select the closest match (Bristol Stool Chart – infant adapted)',
@@ -832,7 +831,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                       setState(() => _selectedPoopType = '');
                     },
               icon: const Icon(Icons.check),
-              label: const Text('Log Stool'),
+              label: const Text('Log Poop'),
             ),
           ],
         ),
@@ -862,7 +861,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Stool Diagnostics',
+            'Poop Diagnostics',
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 8),
