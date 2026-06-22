@@ -853,7 +853,7 @@
                 <svg class="inline h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M9 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0Z" />
                     <path d="M12 1v6m0 6v6" />
-                </svg>Baby Profile <span id="age-display"></span>
+                </svg>Baby Profile: <span id="age-display"></span>
             </button>
         </div>
     </div>
