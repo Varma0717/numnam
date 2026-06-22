@@ -457,6 +457,89 @@ class _RoomDetailViewState extends State<RoomDetailView> {
             ],
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+          child: Column(
+            children: [
+              Card(
+                margin: EdgeInsets.zero,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Room Statistics',
+                                style: TextStyle(fontWeight: FontWeight.w700)),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Total Messages: ${widget.room.messageCount}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.green[100],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          'Active',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.green[800],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Card(
+                margin: EdgeInsets.zero,
+                child: const Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Community Guidelines',
+                          style: TextStyle(fontWeight: FontWeight.w700)),
+                      SizedBox(height: 8),
+                      Text('• Be respectful and kind'),
+                      Text('• Share experiences only'),
+                      Text('• No commercial content'),
+                      Text('• Keep discussions focused'),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Card(
+                margin: EdgeInsets.zero,
+                child: const Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Tips',
+                          style: TextStyle(fontWeight: FontWeight.w700)),
+                      SizedBox(height: 4),
+                      Text(
+                          'Ask specific questions and share what worked for your baby. Other parents learn best from real experiences!'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
         // Messages
         Expanded(
           child: _isLoading

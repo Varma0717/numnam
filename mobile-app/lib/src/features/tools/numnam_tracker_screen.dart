@@ -945,9 +945,11 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
 
   Widget _buildPoopTypeSelection(PoopType poop) {
     final isSelected = _selectedPoopType == poop.type;
+    final shortLabel = _poopShortLabel(poop.type);
+    final emoji = _poopEmoji(poop.type, poop.emoji);
     return FilterChip(
-      avatar: Text(poop.emoji),
-      label: Text(poop.type),
+      avatar: Text(emoji),
+      label: Text(shortLabel),
       selected: isSelected,
       onSelected: (selected) {
         setState(() => _selectedPoopType = selected ? poop.type : '');
@@ -956,10 +958,6 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   }
 
   Widget _buildPoopGuidePage() {
-    if (_config == null || _config!.poopTypes.isEmpty) {
-      return const Center(child: Text('Loading poop guide...'));
-    }
-
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -975,13 +973,13 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 16),
-          for (final poop in _config!.poopTypes)
+          for (final poop in _poopGuideRows())
             _buildPoopTypeCard(
-              poop.type,
-              poop.emoji,
-              poop.appearance,
-              poop.meaning,
-              _parseColorFromHex(poop.color),
+              poop['type']! as String,
+              poop['emoji']! as String,
+              poop['appearance']! as String,
+              poop['meaning']! as String,
+              poop['color']! as Color,
             ),
           const SizedBox(height: 12),
           Card(
@@ -1067,6 +1065,101 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
       return '6+ months';
     }
     return 'All ages';
+  }
+
+  String _poopShortLabel(String type) {
+    final normalized = type.toLowerCase();
+    if (normalized.contains('type 1')) return 'Hard pellets';
+    if (normalized.contains('type 2')) return 'Lumpy sausage';
+    if (normalized.contains('type 3')) return 'Cracked sausage';
+    if (normalized.contains('type 4')) return 'Smooth ideal';
+    if (normalized.contains('type 5')) return 'Soft blobs';
+    if (normalized.contains('type 6')) return 'Mushy loose';
+    if (normalized.contains('red')) return 'Red bits undigested';
+    if (normalized.contains('green')) return 'Green mucous';
+    return type;
+  }
+
+  String _poopEmoji(String type, String fallback) {
+    final normalized = type.toLowerCase();
+    if (normalized.contains('type 1')) return '💩';
+    if (normalized.contains('type 2')) return '🌰';
+    if (normalized.contains('type 3')) return '🌭';
+    if (normalized.contains('type 4')) return '🍌';
+    if (normalized.contains('type 5')) return '💛';
+    if (normalized.contains('type 6')) return '💦';
+    if (normalized.contains('red')) return '🍅';
+    if (normalized.contains('green')) return '💚';
+    return fallback;
+  }
+
+  List<Map<String, Object>> _poopGuideRows() {
+    return const [
+      {
+        'type': 'Type 1',
+        'emoji': '💩',
+        'appearance': 'Hard pellets',
+        'meaning':
+            'Constipation risk. Increase fluids and healthy fats (ghee, oil). Add more fruits like prunes or pears.',
+        'color': Color(0xFFFFE4E6),
+      },
+      {
+        'type': 'Type 2',
+        'emoji': '🌰',
+        'appearance': 'Lumpy sausage',
+        'meaning':
+            'Mild constipation. Increase water and fibre slightly. Ensure good fat intake for lubrication.',
+        'color': Color(0xFFFFF1E6),
+      },
+      {
+        'type': 'Type 3',
+        'emoji': '🌭',
+        'appearance': 'Cracked sausage',
+        'meaning':
+            'Mild constipation. Similar to Type 2. Add more fluids and cooked vegetables.',
+        'color': Color(0xFFFFF1E6),
+      },
+      {
+        'type': 'Type 4',
+        'emoji': '🍌',
+        'appearance': 'Smooth (ideal)',
+        'meaning':
+            'Perfect. Fibre and fluid balance is ideal. Gut microbiome is thriving. Keep doing what you\'re doing.',
+        'color': Color(0xFFEAF8EE),
+      },
+      {
+        'type': 'Type 5',
+        'emoji': '💛',
+        'appearance': 'Soft blobs',
+        'meaning':
+            'Slightly loose. Monitor for changes. Reduce high-fibre foods if becomes more loose. Stay hydrated.',
+        'color': Color(0xFFFFF8DC),
+      },
+      {
+        'type': 'Type 6',
+        'emoji': '💦',
+        'appearance': 'Mushy loose',
+        'meaning':
+            'Loose/Diarrhoea risk. Reduce high-fibre foods. Check for new foods or potential sensitivity. Hydrate well.',
+        'color': Color(0xFFFFF8DC),
+      },
+      {
+        'type': 'Red/Undigested',
+        'emoji': '🍅',
+        'appearance': 'Red or undigested food chunks',
+        'meaning':
+            'Digestion still learning. Chop/mash foods more finely. Mush them thoroughly. Normal at this stage.',
+        'color': Color(0xFFFFE4E6),
+      },
+      {
+        'type': 'Green/Mucous',
+        'emoji': '💚',
+        'appearance': 'Green with mucous coating',
+        'meaning':
+            'Possible irritation. Check for new foods. May indicate allergy or sensitivity. Consult pediatrician if persistent.',
+        'color': Color(0xFFE8F1FF),
+      },
+    ];
   }
 
   Widget _buildGuidePage() {
