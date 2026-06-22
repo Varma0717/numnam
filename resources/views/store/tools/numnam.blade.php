@@ -846,12 +846,12 @@
 <div class="numnam-tracker-wrapper">
     <div class="numnam-header">
         <div class="logo-container">
-            <div class="tracker-logo">Num<span>Nam</span></div>
+            <br><br>
             <button class="baby-age-pill" onclick="showAgeModal()" type="button" aria-label="Update baby age">
                 <svg class="inline h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M9 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0Z" />
                     <path d="M12 1v6m0 6v6" />
-                </svg>Baby: <span id="age-display">8 months</span>
+                </svg>Baby Profile <span id="age-display"></span>
             </button>
         </div>
     </div>
