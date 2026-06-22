@@ -1314,7 +1314,7 @@
 
     <!-- AGE MODAL -->
     <div id="age-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center;">
-        <div style="background:white;border-radius:20px;padding:28px;max-width:420px;width:90%;margin:auto;position:relative;top:50%;transform:translateY(-50%);max-height:90vh;overflow-y:auto">
+        <div style="background:white;border-radius:20px;padding:28px;max-width:420px;width:90%;margin:auto;position:relative;top:25%;transform:translateY(-50%);max-height:90vh;overflow-y:auto">
             <div style="font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;margin-bottom:18px;color:#C0502A">Your Baby's Profile</div>
 
             <div class="form-row">
