@@ -37,6 +37,10 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
   String _solidTexture = '';
   String _solidFinishLevel = '';
   String _selectedPoopType = '';
+  TimeOfDay _milkTime = TimeOfDay.now();
+  TimeOfDay _solidTime = TimeOfDay.now();
+  TimeOfDay _waterTime = TimeOfDay.now();
+  TimeOfDay _poopTime = TimeOfDay.now();
   final TextEditingController _milkNotesController = TextEditingController();
   final TextEditingController _solidNotesController = TextEditingController();
   final TextEditingController _waterNotesController = TextEditingController();
@@ -47,6 +51,54 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
         .replaceAll(RegExp(r'[^\x00-\x7F]+'), '')
         .replaceAll(RegExp(r'\s+'), ' ')
         .trim();
+  }
+
+  String _formatTimeOfDay(TimeOfDay time) {
+    final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
+    final minute = time.minute.toString().padLeft(2, '0');
+    final suffix = time.period == DayPeriod.am ? 'AM' : 'PM';
+    return '$hour:$minute $suffix';
+  }
+
+  DateTime _combineTodayWithTime(TimeOfDay time) {
+    final now = DateTime.now();
+    return DateTime(now.year, now.month, now.day, time.hour, time.minute);
+  }
+
+  Future<void> _pickTime({
+    required TimeOfDay selected,
+    required ValueChanged<TimeOfDay> onPicked,
+  }) async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: selected,
+      helpText: 'Select Time',
+    );
+    if (picked != null && mounted) {
+      setState(() => onPicked(picked));
+    }
+  }
+
+  Widget _buildTimeInput({
+    required TimeOfDay value,
+    required VoidCallback onTap,
+  }) {
+    return Row(
+      children: [
+        const Text('Time:', style: TextStyle(fontWeight: FontWeight.w600)),
+        const SizedBox(width: 10),
+        Expanded(
+          child: OutlinedButton.icon(
+            onPressed: onTap,
+            icon: const Icon(Icons.access_time_outlined, size: 18),
+            label: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(_formatTimeOfDay(value)),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -162,9 +214,9 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
           isScrollable: true,
           controller: _tabController,
           tabs: const [
-            Tab(icon: Icon(Icons.dashboard_outlined), text: 'Dashboard'),
+            Tab(icon: Icon(Icons.dashboard_outlined), text: 'Today'),
             Tab(icon: Icon(Icons.add_circle_outline), text: 'Log'),
-            Tab(icon: Icon(Icons.monitor_heart_outlined), text: 'Poop'),
+            Tab(icon: Icon(Icons.monitor_heart_outlined), text: 'Poop Guide'),
             Tab(icon: Icon(Icons.menu_book_outlined), text: 'Guide'),
           ],
         ),
@@ -258,8 +310,8 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                   children: [
                     const Icon(Icons.child_care_outlined, size: 18),
                     const SizedBox(width: 6),
-                    const Text('Age:'),
-                    Text('$babyAge months'),
+                    const Text('Baby Profile:'),
+                    Text(' $babyAge months'),
                     const SizedBox(width: 12),
                     GestureDetector(
                       onTap: () => _showAgeDialog(),
@@ -314,8 +366,9 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                         size: 44, color: Colors.grey[500]),
                     const SizedBox(height: 8),
                     Text(
-                      'No entries yet',
+                      'No entries yet. Tap Log to add!',
                       style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
@@ -426,7 +479,22 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('Log a Feed', style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 4),
+          Text(
+            'Track milk, solids, water, or poop output',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 16),
+
+          Text(
+            'What are you logging?',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 12),
+
           // Log type selector
           Wrap(
             spacing: 8,
@@ -538,6 +606,14 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                 ),
               ],
             ),
+            const SizedBox(height: 12),
+            _buildTimeInput(
+              value: _milkTime,
+              onTap: () => _pickTime(
+                selected: _milkTime,
+                onPicked: (picked) => _milkTime = picked,
+              ),
+            ),
             const SizedBox(height: 8),
             TextField(
               controller: _milkNotesController,
@@ -557,6 +633,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                   volumeMl: _milkVolume.toInt(),
                   milkType: _selectedMilkTypeId,
                   notes: _milkNotesController.text.trim(),
+                  loggedAt: _combineTodayWithTime(_milkTime),
                 ));
                 setState(() {
                   _selectedMilkTypeId = milkTypeOptions.first.id;
@@ -671,6 +748,14 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
               ],
             ),
             const SizedBox(height: 12),
+            _buildTimeInput(
+              value: _solidTime,
+              onTap: () => _pickTime(
+                selected: _solidTime,
+                onPicked: (picked) => _solidTime = picked,
+              ),
+            ),
+            const SizedBox(height: 12),
             DropdownButtonFormField<String>(
               value: _solidFinishLevel.isEmpty ? null : _solidFinishLevel,
               items: finishOptions
@@ -709,6 +794,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                         texture: _solidTexture,
                         finishLevel: _solidFinishLevel,
                         notes: _solidNotesController.text.trim(),
+                        loggedAt: _combineTodayWithTime(_solidTime),
                       ));
                       setState(() {
                         _solidFood = '';
@@ -756,6 +842,14 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                 ),
               ],
             ),
+            const SizedBox(height: 12),
+            _buildTimeInput(
+              value: _waterTime,
+              onTap: () => _pickTime(
+                selected: _waterTime,
+                onPicked: (picked) => _waterTime = picked,
+              ),
+            ),
             const SizedBox(height: 8),
             TextField(
               controller: _waterNotesController,
@@ -774,6 +868,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                   type: 'water',
                   volumeMl: _waterVolume.toInt(),
                   notes: _waterNotesController.text.trim(),
+                  loggedAt: _combineTodayWithTime(_waterTime),
                 ));
                 setState(() {
                   _waterVolume = 30;
@@ -816,8 +911,16 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
               runSpacing: 8,
               children: [
                 for (final poop in _config!.poopTypes)
-                  _buildPoopTypeSelection(poop.type),
+                  _buildPoopTypeSelection(poop),
               ],
+            ),
+            const SizedBox(height: 12),
+            _buildTimeInput(
+              value: _poopTime,
+              onTap: () => _pickTime(
+                selected: _poopTime,
+                onPicked: (picked) => _poopTime = picked,
+              ),
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
@@ -827,6 +930,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
                       _addLog(FeedLogRequest(
                         type: 'poop',
                         poopType: _selectedPoopType,
+                        loggedAt: _combineTodayWithTime(_poopTime),
                       ));
                       setState(() => _selectedPoopType = '');
                     },
@@ -839,13 +943,14 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
     );
   }
 
-  Widget _buildPoopTypeSelection(String label) {
-    final isSelected = _selectedPoopType == label;
+  Widget _buildPoopTypeSelection(PoopType poop) {
+    final isSelected = _selectedPoopType == poop.type;
     return FilterChip(
-      label: Text(label),
+      avatar: Text(poop.emoji),
+      label: Text(poop.type),
       selected: isSelected,
       onSelected: (selected) {
-        setState(() => _selectedPoopType = selected ? label : '');
+        setState(() => _selectedPoopType = selected ? poop.type : '');
       },
     );
   }
@@ -873,10 +978,46 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
           for (final poop in _config!.poopTypes)
             _buildPoopTypeCard(
               poop.type,
+              poop.emoji,
               poop.appearance,
               poop.meaning,
               _parseColorFromHex(poop.color),
             ),
+          const SizedBox(height: 12),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text('Smart Rescue Logic',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                  SizedBox(height: 6),
+                  Text('If-this-then-that interventions',
+                      style: TextStyle(fontSize: 12, color: Colors.black54)),
+                  SizedBox(height: 12),
+                  Text('Hard Poop? -> Hydration Rescue',
+                      style: TextStyle(fontWeight: FontWeight.w600)),
+                  SizedBox(height: 2),
+                  Text(
+                      'Add 1 tsp of ghee/oil to next meal. Offer water sips. Add water-rich fruits.'),
+                  SizedBox(height: 10),
+                  Text('Loose Poop? -> Slow Down',
+                      style: TextStyle(fontWeight: FontWeight.w600)),
+                  SizedBox(height: 2),
+                  Text(
+                      'Pause new high-fibre veggies. Focus on cooked foods. Monitor for 48 hours.'),
+                  SizedBox(height: 10),
+                  Text('Perfect Poop? -> Keep Going',
+                      style: TextStyle(fontWeight: FontWeight.w600)),
+                  SizedBox(height: 2),
+                  Text(
+                      'You\'ve nailed the nutrition balance. Stay consistent with what\'s working.'),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -889,6 +1030,7 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
 
   Widget _buildPoopTypeCard(
     String type,
+    String emoji,
     String appearance,
     String meaning,
     Color bgColor,
@@ -902,17 +1044,29 @@ class _NumNamTrackerScreenState extends State<NumNamTrackerScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              type,
+              '$emoji $type',
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
-            Text(appearance, style: const TextStyle(fontSize: 12)),
+            Text('Appearance: $appearance',
+                style: const TextStyle(fontSize: 12)),
+            const SizedBox(height: 4),
+            Text('Age Range: ${_ageRangeForPoopType(type)}',
+                style: const TextStyle(fontSize: 12)),
             const SizedBox(height: 4),
             Text(meaning, style: const TextStyle(fontSize: 12)),
           ],
         ),
       ),
     );
+  }
+
+  String _ageRangeForPoopType(String type) {
+    final normalized = type.toLowerCase();
+    if (normalized.contains('red')) {
+      return '6+ months';
+    }
+    return 'All ages';
   }
 
   Widget _buildGuidePage() {

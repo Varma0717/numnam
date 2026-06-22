@@ -15,6 +15,7 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
   List<Room> rooms = [];
+  CommunityStats? _stats;
   bool _isLoadingRooms = true;
   String? _error;
 
@@ -42,8 +43,15 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
     });
     try {
       final fetchedRooms = await CommunitiesService.fetchRooms();
+      CommunityStats? fetchedStats;
+      try {
+        fetchedStats = await CommunitiesService.fetchStats();
+      } catch (_) {
+        fetchedStats = null;
+      }
       setState(() {
         rooms = fetchedRooms;
+        _stats = fetchedStats;
         _isLoadingRooms = false;
         // Initialize TabController with number of rooms
         if (rooms.isNotEmpty) {
@@ -73,7 +81,7 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('NumNam Communities'),
+        title: const Text('NumNam Community'),
         elevation: 0,
       ),
       body: _isLoadingRooms
@@ -112,12 +120,95 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
                           Icon(Icons.people_outline,
                               size: 48, color: Colors.grey),
                           SizedBox(height: 16),
-                          Text('No communities available yet'),
+                          Text(
+                              'No community rooms available yet. Check back soon!'),
                         ],
                       ),
                     )
                   : Column(
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Join thousands of parents sharing their weaning journey, recipes, tips, and experiences.',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              const SizedBox(height: 12),
+                              Wrap(
+                                spacing: 10,
+                                runSpacing: 10,
+                                children: [
+                                  _buildStatCard(
+                                    'Active Members',
+                                    (_stats?.activeMembers ?? 0).toString(),
+                                    Icons.people_outline,
+                                  ),
+                                  _buildStatCard(
+                                    'Discussion Rooms',
+                                    (_stats?.activeRooms ?? rooms.length)
+                                        .toString(),
+                                    Icons.forum_outlined,
+                                  ),
+                                  _buildStatCard(
+                                    'Messages Shared',
+                                    (_stats?.totalMessages ??
+                                            rooms.fold<int>(
+                                                0,
+                                                (sum, room) =>
+                                                    sum + room.messageCount))
+                                        .toString(),
+                                    Icons.chat_bubble_outline,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Card(
+                                margin: EdgeInsets.zero,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: const [
+                                      Text('Community Guidelines',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700)),
+                                      SizedBox(height: 8),
+                                      Text('• Be respectful and supportive'),
+                                      Text(
+                                          '• Share experiences, not medical advice'),
+                                      Text('• No commercial promotion'),
+                                      Text(
+                                          '• Keep discussions focused and kind'),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Card(
+                                margin: EdgeInsets.zero,
+                                child: const Padding(
+                                  padding: EdgeInsets.all(12),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Pro Tip',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700)),
+                                      SizedBox(height: 4),
+                                      Text(
+                                          'Engage authentically with the community. Your experiences and questions help other parents tremendously. No question is too small!'),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         // Room tabs
                         Container(
                           color: Colors.grey[100],
@@ -152,6 +243,31 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
                       ],
                     ),
       bottomNavigationBar: const InnerPageNav(),
+    );
+  }
+
+  Widget _buildStatCard(String title, String value, IconData icon) {
+    return Container(
+      width: 108,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 18, color: Colors.black87),
+          const SizedBox(height: 6),
+          Text(value,
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 2),
+          Text(title,
+              style: const TextStyle(fontSize: 11, color: Colors.black54)),
+        ],
+      ),
     );
   }
 }
@@ -297,6 +413,12 @@ class _RoomDetailViewState extends State<RoomDetailView> {
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 24),
+            Text(
+              'Connect with thousands of parents, share your weaning journey, and get support from our caring community.',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: _joinRoom,
               icon: const Icon(Icons.check),
@@ -364,9 +486,10 @@ class _RoomDetailViewState extends State<RoomDetailView> {
                               Icon(Icons.mail_outline,
                                   size: 48, color: Colors.grey),
                               SizedBox(height: 16),
-                              Text('No messages yet'),
+                              Text('No messages yet. Be the first to share!'),
                               SizedBox(height: 8),
-                              Text('Be the first to start the conversation.'),
+                              Text(
+                                  'Share your question, experience, or tip with the community...'),
                             ],
                           ),
                         )
@@ -426,7 +549,8 @@ class _RoomDetailViewState extends State<RoomDetailView> {
                 child: TextField(
                   controller: _messageController,
                   decoration: InputDecoration(
-                    hintText: 'Say something...',
+                    hintText:
+                        'Share your question, experience, or tip with the community...',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),

@@ -304,6 +304,50 @@ class CommunitiesService {
   static Future<void> leaveRoom(int roomId) async {
     return;
   }
+
+  static Future<CommunityStats> fetchStats() async {
+    try {
+      final headers = await _getHeaders();
+      final response = await http
+          .get(
+            Uri.parse('$_baseUrl$_endpoint/stats'),
+            headers: headers,
+          )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+        final dataField = json is Map<String, dynamic>
+            ? (json['data'] as Map<String, dynamic>? ?? json)
+            : <String, dynamic>{};
+        return CommunityStats.fromJson(dataField);
+      }
+
+      throw 'Failed to load stats: ${response.statusCode}';
+    } catch (e) {
+      throw 'Error loading community stats: $e';
+    }
+  }
+}
+
+class CommunityStats {
+  final int activeMembers;
+  final int activeRooms;
+  final int totalMessages;
+
+  CommunityStats({
+    required this.activeMembers,
+    required this.activeRooms,
+    required this.totalMessages,
+  });
+
+  factory CommunityStats.fromJson(Map<String, dynamic> json) {
+    return CommunityStats(
+      activeMembers: (json['active_members'] as num?)?.toInt() ?? 0,
+      activeRooms: (json['active_rooms'] as num?)?.toInt() ?? 0,
+      totalMessages: (json['total_messages'] as num?)?.toInt() ?? 0,
+    );
+  }
 }
 
 // Models
