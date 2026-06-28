@@ -2,7 +2,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:mobile_app/src/config/app_config.dart';
 import 'package:mobile_app/src/core/storage_service.dart';
-import '../models/communities.dart';
 
 export '../models/communities.dart';
 
@@ -379,14 +378,22 @@ class Room {
         .replaceAll(RegExp(r'\s+'), ' ')
         .trim();
 
+    int toInt(dynamic value) {
+      if (value is int) return value;
+      if (value is num) return value.toInt();
+      if (value is String) return int.tryParse(value) ?? 0;
+      return 0;
+    }
+
     return Room(
-      id: (json['id'] as num?)?.toInt() ?? 0,
+      id: toInt(json['id']),
       name: cleanName,
-      description: (json['description'] ?? '').toString(),
+      description:
+          (json['description'] ?? json['room_description'] ?? '').toString(),
       emoji: (json['emoji'] ?? json['icon'] ?? '💬').toString(),
-      memberCount: (json['member_count'] as num?)?.toInt() ?? 0,
-      messageCount: (json['message_count'] as num?)?.toInt() ?? 0,
-      isMember: true,
+      memberCount: toInt(json['member_count']),
+      messageCount: toInt(json['message_count']),
+      isMember: (json['is_member'] as bool?) ?? true,
       createdAt: DateTime.tryParse((json['created_at'] ?? '').toString()) ??
           DateTime.now(),
     );

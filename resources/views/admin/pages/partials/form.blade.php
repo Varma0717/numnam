@@ -123,11 +123,7 @@
 </div>
 
 <script>
-    let sectionIndex = {
-        {
-            count($sections)
-        }
-    };
+    let sectionIndex = {{ count($sections) }};
 
     function addSection() {
         const msg = document.getElementById('no-sections-msg');

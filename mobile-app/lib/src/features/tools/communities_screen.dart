@@ -13,9 +13,8 @@ class CommunitiesScreen extends StatefulWidget {
 
 class _CommunitiesScreenState extends State<CommunitiesScreen>
     with TickerProviderStateMixin {
-  late TabController _tabController;
+  TabController? _tabController;
   List<Room> rooms = [];
-  CommunityStats? _stats;
   bool _isLoadingRooms = true;
   String? _error;
 
@@ -43,20 +42,14 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
     });
     try {
       final fetchedRooms = await CommunitiesService.fetchRooms();
-      CommunityStats? fetchedStats;
-      try {
-        fetchedStats = await CommunitiesService.fetchStats();
-      } catch (_) {
-        fetchedStats = null;
-      }
       setState(() {
         rooms = fetchedRooms;
-        _stats = fetchedStats;
         _isLoadingRooms = false;
         // Initialize TabController with number of rooms
         if (rooms.isNotEmpty) {
+          _tabController?.dispose();
           _tabController = TabController(length: rooms.length, vsync: this);
-          _tabController.addListener(() {
+          _tabController!.addListener(() {
             setState(() {});
           });
         }
@@ -71,9 +64,7 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
 
   @override
   void dispose() {
-    if (rooms.isNotEmpty) {
-      _tabController.dispose();
-    }
+    _tabController?.dispose();
     super.dispose();
   }
 
@@ -125,149 +116,44 @@ class _CommunitiesScreenState extends State<CommunitiesScreen>
                         ],
                       ),
                     )
-                  : Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Join thousands of parents sharing their weaning journey, recipes, tips, and experiences.',
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                              const SizedBox(height: 12),
-                              Wrap(
-                                spacing: 10,
-                                runSpacing: 10,
-                                children: [
-                                  _buildStatCard(
-                                    'Active Members',
-                                    (_stats?.activeMembers ?? 0).toString(),
-                                    Icons.people_outline,
-                                  ),
-                                  _buildStatCard(
-                                    'Discussion Rooms',
-                                    (_stats?.activeRooms ?? rooms.length)
-                                        .toString(),
-                                    Icons.forum_outlined,
-                                  ),
-                                  _buildStatCard(
-                                    'Messages Shared',
-                                    (_stats?.totalMessages ??
-                                            rooms.fold<int>(
-                                                0,
-                                                (sum, room) =>
-                                                    sum + room.messageCount))
-                                        .toString(),
-                                    Icons.chat_bubble_outline,
-                                  ),
+                  : _tabController == null
+                      ? const Center(child: CircularProgressIndicator())
+                      : Column(
+                          children: [
+                            // Room tabs
+                            Container(
+                              color: Colors.grey[100],
+                              child: TabBar(
+                                controller: _tabController,
+                                isScrollable: true,
+                                tabs: [
+                                  for (final room in rooms)
+                                    Tab(
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(_roomIcon(room.name), size: 16),
+                                          const SizedBox(width: 4),
+                                          Text(room.name),
+                                        ],
+                                      ),
+                                    ),
                                 ],
                               ),
-                              const SizedBox(height: 10),
-                              Card(
-                                margin: EdgeInsets.zero,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: const [
-                                      Text('Community Guidelines',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w700)),
-                                      SizedBox(height: 8),
-                                      Text('• Be respectful and supportive'),
-                                      Text(
-                                          '• Share experiences, not medical advice'),
-                                      Text('• No commercial promotion'),
-                                      Text(
-                                          '• Keep discussions focused and kind'),
-                                    ],
-                                  ),
-                                ),
+                            ),
+                            // Room content
+                            Expanded(
+                              child: TabBarView(
+                                controller: _tabController,
+                                children: [
+                                  for (final room in rooms)
+                                    RoomDetailView(room: room),
+                                ],
                               ),
-                              const SizedBox(height: 10),
-                              Card(
-                                margin: EdgeInsets.zero,
-                                child: const Padding(
-                                  padding: EdgeInsets.all(12),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Pro Tip',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w700)),
-                                      SizedBox(height: 4),
-                                      Text(
-                                          'Engage authentically with the community. Your experiences and questions help other parents tremendously. No question is too small!'),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        // Room tabs
-                        Container(
-                          color: Colors.grey[100],
-                          child: TabBar(
-                            controller: _tabController,
-                            isScrollable: true,
-                            tabs: [
-                              for (final room in rooms)
-                                Tab(
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(_roomIcon(room.name), size: 16),
-                                      const SizedBox(width: 4),
-                                      Text(room.name),
-                                    ],
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                        // Room content
-                        Expanded(
-                          child: TabBarView(
-                            controller: _tabController,
-                            children: [
-                              for (final room in rooms)
-                                RoomDetailView(room: room),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
       bottomNavigationBar: const InnerPageNav(),
-    );
-  }
-
-  Widget _buildStatCard(String title, String value, IconData icon) {
-    return Container(
-      width: 108,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[300]!),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 18, color: Colors.black87),
-          const SizedBox(height: 6),
-          Text(value,
-              style:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 2),
-          Text(title,
-              style: const TextStyle(fontSize: 11, color: Colors.black54)),
-        ],
-      ),
     );
   }
 }
@@ -588,6 +474,7 @@ class _RoomDetailViewState extends State<RoomDetailView> {
                                 try {
                                   await CommunitiesService.toggleMessageLike(
                                       message.id);
+                                  if (!mounted) return;
                                   setState(() {
                                     messages[index] = Message(
                                       id: message.id,
@@ -605,7 +492,9 @@ class _RoomDetailViewState extends State<RoomDetailView> {
                                     );
                                   });
                                 } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
+                                  if (!mounted) return;
+                                  ScaffoldMessenger.of(this.context)
+                                      .showSnackBar(
                                     SnackBar(
                                       content: Text('Error: $e'),
                                       backgroundColor: Colors.red,
@@ -741,19 +630,9 @@ class MessageCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             // Message content
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width - 50,
-                ),
-                child: Text(
-                  message.content,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
-                ),
-              ),
+            Text(
+              message.content,
+              softWrap: true,
             ),
             const SizedBox(height: 12),
             // Actions
@@ -964,6 +843,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                   try {
                                     await CommunitiesService.toggleCommentLike(
                                         comment.id);
+                                    if (!mounted) return;
                                     setState(() {
                                       comments[index] = Comment(
                                         id: comment.id,
@@ -980,7 +860,9 @@ class _CommentScreenState extends State<CommentScreen> {
                                       );
                                     });
                                   } catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
+                                    if (!mounted) return;
+                                    ScaffoldMessenger.of(this.context)
+                                        .showSnackBar(
                                       SnackBar(
                                         content: Text('Error: $e'),
                                         backgroundColor: Colors.red,
